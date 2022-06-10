@@ -3,6 +3,17 @@ local SettingScene = class("SettingScene", function()
     return display.newScene("SettingScene")
 end)
 
+musicOn = true
+effectOn = true
+
+function SettingScene:music()
+    return musicOn
+end
+
+function SettingScene:effect()
+    return effectOn
+end
+
 function SettingScene:ctor()
     --主界面背景图
     display.newSprite("ui/main/bg_menu.jpg")
@@ -38,23 +49,41 @@ end
 function SettingScene:mainPanel()
     --层：音乐
     local mainLayer = ccui.Layout:create()
-    --mainLayer:setBackGroundColor(cc.c3b(100, 0, 0))--设置为红色
     mainLayer:setBackGroundColorOpacity(180)--设置为透明
-    --mainLayer:setBackGroundColorType(1)
     mainLayer:setContentSize(300, 480)
     mainLayer:setPosition(90, display.top - 100)
     mainLayer:setAnchorPoint(0, 1)
     mainLayer:addTo(self)
 
-    --checkBox响应事件函数
-    local function selectedEvent(sender,eventType)
+    --音乐checkBox响应事件函数
+    local function musicSelectedEvent(sender,eventType)
         --cclog(eventType)
         if eventType == ccui.CheckBoxEventType.selected then
+            musicOn = false
             print("eventType == ccui.CheckBoxEventType.selected")
+            print(musicOn)
+
         elseif eventType == ccui.CheckBoxEventType.unselected then
             print("ccui.CheckBoxEventType.unselected  unselected")
+            musicOn = true
+            print(musicOn)
         end
     end
+    --音效checkBox响应事件函数
+    local function effectSelectedEvent(sender,eventType)
+        --cclog(eventType)
+        if eventType == ccui.CheckBoxEventType.selected then
+            effectOn = false
+            print("eventType == ccui.CheckBoxEventType.selected")
+            print(effectOn)
+
+        elseif eventType == ccui.CheckBoxEventType.unselected then
+            print("ccui.CheckBoxEventType.unselected  unselected")
+            effectOn = true
+            print(effectOn)
+        end
+    end
+
     --checkBox：音乐开关，用于开启和关闭背景音乐
     local musicCheckBox = ccui.CheckBox:create()
     musicCheckBox:setScale(0.6,0.6)
@@ -63,7 +92,7 @@ function SettingScene:mainPanel()
     musicCheckBox:setPosition(250,500)
     musicCheckBox:setAnchorPoint(0.5,0.5)
     musicCheckBox:setContentSize(100,100)
-    musicCheckBox:addEventListener(selectedEvent)--注册事件
+    musicCheckBox:addEventListener(musicSelectedEvent)--注册事件
     musicCheckBox:addTo(self)
     --图标：音乐控制
     display.newSprite("bg_music_contrl_cover.png")
@@ -80,7 +109,7 @@ function SettingScene:mainPanel()
     soundCheckBox:setPosition(250,420)
     soundCheckBox:setAnchorPoint(0.5,0.5)
     soundCheckBox:setContentSize(100,100)
-    soundCheckBox:addEventListener(selectedEvent)--注册事件
+    soundCheckBox:addEventListener(effectSelectedEvent)--注册事件
     soundCheckBox:addTo(self)
     --图标：音效控制
     display.newSprite("sound_click_contrl_cover.png")

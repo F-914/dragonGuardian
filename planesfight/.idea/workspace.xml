@@ -11,48 +11,56 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="MainScene.lua" pinned="false" current-in-tab="true">
+      <file leaf-file-name="MainScene.lua" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/app/scenes/MainScene.lua">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="532">
-              <caret line="71" column="8" lean-forward="true" selection-start-line="71" selection-start-column="8" selection-end-line="71" selection-end-column="8" />
+            <state relative-caret-position="1798">
+              <caret line="160" column="41" lean-forward="true" selection-start-line="160" selection-start-column="41" selection-end-line="160" selection-end-column="41" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="FightingScene.lua" pinned="false" current-in-tab="false">
+      <file leaf-file-name="SettingScene.lua" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/app/scenes/SettingScene.lua">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="190">
+              <caret line="112" column="29" lean-forward="true" selection-start-line="112" selection-start-column="29" selection-end-line="112" selection-end-column="29" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="RankScene.lua" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/app/scenes/RankScene.lua">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="411">
+              <caret line="176" lean-forward="true" selection-start-line="176" selection-end-line="176" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="FightingScene.lua" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/app/scenes/FightingScene.lua">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="228">
-              <caret line="26" column="54" selection-start-line="26" selection-start-column="54" selection-end-line="26" selection-end-column="54" />
+            <state relative-caret-position="-596">
+              <caret line="474" column="63" selection-start-line="474" selection-start-column="63" selection-end-line="474" selection-end-column="63" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="functions.lua" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/framework/functions.lua">
+      <file leaf-file-name="MusicSetting.lua" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/app/MusicSetting.lua">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="32186">
-              <caret line="1694" selection-start-line="1694" selection-end-line="1694" />
+            <state relative-caret-position="133">
+              <caret line="7" column="20" selection-start-line="7" selection-start-column="20" selection-end-line="7" selection-end-column="20" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="text_format.lua" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/framework/protobuf/text_format.lua">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-      <file leaf-file-name="decoder.lua" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/framework/protobuf/decoder.lua">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-      <file leaf-file-name="Enemy.lua" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/app/Enemy.lua">
+      <file leaf-file-name="display.lua" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/framework/display.lua">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1425">
-              <caret line="75" selection-start-line="75" selection-end-line="75" selection-end-column="12" />
+            <state relative-caret-position="411">
+              <caret line="355" column="17" lean-forward="true" selection-start-line="355" selection-start-column="17" selection-end-line="355" selection-end-column="35" />
             </state>
           </provider>
         </entry>
@@ -65,27 +73,30 @@
         <option value="$PROJECT_DIR$/src/config.lua" />
         <option value="$PROJECT_DIR$/src/app/MyApp.lua" />
         <option value="$PROJECT_DIR$/src/app/scenes/StartScene.lua" />
-        <option value="$PROJECT_DIR$/src/app/scenes/RankScene.lua" />
         <option value="$PROJECT_DIR$/src/app/Player.lua" />
         <option value="$PROJECT_DIR$/src/app/Enemy.lua" />
-        <option value="$PROJECT_DIR$/src/app/scenes/SettingScene.lua" />
         <option value="$PROJECT_DIR$/src/framework/functions.lua" />
+        <option value="$PROJECT_DIR$/src/app/MusicSetting.lua" />
+        <option value="$PROJECT_DIR$/src/app/scenes/RankScene.lua" />
         <option value="$PROJECT_DIR$/src/app/scenes/MainScene.lua" />
+        <option value="$PROJECT_DIR$/src/app/scenes/SettingScene.lua" />
         <option value="$PROJECT_DIR$/src/app/scenes/FightingScene.lua" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
-    <option name="x" value="830" />
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="788" />
+    <option name="y" value="2" />
     <option name="width" value="1010" />
-    <option name="height" value="1105" />
+    <option name="height" value="1103" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="AndroidView" />
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -128,11 +139,11 @@
           <select />
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
-      <pane id="Scope" />
+      <pane id="AndroidView" />
     </panes>
   </component>
   <component name="PropertiesComponent">
+    <property name="SearchEverywhereHistoryKey" value="Replace&#9;null&#9;null&#10;replace&#9;null&#9;null&#10;editBox&#9;FILE&#9;file://E:/planesfight/frameworks/runtime-src/proj.android/libcocos2dx/src/main/java/org/cocos2dx/lib/Cocos2dxEditBox.java&#10;BMF&#9;null&#9;null&#10;stopBGM&#9;null&#9;null&#10;remo&#9;null&#9;null&#10;Scene&#9;null&#9;null&#10;pushScene&#9;null&#9;null&#10;sche&#9;FILE&#9;file://E:/planesfight/src/framework/scheduler.lua&#10;schedul&#9;FILE&#9;file://E:/planesfight/src/framework/scheduler.lua" />
     <property name="last_opened_file_path" value="$USER_HOME$/Desktop/a1" />
   </component>
   <component name="RecentsManager">
@@ -225,7 +236,7 @@
       <window_info anchor="bottom" id="Terminal" order="9" />
       <window_info id="Capture Tool" order="6" />
       <window_info id="Designer" order="3" />
-      <window_info content_ui="combo" id="Project" order="0" weight="0.16598639" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.30544218" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info id="UI Designer" order="4" />
@@ -247,7 +258,7 @@
       <window_info anchor="bottom" id="Run" order="2" />
       <window_info anchor="right" id="Theme Preview" order="5" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.20884354" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.16530612" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -277,34 +288,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/app/scenes/FightingScene.lua">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="646">
-          <caret line="34" column="47" selection-start-line="34" selection-start-column="47" selection-end-line="34" selection-end-column="47" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/Player.lua">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="874">
-          <caret line="46" column="32" lean-forward="true" selection-start-line="46" selection-start-column="32" selection-end-line="46" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/scenes/MainScene.lua">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1881">
-          <caret line="99" column="8" lean-forward="true" selection-start-line="93" selection-start-column="4" selection-end-line="99" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/scenes/FightingScene.lua">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1501">
-          <caret line="79" lean-forward="true" selection-start-line="79" selection-end-line="79" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main.lua">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -524,41 +507,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/config.lua">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="247">
-          <caret line="13" selection-start-line="13" selection-end-line="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/scenes/RankScene.lua">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="437">
-          <caret line="23" column="38" selection-start-line="23" selection-start-column="38" selection-end-line="23" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/Player.lua">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="570">
-          <caret line="30" column="12" selection-start-line="30" selection-start-column="12" selection-end-line="30" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/framework/scheduler.lua">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="681">
-          <caret line="90" column="9" selection-start-line="90" selection-start-column="9" selection-end-line="90" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/framework/audio.lua">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2622">
-          <caret line="138" column="24" selection-start-line="138" selection-start-column="9" selection-end-line="138" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/app/Enemy.lua">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1425">
@@ -569,9 +517,6 @@
     <entry file="file://$PROJECT_DIR$/src/framework/protobuf/decoder.lua">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/framework/protobuf/text_format.lua">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/framework/functions.lua">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="32186">
@@ -579,24 +524,93 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/scenes/SettingScene.lua">
+    <entry file="file://$PROJECT_DIR$/src/framework/protobuf/text_format.lua">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/config.lua">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="677">
-          <caret line="93" column="32" lean-forward="true" selection-start-line="93" selection-start-column="32" selection-end-line="93" selection-end-column="32" />
+        <state relative-caret-position="247">
+          <caret line="13" selection-start-line="13" selection-end-line="13" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/scenes/FightingScene.lua">
+    <entry file="file://$PROJECT_DIR$/src/framework/protobuf/containers.lua">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="228">
-          <caret line="26" column="54" selection-start-line="26" selection-start-column="54" selection-end-line="26" selection-end-column="54" />
+        <state relative-caret-position="798">
+          <caret line="42" column="7" selection-start-line="42" selection-start-column="7" selection-end-line="42" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/framework/audio.lua">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3116">
+          <caret line="164" column="39" selection-start-line="164" selection-start-column="9" selection-end-line="164" selection-end-column="39" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/frameworks/runtime-src/proj.android/libcocos2dx/src/main/java/org/cocos2dx/lib/Cocos2dxEditBox.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="304">
+          <caret line="212" column="22" lean-forward="true" selection-start-line="212" selection-start-column="22" selection-end-line="212" selection-end-column="22" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/framework/scheduler.lua">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="677">
+          <caret line="60" selection-start-line="60" selection-end-line="60" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/framework/display.lua">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="411">
+          <caret line="355" column="17" lean-forward="true" selection-start-line="355" selection-start-column="17" selection-end-line="355" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/scenes/RankScene.lua">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="411">
+          <caret line="176" lean-forward="true" selection-start-line="176" selection-end-line="176" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/Player.lua">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="570">
+          <caret line="30" column="12" selection-start-line="30" selection-start-column="12" selection-end-line="30" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/MusicSetting.lua">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="133">
+          <caret line="7" column="20" selection-start-line="7" selection-start-column="20" selection-end-line="7" selection-end-column="20" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/app/scenes/MainScene.lua">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="532">
-          <caret line="71" column="8" lean-forward="true" selection-start-line="71" selection-start-column="8" selection-end-line="71" selection-end-column="8" />
+        <state relative-caret-position="1798">
+          <caret line="160" column="41" lean-forward="true" selection-start-line="160" selection-start-column="41" selection-end-line="160" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/scenes/SettingScene.lua">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="190">
+          <caret line="112" column="29" lean-forward="true" selection-start-line="112" selection-start-column="29" selection-end-line="112" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/scenes/FightingScene.lua">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-596">
+          <caret line="474" column="63" selection-start-line="474" selection-start-column="63" selection-end-line="474" selection-end-column="63" />
         </state>
       </provider>
     </entry>

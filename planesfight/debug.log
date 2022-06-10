@@ -78,9 +78,15 @@ LOAD LUA FILE: E:/planesfight/src/main.lua
 
 [Edit text] content size = (290.000000, 50.000000)
 
-[LUA-print] 1662556565
+[LUA-print] 1662783932
 
 [LUA-print] nil
+
+[LUA-print] enemy3:startMove
+
+[LUA-print] enemy2:startMove
+
+[LUA-print] enemy1:startMove
 
 [LUA-print] enemy3:startMove
 
@@ -102,103 +108,27 @@ LOAD LUA FILE: E:/planesfight/src/main.lua
 
 [LUA-print] hit on
 
-[LUA-print] hit on
+[LUA-print] enemy2:reborn
 
 [LUA-print] hit on
 
 [LUA-print] hit on
 
-[LUA-print] hit on
-
-[LUA-print] hit on
-
-[LUA-print] hit on
-
-[LUA-print] hit on
-
-[LUA-print] hit on
-
-[LUA-print] enemy3:reborn
-
-[LUA-print] hit on
-
-[LUA-print] hit on
-
-[LUA-print] hit on
-
-[LUA-print] hit on
-
-[LUA-print] hit on
-
-[LUA-print] hit on
-
-[LUA-print] hit on
-
-[LUA-print] hit on
-
-[LUA-print] enemy3:reborn
-
-[LUA-print] hit on
-
-[LUA-print] hit on
-
-[LUA-print] hit on
-
-[LUA-print] 触摸事件
-
-[LUA-print] hit on
-
-[LUA-print] enemy3:reborn
+[LUA-print] enemy2:reborn
 
 [LUA-print] hit on
 
 [LUA-print] enemy1:reborn
 
-[LUA-print] hit on
+[LUA-print] enemy2:reborn
 
 [LUA-print] hit on
 
 [LUA-print] hit on
+
+[LUA-print] enemy1:reborn
+
+[LUA-print] enemy3:reborn
 
 [LUA-print] 触摸事件
-
-[LUA-print] hit on
-
-[LUA-print] hit on
-
-[LUA-print] hit on
-
-[LUA-print] hit on
-
-[LUA-print] 触摸事件
-
-[LUA-print] hit on
-
-[LUA-print] hit on
-
-[LUA-print] hit on
-
-[LUA-print] hit on
-
-[LUA-print] hit on
-
-[LUA-print] hit on
-
-[LUA-print] hit on
-
-[LUA-print] hit on
-
-[LUA-print] hit on
-
-[LUA-print] hit on
-
-[LUA-print] hit on
-
-[LUA-print] 触摸事件
-
-[LUA-print] hit on
-
-[LUA-print] hit on
-
-[LUA-print] hit on
 
