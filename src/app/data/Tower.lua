@@ -8,7 +8,7 @@ local Tower = class("Tower", require("app.data.BaseModel"))
 local ConstDef = require("app.def.ConstDef")
 --
 
----comment
+---构造函数
 ---@param myTower Tower
 ---@param x number
 ---@param y number
