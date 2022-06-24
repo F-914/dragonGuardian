@@ -4,18 +4,13 @@
 ]]
 local BaseModel = class("BaseModel")
 
---[[--
-    构造函数
-
-    @param myBaseModel 类型：BaseModel 用于从数据库中读取数据后来初始化BaseModel，很有可能用不到，但是先放着
-    @param x 类型：number
-    @param y 类型：number
-    @param width 类型：number
-    @param height 类型：number
-    @param isDeath 类型：boolean
-
-    @return none
-]]
+---构造函数
+---@param myBaseModel BaseModel
+---@param x number
+---@param y number
+---@param width number
+---@param height number
+---@param isDeath boolean
 function BaseModel:ctor(myBaseModel, x, y, width, height, isDeath)
     if myBaseModel == nil then
         self.x_ = x -- 类型：number
@@ -35,6 +30,38 @@ function BaseModel:ctor(myBaseModel, x, y, width, height, isDeath)
     self.id_ = id_ -- 类型：number，唯一id
 end
 
+---直接用 getX 的话可以会覆盖一些自带的函数 可能会在后续导致一些问题
+---@return number
+function BaseModel:getMyX()
+    return self.x_
+end
+
+---comment
+---@return number
+function BaseModel:getMyY()
+    return self.y_
+end
+
+---comment
+---@return number
+function BaseModel:getMyWidth()
+    return self.width_
+end
+
+---comment
+---@return number
+function BaseModel:getMyHeight()
+    return self.height_
+end
+
+---comment
+---@return boolean
+function BaseModel:isDeath()
+    return self.isDeath_
+end
+
+---update
+---@param dt any
 function BaseModel:update(dt)
     -- body
 end

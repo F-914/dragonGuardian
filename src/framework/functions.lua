@@ -327,8 +327,10 @@ function class(classname, super)
             setmetatable(cls, {__index = super})
             cls.super = super
         else
-            cls = {ctor = function()
-                end}
+            cls = {
+                ctor = function()
+                end
+            }
         end
 
         cls.__cname = classname
