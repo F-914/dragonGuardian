@@ -28,6 +28,7 @@ local ConstDef = require("app.def.ConstDef")
 ---@param skills table
 ---@param extraDamage number
 ---@param fatalityRate number
+---@param star number
 -- TODO 属性应该还得增加
 function Tower:ctor(
     myTower,
@@ -48,7 +49,8 @@ function Tower:ctor(
     fireCdUpgrade,
     skills,
     extraDamage,
-    fatalityRate)
+    fatalityRate,
+    star)
     if myTower == nil then
         Tower.super.ctor(self, nil, x, y, width, height, isDeath)
         self.name_ = name
@@ -67,6 +69,7 @@ function Tower:ctor(
         self.fireCdUpgrade_ = fireCdUpgrade
 
         self.fatalityRate_ = fatalityRate
+        self.star_ = star
     else
         Tower:setData(myTower)
     end
@@ -99,6 +102,7 @@ function Tower:setData(myTower)
     self.fireCd_ = myTower:getFireCd()
     self.fireCdEnhance_ = myTower:getFireCdEnhance()
     self.fireCdUpgrade_ = myTower:getFireCdUpgrade()
+    self.star_ = myTower:getStar()
 end
 
 --- 稀有度
@@ -166,6 +170,11 @@ end
 --- 致死率
 function Tower:getFatalityRate()
     return self.fatalityRate_
+end
+
+--- 星级
+function Tower:getStar()
+    return self.star_
 end
 
 return Tower
