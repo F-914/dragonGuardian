@@ -9,6 +9,7 @@ local ShopScene = class("MainScene", function()
     return display.newScene("MainScene")
 end)
 
+local _shopLayer
 local _buttonCoinClik
 local _buttonCoinClikGrey
 local _checkBuy
@@ -20,9 +21,9 @@ local _checkBuy
 
     @return none
 ]]
-function ShopScene:ctor(layer)
+function ShopScene:ctor(layer, num)
     local shopLayer = self:createShopLayer()
-    shopLayer:addTo(layer, 0)
+    shopLayer:addTo(layer, num)
 end
 
 --[[--
@@ -51,7 +52,6 @@ function _buttonCoinClik(layer, itemWidth, itemHeight)
     print("clik")
     layer:scale(1)
     _checkBuy(layer, itemWidth, itemHeight)
-
 end
 
 --[[--
@@ -63,14 +63,12 @@ end
 ]]
 function _buttonCoinClikGrey(layer, itemWidth, itemHeight)
     -- 遮罩
-        local shadeSprite = cc.Sprite:create(
-            "home/shop/coins_shop/base_shade.png")
-        shadeSprite:setPosition(itemWidth*2/3, itemHeight/2)
-        shadeSprite:setAnchorPoint(0.5, 0.5)
-        local size = shadeSprite:getContentSize()
-        --shadeSprite:scale(itemHeight/size.height)
-        shadeSprite:setOpacity(120)
-        shadeSprite:addTo(layer)
+    local shadeSprite = cc.Sprite:create(
+        "home/shop/coins_shop/base_shade.png")
+    shadeSprite:setPosition(itemWidth*2/3, itemHeight/2)
+    shadeSprite:setAnchorPoint(0.5, 0.5)
+    shadeSprite:setOpacity(120)
+    shadeSprite:addTo(layer)
 end
 
 --[[--
@@ -101,32 +99,26 @@ end
 function ShopScene:createShopLayer()
     self:loadMusic()
 
-    local shopLayer = ccui.Layout:create()
-    shopLayer:setBackGroundImage("home/shop/background_shop.png")
-    shopLayer:setPosition(display.width/2, display.height/2)
-    shopLayer:setAnchorPoint(0.5, 0.5)
-    shopLayer:setContentSize(display.width, display.height)
+    _shopLayer = ccui.Layout:create()
+    _shopLayer:setBackGroundImage("home/shop/background_shop.png")
+    _shopLayer:setPosition(display.width/2, display.height/2)
+    _shopLayer:setAnchorPoint(0.5, 0.5)
+    _shopLayer:setContentSize(display.width, display.height)
 
     -- 滑动区域
     local itemWidth, itemHeight = display.width/5, display.height/6
     local listView = ccui.ListView:create()
     listView:setContentSize(display.width, display.height*7/8)      -- 滑动区域大小
-    --listView:setBackGroundColor(cc.c3b(200,200,255))
-    --listView:setBackGroundColorType(1)
     listView:setAnchorPoint(0.5, 0.5)
     listView:setPosition(display.cx, display.cy)
     listView:setDirection(1)        -- 垂直
-    listView:addTo(shopLayer)
+    listView:addTo(_shopLayer)
 
     local dragonNum = 0
 
     for i = 1, 8 do
         -- 层存放每列数据
         local colLayer = ccui.Layout:create()
-        --colLayer:setAnchorPoint(0.5, 0.5)
-        --colLayer:setPosition(display.cx, display.cy)
-        --colLayer:setBackGroundColor(cc.c3b(255,100,math.random(0,255)))
-        --colLayer:setBackGroundColorType(1)
         colLayer:addTo(listView)
 
         if i == 1 then
@@ -175,8 +167,6 @@ function ShopScene:createShopLayer()
             -- 滑动区域
             local rowViewDragon = ccui.ListView:create()
             rowViewDragon:setContentSize(itemWidth*13/3, itemHeight+20)      -- 滑动区域大小
-            --rowView:setBackGroundColor(cc.c3b(200,200,255))
-            --rowView:setBackGroundColorType(1)
             rowViewDragon:setAnchorPoint(0.5, 0.5)
             rowViewDragon:setPosition(display.cx, itemHeight/2)
             rowViewDragon:setDirection(2)        -- 水平
@@ -186,8 +176,6 @@ function ShopScene:createShopLayer()
                 local rowLayer = ccui.Layout:create()
                 rowLayer:setAnchorPoint(0.5, 0.5)
                 rowLayer:setContentSize(itemWidth*13/9, itemHeight)
-                --rowLayer:setBackGroundColor(cc.c3b(255,200,math.random(0,255)))
-                --rowLayer:setBackGroundColorType(1)
                 rowLayer:addTo(rowViewDragon)
                 if dragonNum == 0 then
                     ---------------------------------------------------------------------
@@ -340,12 +328,10 @@ function ShopScene:createShopLayer()
             rowLayer:setContentSize(itemWidth*9/2, itemHeight*3/2)
             rowLayer:pos(display.cx, itemHeight/2)
             rowLayer:addTo(colLayer)
-            --rowLayer:setBackGroundColor(cc.c3b(255,200,math.random(0,255)))
-            --rowLayer:setBackGroundColorType(1)
 
             if i == 6 then
                 ---------------------------------------------------------------------
-                --商品宝箱层
+                --稀有宝箱层
                 local rowRareLayer = ccui.Layout:create()
                 rowRareLayer:setAnchorPoint(0.5, 0.5)
                 rowRareLayer:setContentSize(itemWidth*9/2, itemHeight*3/2)
@@ -353,30 +339,24 @@ function ShopScene:createShopLayer()
                 rowRareLayer:addTo(colLayer)
 
                 colLayer:setContentSize(display.width, itemHeight)
-                ---------------------------------------------------------------------
+
                 -- 稀有宝箱
                 local boxRareButton = ccui.Button:create(
                     "home/shop/diamond_shop/base_rare.png")
                 boxRareButton:setPosition(itemWidth*9/4, itemHeight*3/4)
                 boxRareButton:setAnchorPoint(0.5, 0.5)
-                local size = boxRareButton:getContentSize()
-                --boxRareButton:scale((itemHeight*3/2 - 10)  / size.height)
                 boxRareButton:addTo(rowRareLayer)
 
                 local boxRare = cc.Sprite:create(
                     "home/shop/diamond_shop/box_rare.png")
                 boxRare:setPosition(itemWidth*9/4, itemHeight*3/4)
                 boxRare:setAnchorPoint(0.5, 0.5)
-                local size = boxRare:getContentSize()
-                --boxRare:scale(itemHeight / size.height *2/3)
                 boxRare:addTo(rowRareLayer)
 
                 local boxRareDia = cc.Sprite:create(
                     "home/shop/diamond_shop/commodity_icon_diamond.png")
                 boxRareDia:setPosition(itemWidth*9/4 - itemHeight/20, itemHeight/4)
                 boxRareDia:setAnchorPoint(1, 0.5)
-                local size = boxRareDia:getContentSize()
-                --boxRareDia:scale(itemHeight / size.height /5)
                 boxRareDia:addTo(rowRareLayer)
 
                 local boxRarePrice = display.newTTFLabel({
@@ -402,7 +382,7 @@ function ShopScene:createShopLayer()
                     end
                 end)
                 ---------------------------------------------------------------------
-                --商品宝箱层
+                --普通宝箱层
                 local rowNormalLayer = ccui.Layout:create()
                 rowNormalLayer:setAnchorPoint(0.5, 0.5)
                 rowNormalLayer:setContentSize(itemWidth*9/2, itemHeight*3/2)
@@ -410,30 +390,24 @@ function ShopScene:createShopLayer()
                 rowNormalLayer:addTo(colLayer)
 
                 colLayer:setContentSize(display.width, itemHeight)
-                ---------------------------------------------------------------------
+
                 -- 普通宝箱
                 local boxNormalButton = ccui.Button:create(
                     "home/shop/diamond_shop/base_normal.png")
                 boxNormalButton:setPosition(itemWidth*21/11, itemHeight*3/4)
                 boxNormalButton:setAnchorPoint(0.5, 0.5)
-                local size = boxNormalButton:getContentSize()
-                --boxNormalButton:scale((itemHeight*3/2 - 10) / size.height)
                 boxNormalButton:addTo(rowNormalLayer)
 
                 local boxNormal = cc.Sprite:create(
                     "home/shop/diamond_shop/box_nomal.png")
                 boxNormal:setPosition(itemWidth*21/11, itemHeight*3/4)
                 boxNormal:setAnchorPoint(0.5, 0.5)
-                local size = boxNormal:getContentSize()
-                --boxNormal:scale(itemHeight / size.height *2/3)
                 boxNormal:addTo(rowNormalLayer)
 
                 local boxNormalDia = cc.Sprite:create(
                     "home/shop/diamond_shop/commodity_icon_diamond.png")
                 boxNormalDia:setPosition(itemWidth*21/11 - itemHeight/20, itemHeight/4)
                 boxNormalDia:setAnchorPoint(1, 0.5)
-                local size = boxNormalDia:getContentSize()
-                --boxNormalDia:scale(itemHeight / size.height /5)
                 boxNormalDia:addTo(rowNormalLayer)
 
                 local boxNormalPrice = display.newTTFLabel({
@@ -460,7 +434,7 @@ function ShopScene:createShopLayer()
                 end)
 
                 ---------------------------------------------------------------------
-                --商品宝箱层
+                --史诗宝箱层
                 local rowEpicLayer = ccui.Layout:create()
                 rowEpicLayer:setAnchorPoint(0.5, 0.5)
                 rowEpicLayer:setContentSize(itemWidth*9/2, itemHeight*3/2)
@@ -468,30 +442,24 @@ function ShopScene:createShopLayer()
                 rowEpicLayer:addTo(colLayer)
 
                 colLayer:setContentSize(display.width, itemHeight)
-                ---------------------------------------------------------------------
+
                 -- 史诗宝箱
                 local boxEpicButton = ccui.Button:create(
                     "home/shop/diamond_shop/base_epic.png")
                 boxEpicButton:setPosition(itemWidth*13/5 , itemHeight*3/4)
                 boxEpicButton:setAnchorPoint(0.5, 0.5)
-                local size = boxEpicButton:getContentSize()
-                --boxEpicButton:scale((itemHeight*3/2 - 10) / size.height)
                 boxEpicButton:addTo(rowEpicLayer)
 
                 local boxEpic = cc.Sprite:create(
                     "home/shop/diamond_shop/box_epic.png")
                 boxEpic:setPosition(itemWidth*13/5, itemHeight*3/4)
                 boxEpic:setAnchorPoint(0.5, 0.5)
-                local size = boxEpic:getContentSize()
-                --boxEpic:scale(itemHeight / size.height *2/3)
                 boxEpic:addTo(rowEpicLayer)
 
                 local boxEpicDia = cc.Sprite:create(
                     "home/shop/diamond_shop/commodity_icon_diamond.png")
                 boxEpicDia:setPosition(itemWidth*13/5 - itemHeight/20, itemHeight/4)
                 boxEpicDia:setAnchorPoint(1, 0.5)
-                local size = boxEpicDia:getContentSize()
-                --boxEpicDia:scale(itemHeight / size.height /5)
                 boxEpicDia:addTo(rowEpicLayer)
 
                 local boxEpicPrice = display.newTTFLabel({
@@ -519,7 +487,7 @@ function ShopScene:createShopLayer()
 
             elseif i == 7 then
                 ---------------------------------------------------------------------
-                --商品宝箱层
+                --传说宝箱层
                 local rowLegendLayer = ccui.Layout:create()
                 rowLegendLayer:setAnchorPoint(0.5, 0.5)
                 rowLegendLayer:setContentSize(itemWidth*9/2, itemHeight*7/4)
@@ -527,31 +495,25 @@ function ShopScene:createShopLayer()
                 rowLegendLayer:addTo(colLayer)
 
                 colLayer:setContentSize(display.width, itemHeight)
-                ---------------------------------------------------------------------
+
                 --传说宝箱
                 colLayer:setContentSize(display.width, itemHeight+80)
                 local boxLengendButton = ccui.Button:create(
                     "home/shop/diamond_shop/base_legend.png")
                 boxLengendButton:setPosition(itemWidth*9/4, itemHeight*3/4)
                 boxLengendButton:setAnchorPoint(0.5, 0.5)
-                local size = boxLengendButton:getContentSize()
-                --boxLengendButton:scale(itemHeight*3/2/size.height)
                 boxLengendButton:addTo(rowLegendLayer)
 
                 local boxLengend = cc.Sprite:create(
                     "home/shop/diamond_shop/box_legend.png")
                 boxLengend:setPosition(itemWidth*9/4, itemHeight*3/4)
                 boxLengend:setAnchorPoint(0.5, 0.5)
-                local size = boxLengend:getContentSize()
-                --boxLengend:scale(itemHeight / size.height - 0.1)
                 boxLengend:addTo(rowLegendLayer)
 
                 local boxLengendDia = cc.Sprite:create(
                     "home/shop/diamond_shop/commodity_icon_diamond.png")
                 boxLengendDia:setPosition(itemWidth*9/4-30 - itemHeight/20, itemHeight/5)
                 boxLengendDia:setAnchorPoint(0.5, 0.5)
-                local size = boxLengendDia:getContentSize()
-                --boxLengendDia:scale(itemHeight / size.height /5)
                 boxLengendDia:addTo(rowLegendLayer)
 
                 local boxLegendPrice = display.newTTFLabel({
@@ -583,7 +545,7 @@ function ShopScene:createShopLayer()
     end
 
 
-    return shopLayer
+    return _shopLayer
 end
 
 return ShopScene

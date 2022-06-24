@@ -2,13 +2,31 @@ local MenuScene = class("MenuScene", function()
     return display.newScene("MenuScene")
 end)
 
+local menuTopLayer
+local audio = require"framework.audio"
+-- 底部栏组件
+local curPageSprite
+local sizeTab
+local tabBattle
+local tabShop
+local tabGuide
+local battleTitle, battleIcon
+local shopTitle, shopIcon
+local guideTitle, guideIcon
 
-function MenuScene:ctor(layer)
+--[[--
+    描述：构造函数
+
+    @param none
+
+    @return none
+]]
+function MenuScene:ctor(layer, num)
     self:loadMusic()
     local menuTop = self:createMenuTop()
     local menuBottom = self:createMenuBottom()
-    menuTop:addTo(layer, 1)
-    menuBottom:addTo(layer, 1)
+    menuTop:addTo(layer, num)
+    menuBottom:addTo(layer, num)
 end
 
 --[[--
@@ -18,7 +36,6 @@ end
 
     @return none
 ]]
-local audio = require"framework.audio"
 function MenuScene:loadMusic()
     audio.loadFile("sound_ogg/ui_btn_click.ogg",function (dt) end)
 end
@@ -32,7 +49,7 @@ end
 ]]
 function MenuScene:createMenuTop()
     -- 顶部栏
-    local menuTopLayer = ccui.Layout:create()   -- 菜单层
+    menuTopLayer = ccui.Layout:create()   -- 菜单层
     --menuLayer:setBackGroundImage("home/shop/background_shop.png")
     menuTopLayer:setPosition(display.width/2, display.height/2)
     menuTopLayer:setAnchorPoint(0.5, 0.5)
@@ -156,16 +173,8 @@ function MenuScene:createMenuBottom()
     menuBottomLayer:setAnchorPoint(0.5, 0.5)
     menuBottomLayer:setContentSize(display.width, display.height)
 
-    -- 底部栏
-    local sizeTab
-    local tabBattle
-    local tabShop
-    local tabGuide
-    local battleTitle, battleIcon
-    local shopTitle, shopIcon
-    local guideTitle, guideIcon
 
-    local curPageSprite = cc.Sprite:create("home/bottom_tab_button/tab_selected.png")
+    curPageSprite = cc.Sprite:create("home/bottom_tab_button/tab_selected.png")
     curPageSprite:setAnchorPoint(0.5, 0)
     curPageSprite:setPosition(display.cx, 0)
     sizeTab = curPageSprite:getContentSize()
@@ -196,17 +205,8 @@ function MenuScene:createMenuBottom()
     tabBattle:addTouchEventListener(function (sender, eventType)
         if 2 == eventType then
             audio.playEffect("sound_ogg/ui_btn_click.ogg")
-            print("mid-battle")
-            tabShop:setTouchEnabled(true)
-            tabBattle:setTouchEnabled(false)
-            tabGuide:setTouchEnabled(true)
-            curPageSprite:runAction(cc.MoveTo:create(0.08, cc.p(display.cx,0)))
-            battleIcon:runAction(cc.MoveTo:create(0.08, cc.p(display.cx, sizeTab.height/2 + sizeTab.height/5)))
-            battleTitle:setVisible(true)
-            shopIcon:runAction(cc.MoveTo:create(0.08, cc.p(sizeTab.width/2, sizeTab.height/2)))
-            shopTitle:setVisible(false)
-            guideIcon:runAction(cc.MoveTo:create(0.08, cc.p(display.width - sizeTab.width/2, sizeTab.height/2)))
-            guideTitle:setVisible(false)
+            local MainScene = require"app.scenes.MainScene"
+            MainScene:setPage(1)
         end
     end)
 
@@ -234,17 +234,8 @@ function MenuScene:createMenuBottom()
     tabShop:addTouchEventListener(function (sender, eventType)
         if 2 == eventType then
             audio.playEffect("sound_ogg/ui_btn_click.ogg")
-            print("left-shop")
-            tabShop:setTouchEnabled(false)
-            tabBattle:setTouchEnabled(true)
-            tabGuide:setTouchEnabled(true)
-            curPageSprite:runAction(cc.MoveTo:create(0.08, cc.p(display.cx/3,0)))
-            battleIcon:runAction(cc.MoveTo:create(0.08, cc.p(display.cx, sizeTab.height/2)))
-            battleTitle:setVisible(false)
-            shopIcon:runAction(cc.MoveTo:create(0.08, cc.p(sizeTab.width/2, sizeTab.height/2 + sizeTab.height/5)))
-            shopTitle:setVisible(true)
-            guideIcon:runAction(cc.MoveTo:create(0.08, cc.p(display.width - sizeTab.width/2, sizeTab.height/2)))
-            guideTitle:setVisible(false)
+            local MainScene = require"app.scenes.MainScene"
+            MainScene:setPage(0)
         end
     end)
 
@@ -271,21 +262,59 @@ function MenuScene:createMenuBottom()
     tabGuide:addTouchEventListener(function (sender, eventType)
         if 2 == eventType then
             audio.playEffect("sound_ogg/ui_btn_click.ogg")
-            print("right-guide")
-            tabShop:setTouchEnabled(true)
-            tabBattle:setTouchEnabled(true)
-            tabGuide:setTouchEnabled(false)
-            curPageSprite:runAction(cc.MoveTo:create(0.08, cc.p(display.cx*5/3,0)))
-            battleIcon:runAction(cc.MoveTo:create(0.08, cc.p(display.cx, sizeTab.height/2)))
-            battleTitle:setVisible(false)
-            shopIcon:runAction(cc.MoveTo:create(0.08, cc.p(sizeTab.width/2, sizeTab.height/2)))
-            shopTitle:setVisible(false)
-            guideIcon:runAction(cc.MoveTo:create(0.08, cc.p(display.width - sizeTab.width/2, sizeTab.height/2 + sizeTab.height/5)))
-            guideTitle:setVisible(true)
+            local MainScene = require"app.scenes.MainScene"
+            MainScene:setPage(2)
         end
     end)
 
     return menuBottomLayer
+end
+
+--[[--
+    描述：底部栏状态切换
+
+    @param int: 1--商店、2--战斗、3--图鉴
+
+    @return none
+]]
+function MenuScene:bottomMenuControl(num)
+    if num == 2 then
+        print("mid-battle")
+        tabShop:setTouchEnabled(true)
+        tabBattle:setTouchEnabled(false)
+        tabGuide:setTouchEnabled(true)
+        curPageSprite:runAction(cc.MoveTo:create(0.08, cc.p(display.cx,0)))
+        battleIcon:runAction(cc.MoveTo:create(0.08, cc.p(display.cx, sizeTab.height/2 + sizeTab.height/5)))
+        battleTitle:setVisible(true)
+        shopIcon:runAction(cc.MoveTo:create(0.08, cc.p(sizeTab.width/2, sizeTab.height/2)))
+        shopTitle:setVisible(false)
+        guideIcon:runAction(cc.MoveTo:create(0.08, cc.p(display.width - sizeTab.width/2, sizeTab.height/2)))
+        guideTitle:setVisible(false)
+    elseif num == 1 then
+        print("left-shop")
+        tabShop:setTouchEnabled(false)
+        tabBattle:setTouchEnabled(true)
+        tabGuide:setTouchEnabled(true)
+        curPageSprite:runAction(cc.MoveTo:create(0.08, cc.p(display.cx/3,0)))
+        battleIcon:runAction(cc.MoveTo:create(0.08, cc.p(display.cx, sizeTab.height/2)))
+        battleTitle:setVisible(false)
+        shopIcon:runAction(cc.MoveTo:create(0.08, cc.p(sizeTab.width/2, sizeTab.height/2 + sizeTab.height/5)))
+        shopTitle:setVisible(true)
+        guideIcon:runAction(cc.MoveTo:create(0.08, cc.p(display.width - sizeTab.width/2, sizeTab.height/2)))
+        guideTitle:setVisible(false)
+    elseif num == 3 then
+        print("right-guide")
+        tabShop:setTouchEnabled(true)
+        tabBattle:setTouchEnabled(true)
+        tabGuide:setTouchEnabled(false)
+        curPageSprite:runAction(cc.MoveTo:create(0.08, cc.p(display.cx*5/3,0)))
+        battleIcon:runAction(cc.MoveTo:create(0.08, cc.p(display.cx, sizeTab.height/2)))
+        battleTitle:setVisible(false)
+        shopIcon:runAction(cc.MoveTo:create(0.08, cc.p(sizeTab.width/2, sizeTab.height/2)))
+        shopTitle:setVisible(false)
+        guideIcon:runAction(cc.MoveTo:create(0.08, cc.p(display.width - sizeTab.width/2, sizeTab.height/2 + sizeTab.height/5)))
+        guideTitle:setVisible(true)
+    end
 end
 
 return MenuScene
