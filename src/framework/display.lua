@@ -74,16 +74,17 @@ local sharedAnimationCache = cc.AnimationCache:getInstance()
 -- check device screen size
 local glview = sharedDirector:getOpenGLView()
 if nil == glview then
-    glview =
-        cc.GLViewImpl:createWithRect(
+    glview = cc.GLViewImpl:createWithRect(
         "QuickCocos",
         cc.rect(0, 0, CONFIG_SCREEN_WIDTH or 900, CONFIG_SCREEN_HEIGHT or 640)
     )
+    -- glview = cc.GLViewImpl:createWithRect("QuickCocos",
+    --     cc.rect(0, 0, CONFIG_SCREEN_WIDTH or 900, CONFIG_SCREEN_HEIGHT or 640))
     sharedDirector:setOpenGLView(glview)
 end
 
 local size = glview:getFrameSize()
-display.sizeInPixels = {width = size.width, height = size.height}
+display.sizeInPixels = { width = size.width, height = size.height }
 
 local w = display.sizeInPixels.width
 local h = display.sizeInPixels.height
@@ -241,7 +242,7 @@ end
 local winSize = sharedDirector:getWinSize()
 display.screenScale = 2.0
 display.contentScaleFactor = scale
-display.size = {width = winSize.width, height = winSize.height}
+display.size = { width = winSize.width, height = winSize.height }
 display.width = display.size.width
 display.height = display.size.height
 display.cx = display.width / 2
@@ -325,33 +326,33 @@ display.ANCHOR_POINTS = {
 }
 
 display.SCENE_TRANSITIONS = {
-    CROSSFADE = {cc.TransitionCrossFade, 2},
-    FADE = {cc.TransitionFade, 3, cc.c3b(0, 0, 0)},
-    FADEBL = {cc.TransitionFadeBL, 2},
-    FADEDOWN = {cc.TransitionFadeDown, 2},
-    FADETR = {cc.TransitionFadeTR, 2},
-    FADEUP = {cc.TransitionFadeUp, 2},
-    FLIPANGULAR = {cc.TransitionFlipAngular, 3, cc.TRANSITION_ORIENTATION_LEFT_OVER},
-    FLIPX = {cc.TransitionFlipX, 3, cc.TRANSITION_ORIENTATION_LEFT_OVER},
-    FLIPY = {cc.TransitionFlipY, 3, cc.TRANSITION_ORIENTATION_UP_OVER},
-    JUMPZOOM = {cc.TransitionJumpZoom, 2},
-    MOVEINB = {cc.TransitionMoveInB, 2},
-    MOVEINL = {cc.TransitionMoveInL, 2},
-    MOVEINR = {cc.TransitionMoveInR, 2},
-    MOVEINT = {cc.TransitionMoveInT, 2},
-    PAGETURN = {cc.TransitionPageTurn, 3, false},
-    ROTOZOOM = {cc.TransitionRotoZoom, 2},
-    SHRINKGROW = {cc.TransitionShrinkGrow, 2},
-    SLIDEINB = {cc.TransitionSlideInB, 2},
-    SLIDEINL = {cc.TransitionSlideInL, 2},
-    SLIDEINR = {cc.TransitionSlideInR, 2},
-    SLIDEINT = {cc.TransitionSlideInT, 2},
-    SPLITCOLS = {cc.TransitionSplitCols, 2},
-    SPLITROWS = {cc.TransitionSplitRows, 2},
-    TURNOFFTILES = {cc.TransitionTurnOffTiles, 2},
-    ZOOMFLIPANGULAR = {cc.TransitionZoomFlipAngular, 2},
-    ZOOMFLIPX = {cc.TransitionZoomFlipX, 3, cc.TRANSITION_ORIENTATION_LEFT_OVER},
-    ZOOMFLIPY = {cc.TransitionZoomFlipY, 3, cc.TRANSITION_ORIENTATION_UP_OVER}
+    CROSSFADE = { cc.TransitionCrossFade, 2 },
+    FADE = { cc.TransitionFade, 3, cc.c3b(0, 0, 0) },
+    FADEBL = { cc.TransitionFadeBL, 2 },
+    FADEDOWN = { cc.TransitionFadeDown, 2 },
+    FADETR = { cc.TransitionFadeTR, 2 },
+    FADEUP = { cc.TransitionFadeUp, 2 },
+    FLIPANGULAR = { cc.TransitionFlipAngular, 3, cc.TRANSITION_ORIENTATION_LEFT_OVER },
+    FLIPX = { cc.TransitionFlipX, 3, cc.TRANSITION_ORIENTATION_LEFT_OVER },
+    FLIPY = { cc.TransitionFlipY, 3, cc.TRANSITION_ORIENTATION_UP_OVER },
+    JUMPZOOM = { cc.TransitionJumpZoom, 2 },
+    MOVEINB = { cc.TransitionMoveInB, 2 },
+    MOVEINL = { cc.TransitionMoveInL, 2 },
+    MOVEINR = { cc.TransitionMoveInR, 2 },
+    MOVEINT = { cc.TransitionMoveInT, 2 },
+    PAGETURN = { cc.TransitionPageTurn, 3, false },
+    ROTOZOOM = { cc.TransitionRotoZoom, 2 },
+    SHRINKGROW = { cc.TransitionShrinkGrow, 2 },
+    SLIDEINB = { cc.TransitionSlideInB, 2 },
+    SLIDEINL = { cc.TransitionSlideInL, 2 },
+    SLIDEINR = { cc.TransitionSlideInR, 2 },
+    SLIDEINT = { cc.TransitionSlideInT, 2 },
+    SPLITCOLS = { cc.TransitionSplitCols, 2 },
+    SPLITROWS = { cc.TransitionSplitRows, 2 },
+    TURNOFFTILES = { cc.TransitionTurnOffTiles, 2 },
+    ZOOMFLIPANGULAR = { cc.TransitionZoomFlipAngular, 2 },
+    ZOOMFLIPX = { cc.TransitionZoomFlipX, 3, cc.TRANSITION_ORIENTATION_LEFT_OVER },
+    ZOOMFLIPY = { cc.TransitionZoomFlipY, 3, cc.TRANSITION_ORIENTATION_UP_OVER }
 }
 
 display.TEXTURES_PIXEL_FORMAT = {}
@@ -801,7 +802,7 @@ local sprite = display.newScale9Sprite("Box.png", 0, 0, cc.size(400, 300))
 
 function display.newScale9Sprite(filename, x, y, size, capInsets)
     local scale9sp = ccui.Scale9Sprite or cc.Scale9Sprite
-    return display.newSprite(filename, x, y, {class = scale9sp, size = size, capInsets = capInsets})
+    return display.newSprite(filename, x, y, { class = scale9sp, size = size, capInsets = capInsets })
 end
 
 -- start --
@@ -864,8 +865,8 @@ function display.newTiledBatchNode(filename, plistFile, size, hPadding, vPadding
     for y = 0, __yRepeat - 1 do
         for x = 0, __xRepeat - 1 do
             __newSize.width = __newSize.width + __sliceSize.width
-            __sprite =
-                display.newSprite(filename):align(display.LEFT_BOTTOM, x * __sliceSize.width, y * __sliceSize.height):addTo(
+            __sprite = display.newSprite(filename):align(display.LEFT_BOTTOM, x * __sliceSize.width,
+                y * __sliceSize.height):addTo(
                 __batch
             )
         end
@@ -978,7 +979,7 @@ function display.newCircle(radius, params)
             if radii > endRadian then
                 break
             end
-            points[#points + 1] = {posX + radius * math.cos(radii), posY + radius * math.sin(radii)}
+            points[#points + 1] = { posX + radius * math.cos(radii), posY + radius * math.sin(radii) }
         end
         return points
     end
@@ -1046,13 +1047,14 @@ function display.newRect(rect, params)
     width = rect.width
 
     local points = {
-        {x, y},
-        {x + width, y},
-        {x + width, y + height},
-        {x, y + height}
+        { x, y },
+        { x + width, y },
+        { x + width, y + height },
+        { x, y + height }
     }
     return display.newPolygon(points, params)
 end
+
 --
 
 --[[--
@@ -1073,7 +1075,8 @@ node:addTo(self)
 node:center()
 ~~~
 
-]] function display.newRoundedRect(
+]]
+function display.newRoundedRect(
     size,
     radius,
     params)
@@ -1084,8 +1087,8 @@ node:center()
 
     for i = 0, segments do
         local radian = i * radianPerSegment
-        radianVertices[i] =
-            cc.p(math.round(math.cos(radian) * radius * 10) / 10, math.round(math.sin(radian) * radius * 10) / 10)
+        radianVertices[i] = cc.p(math.round(math.cos(radian) * radius * 10) / 10,
+            math.round(math.sin(radian) * radius * 10) / 10)
     end
 
     local points = {}
@@ -1225,7 +1228,7 @@ function display.newPolygon(points, params, drawNode)
 
     local pts = {}
     for i, p in ipairs(points) do
-        pts[i] = {x = p[1] * scale, y = p[2] * scale}
+        pts[i] = { x = p[1] * scale, y = p[2] * scale }
     end
 
     drawNode = drawNode or cc.DrawNode:create()

@@ -156,6 +156,7 @@ function clone(object)
         end
         return setmetatable(new_table, getmetatable(object))
     end
+
     return _copy(object)
 end
 
@@ -324,7 +325,7 @@ function class(classname, super)
         -- inherited from Lua Object
         if super then
             cls = {}
-            setmetatable(cls, {__index = super})
+            setmetatable(cls, { __index = super })
             cls.super = super
         else
             cls = {
@@ -555,7 +556,7 @@ end
 
 function math.newrandomseed()
     local ok, socket =
-        pcall(
+    pcall(
         function()
             return require("socket")
         end
@@ -1253,9 +1254,10 @@ end
 --------------------------------
 -- @module string
 
+
 string._htmlspecialchars_set = {}
 string._htmlspecialchars_set["&"] = "&amp;"
-string._htmlspecialchars_set['"'] = "&quot;"
+string._htmlspecialchars_set["\""] = "&quot;"
 string._htmlspecialchars_set["'"] = "&#039;"
 string._htmlspecialchars_set["<"] = "&lt;"
 string._htmlspecialchars_set[">"] = "&gt;"
@@ -1598,8 +1600,7 @@ print(string.urldecode(input))
 
 function string.urldecode(input)
     input = string.gsub(input, "+", " ")
-    input =
-        string.gsub(
+    input = string.gsub(
         input,
         "%%(%x%x)",
         function(h)
@@ -1636,7 +1637,7 @@ print(string.utf8len(input))
 function string.utf8len(input)
     local left = string.len(input)
     local cnt = 0
-    local arr = {0, 0xc0, 0xe0, 0xf0, 0xf8, 0xfc}
+    local arr = { 0, 0xc0, 0xe0, 0xf0, 0xf8, 0xfc }
     while left > 0 do
         local tmp = string.byte(input, -left)
         local i = #arr
@@ -1739,6 +1740,7 @@ function vardump(object, label)
             result[#result + 1] = string.format("%s}%s", indent, postfix)
         end
     end
+
     _vardump(object, label, "", 1)
 
     return table.concat(result, "\n")
