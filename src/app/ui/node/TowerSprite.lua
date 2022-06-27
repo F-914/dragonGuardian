@@ -11,7 +11,10 @@ local TowerSprite = class("towerSprite", function(res)
     return display.newSprite(res)
 end)
 
-local CreateSpriteUtil = require("src/app/utils/CreateSpriteUtil.lua")
+--local
+local CreateSpriteUtil = require("src/app/test/CreateSpriteUtil.lua")
+--
+
 --[[--
     @description: 构造函数
     @param res type:string, 图片资源
@@ -32,13 +35,15 @@ function TowerSprite:ctor(res, data)
     self:addChild(towerType)
 
 end
+
 --[[--
     @description: 帧刷新
     @param dt type:number, 帧间隔，单位秒
     @return none
 ]]
 function TowerSprite:update(dt)
-    local texture = CCTextureCache:sharedTextureCache():addImage("res/home/guide/subinterface_tower_list/level/Lv."..self.data_.level..".png")
+    local texture = CCTextureCache:sharedTextureCache():addImage("res/home/guide/subinterface_tower_list/level/Lv." ..
+        self.data_.level .. ".png")
     self.levelSprite_:setTexture(texture)
 end
 

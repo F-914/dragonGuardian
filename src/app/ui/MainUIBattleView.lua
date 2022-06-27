@@ -27,6 +27,7 @@ function MainUIBattle:ctor()
     self:init()
 
 end
+
 function MainUIBattle:init()
     self.battleBackGroundLayer_ = BattleBackGroundLayer.new()
     self:addChild(self.battleBackGroundLayer_)
@@ -35,18 +36,21 @@ function MainUIBattle:init()
     self.userRewardLayer_ = UserRewardsLayer.new()
     self:addChild(self.userRewardLayer_)
 end
+
 --[[--
     @description: 执行事件的注册
 ]]
 function MainUIBattle:onEnter()
 
 end
+
 --[[--
     @description: 执行事件的注销
 ]]
 function MainUIBattle:onExit()
 
 end
+
 --[[--
     @description:帧刷新
     @param dt type:number, 帧间隔
@@ -57,4 +61,5 @@ function MainUIBattle:update(dt)
     self.battleBackGroundLayer_:update(dt)
     self.battleBackGroundLayer_:update(dt)
 end
+
 return MainUIBattle

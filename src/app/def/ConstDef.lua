@@ -3,41 +3,22 @@
     常量定义
 ]]
 
--- PATH
-local PATH_ICON_01 = "src/generic/tower_PATH_ICON/01.png"
-local PATH_ICON_02 = "src/generic/tower_PATH_ICON/02.png"
-local PATH_ICON_03 = "src/generic/tower_PATH_ICON/03.png"
-local PATH_ICON_04 = "src/generic/tower_PATH_ICON/04.png"
-local PATH_ICON_05 = "src/generic/tower_PATH_ICON/05.png"
-local PATH_ICON_06 = "src/generic/tower_PATH_ICON/06.png"
-local PATH_ICON_07 = "src/generic/tower_PATH_ICON/07.png"
-local PATH_ICON_08 = "src/generic/tower_PATH_ICON/08.png"
-local PATH_ICON_09 = "src/generic/tower_PATH_ICON/09.png"
-local PATH_ICON_10 = "src/generic/tower_PATH_ICON/10.png"
-local PATH_ICON_11 = "src/generic/tower_PATH_ICON/11.png"
-local PATH_ICON_12 = "src/generic/tower_PATH_ICON/12.png"
-local PATH_ICON_13 = "src/generic/tower_PATH_ICON/13.png"
-local PATH_ICON_14 = "src/generic/tower_PATH_ICON/14.png"
-local PATH_ICON_15 = "src/generic/tower_PATH_ICON/15.png"
-local PATH_ICON_16 = "src/generic/tower_PATH_ICON/16.png"
-local PATH_ICON_17 = "src/generic/tower_PATH_ICON/17.png"
-local PATH_ICON_18 = "src/generic/tower_PATH_ICON/18.png"
-local PATH_ICON_19 = "src/generic/tower_PATH_ICON/19.png"
-local PATH_ICON_20 = "src/generic/tower_PATH_ICON/20.png"
+--local
+local StringDef = require("app.def.StringDef")
 --
 
 local ConstDef = {
     scale_ = 0.9,
-    ICON_LIST = { PATH_ICON_01, PATH_ICON_02,
-        PATH_ICON_03, PATH_ICON_04,
-        PATH_ICON_05, PATH_ICON_06,
-        PATH_ICON_07, PATH_ICON_08,
-        PATH_ICON_09, PATH_ICON_10,
-        PATH_ICON_11, PATH_ICON_12,
-        PATH_ICON_13, PATH_ICON_14,
-        PATH_ICON_15, PATH_ICON_16,
-        PATH_ICON_17, PATH_ICON_18,
-        PATH_ICON_19, PATH_ICON_20 },
+    PATH_ICON_LIST = { StringDef.PATH_ICON_01, StringDef.PATH_ICON_02,
+        StringDef.PATH_ICON_03, StringDef.PATH_ICON_04,
+        StringDef.PATH_ICON_05, StringDef.PATH_ICON_06,
+        StringDef.PATH_ICON_07, StringDef.PATH_ICON_08,
+        StringDef.PATH_ICON_09, StringDef.PATH_ICON_10,
+        StringDef.PATH_ICON_11, StringDef.PATH_ICON_12,
+        StringDef.PATH_ICON_13, StringDef.PATH_ICON_14,
+        StringDef.PATH_ICON_15, StringDef.PATH_ICON_16,
+        StringDef.PATH_ICON_17, StringDef.PATH_ICON_18,
+        StringDef.PATH_ICON_19, StringDef.PATH_ICON_20 },
     LINEUP_LIST = {
         lineupOne = { 1, 1, 1, 1, 1 },
         lineupTwo = { 2, 2, 2, 2, 2 },

@@ -11,8 +11,8 @@ local UserBattleLayer = class("UserBattleLayer", function()
     return display.newLayer()
 end)
 
-local GameData = require("src/app/data/GameData.lua")
-local CreateSpriteUtil = require("src/app/utils/CreateSpriteUtil.lua")
+local GameData = require("app.test.GameData")
+local CreateSpriteUtil = require("src/app/test/CreateSpriteUtil.lua")
 
 --[[--
     @description: 构造方法
@@ -22,6 +22,7 @@ function UserBattleLayer:ctor()
 
     self:init()
 end
+
 --[[--
     @description: 初始化方法
 ]]
@@ -59,18 +60,21 @@ function UserBattleLayer:init()
     end)
 
 end
+
 --[[--
     @description: 执行事件的注册
 ]]
 function UserBattleLayer:onEnter()
 
 end
+
 --[[--
     @description: 执行事件的注销
 ]]
 function UserBattleLayer:onExit()
 
 end
+
 --[[--
     @description: 帧刷新
     @param dt type: number, 帧间隔

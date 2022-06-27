@@ -10,7 +10,10 @@
 local RewardSprite = class("RewardSprite", function(res)
     return display.newSprite(res)
 end)
-local CreateSpriteUtil = require("src/app/utils/CreateSpriteUtil.lua")
+--local
+local CreateSpriteUtil = require("src/app/test/CreateSpriteUtil.lua")
+--
+
 --[[--
     @description: 构造方法
     @param res type:string, 精灵纹理
@@ -41,11 +44,11 @@ function RewardSprite:ctor(res, data)
     local quantityTTF = nil
     if self.data_.quantity then
         quantityTTF = display.newTTFLabel({
-                    text = tostring(self.data_.quantity),
-                    font = "res/font/fzbiaozjw.ttf",
-                    size = 18,
-                    color = cc.c3b(168, 176, 225)
-                })
+            text = tostring(self.data_.quantity),
+            font = "res/font/fzbiaozjw.ttf",
+            size = 18,
+            color = cc.c3b(168, 176, 225)
+        })
     end
     if quantityTTF then
         button:setPosition(self.size_.width * .5, self.size_.height * .5 + 5)
@@ -59,6 +62,7 @@ function RewardSprite:ctor(res, data)
     self.lockSp_ = lockSp --lockSp 用于帧刷新
     self:init()
 end
+
 --[[-
     @description: 进行解锁状态变化事件的注册，暂无
 ]]
@@ -67,6 +71,7 @@ function RewardSprite:init()
         注册方法块，暂无
     ]]
 end
+
 --[[--
     @description: 当奖励解锁时调用这个方法，更新纹理，该方法用于注册后调用
 ]]
@@ -80,6 +85,7 @@ function RewardSprite:unlocked()
     local texture = CCTextureCache:sharedTextureCache():addImage("res/home/battle/high_ladder/unlocked_unreceived_yellow_border.png")
     self:setTexture(texture)
 end
+
 --[[--
     @description: 当奖励被领取时，调用这个方法，更新视图，该方法用于注册
 ]]
@@ -93,6 +99,7 @@ function RewardSprite:get()
     local texture = CCTextureCache:sharedTextureCache():addImage("res/home/battle/high_ladder/can_receive.png")
     self:setTexture(texture)
 end
+
 --[[--
     @description: 帧刷新，暂无
     @param dt type: number, 帧间隔
@@ -112,4 +119,5 @@ function RewardSprite:update(dt)
     --
     --end
 end
+
 return RewardSprite

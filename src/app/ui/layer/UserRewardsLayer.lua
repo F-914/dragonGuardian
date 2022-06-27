@@ -12,9 +12,12 @@ local UserRewardsLayer = class("UserRewardsLayer", function()
     return display.newLayer()
 end)
 
-local GameData = require("src/app/data/GameData.lua")
-local CreateSpriteUtil = require("src/app/utils/CreateSpriteUtil.lua")
+--local
+local GameData = require("app.test.GameData")
+local CreateSpriteUtil = require("src/app/test/CreateSpriteUtil.lua")
 local CalibrateScaleSprite = require("src/app/ui/node/CalibrateScaleSprite.lua")
+local Log = require("app.utils.Log")
+--
 --[[--
     @description: 构造方法
     @param none
@@ -27,6 +30,7 @@ function UserRewardsLayer:ctor()
     self.calibrateScale_ = nil --type: sprite 用于帧刷新
     self:init()
 end
+
 --[[--
     @description:初始化方法
     @param none
@@ -64,7 +68,9 @@ function UserRewardsLayer:init()
     highLadderView:setDirection(2)
     highLadderView:addTo(self)
     --构建进度条
-    local calibrateScale = CalibrateScaleSprite.new("res/home/battle/high_ladder/calibrated scale/calibrated_scale.png", GameData.userKeyQuantity_)
+    local calibrateScale = CalibrateScaleSprite.new("res/home/battle/high_ladder/calibrated scale/calibrated_scale.png",
+        GameData.userKeyQuantity_)
+    Log.i(" userKeyQuantity_ is " .. tostring(GameData.userKeyQuantity_))
     calibrateScale:setAnchorPoint(0, 0)
     calibrateScale:setPosition(12, 15)
     calibrateScale:addTo(highLadderView)
@@ -91,6 +97,7 @@ function UserRewardsLayer:init()
     keySprite:setPosition(18, 35)
     keySprite:addTo(highLadderView)
 end
+
 --[[--
     @description: 帧刷新
     @param dt type:number, 帧间隔
@@ -101,16 +108,19 @@ function UserRewardsLayer:update(dt)
     end
     self.calibrateScale_:update(dt)
 end
+
 --[[--
     @description: 执行事件的注册
 ]]
 function UserRewardsLayer:onEnter()
 
 end
+
 --[[--
     @description: 执行事件的注销
 ]]
 function UserRewardsLayer:onExit()
 
 end
+
 return UserRewardsLayer
