@@ -123,15 +123,11 @@ end
 
 function SimpleTCP:_update(dt)
 	if self.stat == SimpleTCP.STAT_CONNECTED then
-<<<<<<< HEAD
 		local body, status, partial = self.tcp:receive("*a") -- receive mode: get all data
-=======
-		local body, status, partial = self.tcp:receive("*a")	-- receive mode: get all data
->>>>>>> dev_txf
 		-- 1. If receive successful
 		if body and string.len(body) > 0 then
 			self.callback(SimpleTCP.EVENT_DATA, body)
-			return
+			-- return
 		end
 
 		-- 2. If got an error. Firstly, transfer partial data.

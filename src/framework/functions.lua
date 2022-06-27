@@ -21,10 +21,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
 ]]
-<<<<<<< HEAD
-=======
-
->>>>>>> dev_txf
 --------------------------------
 -- @module functions
 
@@ -33,10 +29,6 @@ THE SOFTWARE.
 提供一组常用函数，以及对 Lua 标准库的扩展
 
 ]]
-<<<<<<< HEAD
-=======
-
->>>>>>> dev_txf
 --[[--
 
 输出格式化字符串
@@ -105,13 +97,9 @@ end
 
 ]]
 function checktable(value)
-<<<<<<< HEAD
     if type(value) ~= "table" then
         value = {}
     end
-=======
-    if type(value) ~= "table" then value = {} end
->>>>>>> dev_txf
     return value
 end
 
@@ -168,10 +156,6 @@ function clone(object)
         end
         return setmetatable(new_table, getmetatable(object))
     end
-<<<<<<< HEAD
-
-=======
->>>>>>> dev_txf
     return _copy(object)
 end
 
@@ -312,7 +296,6 @@ function class(classname, super)
 
         if superType == "table" then
             -- copy fields from super
-<<<<<<< HEAD
             for k, v in pairs(super) do
                 cls[k] = v
             end
@@ -322,14 +305,6 @@ function class(classname, super)
             cls.__create = super
             cls.ctor = function()
             end
-=======
-            for k,v in pairs(super) do cls[k] = v end
-            cls.__create = super.__create
-            cls.super    = super
-        else
-            cls.__create = super
-            cls.ctor = function() end
->>>>>>> dev_txf
         end
 
         cls.__cname = classname
@@ -338,26 +313,17 @@ function class(classname, super)
         function cls.new(...)
             local instance = cls.__create(...)
             -- copy fields from class to native object
-<<<<<<< HEAD
             for k, v in pairs(cls) do
                 instance[k] = v
             end
-=======
-            for k,v in pairs(cls) do instance[k] = v end
->>>>>>> dev_txf
             instance.class = cls
             instance:ctor(...)
             return instance
         end
-<<<<<<< HEAD
-=======
-
->>>>>>> dev_txf
     else
         -- inherited from Lua Object
         if super then
             cls = {}
-<<<<<<< HEAD
             setmetatable(cls, { __index = super })
             cls.super = super
         else
@@ -365,12 +331,6 @@ function class(classname, super)
                 ctor = function()
                 end
             }
-=======
-            setmetatable(cls, {__index = super})
-            cls.super = super
-        else
-            cls = {ctor = function() end}
->>>>>>> dev_txf
         end
 
         cls.__cname = classname
@@ -516,11 +476,7 @@ function import(moduleName, currentModuleName)
 
         if not currentModuleNameParts then
             if not currentModuleName then
-<<<<<<< HEAD
                 local n, v = debug.getlocal(3, 1)
-=======
-                local n,v = debug.getlocal(3, 1)
->>>>>>> dev_txf
                 currentModuleName = v
             end
 
@@ -586,10 +542,6 @@ function handler(obj, method)
     end
 end
 
-<<<<<<< HEAD
-=======
-
->>>>>>> dev_txf
 --------------------------------
 -- @module math
 
@@ -602,18 +554,12 @@ end
 -- end --
 
 function math.newrandomseed()
-<<<<<<< HEAD
     local ok, socket =
     pcall(
         function()
             return require("socket")
         end
     )
-=======
-    local ok, socket = pcall(function()
-        return require("socket")
-    end)
->>>>>>> dev_txf
 
     if ok then
         -- 如果集成了 socket 模块，则使用 socket.gettime() 获取随机数种子
@@ -633,11 +579,7 @@ end
 -- 对数值进行四舍五入，如果不是数值则返回 0
 -- @function [parent=#math] round
 -- @param number value 输入值
-<<<<<<< HEAD
 -- @return number#number
-=======
--- @return number#number 
->>>>>>> dev_txf
 
 -- end --
 
@@ -655,11 +597,7 @@ end
 -- end --
 
 function math.angle2radian(angle)
-<<<<<<< HEAD
     return angle * math.pi / 180
-=======
-	return angle*math.pi/180
->>>>>>> dev_txf
 end
 
 -- start --
@@ -671,17 +609,9 @@ end
 -- end --
 
 function math.radian2angle(radian)
-<<<<<<< HEAD
     return radian / math.pi * 180
 end
 
-=======
-	return radian/math.pi*180
-end
-
-
-
->>>>>>> dev_txf
 --------------------------------
 -- @module io
 
@@ -691,11 +621,7 @@ end
 -- 检查指定的文件或目录是否存在，如果存在返回 true，否则返回 false
 -- @function [parent=#io] exists
 -- @param string path 要检查的文件或目录的完全路径
-<<<<<<< HEAD
 -- @return boolean#boolean
-=======
--- @return boolean#boolean 
->>>>>>> dev_txf
 
 --[[--
 
@@ -713,10 +639,6 @@ end
 ~~~
 
 ]]
-<<<<<<< HEAD
-=======
-
->>>>>>> dev_txf
 -- end --
 
 function io.exists(path)
@@ -734,11 +656,7 @@ end
 -- 读取文件内容，返回包含文件内容的字符串，如果失败返回 nil
 -- @function [parent=#io] readfile
 -- @param string path 文件完全路径
-<<<<<<< HEAD
 -- @return string#string
-=======
--- @return string#string 
->>>>>>> dev_txf
 
 --[[--
 
@@ -747,10 +665,6 @@ end
 io.readfile() 会一次性读取整个文件的内容，并返回一个字符串，因此该函数不适宜读取太大的文件。
 
 ]]
-<<<<<<< HEAD
-=======
-
->>>>>>> dev_txf
 -- end --
 
 function io.readfile(path)
@@ -771,11 +685,7 @@ end
 -- @param string path 文件完全路径
 -- @param string content 要写入的内容
 -- @param string mode 写入模式，默认值为 "w+b"
-<<<<<<< HEAD
 -- @return boolean#boolean
-=======
--- @return boolean#boolean 
->>>>>>> dev_txf
 
 --[[--
 
@@ -791,23 +701,15 @@ end
 **Android 特别提示:** 在 Android 平台上，文件只能写入存储卡所在路径，assets 和 data 等目录都是无法写入的。
 
 ]]
-<<<<<<< HEAD
-=======
-
->>>>>>> dev_txf
 -- end --
 
 function io.writefile(path, content, mode)
     mode = mode or "w+b"
     local file = io.open(path, mode)
     if file then
-<<<<<<< HEAD
         if file:write(content) == nil then
             return false
         end
-=======
-        if file:write(content) == nil then return false end
->>>>>>> dev_txf
         io.close(file)
         return true
     else
@@ -821,11 +723,7 @@ end
 -- 拆分一个路径字符串，返回组成路径的各个部分
 -- @function [parent=#io] pathinfo
 -- @param string path 要分拆的路径字符串
-<<<<<<< HEAD
 -- @return table#table
-=======
--- @return table#table 
->>>>>>> dev_txf
 
 --[[--
 
@@ -844,10 +742,6 @@ local pathinfo  = io.pathinfo("/var/app/test/abc.png")
 ~~~
 
 ]]
-<<<<<<< HEAD
-=======
-
->>>>>>> dev_txf
 -- end --
 
 function io.pathinfo(path)
@@ -882,11 +776,7 @@ end
 -- 返回指定文件的大小，如果失败返回 false
 -- @function [parent=#io] filesize
 -- @param string path 文件完全路径
-<<<<<<< HEAD
 -- @return integer#integer
-=======
--- @return integer#integer 
->>>>>>> dev_txf
 
 -- end --
 
@@ -902,10 +792,6 @@ function io.filesize(path)
     return size
 end
 
-<<<<<<< HEAD
-=======
-
->>>>>>> dev_txf
 --------------------------------
 -- @module table
 
@@ -915,11 +801,7 @@ end
 -- 计算表格包含的字段数量
 -- @function [parent=#table] nums
 -- @param table t 要检查的表格
-<<<<<<< HEAD
 -- @return integer#integer
-=======
--- @return integer#integer 
->>>>>>> dev_txf
 
 --[[--
 
@@ -928,10 +810,6 @@ end
 Lua table 的 "#" 操作只对依次排序的数值下标数组有效，table.nums() 则计算 table 中所有不为 nil 的值的个数。
 
 ]]
-<<<<<<< HEAD
-=======
-
->>>>>>> dev_txf
 -- end --
 
 function table.nums(t)
@@ -948,11 +826,7 @@ end
 -- 返回指定表格中的所有键
 -- @function [parent=#table] keys
 -- @param table hashtable 要检查的表格
-<<<<<<< HEAD
 -- @return table#table
-=======
--- @return table#table 
->>>>>>> dev_txf
 
 --[[--
 
@@ -967,10 +841,6 @@ local keys = table.keys(hashtable)
 ~~~
 
 ]]
-<<<<<<< HEAD
-=======
-
->>>>>>> dev_txf
 -- end --
 
 function table.keys(hashtable)
@@ -987,11 +857,7 @@ end
 -- 返回指定表格中的所有值
 -- @function [parent=#table] values
 -- @param table hashtable 要检查的表格
-<<<<<<< HEAD
 -- @return table#table
-=======
--- @return table#table 
->>>>>>> dev_txf
 
 --[[--
 
@@ -1006,10 +872,6 @@ local values = table.values(hashtable)
 ~~~
 
 ]]
-<<<<<<< HEAD
-=======
-
->>>>>>> dev_txf
 -- end --
 
 function table.values(hashtable)
@@ -1042,10 +904,6 @@ table.merge(dest, src)
 ~~~
 
 ]]
-<<<<<<< HEAD
-=======
-
->>>>>>> dev_txf
 -- end --
 
 function table.merge(dest, src)
@@ -1081,7 +939,6 @@ table.insertto(dest, src, 5)
 ~~~
 
 ]]
-<<<<<<< HEAD
 -- end --
 
 function table.insertto(dest, src, begin)
@@ -1094,21 +951,6 @@ function table.insertto(dest, src, begin)
     for i = 0, len - 1 do
         dest[i + begin] = src[i + 1]
     end
-=======
-
--- end --
-
-function table.insertto(dest, src, begin)
-	begin = checkint(begin)
-	if begin <= 0 then
-		begin = #dest + 1
-	end
-
-	local len = #src
-	for i = 0, len - 1 do
-		dest[i + begin] = src[i + 1]
-	end
->>>>>>> dev_txf
 end
 
 -- start --
@@ -1119,11 +961,7 @@ end
 -- @param table array 表格
 -- @param mixed value 要查找的值
 -- @param integer begin 起始索引值
-<<<<<<< HEAD
 -- @return integer#integer
-=======
--- @return integer#integer 
->>>>>>> dev_txf
 
 --[[--
 
@@ -1137,25 +975,15 @@ print(table.indexof(array, "b")) -- 输出 2
 ~~~
 
 ]]
-<<<<<<< HEAD
-=======
-
->>>>>>> dev_txf
 -- end --
 
 function table.indexof(array, value, begin)
     for i = begin or 1, #array do
-<<<<<<< HEAD
         if array[i] == value then
             return i
         end
     end
     return false
-=======
-        if array[i] == value then return i end
-    end
-	return false
->>>>>>> dev_txf
 end
 
 -- start --
@@ -1179,21 +1007,13 @@ print(table.keyof(hashtable, "chukong")) -- 输出 comp
 ~~~
 
 ]]
-<<<<<<< HEAD
-=======
-
->>>>>>> dev_txf
 -- end --
 
 function table.keyof(hashtable, value)
     for k, v in pairs(hashtable) do
-<<<<<<< HEAD
         if v == value then
             return k
         end
-=======
-        if v == value then return k end
->>>>>>> dev_txf
     end
     return nil
 end
@@ -1206,11 +1026,7 @@ end
 -- @param table array 表格
 -- @param mixed value 要删除的值
 -- @param boolean removeall 是否删除所有相同的值
-<<<<<<< HEAD
 -- @return integer#integer
-=======
--- @return integer#integer 
->>>>>>> dev_txf
 
 --[[--
 
@@ -1224,10 +1040,6 @@ print(table.removebyvalue(array, "c", true)) -- 输出 2
 ~~~
 
 ]]
-<<<<<<< HEAD
-=======
-
->>>>>>> dev_txf
 -- end --
 
 function table.removebyvalue(array, value, removeall)
@@ -1238,13 +1050,9 @@ function table.removebyvalue(array, value, removeall)
             c = c + 1
             i = i - 1
             max = max - 1
-<<<<<<< HEAD
             if not removeall then
                 break
             end
-=======
-            if not removeall then break end
->>>>>>> dev_txf
         end
         i = i + 1
     end
@@ -1293,10 +1101,6 @@ end
 ~~~
 
 ]]
-<<<<<<< HEAD
-=======
-
->>>>>>> dev_txf
 -- end --
 
 function table.map(t, fn)
@@ -1338,18 +1142,10 @@ end
 ~~~
 
 ]]
-<<<<<<< HEAD
 -- end --
 
 function table.walk(t, fn)
     for k, v in pairs(t) do
-=======
-
--- end --
-
-function table.walk(t, fn)
-    for k,v in pairs(t) do
->>>>>>> dev_txf
         fn(v, k)
     end
 end
@@ -1394,21 +1190,13 @@ end
 ~~~
 
 ]]
-<<<<<<< HEAD
-=======
-
->>>>>>> dev_txf
 -- end --
 
 function table.filter(t, fn)
     for k, v in pairs(t) do
-<<<<<<< HEAD
         if not fn(v, k) then
             t[k] = nil
         end
-=======
-        if not fn(v, k) then t[k] = nil end
->>>>>>> dev_txf
     end
 end
 
@@ -1442,10 +1230,6 @@ end
 ~~~
 
 ]]
-<<<<<<< HEAD
-=======
-
->>>>>>> dev_txf
 -- end --
 
 function table.unique(t, bArray)
@@ -1466,10 +1250,6 @@ function table.unique(t, bArray)
     return n
 end
 
-<<<<<<< HEAD
-=======
-
->>>>>>> dev_txf
 --------------------------------
 -- @module string
 
@@ -1501,10 +1281,6 @@ print(string.htmlspecialchars("<ABC>"))
 ~~~
 
 ]]
-<<<<<<< HEAD
-=======
-
->>>>>>> dev_txf
 -- end --
 
 function string.htmlspecialchars(input)
@@ -1534,10 +1310,6 @@ print(string.restorehtmlspecialchars("&lt;ABC&gt;"))
 ~~~
 
 ]]
-<<<<<<< HEAD
-=======
-
->>>>>>> dev_txf
 -- end --
 
 function string.restorehtmlspecialchars(input)
@@ -1568,10 +1340,6 @@ print(string.nl2br("Hello\nWorld"))
 ~~~
 
 ]]
-<<<<<<< HEAD
-=======
-
->>>>>>> dev_txf
 -- end --
 
 function string.nl2br(input)
@@ -1599,10 +1367,6 @@ print(string.text2html("<Hello>\nWorld"))
 ~~~
 
 ]]
-<<<<<<< HEAD
-=======
-
->>>>>>> dev_txf
 -- end --
 
 function string.text2html(input)
@@ -1639,16 +1403,11 @@ local res = string.split(input, "-+-")
 ~~~
 
 ]]
-<<<<<<< HEAD
-=======
-
->>>>>>> dev_txf
 -- end --
 
 function string.split(input, delimiter)
     input = tostring(input)
     delimiter = tostring(delimiter)
-<<<<<<< HEAD
     if (delimiter == "") then
         return false
     end
@@ -1657,12 +1416,6 @@ function string.split(input, delimiter)
     for st, sp in function()
         return string.find(input, delimiter, pos, true)
     end do
-=======
-    if (delimiter=='') then return false end
-    local pos,arr = 0, {}
-    -- for each divider found
-    for st,sp in function() return string.find(input, delimiter, pos, true) end do
->>>>>>> dev_txf
         table.insert(arr, string.sub(input, pos, st - 1))
         pos = sp + 1
     end
@@ -1699,10 +1452,6 @@ print(string.ltrim(input))
 -   回到行首符 \r
 
 ]]
-<<<<<<< HEAD
-=======
-
->>>>>>> dev_txf
 -- end --
 
 function string.ltrim(input)
@@ -1731,10 +1480,6 @@ print(string.rtrim(input))
 ~~~
 
 ]]
-<<<<<<< HEAD
-=======
-
->>>>>>> dev_txf
 -- end --
 
 function string.rtrim(input)
@@ -1755,10 +1500,6 @@ end
 去掉字符串首尾的空白字符，返回结果
 
 ]]
-<<<<<<< HEAD
-=======
-
->>>>>>> dev_txf
 -- end --
 
 function string.trim(input)
@@ -1787,10 +1528,6 @@ print(string.ucfirst(input))
 ~~~
 
 ]]
-<<<<<<< HEAD
-=======
-
->>>>>>> dev_txf
 -- end --
 
 function string.ucfirst(input)
@@ -1824,10 +1561,6 @@ print(string.urlencode(input))
 ~~~
 
 ]]
-<<<<<<< HEAD
-=======
-
->>>>>>> dev_txf
 -- end --
 
 function string.urlencode(input)
@@ -1862,7 +1595,6 @@ print(string.urldecode(input))
 ~~~
 
 ]]
-<<<<<<< HEAD
 -- end --
 
 function string.urldecode(input)
@@ -1875,15 +1607,6 @@ function string.urldecode(input)
         end
     )
     input = string.gsub(input, "\r\n", "\n")
-=======
-
--- end --
-
-function string.urldecode(input)
-    input = string.gsub (input, "+", " ")
-    input = string.gsub (input, "%%(%x%x)", function(h) return string.char(checknumber(h,16)) end)
-    input = string.gsub (input, "\r\n", "\n")
->>>>>>> dev_txf
     return input
 end
 
@@ -1908,27 +1631,15 @@ print(string.utf8len(input))
 ~~~
 
 ]]
-<<<<<<< HEAD
-=======
-
->>>>>>> dev_txf
 -- end --
 
 function string.utf8len(input)
     local left = string.len(input)
-<<<<<<< HEAD
     local cnt = 0
     local arr = { 0, 0xc0, 0xe0, 0xf0, 0xf8, 0xfc }
     while left > 0 do
         local tmp = string.byte(input, -left)
         local i = #arr
-=======
-    local cnt  = 0
-    local arr  = {0, 0xc0, 0xe0, 0xf0, 0xf8, 0xfc}
-    while left > 0 do
-        local tmp = string.byte(input, -left)
-        local i   = #arr
->>>>>>> dev_txf
         while arr[i] do
             if tmp >= arr[i] then
                 left = left - i
@@ -1961,17 +1672,12 @@ print(string.formatnumberthousands(1924235))
 ~~~
 
 ]]
-<<<<<<< HEAD
-=======
-
->>>>>>> dev_txf
 -- end --
 
 function string.formatnumberthousands(num)
     local formatted = tostring(checknumber(num))
     local k
     while true do
-<<<<<<< HEAD
         formatted, k = string.gsub(formatted, "^(-?%d+)(%d%d%d)", "%1,%2")
         if k == 0 then
             break
@@ -2038,10 +1744,3 @@ function vardump(object, label)
 
     return table.concat(result, "\n")
 end
-=======
-        formatted, k = string.gsub(formatted, "^(-?%d+)(%d%d%d)", '%1,%2')
-        if k == 0 then break end
-    end
-    return formatted
-end
->>>>>>> dev_txf
