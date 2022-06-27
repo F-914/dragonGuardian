@@ -8,9 +8,10 @@ local Tower = class("Tower", require("app.data.BaseModel"))
 local ConstDef = require("app.def.ConstDef")
 --
 
----构造函数
----@param myTower Tower
----@param x number
+--[[--
+构造函数
+@param myTower Tower
+@param x number
 ---@param y number
 ---@param width number
 ---@param height number
@@ -30,6 +31,7 @@ local ConstDef = require("app.def.ConstDef")
 ---@param fatalityRate number
 ---@param star number
 -- TODO 属性应该还得增加
+]]
 function Tower:ctor(
     myTower,
     x,
