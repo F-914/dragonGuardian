@@ -1,19 +1,24 @@
 --[[--
-    ShopScene.lua
-
-    描述：商店场景
+    商店场景
+    ShopView.lua
 ]]
+local ShopView =
+class(
+    "ShopView",
+    function()
+        return display.newColorLayer(cc.c4b(0, 0, 0, 0))
+    end
+)
+-- local
 local StoreList = require("app.test.StoreList")
 local Log = require("app.utils.Log")
-
-local ShopScene = class("MainScene", function()
-    return display.newScene("MainScene")
-end)
-
+local audio = require("framework.audio")
+--
 local _shopLayer
 local _buttonCoinClik
 local _buttonCoinClikGrey
 local _checkBuy
+--
 
 --[[--
     描述：初始化函数
@@ -22,88 +27,11 @@ local _checkBuy
 
     @return none
 ]]
-function ShopScene:ctor(layer, num)
-    if layer == nil then
-        Log.e("ShopScene: layer is nil")
-        return
-    end
-    if num == nil then
-        num = 0
-    end
-    local shopLayer = self:createShopLayer()
-    shopLayer:addTo(layer, num)
+function ShopView:ctor()
+    self:initView()
 end
 
---[[--
-    描述：音乐音效加载
-
-    @param none
-
-    @return none
-]]
-local audio = require "framework.audio"
-function ShopScene:loadMusic()
-    audio.loadFile("sound_ogg/get_free_item.ogg", function(dt) end)
-    audio.loadFile("sound_ogg/get_paid_item.ogg", function(dt) end)
-    audio.loadFile("sound_ogg/open_box.ogg", function(dt) end)
-    audio.loadFile("sound_ogg/buy_paid_item.ogg", function(dt) end)
-end
-
---[[--
-    描述：金币商城按钮点击事件(点击后弹出二级界面)
-
-    @param layer
-
-    @return none
-]]
-function _buttonCoinClik(layer, itemWidth, itemHeight)
-    print("clik")
-    layer:scale(1)
-    _checkBuy(layer, itemWidth, itemHeight)
-end
-
---[[--
-    描述：金币商城按钮点击事件(点击后置灰)
-
-    @param layer
-
-    @return none
-]]
-function _buttonCoinClikGrey(layer, itemWidth, itemHeight)
-    -- 遮罩
-    local shadeSprite = cc.Sprite:create("home/shop/coins_shop/base_shade.png")
-    shadeSprite:setPosition(itemWidth * 2 / 3, itemHeight / 2)
-    shadeSprite:setAnchorPoint(0.5, 0.5)
-    shadeSprite:setOpacity(120)
-    shadeSprite:addTo(layer)
-end
-
---[[--
-    描述：二级界面确认购买信息获取模拟
-]]
-function _checkBuy(layer, itemWidth, itemHeight)
-    -- 弹出二级界面确认
-    local checkButton = ccui.Button:create("home/shop/second_purchase_confirmation_popup/button_buy.png")
-    checkButton:setAnchorPoint(0.5, 0.5)
-    checkButton:setPosition(itemWidth * 2 / 3, itemHeight / 2)
-    checkButton:scale(0.25)
-    checkButton:addTo(layer)
-    checkButton:addTouchEventListener(function(sender, eventType)
-        --checkButton:setTouchEnabled(false)
-        checkButton:removeFromParent()
-        _buttonCoinClikGrey(layer, itemWidth, itemHeight)
-        audio.playEffect("sound_ogg/buy_paid_item.ogg", false)
-    end)
-end
-
---[[--
-    描述：商店场景创建
-
-    @param none
-
-    @return layer
-]]
-function ShopScene:createShopLayer()
+function ShopView:initView()
     self:loadMusic()
 
     _shopLayer = ccui.Layout:create()
@@ -550,9 +478,68 @@ function ShopScene:createShopLayer()
             end
         end
     end
-
-
-    return _shopLayer
+    self:addChild(_shopLayer)
 end
 
-return ShopScene
+--[[--
+    描述：音乐音效加载
+
+    @param none
+
+    @return none
+]]
+function ShopView:loadMusic()
+    audio.loadFile("sound_ogg/get_free_item.ogg", function(dt) end)
+    audio.loadFile("sound_ogg/get_paid_item.ogg", function(dt) end)
+    audio.loadFile("sound_ogg/open_box.ogg", function(dt) end)
+    audio.loadFile("sound_ogg/buy_paid_item.ogg", function(dt) end)
+end
+
+--[[--
+    描述：金币商城按钮点击事件(点击后弹出二级界面)
+
+    @param layer
+
+    @return none
+]]
+function _buttonCoinClik(layer, itemWidth, itemHeight)
+    print("clik")
+    layer:scale(1)
+    _checkBuy(layer, itemWidth, itemHeight)
+end
+
+--[[--
+    描述：金币商城按钮点击事件(点击后置灰)
+
+    @param layer
+
+    @return none
+]]
+function _buttonCoinClikGrey(layer, itemWidth, itemHeight)
+    -- 遮罩
+    local shadeSprite = cc.Sprite:create("home/shop/coins_shop/base_shade.png")
+    shadeSprite:setPosition(itemWidth * 2 / 3, itemHeight / 2)
+    shadeSprite:setAnchorPoint(0.5, 0.5)
+    shadeSprite:setOpacity(120)
+    shadeSprite:addTo(layer)
+end
+
+--[[--
+    描述：二级界面确认购买信息获取模拟
+]]
+function _checkBuy(layer, itemWidth, itemHeight)
+    -- 弹出二级界面确认
+    local checkButton = ccui.Button:create("home/shop/second_purchase_confirmation_popup/button_buy.png")
+    checkButton:setAnchorPoint(0.5, 0.5)
+    checkButton:setPosition(itemWidth * 2 / 3, itemHeight / 2)
+    checkButton:scale(0.25)
+    checkButton:addTo(layer)
+    checkButton:addTouchEventListener(function(sender, eventType)
+        --checkButton:setTouchEnabled(false)
+        checkButton:removeFromParent()
+        _buttonCoinClikGrey(layer, itemWidth, itemHeight)
+        audio.playEffect("sound_ogg/buy_paid_item.ogg", false)
+    end)
+end
+
+return ShopView

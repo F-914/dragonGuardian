@@ -1,7 +1,5 @@
 --[[--
-    该类仅用于测试
-    因为我们可能要测试不同的页面，页面之间暂时没有关联，所以这里暂时都留下来了，然后注释了一下
-    可以考虑做成很多个按钮，按哪个出来哪个
+    主界面
     MainScene.lua
 ]]
 local MainScene = class("MainScene", function()
@@ -14,49 +12,26 @@ local AtlasView = require("app.ui.AtlasView")
 local GameData = require("app.test.GameData")
 local MainUIBattle = require("app.ui.MainUIBattleView")
 local MenuScene = require("app.scenes.MenuScene")
+local ShopView = require("app.ui.ShopView")
 local Log = require("app.utils.Log")
 --
 
--- -- 战斗界面
--- function MainScene:ctor()
---     GameData:init()
-
---     self.mainUIBattle_ = MainUIBattle.new()
---     self:addChild(self.mainUIBattle_)
-
-
---     self:addNodeEventListener(cc.NODE_ENTER_FRAME_EVENT, handler(self, self.update))
---     self:performWithDelay(function()
---         self:scheduleUpdate()
---     end, 1)
--- end
-
--- function MainScene:update(dt)
---     GameData:update(dt)
---     self.mainUIBattle_:update(dt)
--- end
-
--- function MainScene:onEnter()
--- end
-
--- function MainScene:onExit()
--- end
-
--- txf
--- function MainScene:ctor()
---     local atalasView = AtlasView.new()
---     self:add(atalasView)
--- end
---
-
--- zwb
 function MainScene:ctor()
+    GameData:init()
+    self:addNodeEventListener(cc.NODE_ENTER_FRAME_EVENT, handler(self, self.update))
+    self:performWithDelay(function()
+        self:scheduleUpdate()
+    end, 1)
 end
 
 function MainScene:onEnter()
     MenuScene.new(self, 1)
-    --ShopScene.new(self, 0)
     self:sliderView()
+end
+
+function MainScene:update(dt)
+    GameData:update(dt)
+    self.mainUIBattle_:update(dt)
 end
 
 function MainScene:onExit()
@@ -75,6 +50,17 @@ function MainScene:setPage(num)
     pageView:scrollToPage(num)
 end
 
+function MainScene:createPageLayer(view)
+    local layer = ccui.Layout:create()
+    layer:setAnchorPoint(0, 0)
+    layer:setPosition(0, 0)
+    layer:setContentSize(display.width, display.height)
+    --
+    view:addTo(layer)
+    --
+    return layer
+end
+
 function MainScene:sliderView()
     -- PageView
     pageView = ccui.PageView:create()
@@ -87,14 +73,19 @@ function MainScene:sliderView()
     pageView:setPosition(display.cx, display.cy)
 
     -- 这里创建page
+    local layerTable = {
+        ShopView.new(),
+        MainUIBattle.new(),
+        AtlasView.new(),
+    }
     for i = 1, 3 do
         -- 以层作为载体传入pageview
-        local layer = ccui.Layout:create()
-        layer:setAnchorPoint(0, 0)
-        layer:setPosition(0, 0)
-        layer:setContentSize(display.width, display.height)
-        ShopScene.new(layer, 0)
-        pageView:addPage(layer)
+        -- local layer = ccui.Layout:create()
+        -- layer:setAnchorPoint(0, 0)
+        -- layer:setPosition(0, 0)
+        -- layer:setContentSize(display.width, display.height)
+        -- ShopScene.new(layer, 0)
+        pageView:addPage(layerTable.i)
     end
 
     -- 触摸回调
@@ -102,7 +93,7 @@ function MainScene:sliderView()
         -- 翻页时
         if event == ccui.PageViewEventType.turning then
             -- getCurrentPageIndex() 获取当前翻到的页码 打印
-            print("当前页码是" .. pageView:getCurPageIndex() + 1)
+            Log.i("当前页码是" .. pageView:getCurPageIndex() + 1)
             MenuScene:bottomMenuControl(pageView:getCurPageIndex() + 1)
         end
     end

@@ -24,11 +24,10 @@ function MainUIBattle:ctor()
     self.userBattleLayer_ = nil --type:layer, 显示战斗按钮和队伍的层
     self.userRewardLayer_ = nil --type:layer, 天梯奖励层
 
-    self:init()
-
+    self:initView()
 end
 
-function MainUIBattle:init()
+function MainUIBattle:initView()
     self.battleBackGroundLayer_ = BattleBackGroundLayer.new()
     self:addChild(self.battleBackGroundLayer_)
     self.userBattleLayer_ = UserBattleLayer.new()
