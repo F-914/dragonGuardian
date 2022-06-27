@@ -153,11 +153,11 @@ function ShopView:initView()
                     -- 点击事件
                     freeButton:addTouchEventListener(function(sender, eventType)
                         if 0 == eventType then
-                            print("0")
+                            Log.i("0")
                             rowLayer:scale(0.8)
                         end
                         if 2 == eventType then
-                            print("2")
+                            Log.i("2")
                             audio.playEffect("sound_ogg/get_free_item.ogg")
                             --freeButton:setTouchEnabled(false)
                             rowLayer:scale(1)
@@ -168,10 +168,10 @@ function ShopView:initView()
                     -- 商品塔
                     local dragon = StoreList.DRAGON_LIST[dragonNum]
                     if dragon == nil then
-                        print("dragonNum", dragonNum)
-                        print("dragon", StoreList.DRAGON_LIST[dragonNum])
+                        Log.i("dragonNum", dragonNum)
+                        Log.i("dragon", StoreList.DRAGON_LIST[dragonNum])
                     else
-                        print(dragon["id"], dragon.type)
+                        Log.i(dragon["id"], dragon.type)
                         local dragonButton = ccui.Button:create(
                             "home/shop/coins_shop/commodity_icon_tower_fragment/"
                             .. dragon["id"] .. ".png")
@@ -503,7 +503,7 @@ end
     @return none
 ]]
 function _buttonCoinClik(layer, itemWidth, itemHeight)
-    print("clik")
+    Log.i("clik")
     layer:scale(1)
     _checkBuy(layer, itemWidth, itemHeight)
 end

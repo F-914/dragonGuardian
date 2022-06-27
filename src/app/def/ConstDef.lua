@@ -9,7 +9,7 @@ local StringDef = require("app.def.StringDef")
 
 local ConstDef = {
     scale_ = 0.9,
-    PATH_ICON_LIST = { StringDef.PATH_ICON_01, StringDef.PATH_ICON_02,
+    ICON_LIST = { StringDef.PATH_ICON_01, StringDef.PATH_ICON_02,
         StringDef.PATH_ICON_03, StringDef.PATH_ICON_04,
         StringDef.PATH_ICON_05, StringDef.PATH_ICON_06,
         StringDef.PATH_ICON_07, StringDef.PATH_ICON_08,

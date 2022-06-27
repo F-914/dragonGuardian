@@ -3,17 +3,18 @@
 
     描述：商店场景
 ]]
-local StoreList = require("app.test.StoreList")
-local Log = require("app.utils.Log")
-
 local ShopScene = class("MainScene", function()
     return display.newScene("MainScene")
 end)
-
+--local
+local StoreList = require("app.test.StoreList")
+local Log = require("app.utils.Log")
+--
 local _shopLayer
 local _buttonCoinClik
 local _buttonCoinClikGrey
 local _checkBuy
+--
 
 --[[--
     描述：初始化函数
@@ -57,7 +58,7 @@ end
     @return none
 ]]
 function _buttonCoinClik(layer, itemWidth, itemHeight)
-    print("clik")
+    Log.i("clik")
     layer:scale(1)
     _checkBuy(layer, itemWidth, itemHeight)
 end
@@ -225,11 +226,11 @@ function ShopScene:createShopLayer()
                     -- 点击事件
                     freeButton:addTouchEventListener(function(sender, eventType)
                         if 0 == eventType then
-                            print("0")
+                            Log.i("0")
                             rowLayer:scale(0.8)
                         end
                         if 2 == eventType then
-                            print("2")
+                            Log.i("2")
                             audio.playEffect("sound_ogg/get_free_item.ogg")
                             --freeButton:setTouchEnabled(false)
                             rowLayer:scale(1)
@@ -240,10 +241,10 @@ function ShopScene:createShopLayer()
                     -- 商品塔
                     local dragon = StoreList.DRAGON_LIST[dragonNum]
                     if dragon == nil then
-                        print("dragonNum", dragonNum)
-                        print("dragon", StoreList.DRAGON_LIST[dragonNum])
+                        Log.i("dragonNum", dragonNum)
+                        Log.i("dragon", StoreList.DRAGON_LIST[dragonNum])
                     else
-                        print(dragon["id"], dragon.type)
+                        Log.i(dragon["id"], dragon.type)
                         local dragonButton = ccui.Button:create(
                             "home/shop/coins_shop/commodity_icon_tower_fragment/"
                             .. dragon["id"] .. ".png")
@@ -255,8 +256,7 @@ function ShopScene:createShopLayer()
                         dragonButton:addTo(rowLayer)
 
                         -- 金币图标
-                        local coinIcon = cc.Sprite:create(
-                            "home/shop/coins_shop/icon_coin.png")
+                        local coinIcon = cc.Sprite:create("home/shop/coins_shop/icon_coin.png")
                         if dragon.type == "epic" then
                             coinIcon:setPosition(itemWidth * 2 / 3 - 30, itemHeight / 6)
                         else

@@ -10,14 +10,25 @@ end)
 local StringDef = require("app.def.StringDef")
 local AtlasView = require("app.ui.AtlasView")
 local GameData = require("app.test.GameData")
-local MainUIBattle = require("app.ui.MainUIBattleView")
+local MainUIBattleView = require("app.ui.MainUIBattleView")
 local MenuScene = require("app.scenes.MenuScene")
 local ShopView = require("app.ui.ShopView")
 local Log = require("app.utils.Log")
 --
+local pageView
+--
 
 function MainScene:ctor()
+    --test
     GameData:init()
+    --
+    self.mainUIBattleView_ = MainUIBattleView.new()
+    self.atlasView = AtlasView.new()
+    self.shopView = ShopView.new()
+
+    MenuScene.new(self, 1)
+    self:sliderView()
+
     self:addNodeEventListener(cc.NODE_ENTER_FRAME_EVENT, handler(self, self.update))
     self:performWithDelay(function()
         self:scheduleUpdate()
@@ -25,13 +36,12 @@ function MainScene:ctor()
 end
 
 function MainScene:onEnter()
-    MenuScene.new(self, 1)
-    self:sliderView()
+
 end
 
 function MainScene:update(dt)
     GameData:update(dt)
-    self.mainUIBattle_:update(dt)
+    self.mainUIBattleView_:update(dt)
 end
 
 function MainScene:onExit()
@@ -44,21 +54,9 @@ end
 
     @return none
 ]]
-local pageView
 function MainScene:setPage(num)
     Log.i("setPage")
     pageView:scrollToPage(num)
-end
-
-function MainScene:createPageLayer(view)
-    local layer = ccui.Layout:create()
-    layer:setAnchorPoint(0, 0)
-    layer:setPosition(0, 0)
-    layer:setContentSize(display.width, display.height)
-    --
-    view:addTo(layer)
-    --
-    return layer
 end
 
 function MainScene:sliderView()
@@ -74,18 +72,20 @@ function MainScene:sliderView()
 
     -- 这里创建page
     local layerTable = {
-        ShopView.new(),
-        MainUIBattle.new(),
-        AtlasView.new(),
+        self.shopView,
+        self.mainUIBattleView_,
+        self.atlasView,
     }
     for i = 1, 3 do
         -- 以层作为载体传入pageview
-        -- local layer = ccui.Layout:create()
-        -- layer:setAnchorPoint(0, 0)
-        -- layer:setPosition(0, 0)
-        -- layer:setContentSize(display.width, display.height)
+        local layer = ccui.Layout:create()
+        layer:setAnchorPoint(0, 0)
+        layer:setPosition(0, 0)
+        layer:setContentSize(display.width, display.height)
         -- ShopScene.new(layer, 0)
-        pageView:addPage(layerTable.i)
+        layerTable[i]:addTo(layer, 0)
+        pageView:addPage(layer)
+        -- pageView:addPage(layerTable[i])
     end
 
     -- 触摸回调
