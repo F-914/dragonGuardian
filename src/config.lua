@@ -1,5 +1,11 @@
+<<<<<<< HEAD
 -- 0 - disable debug info, 1 - less debug info, 2 - verbose debug info
 DEBUG = 2
+=======
+
+-- 0 - disable debug info, 1 - less debug info, 2 - verbose debug info
+DEBUG = 1
+>>>>>>> dev_txf
 
 -- display FPS stats on screen
 DEBUG_FPS = true
@@ -8,8 +14,16 @@ DEBUG_FPS = true
 DEBUG_MEM = false
 
 -- design resolution
+<<<<<<< HEAD
 CONFIG_SCREEN_WIDTH = 720
 CONFIG_SCREEN_HEIGHT = 1280
 
 -- auto scale mode
 CONFIG_SCREEN_AUTOSCALE = "EXACT_FIT"
+=======
+CONFIG_SCREEN_WIDTH  = 640
+CONFIG_SCREEN_HEIGHT = 960
+
+-- auto scale mode
+CONFIG_SCREEN_AUTOSCALE = "FIXED_WIDTH"
+>>>>>>> dev_txf

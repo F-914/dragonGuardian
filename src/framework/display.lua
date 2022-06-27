@@ -21,6 +21,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
 ]]
+<<<<<<< HEAD
+=======
+
+>>>>>>> dev_txf
 --------------------------------
 -- @module display
 
@@ -66,25 +70,41 @@ display 模块封装了绝大部分与显示有关的功能，并负责根据 co
 ]]
 local display = {}
 
+<<<<<<< HEAD
 local sharedDirector = cc.Director:getInstance()
 local sharedTextureCache = cc.Director:getInstance():getTextureCache()
 local sharedSpriteFrameCache = cc.SpriteFrameCache:getInstance()
 local sharedAnimationCache = cc.AnimationCache:getInstance()
+=======
+local sharedDirector         = cc.Director:getInstance()
+local sharedTextureCache     = cc.Director:getInstance():getTextureCache()
+local sharedSpriteFrameCache = cc.SpriteFrameCache:getInstance()
+local sharedAnimationCache   = cc.AnimationCache:getInstance()
+>>>>>>> dev_txf
 
 -- check device screen size
 local glview = sharedDirector:getOpenGLView()
 if nil == glview then
+<<<<<<< HEAD
     glview = cc.GLViewImpl:createWithRect(
         "QuickCocos",
         cc.rect(0, 0, CONFIG_SCREEN_WIDTH or 900, CONFIG_SCREEN_HEIGHT or 640)
     )
     -- glview = cc.GLViewImpl:createWithRect("QuickCocos",
     --     cc.rect(0, 0, CONFIG_SCREEN_WIDTH or 900, CONFIG_SCREEN_HEIGHT or 640))
+=======
+    glview = cc.GLViewImpl:createWithRect("QuickCocos",
+        cc.rect(0, 0, CONFIG_SCREEN_WIDTH or 900, CONFIG_SCREEN_HEIGHT or 640))
+>>>>>>> dev_txf
     sharedDirector:setOpenGLView(glview)
 end
 
 local size = glview:getFrameSize()
+<<<<<<< HEAD
 display.sizeInPixels = { width = size.width, height = size.height }
+=======
+display.sizeInPixels = {width = size.width, height = size.height}
+>>>>>>> dev_txf
 
 local w = display.sizeInPixels.width
 local h = display.sizeInPixels.height
@@ -106,6 +126,7 @@ end
 
 local scale, scaleX, scaleY
 
+<<<<<<< HEAD
 -- if CONFIG_SCREEN_AUTOSCALE and CONFIG_SCREEN_AUTOSCALE ~= "NONE" then
 --     if type(CONFIG_SCREEN_AUTOSCALE_CALLBACK) == "function" then
 --         scaleX, scaleY = CONFIG_SCREEN_AUTOSCALE_CALLBACK(w, h, device.model)
@@ -257,6 +278,70 @@ display.top = display.height
 display.bottom = 0
 display.widthInPixels = display.sizeInPixels.width
 display.heightInPixels = display.sizeInPixels.height
+=======
+if CONFIG_SCREEN_AUTOSCALE and CONFIG_SCREEN_AUTOSCALE ~="NONE" then
+	if type(CONFIG_SCREEN_AUTOSCALE_CALLBACK) == "function" then
+		scaleX, scaleY = CONFIG_SCREEN_AUTOSCALE_CALLBACK(w, h, device.model)
+	end
+
+	if CONFIG_SCREEN_AUTOSCALE == "EXACT_FIT" then
+		scale = 1.0
+		glview:setDesignResolutionSize(CONFIG_SCREEN_WIDTH, CONFIG_SCREEN_HEIGHT, cc.ResolutionPolicy.EXACT_FIT)
+	elseif CONFIG_SCREEN_AUTOSCALE == "FILL_ALL" then
+		CONFIG_SCREEN_WIDTH = w
+		CONFIG_SCREEN_HEIGHT = h
+		scale = 1.0
+		glview:setDesignResolutionSize(CONFIG_SCREEN_WIDTH, CONFIG_SCREEN_HEIGHT, cc.ResolutionPolicy.SHOW_ALL)
+	else
+		if not scaleX or not scaleY then
+			scaleX, scaleY = w / CONFIG_SCREEN_WIDTH, h / CONFIG_SCREEN_HEIGHT
+		end
+
+		if CONFIG_SCREEN_AUTOSCALE == "FIXED_WIDTH" then
+			scale = scaleX
+			CONFIG_SCREEN_HEIGHT = h / scale
+		elseif CONFIG_SCREEN_AUTOSCALE == "FIXED_HEIGHT" then
+			scale = scaleY
+			CONFIG_SCREEN_WIDTH = w / scale
+		elseif CONFIG_SCREEN_AUTOSCALE == "FIXED_AUTO" then
+			if scaleX < scaleY then
+				scale = scaleX
+				CONFIG_SCREEN_HEIGHT = h / scale
+			else
+				scale = scaleY
+				CONFIG_SCREEN_WIDTH  = w / scale
+			end
+		else
+			scale = 1.0
+			printError(string.format("display - invalid CONFIG_SCREEN_AUTOSCALE \"%s\"", CONFIG_SCREEN_AUTOSCALE))
+		end
+		glview:setDesignResolutionSize(CONFIG_SCREEN_WIDTH, CONFIG_SCREEN_HEIGHT, cc.ResolutionPolicy.NO_BORDER)
+	end
+else
+	CONFIG_SCREEN_WIDTH = w
+	CONFIG_SCREEN_HEIGHT = h
+	scale = 1.0
+end
+
+local winSize = sharedDirector:getWinSize()
+display.screenScale        = 2.0
+display.contentScaleFactor = scale
+display.size               = {width = winSize.width, height = winSize.height}
+display.width              = display.size.width
+display.height             = display.size.height
+display.cx                 = display.width / 2
+display.cy                 = display.height / 2
+display.c_left             = -display.width / 2
+display.c_right            = display.width / 2
+display.c_top              = display.height / 2
+display.c_bottom           = -display.height / 2
+display.left               = 0
+display.right              = display.width
+display.top                = display.height
+display.bottom             = 0
+display.widthInPixels      = display.sizeInPixels.width
+display.heightInPixels     = display.sizeInPixels.height
+>>>>>>> dev_txf
 
 printInfo(string.format("# CONFIG_SCREEN_AUTOSCALE      = %s", CONFIG_SCREEN_AUTOSCALE))
 printInfo(string.format("# CONFIG_SCREEN_WIDTH          = %0.2f", CONFIG_SCREEN_WIDTH))
@@ -278,6 +363,7 @@ printInfo(string.format("# display.c_top                = %0.2f", display.c_top)
 printInfo(string.format("# display.c_bottom             = %0.2f", display.c_bottom))
 printInfo("#")
 
+<<<<<<< HEAD
 display.COLOR_WHITE = cc.c3b(255, 255, 255)
 display.COLOR_YELLOW = cc.c3b(255, 255, 0)
 display.COLOR_GREEN = cc.c3b(0, 255, 0)
@@ -353,12 +439,87 @@ display.SCENE_TRANSITIONS = {
     ZOOMFLIPANGULAR = { cc.TransitionZoomFlipAngular, 2 },
     ZOOMFLIPX = { cc.TransitionZoomFlipX, 3, cc.TRANSITION_ORIENTATION_LEFT_OVER },
     ZOOMFLIPY = { cc.TransitionZoomFlipY, 3, cc.TRANSITION_ORIENTATION_UP_OVER }
+=======
+display.COLOR_WHITE   = cc.c3b(255, 255, 255)
+display.COLOR_YELLOW  = cc.c3b(255, 255, 0)
+display.COLOR_GREEN   = cc.c3b(0, 255, 0)
+display.COLOR_BLUE    = cc.c3b(0, 0, 255)
+display.COLOR_RED     = cc.c3b(255, 0, 0)
+display.COLOR_MAGENTA = cc.c3b(255, 0, 255)
+display.COLOR_BLACK   = cc.c3b(0, 0, 0)
+display.COLOR_ORANGE  = cc.c3b(255, 127, 0)
+display.COLOR_GRAY    = cc.c3b(166, 166, 166)
+
+display.AUTO_SIZE      = 0
+display.FIXED_SIZE     = 1
+display.LEFT_TO_RIGHT  = 0
+display.RIGHT_TO_LEFT  = 1
+display.TOP_TO_BOTTOM  = 2
+display.BOTTOM_TO_TOP  = 3
+
+display.CENTER        = 1
+display.LEFT_TOP      = 2; display.TOP_LEFT      = 2
+display.CENTER_TOP    = 3; display.TOP_CENTER    = 3
+display.RIGHT_TOP     = 4; display.TOP_RIGHT     = 4
+display.CENTER_LEFT   = 5; display.LEFT_CENTER   = 5
+display.CENTER_RIGHT  = 6; display.RIGHT_CENTER  = 6
+display.BOTTOM_LEFT   = 7; display.LEFT_BOTTOM   = 7
+display.BOTTOM_RIGHT  = 8; display.RIGHT_BOTTOM  = 8
+display.BOTTOM_CENTER = 9; display.CENTER_BOTTOM = 9
+
+display.ANCHOR_POINTS = {
+    cc.p(0.5, 0.5),  -- CENTER
+    cc.p(0, 1),      -- TOP_LEFT
+    cc.p(0.5, 1),    -- TOP_CENTER
+    cc.p(1, 1),      -- TOP_RIGHT
+    cc.p(0, 0.5),    -- CENTER_LEFT
+    cc.p(1, 0.5),    -- CENTER_RIGHT
+    cc.p(0, 0),      -- BOTTOM_LEFT
+    cc.p(1, 0),      -- BOTTOM_RIGHT
+    cc.p(0.5, 0),    -- BOTTOM_CENTER
+}
+
+display.SCENE_TRANSITIONS = {
+    CROSSFADE       = {cc.TransitionCrossFade, 2},
+    FADE            = {cc.TransitionFade, 3, cc.c3b(0, 0, 0)},
+    FADEBL          = {cc.TransitionFadeBL, 2},
+    FADEDOWN        = {cc.TransitionFadeDown, 2},
+    FADETR          = {cc.TransitionFadeTR, 2},
+    FADEUP          = {cc.TransitionFadeUp, 2},
+    FLIPANGULAR     = {cc.TransitionFlipAngular, 3, cc.TRANSITION_ORIENTATION_LEFT_OVER},
+    FLIPX           = {cc.TransitionFlipX, 3, cc.TRANSITION_ORIENTATION_LEFT_OVER},
+    FLIPY           = {cc.TransitionFlipY, 3, cc.TRANSITION_ORIENTATION_UP_OVER},
+    JUMPZOOM        = {cc.TransitionJumpZoom, 2},
+    MOVEINB         = {cc.TransitionMoveInB, 2},
+    MOVEINL         = {cc.TransitionMoveInL, 2},
+    MOVEINR         = {cc.TransitionMoveInR, 2},
+    MOVEINT         = {cc.TransitionMoveInT, 2},
+    PAGETURN        = {cc.TransitionPageTurn, 3, false},
+    ROTOZOOM        = {cc.TransitionRotoZoom, 2},
+    SHRINKGROW      = {cc.TransitionShrinkGrow, 2},
+    SLIDEINB        = {cc.TransitionSlideInB, 2},
+    SLIDEINL        = {cc.TransitionSlideInL, 2},
+    SLIDEINR        = {cc.TransitionSlideInR, 2},
+    SLIDEINT        = {cc.TransitionSlideInT, 2},
+    SPLITCOLS       = {cc.TransitionSplitCols, 2},
+    SPLITROWS       = {cc.TransitionSplitRows, 2},
+    TURNOFFTILES    = {cc.TransitionTurnOffTiles, 2},
+    ZOOMFLIPANGULAR = {cc.TransitionZoomFlipAngular, 2},
+    ZOOMFLIPX       = {cc.TransitionZoomFlipX, 3, cc.TRANSITION_ORIENTATION_LEFT_OVER},
+    ZOOMFLIPY       = {cc.TransitionZoomFlipY, 3, cc.TRANSITION_ORIENTATION_UP_OVER},
+>>>>>>> dev_txf
 }
 
 display.TEXTURES_PIXEL_FORMAT = {}
 
+<<<<<<< HEAD
 display.DEFAULT_TTF_FONT = "Arial"
 display.DEFAULT_TTF_FONT_SIZE = 24
+=======
+display.DEFAULT_TTF_FONT        = "Arial"
+display.DEFAULT_TTF_FONT_SIZE   = 24
+
+>>>>>>> dev_txf
 
 -- start --
 
@@ -374,7 +535,11 @@ display.DEFAULT_TTF_FONT_SIZE = 24
 function display.newScene(name)
     local scene = cc.Scene:create()
     scene.name = name or "<unknown-scene>"
+<<<<<<< HEAD
     scene:setNodeEventEnabled(true)
+=======
+	scene:setNodeEventEnabled(true)
+>>>>>>> dev_txf
     return scene
 end
 
@@ -455,6 +620,10 @@ display.replaceScene(transition)
 -   turnOffTiles 当前场景分成多个块，逐渐替换为新场景
 
 ]]
+<<<<<<< HEAD
+=======
+
+>>>>>>> dev_txf
 -- end --
 
 function display.wrapSceneWithTransition(scene, transitionType, time, more)
@@ -566,8 +735,13 @@ end
 
 function display.newLayer()
     local node = cc.Node:create()
+<<<<<<< HEAD
     node:setContentSize(cc.size(display.width, display.height))
     return node
+=======
+	node:setContentSize(cc.size(display.width, display.height))
+	return node
+>>>>>>> dev_txf
 end
 
 -- start --
@@ -576,7 +750,11 @@ end
 -- 创建一个颜色填充层
 -- @function [parent=#display] newColorLayer
 -- @param ccColor4B color
+<<<<<<< HEAD
 -- @return LayerColor#LayerColor ret (return value: cc.LayerColor)
+=======
+-- @return LayerColor#LayerColor ret (return value: cc.LayerColor) 
+>>>>>>> dev_txf
 -- @see LayerColor
 
 -- end --
@@ -593,6 +771,10 @@ end
 -- @return Node#Node ret (return value: cc.Node)  Node对象
 -- @see Node
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> dev_txf
 --[[--
 
 创建并返回一个 Node 对象
@@ -628,6 +810,10 @@ end
 -- @param table rect 指定的区域
 -- @return ClippingRectangleNode#ClippingRectangleNode ret (return value: cc.ClippingRectangleNode)  ClippingRectangleNode
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> dev_txf
 --[[--
 
 创建并返回一个 ClippingRectangleNode 对象。
@@ -656,7 +842,11 @@ scene:addChild(clipnode)
 -- end --
 
 function display.newClippingRectangleNode(rect)
+<<<<<<< HEAD
     return cc.ClippingRegionNode:create(rect)
+=======
+	return cc.ClippingRegionNode:create(rect)
+>>>>>>> dev_txf
 end
 
 -- start --
@@ -668,9 +858,16 @@ end
 -- @param number x
 -- @param number y
 -- @param table params
+<<<<<<< HEAD
 -- @return Sprite#Sprite ret (return value: cc.Sprite)
 -- @see Sprite
 
+=======
+-- @return Sprite#Sprite ret (return value: cc.Sprite) 
+-- @see Sprite
+
+
+>>>>>>> dev_txf
 --[[--
 
 创建并返回一个 Sprite 显示对象。
@@ -710,6 +907,7 @@ function display.newSprite(filename, x, y, params)
         spriteClass = params.class
         size = params.size
     end
+<<<<<<< HEAD
     if not spriteClass then
         spriteClass = cc.Sprite
     end
@@ -718,6 +916,12 @@ function display.newSprite(filename, x, y, params)
     if t == "userdata" then
         t = tolua.type(filename)
     end
+=======
+    if not spriteClass then spriteClass = cc.Sprite end
+
+    local t = type(filename)
+    if t == "userdata" then t = tolua.type(filename) end
+>>>>>>> dev_txf
     local sprite
 
     if not filename then
@@ -755,12 +959,17 @@ function display.newSprite(filename, x, y, params)
     end
 
     if sprite then
+<<<<<<< HEAD
         if x and y then
             sprite:setPosition(x, y)
         end
         if size then
             sprite:setContentSize(size)
         end
+=======
+        if x and y then sprite:setPosition(x, y) end
+        if size then sprite:setContentSize(size) end
+>>>>>>> dev_txf
     else
         printError("display.newSprite() - create sprite failure, filename %s", tostring(filename))
         sprite = spriteClass:create()
@@ -780,6 +989,10 @@ end
 -- @param table size
 -- @return Scale9Sprite#Scale9Sprite ret (return value: ccui.Scale9Sprite) Sprite9Scale显示对象
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> dev_txf
 --[[--
 
 创建并返回一个 Sprite9Scale 显示对象。
@@ -802,7 +1015,11 @@ local sprite = display.newScale9Sprite("Box.png", 0, 0, cc.size(400, 300))
 
 function display.newScale9Sprite(filename, x, y, size, capInsets)
     local scale9sp = ccui.Scale9Sprite or cc.Scale9Sprite
+<<<<<<< HEAD
     return display.newSprite(filename, x, y, { class = scale9sp, size = size, capInsets = capInsets })
+=======
+    return display.newSprite(filename, x, y, {class = scale9sp, size = size, capInsets = capInsets})
+>>>>>>> dev_txf
 end
 
 -- start --
@@ -843,7 +1060,11 @@ end
 -- @param size size The tiled node size, use cc.size create it please.
 -- @param integer hPadding Horizontal padding, it will display 1 px gap on moving the node, set padding for fix it.
 -- @param integer vPadding Vertical padding.
+<<<<<<< HEAD
 -- @return SpriteBatchNode#SpriteBatchNode ret (return value: cc.SpriteBatchNode)
+=======
+-- @return SpriteBatchNode#SpriteBatchNode ret (return value: cc.SpriteBatchNode) 
+>>>>>>> dev_txf
 
 -- end --
 
@@ -855,6 +1076,7 @@ function display.newTiledBatchNode(filename, plistFile, size, hPadding, vPadding
     local __sliceSize = __sprite:getContentSize()
     __sliceSize.width = __sliceSize.width - hPadding
     __sliceSize.height = __sliceSize.height - vPadding
+<<<<<<< HEAD
     local __xRepeat = math.ceil(size.width / __sliceSize.width)
     local __yRepeat = math.ceil(size.height / __sliceSize.height)
     -- How maney sprites we need to fill in tiled node?
@@ -869,6 +1091,21 @@ function display.newTiledBatchNode(filename, plistFile, size, hPadding, vPadding
                 y * __sliceSize.height):addTo(
                 __batch
             )
+=======
+    local __xRepeat = math.ceil(size.width/__sliceSize.width)
+    local __yRepeat = math.ceil(size.height/__sliceSize.height)
+    -- How maney sprites we need to fill in tiled node?
+    local __capacity = __xRepeat * __yRepeat
+    local __batch = display.newBatchNode(plistFile, __capacity)
+    local __newSize = cc.size(0,0)
+
+    for y=0,__yRepeat-1 do
+        for x=0,__xRepeat-1 do
+            __newSize.width = __newSize.width + __sliceSize.width
+            __sprite = display.newSprite(filename)
+                :align(display.LEFT_BOTTOM,x*__sliceSize.width, y*__sliceSize.height)
+                :addTo(__batch)
+>>>>>>> dev_txf
         end
         __newSize.height = __newSize.height + __sliceSize.height
     end
@@ -882,7 +1119,11 @@ end
 --------------------------------
 -- 创建并返回一个空的 DrawNode 对象
 -- @function [parent=#display] newDrawNode
+<<<<<<< HEAD
 -- @return DrawNode#DrawNode ret (return value: cc.DrawNode)
+=======
+-- @return DrawNode#DrawNode ret (return value: cc.DrawNode) 
+>>>>>>> dev_txf
 -- @see DrawNode
 
 -- end --
@@ -898,9 +1139,16 @@ end
 -- @function [parent=#display] newSolidCircle
 -- @param number radius 实心圆的半径
 -- @param table params 创建圆的参数 x,y为圆点位置 color中圆的颜色
+<<<<<<< HEAD
 -- @return DrawNode#DrawNode ret (return value: cc.DrawNode)
 -- @see DrawNode
 
+=======
+-- @return DrawNode#DrawNode ret (return value: cc.DrawNode) 
+-- @see DrawNode
+
+
+>>>>>>> dev_txf
 --[[--
 
 创建并返回一个 DrawNode（实心圆）对象。
@@ -917,8 +1165,12 @@ circle:addTo(scene)
 
 function display.newSolidCircle(radius, params)
     local circle = display.newDrawNode()
+<<<<<<< HEAD
     circle:drawSolidCircle(
         cc.p(params.x or 0, params.y or 0),
+=======
+    circle:drawSolidCircle(cc.p(params.x or 0, params.y or 0),
+>>>>>>> dev_txf
         radius or 0,
         params.angle or 0,
         params.segments or 50,
@@ -936,9 +1188,16 @@ end
 -- @function [parent=#display] newCircle
 -- @param number radius
 -- @param table params 有参数，x,y 圆的位置 填充色 fillColor, 边线色 borderColor 及边线宽度 borderWidth
+<<<<<<< HEAD
 -- @return DrawNode#DrawNode ret (return value: cc.DrawNode)
 -- @see DrawNode
 
+=======
+-- @return DrawNode#DrawNode ret (return value: cc.DrawNode) 
+-- @see DrawNode
+
+
+>>>>>>> dev_txf
 --[[--
 
 创建并返回一个 DrawNode （圆）对象。
@@ -976,10 +1235,15 @@ function display.newCircle(radius, params)
         local points = {}
         for i = 1, segments do
             local radii = startRadian + i * radianPerSegm
+<<<<<<< HEAD
             if radii > endRadian then
                 break
             end
             points[#points + 1] = { posX + radius * math.cos(radii), posY + radius * math.sin(radii) }
+=======
+            if radii > endRadian then break end
+            points[#points + 1] = {posX + radius * math.cos(radii), posY + radius * math.sin(radii)}
+>>>>>>> dev_txf
         end
         return points
     end
@@ -1013,9 +1277,16 @@ end
 -- @function [parent=#display] newRect
 -- @param table rect table
 -- @param table params 有参数，填充色 fillColor, 边线色 borderColor 及边线宽度 borderWidth
+<<<<<<< HEAD
 -- @return DrawNode#DrawNode ret (return value: cc.DrawNode)
 -- @see ShapeNode
 
+=======
+-- @return DrawNode#DrawNode ret (return value: cc.DrawNode) 
+-- @see ShapeNode
+
+
+>>>>>>> dev_txf
 --[[--
 
 创建并返回一个 DrawNode （矩形）对象。
@@ -1047,16 +1318,26 @@ function display.newRect(rect, params)
     width = rect.width
 
     local points = {
+<<<<<<< HEAD
         { x, y },
         { x + width, y },
         { x + width, y + height },
         { x, y + height }
+=======
+        {x,y},
+        {x + width, y},
+        {x + width, y + height},
+        {x, y + height}
+>>>>>>> dev_txf
     }
     return display.newPolygon(points, params)
 end
 
+<<<<<<< HEAD
 --
 
+=======
+>>>>>>> dev_txf
 --[[--
 
 创建并返回一个 DrawNode （圆角矩形）对象。
@@ -1075,11 +1356,17 @@ node:addTo(self)
 node:center()
 ~~~
 
+<<<<<<< HEAD
 ]]
 function display.newRoundedRect(
     size,
     radius,
     params)
+=======
+]]--
+
+function display.newRoundedRect(size, radius, params)
+>>>>>>> dev_txf
     local radius = radius or 1
     local segments = math.ceil(radius)
     local radianPerSegment = math.pi * 0.5 / segments
@@ -1087,8 +1374,12 @@ function display.newRoundedRect(
 
     for i = 0, segments do
         local radian = i * radianPerSegment
+<<<<<<< HEAD
         radianVertices[i] = cc.p(math.round(math.cos(radian) * radius * 10) / 10,
             math.round(math.sin(radian) * radius * 10) / 10)
+=======
+        radianVertices[i] = cc.p(math.round(math.cos(radian) * radius * 10) / 10, math.round(math.sin(radian) * radius * 10) / 10)
+>>>>>>> dev_txf
     end
 
     local points = {}
@@ -1123,14 +1414,22 @@ function display.newRoundedRect(
     end
     points[#points + 1] = cc.p(points[1].x, points[1].y)
 
+<<<<<<< HEAD
     params = checktable(params)
+=======
+	params = checktable(params)
+>>>>>>> dev_txf
     local borderWidth = params.borderWidth or 0.5
     local fillColor = params.fillColor or cc.c4f(1, 1, 1, 1)
     local borderColor = params.borderColor or cc.c4f(1, 1, 1, 1)
     local drawNode = cc.DrawNode:create()
     drawNode:drawPolygon(points, #points, fillColor, borderWidth, borderColor)
     drawNode:setContentSize(size)
+<<<<<<< HEAD
     drawNode:setAnchorPoint(cc.p(0.5, 0.5))
+=======
+	drawNode:setAnchorPoint(cc.p(0.5, 0.5))
+>>>>>>> dev_txf
 
     return drawNode
 end
@@ -1142,9 +1441,16 @@ end
 -- @function [parent=#display] newLine
 -- @param table point table
 -- @param table params 有参数，边线色 borderColor 及边线宽度 borderWidth
+<<<<<<< HEAD
 -- @return DrawNode#DrawNode ret (return value: cc.DrawNode)
 -- @see ShapeNode
 
+=======
+-- @return DrawNode#DrawNode ret (return value: cc.DrawNode) 
+-- @see ShapeNode
+
+
+>>>>>>> dev_txf
 --[[--
 
 创建并返回一个 DrawNode （线性）对象。
@@ -1171,12 +1477,21 @@ function display.newLine(points, params)
     local scale
 
     if not params then
+<<<<<<< HEAD
         borderColor = cc.c4f(0, 0, 0, 1)
         radius = 0.5
         scale = 1.0
     else
         borderColor = params.borderColor or cc.c4f(0, 0, 0, 1)
         radius = (params.borderWidth and params.borderWidth / 2) or 0.5
+=======
+        borderColor = cc.c4f(0,0,0,1)
+        radius = 0.5
+        scale = 1.0
+    else
+        borderColor = params.borderColor or cc.c4f(0,0,0,1)
+        radius = (params.borderWidth and params.borderWidth/2) or 0.5
+>>>>>>> dev_txf
         scale = checknumber(params.scale or 1.0)
     end
 
@@ -1201,6 +1516,10 @@ end
 -- @return DrawNode#DrawNode ret (return value: cc.DrawNode)  DrawNode
 -- @see DrawNode
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> dev_txf
 --[[--
 
 创建并返回一个 PolygonShape （多边形）对象。
@@ -1228,7 +1547,11 @@ function display.newPolygon(points, params, drawNode)
 
     local pts = {}
     for i, p in ipairs(points) do
+<<<<<<< HEAD
         pts[i] = { x = p[1] * scale, y = p[2] * scale }
+=======
+        pts[i] = {x = p[1] * scale, y = p[2] * scale}
+>>>>>>> dev_txf
     end
 
     drawNode = drawNode or cc.DrawNode:create()
@@ -1273,6 +1596,7 @@ local label = display.newBMFontLabel({
 -- end --
 
 function display.newBMFontLabel(params)
+<<<<<<< HEAD
     assert(type(params) == "table", "[framework.display] newBMFontLabel() invalid params")
 
     local text = tostring(params.text)
@@ -1288,6 +1612,22 @@ function display.newBMFontLabel(params)
     if not label then
         return
     end
+=======
+    assert(type(params) == "table",
+           "[framework.display] newBMFontLabel() invalid params")
+
+    local text      = tostring(params.text)
+    local font      = params.font
+    local textAlign = params.align or cc.TEXT_ALIGNMENT_LEFT
+    local maxLineW  = params.maxLineWidth or 0
+    local offsetX   = params.offsetX or 0
+    local offsetY   = params.offsetY or 0
+    local x, y      = params.x, params.y
+    assert(font ~= nil, "framework.display.newBMFontLabel() - not set font")
+
+    local label = cc.Label:createWithBMFont(font, text, textAlign, maxLineW, cc.p(offsetX, offsetY));
+    if not label then return end
+>>>>>>> dev_txf
 
     if type(x) == "number" and type(y) == "number" then
         label:setPosition(x, y)
@@ -1355,6 +1695,7 @@ local label = display.newTTFLabel({
 -- end --
 
 function display.newTTFLabel(params)
+<<<<<<< HEAD
     assert(type(params) == "table", "[framework.display] newTTFLabel() invalid params")
 
     local text = tostring(params.text)
@@ -1367,6 +1708,22 @@ function display.newTTFLabel(params)
     local dimensions = params.dimensions or cc.size(0, 0)
 
     assert(type(size) == "number", "[framework.display] newTTFLabel() invalid params.size")
+=======
+    assert(type(params) == "table",
+           "[framework.display] newTTFLabel() invalid params")
+
+    local text       = tostring(params.text)
+    local font       = params.font or display.DEFAULT_TTF_FONT
+    local size       = params.size or display.DEFAULT_TTF_FONT_SIZE
+    local color      = params.color or display.COLOR_WHITE
+    local textAlign  = params.align or cc.TEXT_ALIGNMENT_LEFT
+    local textValign = params.valign or cc.VERTICAL_TEXT_ALIGNMENT_TOP
+    local x, y       = params.x, params.y
+    local dimensions = params.dimensions or cc.size(0, 0)
+
+    assert(type(size) == "number",
+           "[framework.display] newTTFLabel() invalid params.size")
+>>>>>>> dev_txf
 
     local label
     if cc.FileUtils:getInstance():isFileExist(font) then
@@ -1382,9 +1739,13 @@ function display.newTTFLabel(params)
     end
 
     if label then
+<<<<<<< HEAD
         if x and y then
             label:setPosition(x, y)
         end
+=======
+        if x and y then label:setPosition(x, y) end
+>>>>>>> dev_txf
     end
 
     return label
@@ -1400,6 +1761,10 @@ end
 -- @param integer x
 -- @param integer y
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> dev_txf
 --[[--
 
 将指定的显示对象按照特定锚点对齐。
@@ -1440,9 +1805,13 @@ display.align(sprite, display.LEFT_TOP, 0, 0)
 
 function display.align(target, anchorPoint, x, y)
     target:setAnchorPoint(display.ANCHOR_POINTS[anchorPoint])
+<<<<<<< HEAD
     if x and y then
         target:setPosition(x, y)
     end
+=======
+    if x and y then target:setPosition(x, y) end
+>>>>>>> dev_txf
 end
 
 function display.addImageAsync(imagePath, callback)
@@ -1458,6 +1827,10 @@ end
 -- @param string image 材质文件名
 -- @see Sprite Sheets
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> dev_txf
 --[[--
 
 将指定的 Sprite Sheets 材质文件及其数据文件载入图像帧缓存。
@@ -1539,6 +1912,10 @@ end
 -- @param integer format 材质格式
 -- @see Texture Pixel Format
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> dev_txf
 --[[--
 
 设置材质格式。
@@ -1584,7 +1961,11 @@ end
 -- @function [parent=#display] newBatchNode
 -- @param string image 图像文件名
 -- @param integer capacity
+<<<<<<< HEAD
 -- @return SpriteBatchNode#SpriteBatchNode ret (return value: cc.SpriteBatchNode)
+=======
+-- @return SpriteBatchNode#SpriteBatchNode ret (return value: cc.SpriteBatchNode) 
+>>>>>>> dev_txf
 -- @see Batch Node
 
 --[[--
@@ -1625,7 +2006,11 @@ end
 -- 创建并返回一个图像帧对象。
 -- @function [parent=#display] newSpriteFrame
 -- @param string 图像帧名称
+<<<<<<< HEAD
 -- @return SpriteFrameCache#SpriteFrameCache ret (return value: cc.SpriteFrameCache)
+=======
+-- @return SpriteFrameCache#SpriteFrameCache ret (return value: cc.SpriteFrameCache) 
+>>>>>>> dev_txf
 
 --[[--
 
@@ -1668,6 +2053,10 @@ end
 -- @param boolean isReversed 是否是递减索引
 -- @return table#table ret (return value: table)  图像帧数组
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> dev_txf
 --[[--
 
 以特定模式创建一个包含多个图像帧对象的数组。
@@ -1777,7 +2166,11 @@ end
 -- 取得以指定名字缓存的动画对象，如果不存在则返回 nil。
 -- @function [parent=#display] getAnimationCache
 -- @param string name
+<<<<<<< HEAD
 -- @return Animation#Animation ret (return value: cc.Animation)
+=======
+-- @return Animation#Animation ret (return value: cc.Animation) 
+>>>>>>> dev_txf
 
 -- end --
 
@@ -1829,6 +2222,10 @@ end
 - display.PROGRESS_TIMER_RADIAL 环形
 
 ]]
+<<<<<<< HEAD
+=======
+
+>>>>>>> dev_txf
 -- end --
 
 display.PROGRESS_TIMER_BAR = 1
@@ -1865,6 +2262,7 @@ display.captureScreen(
 ~~~
 
 ]]
+<<<<<<< HEAD
 -- end --
 
 function display.captureScreen(callback, fileName)
@@ -1879,6 +2277,21 @@ function display.captureScreen(callback, fileName)
             end
         end
     )
+=======
+
+-- end --
+
+function display.captureScreen(callback, fileName)
+	sharedDirector:captureScreen(function(image)
+		if image then
+			local path = cc.FileUtils:getInstance():getWritablePath() .. fileName
+			image:saveToFile(path)
+			callback(true, path)
+		else
+			callback(false)
+		end
+	end)
+>>>>>>> dev_txf
 end
 
 return display
