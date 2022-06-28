@@ -5,6 +5,7 @@ end)
 local priority_ = 0     -- 存储层优先级
 local menuTopLayer_
 local audio_ = require"framework.audio"
+
 -- 底部栏组件
 local curPageSprite_
 local sizeTab_
@@ -70,7 +71,7 @@ function MenuScene:createMenuTop()
     local baseHeight = sizeBase.height * display.width / sizeBase.width
     -- base中心高度
     local baseCY = display.height - baseHeight/2
-    avatarButton:setPosition(display.cx/4, baseCY + 2)
+    avatarButton:setPosition(display.cx / 4, baseCY + 2)
     avatarButton:addTo(menuTopLayer_, 1)
     avatarButton:addTouchEventListener(function (sender, eventType)
         if 2 == eventType then
@@ -103,7 +104,7 @@ function MenuScene:createMenuTop()
         font = "font/fzzchjw.ttf",
         size = 20
     })
-    nameText:align(display.LEFT_CENTER, display.width*9/40, baseCY+2 + sizeNameBase.height/4)
+    nameText:align(display.LEFT_CENTER, display.width * 9 / 40, baseCY + 2 + sizeNameBase.height / 4)
     nameText:setColor(cc.c3b(255, 255, 255))
     nameText:addTo(menuTopLayer_)
 
@@ -117,7 +118,7 @@ function MenuScene:createMenuTop()
         font = "font/fzbiaozjw.ttf",
         size = 24
     })
-    scoreText:align(display.LEFT_CENTER, display.width*23/80, baseCY+5 - sizeNameBase.height/4)
+    scoreText:align(display.LEFT_CENTER, display.width * 23 / 80, baseCY + 5 - sizeNameBase.height / 4)
     scoreText:setColor(cc.c3b(255, 206, 55))
     scoreText:addTo(menuTopLayer_)
 
@@ -136,7 +137,7 @@ function MenuScene:createMenuTop()
         font = "font/fzbiaozjw.ttf",
         size = 26
     })
-    coinNum:align(display.RIGHT_TOP, display.cx*8/5 + display.cx/20, baseCY + sizeNameBase.height/2 - 5)
+    coinNum:align(display.RIGHT_TOP, display.cx * 8 / 5 + display.cx / 20, baseCY + sizeNameBase.height / 2 - 5)
     coinNum:setColor(cc.c3b(255, 255, 255))
     coinNum:addTo(menuTopLayer_)
 
@@ -155,7 +156,7 @@ function MenuScene:createMenuTop()
         font = "font/fzbiaozjw.ttf",
         size = 26
     })
-    diaNum:align(display.RIGHT_BOTTOM, display.cx*8/5 + display.cx/20, baseCY - sizeNameBase.height/2 + 5)
+    diaNum:align(display.RIGHT_BOTTOM, display.cx * 8 / 5 + display.cx / 20, baseCY - sizeNameBase.height / 2 + 5)
     diaNum:setColor(cc.c3b(255, 255, 255))
     diaNum:addTo(menuTopLayer_)
 
@@ -170,12 +171,11 @@ end
     @return layer
 ]]
 function MenuScene:createMenuBottom()
-    local menuBottomLayer = ccui.Layout:create()   -- 菜单层
+    local menuBottomLayer = ccui.Layout:create() -- 菜单层
     --menuLayer:setBackGroundImage("home/shop/background_shop.png")
-    menuBottomLayer:setPosition(display.width/2, display.height/2)
+    menuBottomLayer:setPosition(display.width / 2, display.height / 2)
     menuBottomLayer:setAnchorPoint(0.5, 0.5)
     menuBottomLayer:setContentSize(display.width, display.height)
-
 
     curPageSprite_ = cc.Sprite:create("home/bottom_tab_button/tab_selected.png")
     curPageSprite_:setAnchorPoint(0.5, 0)
