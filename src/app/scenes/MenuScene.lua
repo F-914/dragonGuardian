@@ -5,7 +5,6 @@ end)
 local priority_ = 0     -- 存储层优先级
 local menuTopLayer_
 local audio_ = require"framework.audio"
-
 -- 底部栏组件
 local curPageSprite_
 local sizeTab_
@@ -15,6 +14,8 @@ local tabGuide_
 local battleTitle_, battleIcon_
 local shopTitle_, shopIcon_
 local guideTitle_, guideIcon_
+
+local MenuConfig = require"app.test.MenuConfig"
 
 --[[--
     描述：构造函数
@@ -514,11 +515,11 @@ function MenuScene:createSecondSetting(layer)
     -- 事件回调函数
     local function onChangedCheckBoxEffect(sender, eventType)
         if eventType == ccui.CheckBoxEventType.selected then
-            audio_.stopEffect()
-            --audioBgm.pauseAll()
+            audio_.setEffectVolume(0)
+            MenuConfig.IS_PLAY_EFFECT = false
         elseif eventType == ccui.CheckBoxEventType.unselected then
-            --audio.playEffect("sounds/mainMainMusic.ogg")
-            --audioBgm.resumeAll()
+            audio_.setEffectVolume(1)
+            MenuConfig.IS_PLAY_EFFECT = true
         end
     end
 
@@ -532,23 +533,31 @@ function MenuScene:createSecondSetting(layer)
     )
     ckbEffect:setPosition(cc.p(display.width/2 - sizeSetBase.width/15, display.height/2 + sizeSetBase.height/5))
     ckbEffect:setAnchorPoint(0,0.5)
+    -- 按钮选择状态
+    if MenuConfig.IS_PLAY_EFFECT then
+        ckbEffect:setSelected(false)
+    else
+        ckbEffect:setSelected(true)
+    end
     -- 添加事件监听器
     ckbEffect:addEventListener(onChangedCheckBoxEffect)
     ckbEffect:addTo(secSettingLayer)
 
     ------------------------------------------------------------------------------------------------
     -- 音乐控制
-    local effectTitle = cc.Sprite:create("home/top_player_info/second_setting/title_music.png")
-    effectTitle:setAnchorPoint(0, 0.5)
-    effectTitle:setPosition(cc.p(display.width/3 - sizeSetBase.width/10, display.height/2 + sizeSetBase.height/15))
-    effectTitle:addTo(secSettingLayer)
+    local bgmTitle = cc.Sprite:create("home/top_player_info/second_setting/title_music.png")
+    bgmTitle:setAnchorPoint(0, 0.5)
+    bgmTitle:setPosition(cc.p(display.width/3 - sizeSetBase.width/10, display.height/2 + sizeSetBase.height/15))
+    bgmTitle:addTo(secSettingLayer)
 
     -- 事件回调函数
     local function onChangedCheckBoxBgm(sender, eventType)
         if eventType == ccui.CheckBoxEventType.selected then
             audio_.stopBGM()
+            MenuConfig.IS_PLAY_BGM = false
         elseif eventType == ccui.CheckBoxEventType.unselected then
-            --audio_.playBGM("sounds/mainMainMusic.ogg")
+            audio_.playBGM("sound_ogg/lobby_bgm_120bpm.ogg")
+            MenuConfig.IS_PLAY_BGM = true
         end
     end 
 
@@ -562,6 +571,12 @@ function MenuScene:createSecondSetting(layer)
     )
     ckbBgm:setPosition(cc.p(display.width/2 - sizeSetBase.width/15, display.height/2 + sizeSetBase.height/15))
     ckbBgm:setAnchorPoint(0,0.5)
+    -- 按钮选择状态
+    if MenuConfig.IS_PLAY_BGM then
+        ckbBgm:setSelected(false)
+    else
+        ckbBgm:setSelected(true)
+    end
     -- 添加事件监听器
     ckbBgm:addEventListener(onChangedCheckBoxBgm)
     ckbBgm:addTo(secSettingLayer)
@@ -582,19 +597,19 @@ function MenuScene:createSecondSetting(layer)
         end
     end 
 
-    --CheckBox音乐
-    local ckbBgm = ccui.CheckBox:create(
+    --CheckBox技能介绍
+    local ckbIntro = ccui.CheckBox:create(
         "home/top_player_info/second_setting/CheckBox_on.png",    --普通状态
         "home/top_player_info/second_setting/CheckBox_on.png",    --普通按下
         "home/top_player_info/second_setting/CheckBox_off.png",    --选中状态
         "home/top_player_info/second_setting/CheckBox_on.png",    --普通禁用
         "home/top_player_info/second_setting/CheckBox_off.png"     --选中禁用
     )
-    ckbBgm:setPosition(cc.p(display.width/2 - sizeSetBase.width/15, display.height/2 - sizeSetBase.height/15))
-    ckbBgm:setAnchorPoint(0,0.5)
+    ckbIntro:setPosition(cc.p(display.width/2 - sizeSetBase.width/15, display.height/2 - sizeSetBase.height/15))
+    ckbIntro:setAnchorPoint(0,0.5)
     -- 添加事件监听器
-    ckbBgm:addEventListener(onChangedCheckBoxIntroduce)
-    ckbBgm:addTo(secSettingLayer)
+    ckbIntro:addEventListener(onChangedCheckBoxIntroduce)
+    ckbIntro:addTo(secSettingLayer)
 
 
 
