@@ -8,11 +8,14 @@ local Enemy = class("Enemy", require("app.data.BaseModel"))
 local ConstDef = require("app.def.ConstDef")
 --
 
+---Enemy.ctor 构造函数
+---@param name        string 敌人名
+---@param hp          number 敌人血量
+---@param skills      table 敌人技能
+---@param description string 敌人描述
+---@return  Type Description
 function Enemy:ctor(name, hp, skills, description)
-    self.name_ = name
-    self.hp_ = hp
-    self.skills_ = skills
-    self.description_ = description
+    self:setEnemy(name, hp, skills, desc)
 end
 
 function Enemy:setEnemy(name, hp, skills, desc)

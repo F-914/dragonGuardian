@@ -11,11 +11,14 @@ local ConstDef = require("app.def.ConstDef")
 ---BattleTeam.ctor 构造函数
 ---@param myTeam table 队伍情况
 function BattleTeam:ctor(myTeam)
+    self:setBattleTeam(myTeam)
+end
+
+function BattleTeam:setBattleTeam(myTeam)
     if myTeam == nil then
         myTeam = {}
     end
     self.team_ = myTeam
-    self.baseModel_ = nil
 end
 
 ---BattleTeam.getTeamSize 获取队伍中队员数量
