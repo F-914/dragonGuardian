@@ -11,23 +11,23 @@ local BaseModel = class("BaseModel")
 ---@param width number
 ---@param height number
 ---@param isDeath boolean
-function BaseModel:ctor(myBaseModel, x, y, width, height, isDeath)
-    if myBaseModel == nil then
-        self.x_ = x -- 类型：number
-        self.y_ = y -- 类型：number
-        self.width_ = width -- 类型：number
-        self.height_ = height -- 类型：number
-        self.isDeath_ = isDeath -- 类型：boolean，是否死亡（销毁）
-    else
-        self.x_ = myBaseModel.x_
-        self.y_ = myBaseModel.y_
-        self.width_ = myBaseModel.width_
-        self.height_ = myBaseModel.height_
-        self.isDeath_ = myBaseModel.isDeath_
-    end
+function BaseModel:ctor(x, y, width, height, isDeath)
+    self.x_ = x -- 类型：number
+    self.y_ = y -- 类型：number
+    self.width_ = width -- 类型：number
+    self.height_ = height -- 类型：number
+    self.isDeath_ = isDeath -- 类型：boolean，是否死亡（销毁）
+    -- -不知名id 应该是用来标志对象的
+    -- id_ = id_ + 1
+    -- self.id_ = id_ -- 类型：number，唯一id
+end
 
-    id_ = id_ + 1
-    self.id_ = id_ -- 类型：number，唯一id
+function BaseModel:setBaseModel(x, y, width, height, isDeath)
+    self.x_ = x -- 类型：number
+    self.y_ = y -- 类型：number
+    self.width_ = width -- 类型：number
+    self.height_ = height -- 类型：number
+    self.isDeath_ = isDeath -- 类型：boolean，是否死亡（销毁）
 end
 
 ---直接用 getX 的话可以会覆盖一些自带的函数 可能会在后续导致一些问题

@@ -8,37 +8,7 @@ local Tower = class("Tower", require("app.data.BaseModel"))
 local ConstDef = require("app.def.ConstDef")
 --
 
---[[--
-构造函数
-@param myTower Tower
-@param x number
----@param y number
----@param width number
----@param height number
----@param isDeath boolean
----@param name string
----@param rarity number
----@param type number
----@param atk number
----@param atkTarget number
----@param atkUpgrade number
----@param atkEnhance number
----@param fireCd number
----@param fireCdEnhance number
----@param fireCdUpgrade number
----@param skills table
----@param extraDamage number
----@param fatalityRate number
----@param star number
--- TODO 属性应该还得增加
-]]
 function Tower:ctor(
-    myTower,
-    x,
-    y,
-    width,
-    height,
-    isDeath,
     name,
     rarity,
     type,
@@ -53,58 +23,56 @@ function Tower:ctor(
     extraDamage,
     fatalityRate,
     star)
-    if myTower == nil then
-        Tower.super.ctor(self, nil, x, y, width, height, isDeath)
-        self.name_ = name
-        self.rarity_ = rarity
-        self.type_ = type
-        self.skills = skills
+    self.name_ = name
+    self.rarity_ = rarity
+    self.type_ = type
+    self.skills = skills
 
-        self.atk_ = atk
-        self.atkTarget_ = atkTarget
-        self.atkUpgrade_ = atkUpgrade
-        self.atkEnhance_ = atkEnhance
-        self.extraDamage_ = extraDamage
+    self.atk_ = atk
+    self.atkTarget_ = atkTarget
+    self.atkUpgrade_ = atkUpgrade
+    self.atkEnhance_ = atkEnhance
+    self.extraDamage_ = extraDamage
 
-        self.fireCd_ = fireCd
-        self.fireCdEnhance_ = fireCdEnhance
-        self.fireCdUpgrade_ = fireCdUpgrade
+    self.fireCd_ = fireCd
+    self.fireCdEnhance_ = fireCdEnhance
+    self.fireCdUpgrade_ = fireCdUpgrade
 
-        self.fatalityRate_ = fatalityRate
-        self.star_ = star
-    else
-        Tower:setData(myTower)
-    end
+    self.fatalityRate_ = fatalityRate
+    self.star_ = star
 end
 
----setData
----@param myTower Tower
-function Tower:setData(myTower)
-    Tower.super.ctor(
-        self,
-        nil,
-        myTower:getMyX(),
-        myTower:getMyY(),
-        myTower:getMyWidth(),
-        myTower:getMyHeight(),
-        myTower:isDeath()
-    )
-    self.name_ = myTower:getName()
-    self.rarity_ = myTower:getRarity()
-    self.type_ = myTower:getType()
-    self.skills_ = myTower:getSkills()
+function Tower:setTower(name,
+                        rarity,
+                        type,
+                        atk,
+                        atkTarget,
+                        atkUpgrade,
+                        atkEnhance,
+                        fireCd,
+                        fireCdEnhance,
+                        fireCdUpgrade,
+                        skills,
+                        extraDamage,
+                        fatalityRate,
+                        star)
+    self.name_ = name
+    self.rarity_ = rarity
+    self.type_ = type
+    self.skills = skills
 
-    self.atk_ = myTower:getAtk()
-    self.atkTarget_ = myTower:getTarget()
-    self.atkUpgrade_ = myTower:getAtkUpgrade()
-    self.atkEnhance_ = myTower:getAtkEnhance()
-    self.extraDamage_ = myTower:getExtraDamage()
-    self.fatalityRate_ = myTower:getFatalityRate()
+    self.atk_ = atk
+    self.atkTarget_ = atkTarget
+    self.atkUpgrade_ = atkUpgrade
+    self.atkEnhance_ = atkEnhance
+    self.extraDamage_ = extraDamage
 
-    self.fireCd_ = myTower:getFireCd()
-    self.fireCdEnhance_ = myTower:getFireCdEnhance()
-    self.fireCdUpgrade_ = myTower:getFireCdUpgrade()
-    self.star_ = myTower:getStar()
+    self.fireCd_ = fireCd
+    self.fireCdEnhance_ = fireCdEnhance
+    self.fireCdUpgrade_ = fireCdUpgrade
+
+    self.fatalityRate_ = fatalityRate
+    self.star_ = star
 end
 
 --- 稀有度

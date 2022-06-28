@@ -2,7 +2,7 @@
     BattleTeam.lua
     我方阵营
 ]]
-local BattleTeam = class("BattleTeam")
+local BattleTeam = class("BattleTeam", require("app.data.base.BaseModel"))
 
 -- local
 local ConstDef = require("app.def.ConstDef")
@@ -15,6 +15,7 @@ function BattleTeam:ctor(myTeam)
         myTeam = {}
     end
     self.team_ = myTeam
+    self.baseModel_ = nil
 end
 
 ---BattleTeam.getTeamSize 获取队伍中队员数量
