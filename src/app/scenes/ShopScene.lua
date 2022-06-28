@@ -9,7 +9,7 @@ local ShopScene = class("MainScene", function()
     return display.newScene("MainScene")
 end)
 
-local _shopLayer
+local shopLayer_
 local _buttonCoinClik
 local _buttonCoinClikGrey
 local _checkBuy
@@ -33,12 +33,12 @@ end
 
     @return none
 ]]
-local audio = require"framework.audio"
+local audio_ = require"framework.audio"
 function ShopScene:loadMusic()
-    audio.loadFile("sound_ogg/get_free_item.ogg",function (dt) end)
-    audio.loadFile("sound_ogg/get_paid_item.ogg",function (dt) end)
-    audio.loadFile("sound_ogg/open_box.ogg",function (dt) end)
-    audio.loadFile("sound_ogg/buy_paid_item.ogg",function (dt) end)
+    audio_.loadFile("sound_ogg/get_free_item.ogg",function (dt) end)
+    audio_.loadFile("sound_ogg/get_paid_item.ogg",function (dt) end)
+    audio_.loadFile("sound_ogg/open_box.ogg",function (dt) end)
+    audio_.loadFile("sound_ogg/buy_paid_item.ogg",function (dt) end)
 end
 
 --[[--
@@ -85,8 +85,52 @@ function _checkBuy(layer, itemWidth, itemHeight)
         --checkButton:setTouchEnabled(false)
         checkButton:removeFromParent()
         _buttonCoinClikGrey(layer, itemWidth, itemHeight)
-        audio.playEffect("sound_ogg/buy_paid_item.ogg", false)
+        audio_.playEffect("sound_ogg/buy_paid_item.ogg", false)
     end)
+
+    local checkLayer = ccui.Layout:create()
+    checkLayer:setBackGroundColor(cc.c4b(0,0,0,100))
+    checkLayer:setBackGroundColorType(1)
+    checkLayer:opacity(200)
+    checkLayer:setAnchorPoint(0.5, 0.5)
+    checkLayer:setPosition(display.cx, display.cy)
+    checkLayer:setContentSize(display.width, display.height)
+    checkLayer:addTo(layer:getParent():getParent():getParent(), 5)
+    -- 设置层可触摸屏蔽下方按键
+    checkLayer:setTouchEnabled(true)
+    checkLayer:addTouchEventListener(function (sender, eventType)
+        if 2 == eventType then
+            audio_.playEffect("sound_ogg/ui_btn_click.ogg")
+            checkLayer:removeFromParent()
+        end
+    end)
+
+--[[
+    local checkBase = cc.Sprite:create("home/top_player_info/second_setting/base_popup.png")
+    checkBase:setAnchorPoint(0.5, 0.5)
+    checkBase:setPosition(display.cx, display.cy)
+    checkBase:addTo(checkLayer)
+    local sizeSetBase = checkBase:getContentSize()
+
+    local checkClose = ccui.Button:create("home/top_player_info/second_setting/button_close.png")
+    checkClose:setAnchorPoint(0.5, 0.5)
+    checkClose:setPosition(display.cx + sizeSetBase.width/2 - sizeSetBase.width/17, display.cy + sizeSetBase.height/2 - sizeSetBase.height/10)
+    checkClose:addTo(checkLayer)
+    checkClose:addTouchEventListener(function (sender, eventType)
+        if 2 == eventType then
+            audio_.playEffect("sound_ogg/ui_btn_click.ogg")
+            checkLayer:removeFromParent()
+        end
+    end)
+
+    -- 遮罩，屏蔽点击退出触摸事件
+    local baseMaskLayer = ccui.Layout:create()
+    baseMaskLayer:setAnchorPoint(0.5, 0.5)
+    baseMaskLayer:setPosition(display.cx, display.cy)
+    baseMaskLayer:setContentSize(sizeSetBase.width, sizeSetBase.height)
+    baseMaskLayer:setTouchEnabled(true)
+    baseMaskLayer:addTo(checkLayer, -1)
+]]
 end
 
 --[[--
@@ -99,11 +143,11 @@ end
 function ShopScene:createShopLayer()
     self:loadMusic()
 
-    _shopLayer = ccui.Layout:create()
-    _shopLayer:setBackGroundImage("home/shop/background_shop.png")
-    _shopLayer:setPosition(display.width/2, display.height/2)
-    _shopLayer:setAnchorPoint(0.5, 0.5)
-    _shopLayer:setContentSize(display.width, display.height)
+    shopLayer_ = ccui.Layout:create()
+    shopLayer_:setBackGroundImage("home/shop/background_shop.png")
+    shopLayer_:setPosition(display.width/2, display.height/2)
+    shopLayer_:setAnchorPoint(0.5, 0.5)
+    shopLayer_:setContentSize(display.width, display.height)
 
     -- 滑动区域
     local itemWidth, itemHeight = display.width/5, display.height/6
@@ -112,7 +156,7 @@ function ShopScene:createShopLayer()
     listView:setAnchorPoint(0.5, 0.5)
     listView:setPosition(display.cx, display.cy)
     listView:setDirection(1)        -- 垂直
-    listView:addTo(_shopLayer)
+    listView:addTo(shopLayer_)
 
     local dragonNum = 0
 
@@ -223,7 +267,7 @@ function ShopScene:createShopLayer()
                         end
                         if 2 == eventType then
                             print("2")
-                            audio.playEffect("sound_ogg/get_free_item.ogg")
+                            audio_.playEffect("sound_ogg/get_free_item.ogg")
                             --freeButton:setTouchEnabled(false)
                             rowLayer:scale(1)
                         end
@@ -298,7 +342,7 @@ function ShopScene:createShopLayer()
                             end
                             if 2 == eventType then
                                 dragonButton:setTouchEnabled(false)
-                                audio.playEffect("sound_ogg/get_paid_item.ogg")
+                                audio_.playEffect("sound_ogg/get_paid_item.ogg")
                                 _buttonCoinClik(rowLayer, itemWidth, itemHeight)
                             end
                         end)
@@ -377,7 +421,7 @@ function ShopScene:createShopLayer()
                     end
                     if 2 == eventType then
                         --boxRareButton:setTouchEnabled(false)
-                        audio.playEffect("sound_ogg/open_box.ogg")
+                        audio_.playEffect("sound_ogg/open_box.ogg")
                         rowRareLayer:scale(1)
                     end
                 end)
@@ -428,7 +472,7 @@ function ShopScene:createShopLayer()
                     end
                     if 2 == eventType then
                         --boxNormalButton:setTouchEnabled(false)
-                        audio.playEffect("sound_ogg/open_box.ogg")
+                        audio_.playEffect("sound_ogg/open_box.ogg")
                         rowNormalLayer:scale(1)
                     end
                 end)
@@ -480,7 +524,7 @@ function ShopScene:createShopLayer()
                     end
                     if 2 == eventType then
                         --boxEpicButton:setTouchEnabled(false)
-                        audio.playEffect("sound_ogg/open_box.ogg")
+                        audio_.playEffect("sound_ogg/open_box.ogg")
                         rowEpicLayer:scale(1)
                     end
                 end)
@@ -534,7 +578,7 @@ function ShopScene:createShopLayer()
                     end
                     if 2 == eventType then
                         --boxLengendButton:setTouchEnabled(false)
-                        audio.playEffect("sound_ogg/open_box.ogg")
+                        audio_.playEffect("sound_ogg/open_box.ogg")
                         rowLegendLayer:scale(1)
                     end
                 end)
@@ -545,7 +589,7 @@ function ShopScene:createShopLayer()
     end
 
 
-    return _shopLayer
+    return shopLayer_
 end
 
 return ShopScene
