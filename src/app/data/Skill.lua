@@ -2,7 +2,7 @@
     Skill.lua
     技能基类
 ]]
-local Skill = class("Skill", require("app.data.Skill"))
+local Skill = class("Skill", require("app.data.base.BaseModel"))
 
 ---Skill.ctor 构造函数
 ---@param skillName         string 技能名

@@ -9,7 +9,7 @@ local ConstDef = require("app.def.ConstDef")
 --
 
 ---TreasureBoxReward.ctor 构造函数
----@param treasureBoxType string 宝箱的类型（这里用的是字符串，暂时的想法是可以根据宝箱的类型来选择不同的函数去执行
+---@param treasureBoxType string 宝箱的类型
 ---@param rewardAmount    number 宝箱的数量
 ---@return  Type Description
 function TreasureBoxReward:ctor(treasureBoxType, rewardAmount)

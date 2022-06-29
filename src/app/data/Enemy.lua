@@ -2,7 +2,7 @@
     Enemy.lua
     敌人对象基类
 ]]
-local Enemy = class("Enemy", require("app.data.BaseModel"))
+local Enemy = class("Enemy", require("app.data.base.BaseModel"))
 
 -- local
 local ConstDef = require("app.def.ConstDef")
