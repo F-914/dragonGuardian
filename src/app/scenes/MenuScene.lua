@@ -5,6 +5,7 @@ end)
 local priority_ = 0     -- 存储层优先级
 local menuTopLayer_
 local audio_ = require"framework.audio"
+local avatarButton_
 -- 底部栏组件
 local curPageSprite_
 local sizeTab_
@@ -16,6 +17,8 @@ local shopTitle_, shopIcon_
 local guideTitle_, guideIcon_
 
 local MenuConfig = require"app.test.MenuConfig"
+local TowerDef = require"app.def.TowerDef"
+local Log = require"app.utils.Log"
 
 --[[--
     描述：构造函数
@@ -66,17 +69,18 @@ function MenuScene:createMenuTop()
     topBase:addTo(menuTopLayer_)
 
     -- 头像框按钮
-    local avatarButton = ccui.Button:create("home/top_player_info/default_avatar.png")
-    avatarButton:setAnchorPoint(0.5, 0.5)
+    avatarButton_ = ccui.Button:create(MenuConfig.AVATER.ICON_PATH)
+    avatarButton_:setAnchorPoint(0.5, 0.5)
     -- base的高度
     local baseHeight = sizeBase.height * display.width / sizeBase.width
     -- base中心高度
     local baseCY = display.height - baseHeight/2
-    avatarButton:setPosition(display.cx / 4, baseCY + 2)
-    avatarButton:addTo(menuTopLayer_, 1)
-    avatarButton:addTouchEventListener(function (sender, eventType)
+    avatarButton_:setPosition(display.cx / 4, baseCY + 2)
+    avatarButton_:addTo(menuTopLayer_, 1)
+    avatarButton_:addTouchEventListener(function (sender, eventType)
         if 2 == eventType then
             audio_.playEffect("sound_ogg/ui_btn_click.ogg")
+            MenuScene:createAvatarSelection(menuTopLayer_:getParent())
         end
     end)
 
@@ -101,7 +105,7 @@ function MenuScene:createMenuTop()
     local sizeNameBase = nameBase:getContentSize()
 
     local nameText = display.newTTFLabel({
-        text = "玩家昵称",
+        text = MenuConfig.NAME,
         font = "font/fzzchjw.ttf",
         size = 20
     })
@@ -115,7 +119,7 @@ function MenuScene:createMenuTop()
     cupSprite:addTo(menuTopLayer_)
 
     local scoreText = display.newTTFLabel({
-        text = "100",
+        text = MenuConfig.CUP_NUM,
         font = "font/fzbiaozjw.ttf",
         size = 24
     })
@@ -134,7 +138,7 @@ function MenuScene:createMenuTop()
     coinSprite:addTo(menuTopLayer_)
 
     local coinNum = display.newTTFLabel({
-        text = "25165",
+        text = MenuConfig.COIN_NUM,
         font = "font/fzbiaozjw.ttf",
         size = 26
     })
@@ -153,7 +157,7 @@ function MenuScene:createMenuTop()
     diaSprite:addTo(menuTopLayer_)
 
     local diaNum = display.newTTFLabel({
-        text = "128645",
+        text = MenuConfig.DIA_NUM,
         font = "font/fzbiaozjw.ttf",
         size = 26
     })
@@ -443,37 +447,37 @@ end
     @return none
 ]]
 function MenuScene:createSecondSetting(layer)
-    local secSettingLayer = ccui.Layout:create()
-    secSettingLayer:setBackGroundColor(cc.c4b(0,0,0,100))
-    secSettingLayer:setBackGroundColorType(1)
-    secSettingLayer:opacity(200)
-    secSettingLayer:setAnchorPoint(0.5, 0.5)
-    secSettingLayer:setPosition(display.cx, display.cy)
-    secSettingLayer:setContentSize(display.width, display.height)
-    secSettingLayer:addTo(layer, priority_ + 1)
+    local secAvatarLayer = ccui.Layout:create()
+    secAvatarLayer:setBackGroundColor(cc.c4b(0,0,0,100))
+    secAvatarLayer:setBackGroundColorType(1)
+    secAvatarLayer:opacity(200)
+    secAvatarLayer:setAnchorPoint(0.5, 0.5)
+    secAvatarLayer:setPosition(display.cx, display.cy)
+    secAvatarLayer:setContentSize(display.width, display.height)
+    secAvatarLayer:addTo(layer, priority_ + 1)
     -- 设置层可触摸屏蔽下方按键
-    secSettingLayer:setTouchEnabled(true)
-    secSettingLayer:addTouchEventListener(function (sender, eventType)
+    secAvatarLayer:setTouchEnabled(true)
+    secAvatarLayer:addTouchEventListener(function (sender, eventType)
         if 2 == eventType then
             audio_.playEffect("sound_ogg/ui_btn_click.ogg")
-            secSettingLayer:removeFromParent()
+            secAvatarLayer:removeFromParent()
         end
     end)
 
     local setBase = cc.Sprite:create("home/top_player_info/second_setting/base_popup.png")
     setBase:setAnchorPoint(0.5, 0.5)
     setBase:setPosition(display.cx, display.cy)
-    setBase:addTo(secSettingLayer)
+    setBase:addTo(secAvatarLayer)
     local sizeSetBase = setBase:getContentSize()
 
     local setClose = ccui.Button:create("home/top_player_info/second_setting/button_close.png")
     setClose:setAnchorPoint(0.5, 0.5)
     setClose:setPosition(display.cx + sizeSetBase.width/2 - sizeSetBase.width/17, display.cy + sizeSetBase.height/2 - sizeSetBase.height/10)
-    setClose:addTo(secSettingLayer)
+    setClose:addTo(secAvatarLayer)
     setClose:addTouchEventListener(function (sender, eventType)
         if 2 == eventType then
             audio_.playEffect("sound_ogg/ui_btn_click.ogg")
-            secSettingLayer:removeFromParent()
+            secAvatarLayer:removeFromParent()
         end
     end)
 
@@ -483,12 +487,12 @@ function MenuScene:createSecondSetting(layer)
     baseMaskLayer:setPosition(display.cx, display.cy)
     baseMaskLayer:setContentSize(sizeSetBase.width, sizeSetBase.height)
     baseMaskLayer:setTouchEnabled(true)
-    baseMaskLayer:addTo(secSettingLayer, -1)
+    baseMaskLayer:addTo(secAvatarLayer, -1)
 
     local setExit = ccui.Button:create("home/top_player_info/second_setting/button_exit.png")
     setExit:setAnchorPoint(0.5, 0.5)
     setExit:setPosition(display.cx, display.cy - sizeSetBase.height*7/24)
-    setExit:addTo(secSettingLayer)
+    setExit:addTo(secAvatarLayer)
     setExit:addTouchEventListener(function (sender, eventType)
         if 2 == eventType then
             audio_.playEffect("sound_ogg/ui_btn_click.ogg")
@@ -503,14 +507,14 @@ function MenuScene:createSecondSetting(layer)
     versionText:align(display.CENTER, display.cx, display.cy - sizeSetBase.height/2 + sizeSetBase.height/14)
     versionText:setColor(cc.c3b(255, 255, 255))
     versionText:opacity(60)
-    versionText:addTo(secSettingLayer)
+    versionText:addTo(secAvatarLayer)
 
     ------------------------------------------------------------------------------------------------
     -- 音效控制
     local effectTitle = cc.Sprite:create("home/top_player_info/second_setting/title_effect.png")
     effectTitle:setAnchorPoint(0, 0.5)
     effectTitle:setPosition(cc.p(display.width/3 - sizeSetBase.width/10, display.height/2 + sizeSetBase.height/5))
-    effectTitle:addTo(secSettingLayer)
+    effectTitle:addTo(secAvatarLayer)
 
     -- 事件回调函数
     local function onChangedCheckBoxEffect(sender, eventType)
@@ -541,14 +545,14 @@ function MenuScene:createSecondSetting(layer)
     end
     -- 添加事件监听器
     ckbEffect:addEventListener(onChangedCheckBoxEffect)
-    ckbEffect:addTo(secSettingLayer)
+    ckbEffect:addTo(secAvatarLayer)
 
     ------------------------------------------------------------------------------------------------
     -- 音乐控制
     local bgmTitle = cc.Sprite:create("home/top_player_info/second_setting/title_music.png")
     bgmTitle:setAnchorPoint(0, 0.5)
     bgmTitle:setPosition(cc.p(display.width/3 - sizeSetBase.width/10, display.height/2 + sizeSetBase.height/15))
-    bgmTitle:addTo(secSettingLayer)
+    bgmTitle:addTo(secAvatarLayer)
 
     -- 事件回调函数
     local function onChangedCheckBoxBgm(sender, eventType)
@@ -579,14 +583,14 @@ function MenuScene:createSecondSetting(layer)
     end
     -- 添加事件监听器
     ckbBgm:addEventListener(onChangedCheckBoxBgm)
-    ckbBgm:addTo(secSettingLayer)
+    ckbBgm:addTo(secAvatarLayer)
 
     ------------------------------------------------------------------------------------------------
     -- 技能介绍控制
     local introduceTitle = cc.Sprite:create("home/top_player_info/second_setting/title_skill_introduce.png")
     introduceTitle:setAnchorPoint(0, 0.5)
     introduceTitle:setPosition(cc.p(display.width/3 - sizeSetBase.width/10, display.height/2 - sizeSetBase.height/15))
-    introduceTitle:addTo(secSettingLayer)
+    introduceTitle:addTo(secAvatarLayer)
 
     -- 事件回调函数
     local function onChangedCheckBoxIntroduce(sender, eventType)
@@ -609,11 +613,205 @@ function MenuScene:createSecondSetting(layer)
     ckbIntro:setAnchorPoint(0,0.5)
     -- 添加事件监听器
     ckbIntro:addEventListener(onChangedCheckBoxIntroduce)
-    ckbIntro:addTo(secSettingLayer)
+    ckbIntro:addTo(secAvatarLayer)
 
 
 
 end
 
+--[[--
+    描述：头像选择界面弹窗
+
+    @param layer
+
+    @return none
+]]
+function MenuScene:createAvatarSelection(layer)
+    local curAvaterID = 0   -- 当前展示头像id（未存入文件）
+
+    local secAvatarLayer = ccui.Layout:create()
+    secAvatarLayer:setBackGroundColor(cc.c4b(0,0,0,100))
+    secAvatarLayer:setBackGroundColorType(1)
+    secAvatarLayer:opacity(200)
+    secAvatarLayer:setAnchorPoint(0.5, 0.5)
+    secAvatarLayer:setPosition(display.cx, display.cy)
+    secAvatarLayer:setContentSize(display.width, display.height)
+    secAvatarLayer:addTo(layer, priority_ + 1)
+    -- 设置层可触摸屏蔽下方按键
+    secAvatarLayer:setTouchEnabled(true)
+    secAvatarLayer:addTouchEventListener(function (sender, eventType)
+        if 2 == eventType then
+            audio_.playEffect("sound_ogg/ui_btn_click.ogg")
+            secAvatarLayer:removeFromParent()
+        end
+    end)
+
+    local selectionBase = cc.Sprite:create("home/top_player_info/second_avater_selection/base_popup.png")
+    selectionBase:setAnchorPoint(0.5, 0.5)
+    selectionBase:setPosition(display.cx, display.cy)
+    selectionBase:addTo(secAvatarLayer)
+    local sizeSetBase = selectionBase:getContentSize()
+
+    local selectionClose = ccui.Button:create("home/top_player_info/second_avater_selection/button_close.png")
+    selectionClose:setAnchorPoint(0.5, 0.5)
+    selectionClose:setPosition(display.cx + sizeSetBase.width/2 - sizeSetBase.width/17, display.cy + sizeSetBase.height/2 - sizeSetBase.height/23)
+    selectionClose:addTo(secAvatarLayer)
+    selectionClose:addTouchEventListener(function (sender, eventType)
+        if 2 == eventType then
+            audio_.playEffect("sound_ogg/ui_btn_click.ogg")
+            secAvatarLayer:removeFromParent()
+        end
+    end)
+
+    -- 遮罩，屏蔽点击退出触摸事件
+    local baseMaskLayer = ccui.Layout:create()
+    baseMaskLayer:setAnchorPoint(0.5, 0.5)
+    baseMaskLayer:setPosition(display.cx, display.cy)
+    baseMaskLayer:setContentSize(sizeSetBase.width, sizeSetBase.height)
+    baseMaskLayer:setTouchEnabled(true)
+    baseMaskLayer:addTo(secAvatarLayer, -1)
+
+    local avaterConfirm = ccui.Button:create("home/top_player_info/second_avater_selection/button_confirm.png")
+    avaterConfirm:setAnchorPoint(0.5, 0.5)
+    avaterConfirm:setPosition(display.cx, display.cy - sizeSetBase.height*5/12)
+    avaterConfirm:addTo(secAvatarLayer)
+    avaterConfirm:addTouchEventListener(function (sender, eventType)
+        if 2 == eventType then
+            audio_.playEffect("sound_ogg/ui_btn_click.ogg")
+            MenuConfig.AVATER.ICON_PATH = TowerDef[curAvaterID].ICON_PATH
+            MenuConfig.AVATER.ID = curAvaterID
+            secAvatarLayer:removeFromParent()
+            avatarButton_:loadTextures(MenuConfig.AVATER.ICON_PATH, "")
+        end
+    end)
+
+    ------------------------------------------------------------------------------------------
+    -- 当前选中头像展示
+    local avaterCur = cc.Sprite:create(MenuConfig.AVATER.ICON_PATH)
+    avaterCur:setAnchorPoint(0.5, 0.5)
+    avaterCur:setPosition(sizeSetBase.width/3, display.cy + sizeSetBase.height*8/24)
+    avaterCur:addTo(secAvatarLayer)
+
+    local avaterText = display.newTTFLabel({
+        text = "头像名称",
+        font = "font/fzbiaozjw.ttf",
+        size = 25
+    })
+    avaterText:align(display.LEFT_CENTER, sizeSetBase.width*23/49, display.cy + sizeSetBase.height*18/49)
+    avaterText:setColor(cc.c3b(255, 255, 255))
+    avaterText:addTo(secAvatarLayer)
+
+    local avaterTips = cc.Sprite:create("home/top_player_info/second_avater_selection/tips.png")
+    avaterTips:setAnchorPoint(0, 0.5)
+    avaterTips:setPosition(sizeSetBase.width*11/24, display.cy + sizeSetBase.height*15/48)
+    avaterTips:addTo(secAvatarLayer)
+
+    ------------------------------------------------------------------------------------------
+    -- 滑动区域
+    local image = cc.Sprite:create("home/top_player_info/second_avater_selection/base_slider.png")
+    local sizeImage = image:getContentSize()
+    local itemWidth, itemHeight = sizeSetBase.width / 5, sizeSetBase.height / 8
+    local listView = ccui.ListView:create()
+    listView:setAnchorPoint(0.5, 0.5)
+    listView:setPosition(display.cx, display.cy - sizeSetBase.height/25)
+    listView:setContentSize(sizeSetBase.width, sizeImage.height)
+    listView:setDirection(1) -- 垂直
+    listView:addTo(secAvatarLayer)
+    listView:setBackGroundImage("home/top_player_info/second_avater_selection/base_slider.png")
+
+    local avaterNum = 1
+    -- 按是否获得将头像分类
+    local avaterObtain = {}
+    local avaterNotObtain = {}
+    for id, tower in ipairs(TowerDef) do
+        if tower.IS_OBTAIN then
+            if tower.RARITY == "legend" then
+                table.insert(avaterObtain, 1, tower)
+            else
+                table.insert(avaterObtain, tower)
+            end
+        else
+            table.insert(avaterNotObtain, tower)
+        end
+    end
+    print("obtain tower:", #avaterObtain)
+    print("not obtain tower:", #avaterNotObtain)
+
+    local iNotObtain = 0    -- 未获得标题层数
+    for i = 1,8 do
+        -- 层存放每层数据
+        local colLayer = ccui.Layout:create()
+        colLayer:setContentSize(sizeSetBase.width, itemHeight)
+        colLayer:addTo(listView)
+
+        if i == 1 then
+            colLayer:setContentSize(sizeSetBase.width, itemHeight/2)
+            local avaterTitleBase = cc.Sprite:create("home/top_player_info/second_avater_selection/division_obtain.png")
+            avaterTitleBase:setAnchorPoint(0.5, 0.5)
+            avaterTitleBase:setPosition(sizeSetBase.width/2, itemHeight/4)
+            avaterTitleBase:addTo(colLayer)
+        elseif i == iNotObtain then
+            print("not obtain")
+            colLayer:setContentSize(sizeSetBase.width, itemHeight/2)
+            local avaterTitleBaseTwo = cc.Sprite:create("home/top_player_info/second_avater_selection/division_not_obtain.png")
+            avaterTitleBaseTwo:setAnchorPoint(0.5, 0.5)
+            avaterTitleBaseTwo:setPosition(sizeSetBase.width/2, itemHeight/4)
+            avaterTitleBaseTwo:addTo(colLayer)
+        else
+            local avaterList = ccui.ListView:create()
+            avaterList:setAnchorPoint(0.5, 0.5)
+            avaterList:setPosition(sizeSetBase.width/2, itemHeight/2)
+            avaterList:setContentSize(sizeSetBase.width*4/5, itemHeight)
+            avaterList:setDirection(2) -- 水平
+            avaterList:addTo(colLayer)
+            --avaterList:setBackGroundColor(cc.c3b(255, math.random(0, 255), 255))
+            --avaterList:setBackGroundColorType(1)
+            for j = 1, 4 do
+                local rowLayer = ccui.Layout:create()
+                rowLayer:setContentSize(itemWidth, itemHeight)
+                rowLayer:addTo(avaterList)
+
+                if avaterNum <= #avaterObtain then
+                    local tower = avaterObtain[avaterNum]
+                    if tower == nil then
+                        Log.i("obtaon tower is empty")
+                    else
+                        local avaterButton = ccui.Button:create(tower.ICON_PATH)
+                        avaterButton:setAnchorPoint(0.5, 0.5)
+                        avaterButton:setPosition(itemWidth/2, itemHeight/2)
+                        avaterButton:addTo(rowLayer)
+                        avaterNum = avaterNum + 1
+                        avaterButton:addTouchEventListener(function(sender, eventType)
+                            if 2 == eventType then
+                                -- 更换头像展示
+                                local img = cc.Sprite:create(tower.ICON_PATH):getSpriteFrame()
+                                avaterCur:setSpriteFrame(img)
+                                curAvaterID = tower.ID
+                            end
+                        end)
+                    end
+                elseif avaterNum == #avaterObtain + 1 then
+                    iNotObtain = i + 1
+                    avaterNum = avaterNum + 1
+                else
+                    local num = avaterNum - #avaterObtain - 1
+                    print("num:", num)
+                    local tower = avaterNotObtain[num]
+                    if tower == nil then
+                        Log.i("not obtain tower is empty")
+                    else
+                        local avaterButton = ccui.Button:create(tower.ICON_PATH_GREY)
+                        avaterButton:setAnchorPoint(0.5, 0.5)
+                        avaterButton:setPosition(itemWidth/2, itemHeight/2)
+                        avaterButton:addTo(rowLayer)
+                        avaterNum = avaterNum + 1
+                    end
+                end
+            end
+        end
+    end
+
+
+end
 
 return MenuScene

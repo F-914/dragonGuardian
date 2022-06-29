@@ -14,6 +14,7 @@ local MainUIBattleView = require("app.ui.MainUIBattleView")
 local MenuScene = require("app.scenes.MenuScene")
 local ShopView = require("app.ui.ShopView")
 local Log = require("app.utils.Log")
+local MenuConfig = require("app.test.MenuConfig")
 --
 local pageView
 --
@@ -35,11 +36,13 @@ function MainScene:ctor()
     end, 1)
 
     -- 主界面默认音乐播放
-    print("主界面音乐播放")
-    local audio = require("framework.audio")
-    audio.loadFile("sound_ogg/lobby_bgm_120bpm.ogg",function ()
-        audio.playBGM("sound_ogg/lobby_bgm_120bpm.ogg",true)
-    end)
+    if MenuConfig.IS_PLAY_BGM then
+        print("主界面音乐播放")
+        local audio = require("framework.audio")
+        audio.loadFile("sound_ogg/lobby_bgm_120bpm.ogg",function ()
+            audio.playBGM("sound_ogg/lobby_bgm_120bpm.ogg",true)
+        end)
+    end
 
 end
 
