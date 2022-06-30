@@ -12,7 +12,11 @@ local CalibrateScaleSprite = class("CalibrateScaleSprite", function(res)
     return display.newSprite(res)
 end)
 
-local GameDate = require("src/app/data/GameData.lua")
+-- local
+local StringDef = require("app.def.StringDef")
+local GameData = require("app.test.GameData")
+local Log = require("app.utils.Log")
+--
 
 --[[--
     @description: 构造方法
@@ -22,10 +26,12 @@ local GameDate = require("src/app/data/GameData.lua")
 ]]
 function CalibrateScaleSprite:ctor(res, userKeyQuantity)
     self.currentKey_ = userKeyQuantity --记录当前钥匙数量，用于帧刷新和创建进度条
+    Log.i("userKeyQuantity is nil ? " .. tostring(userKeyQuantity == nil))
     self.yellowScale_ = nil --用于帧刷新
     self.size_ = nil --用于帧刷新
     self:init()
 end
+
 --[[--
     @description:初始化，构造纹理
     @param none
@@ -41,9 +47,9 @@ function CalibrateScaleSprite:init()
     local yellowScale = display.newSprite("res/home/battle/high_ladder/calibrated scale/cutoff/cutoff.png")
     yellowScale:setAnchorPoint(0, 0)
     yellowScale:setPosition(3, 6)
-    local factor = self.currentKey_ / GameDate.maxKeyQuantity_
+    local factor = self.currentKey_ / GameData.maxKeyQuantity_
     --这个放缩值谨慎修改
-    local scale = 3.134 * factor - 0.19
+    local scale = 3.13 * factor - 0.20
     yellowScale:setScale(scale, 1)
     yellowScale:addTo(self)
 
@@ -56,23 +62,23 @@ function CalibrateScaleSprite:init()
     --spriteDecorate:addTo(yellowScale)
 
     self.yellowScale_ = yellowScale
-    local keyRewardNodes = GameDate.keyRewardNodes_
+    local keyRewardNodes = GameData.keyRewardNodes_
     for i = 1, #keyRewardNodes do
         local num = keyRewardNodes[i]
-        local factor2 = num / GameDate.maxKeyQuantity_
+        local factor2 = num / GameData.maxKeyQuantity_
         local quantityTTF = display.newTTFLabel({
             text = tostring(num),
             font = "res/font/fzbiaozjw.ttf",
             size = 18,
             color = cc.c3b(168, 176, 225)
         })
-        local scale = factor2 * 3.13 - 0.19
+        local scale = factor2 * 3.127 - 0.18
         quantityTTF:setPosition(scale * 210, -10)
         quantityTTF:setScale(0.3, 0.8)
         quantityTTF:addTo(self)
 
         local cutoffScale = nil
-        if num < GameDate.userKeyQuantity_ then
+        if num < GameData.userKeyQuantity_ then
             cutoffScale = display.newSprite("res/home/battle/high_ladder/calibrated scale/cutoff/cutoff_scale.png")
         else
             cutoffScale = display.newSprite("res/home/battle/high_ladder/calibrated scale/scale.png")
@@ -85,6 +91,7 @@ function CalibrateScaleSprite:init()
 
 
 end
+
 --[[--
     @description: 帧刷新
     @param dt type:number 帧间隔
@@ -92,13 +99,12 @@ end
 ]]
 function CalibrateScaleSprite:update(dt)
     --监听到用户的钥匙数量发生变化
-    if not self.currentKey_ == GameDate.userKeyQuantity then
-        self.currentKey_ = GameDate.userKeyQuantity
-        local factor = self.currentKey_ / GameDate.maxKeyQuantity_
+    if not self.currentKey_ == GameData.userKeyQuantity then
+        self.currentKey_ = GameData.userKeyQuantity
+        local factor = self.currentKey_ / GameData.maxKeyQuantity_
         local scale = 3.13 * factor - 0.19
         self.yellowScale_:setScale(scale, 1)
     end
 end
-
 
 return CalibrateScaleSprite
