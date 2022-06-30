@@ -7,6 +7,7 @@ local MainScene = class("MainScene", function()
 end)
 
 -- local
+local LoadView = require("app.ui.LoadView")
 local StringDef = require("app.def.StringDef")
 local AtlasView = require("app.ui.AtlasView")
 local GameData = require("app.test.GameData")
@@ -17,9 +18,12 @@ local Log = require("app.utils.Log")
 local MenuConfig = require("app.test.MenuConfig")
 --
 local pageView
+local loadView
 --
 
 function MainScene:ctor()
+    loadView = LoadView.new()
+    loadView:addTo(self, 3)
     --test
     GameData:init()
     --
@@ -56,6 +60,14 @@ function MainScene:update(dt)
 end
 
 function MainScene:onExit()
+end
+
+--[[--
+    描述：删除加载界面
+]]
+function MainScene:quitLoading()
+    print("loadingView", loadView)
+    loadView:removeFromParent()
 end
 
 --[[--
