@@ -1,14 +1,15 @@
 --[[--
     宝箱开启确认界面
-    OpenTreasure2nd.lua
+    OpenTreasure2nd
 ]]
 local OpenTreasureChest2nd = class("OpenTreasureChest2nd", function()
     return ccui.Layout:create()
 end)
 
-local Factory = require("src/app/utils/Factory.lua")
-local ChestRewardGet2nd = require("src/app/ui/secondaryui/ChestRewardGet2nd.lua")
-local TestDataFactory = require("src/app/test/TestDataFactory.lua")
+local Factory = require("app.utils.Factory")
+local ChestRewardGet2nd = require("app.ui.secondaryui.ChestRewardGet2nd")
+local TestDataFactory = require("app.test.TestDataFactory")
+local StringDef = require("app.def.StringDef")
 --[[--
     @description: 构造函数
     @param treasureData type:table, 宝箱中的数据
@@ -19,6 +20,7 @@ function OpenTreasureChest2nd:ctor(treasureData)
 
     self:init()
 end
+
 --[[--
     @description: 初始化，设置界面属性和子节点
     @param none
@@ -32,7 +34,7 @@ function OpenTreasureChest2nd:init()
     self:setBackGroundColorOpacity(150)
     self:setPosition(0, 0)
 
-    local backSprite = display.newSprite("res/home/general/second_open_confirm_popup/base_popup.png")
+    local backSprite = display.newSprite(StringDef.PATH_SECOND_OPEN_BASE_POPUP)
     backSprite:setPosition(display.width * .5, display.height * .5)
     backSprite:addTo(self)
     backSprite:setScale(.9)
@@ -47,7 +49,7 @@ function OpenTreasureChest2nd:init()
     fontSprite:setPosition(size.width * .5, size.height * .9)
     fontSprite:addTo(backSprite)
 
-    local closeButton = ccui.Button:create("res/home/general/second_open_confirm_popup/button_close.png")
+    local closeButton = ccui.Button:create(StringDef.PATH_SECOND_OPEN_BUTTON_CLOSE)
     closeButton:setPosition(size.width * .93, size.height * .89)
     closeButton:addTouchEventListener(function(sender, eventType)
         if eventType == 2 then
@@ -56,7 +58,7 @@ function OpenTreasureChest2nd:init()
     end)
     closeButton:addTo(backSprite)
 
-    local openButton = ccui.Button:create("res/home/general/second_open_confirm_popup/button_open.png")
+    local openButton = ccui.Button:create(StringDef.PATH_SECOND_OPEN_BUTTON_OPEN)
     openButton:setPosition(size.width * .5, 0)
     openButton:addTouchEventListener(function(sender, eventType)
         if eventType == 2 then
@@ -88,10 +90,11 @@ end
 ]]
 function OpenTreasureChest2nd:playOpenChestAnimation()
     local spine = sp.SkeletonAnimation:createWithJsonFile(
-        "res/animation/out_game/open_treasure_box/open.json",
-            "res/animation/out_game/open_treasure_box/open.atlas"
+        StringDef.PATH_ANIMATION_OPEN_TREASURE_BOX_JSON,
+        StringDef.PATH_ANIMATION_OPEN_TREASURE_BOX_ATLAS
     )
     spine:setPosition(display.width * .5, display.height * .5)
     spine:setAnimation(0, "legend", false)
 end
+
 return OpenTreasureChest2nd

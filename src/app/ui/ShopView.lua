@@ -12,11 +12,7 @@ class(
 -- local
 local StoreList = require("app.test.StoreList")
 local Log = require("app.utils.Log")
-<<<<<<< HEAD
-local audio_ = require("framework.audio")
-=======
 local audio = require("framework.audio")
->>>>>>> dev_xz
 --
 local _shopLayer
 local _buttonCoinClik
@@ -162,11 +158,7 @@ function ShopView:initView()
                         end
                         if 2 == eventType then
                             Log.i("2")
-<<<<<<< HEAD
-                            audio_.playEffect("sound_ogg/get_free_item.ogg")
-=======
                             audio.playEffect("sound_ogg/get_free_item.ogg")
->>>>>>> dev_xz
                             --freeButton:setTouchEnabled(false)
                             rowLayer:scale(1)
                         end
@@ -240,15 +232,9 @@ function ShopView:initView()
                                 rowLayer:scale(0.8)
                             end
                             if 2 == eventType then
-<<<<<<< HEAD
-                                --dragonButton:setTouchEnabled(false)
-                                audio_.playEffect("sound_ogg/get_paid_item.ogg")
-                                _buttonCoinClik(rowLayer, itemWidth, itemHeight, dragonButton, dragon)
-=======
                                 dragonButton:setTouchEnabled(false)
                                 audio.playEffect("sound_ogg/get_paid_item.ogg")
                                 _buttonCoinClik(rowLayer, itemWidth, itemHeight)
->>>>>>> dev_xz
                             end
                         end)
                     end
@@ -326,11 +312,7 @@ function ShopView:initView()
                     end
                     if 2 == eventType then
                         --boxRareButton:setTouchEnabled(false)
-<<<<<<< HEAD
-                        audio_.playEffect("sound_ogg/open_box.ogg")
-=======
                         audio.playEffect("sound_ogg/open_box.ogg")
->>>>>>> dev_xz
                         rowRareLayer:scale(1)
                     end
                 end)
@@ -381,11 +363,7 @@ function ShopView:initView()
                     end
                     if 2 == eventType then
                         --boxNormalButton:setTouchEnabled(false)
-<<<<<<< HEAD
-                        audio_.playEffect("sound_ogg/open_box.ogg")
-=======
                         audio.playEffect("sound_ogg/open_box.ogg")
->>>>>>> dev_xz
                         rowNormalLayer:scale(1)
                     end
                 end)
@@ -437,11 +415,7 @@ function ShopView:initView()
                     end
                     if 2 == eventType then
                         --boxEpicButton:setTouchEnabled(false)
-<<<<<<< HEAD
-                        audio_.playEffect("sound_ogg/open_box.ogg")
-=======
                         audio.playEffect("sound_ogg/open_box.ogg")
->>>>>>> dev_xz
                         rowEpicLayer:scale(1)
                     end
                 end)
@@ -495,11 +469,7 @@ function ShopView:initView()
                     end
                     if 2 == eventType then
                         --boxLengendButton:setTouchEnabled(false)
-<<<<<<< HEAD
-                        audio_.playEffect("sound_ogg/open_box.ogg")
-=======
                         audio.playEffect("sound_ogg/open_box.ogg")
->>>>>>> dev_xz
                         rowLegendLayer:scale(1)
                     end
                 end)
@@ -519,17 +489,10 @@ end
     @return none
 ]]
 function ShopView:loadMusic()
-<<<<<<< HEAD
-    audio_.loadFile("sound_ogg/get_free_item.ogg", function(dt) end)
-    audio_.loadFile("sound_ogg/get_paid_item.ogg", function(dt) end)
-    audio_.loadFile("sound_ogg/open_box.ogg", function(dt) end)
-    audio_.loadFile("sound_ogg/buy_paid_item.ogg", function(dt) end)
-=======
     audio.loadFile("sound_ogg/get_free_item.ogg", function(dt) end)
     audio.loadFile("sound_ogg/get_paid_item.ogg", function(dt) end)
     audio.loadFile("sound_ogg/open_box.ogg", function(dt) end)
     audio.loadFile("sound_ogg/buy_paid_item.ogg", function(dt) end)
->>>>>>> dev_xz
 end
 
 --[[--
@@ -539,17 +502,10 @@ end
 
     @return none
 ]]
-<<<<<<< HEAD
-function _buttonCoinClik(layer, itemWidth, itemHeight, button, dragonInformation)
-    Log.i("clik")
-    layer:scale(1)
-    _checkBuy(layer, itemWidth, itemHeight, button, dragonInformation)
-=======
 function _buttonCoinClik(layer, itemWidth, itemHeight)
     Log.i("clik")
     layer:scale(1)
     _checkBuy(layer, itemWidth, itemHeight)
->>>>>>> dev_xz
 end
 
 --[[--
@@ -559,12 +515,7 @@ end
 
     @return none
 ]]
-<<<<<<< HEAD
-function _buttonCoinClikGrey(layer, itemWidth, itemHeight, button)
-    button:setTouchEnabled(false)
-=======
 function _buttonCoinClikGrey(layer, itemWidth, itemHeight)
->>>>>>> dev_xz
     -- 遮罩
     local shadeSprite = cc.Sprite:create("home/shop/coins_shop/base_shade.png")
     shadeSprite:setPosition(itemWidth * 2 / 3, itemHeight / 2)
@@ -576,111 +527,8 @@ end
 --[[--
     描述：二级界面确认购买信息获取模拟
 ]]
-<<<<<<< HEAD
-function _checkBuy(layer, itemWidth, itemHeight, button, dragonInformation)
-    -- 弹出二级界面确认
-    local checkLayer = ccui.Layout:create()
-    checkLayer:setBackGroundColor(cc.c4b(0,0,0,100))
-    checkLayer:setBackGroundColorType(1)
-    checkLayer:opacity(200)
-    checkLayer:setAnchorPoint(0.5, 0.5)
-    checkLayer:setPosition(display.cx, display.cy)
-    checkLayer:setContentSize(display.width, display.height)
-    -- 获取顶层父节点层
-    local parentLayer = layer:getParent()
-    for i=1,9 do
-        parentLayer = parentLayer:getParent()
-    end
-    checkLayer:addTo(parentLayer)
-    checkLayer:setLocalZOrder(1)
-
-    -- 设置层可触摸屏蔽下方按键
-    checkLayer:setTouchEnabled(true)
-    checkLayer:addTouchEventListener(function (sender, eventType)
-        if 2 == eventType then
-            audio_.playEffect("sound_ogg/ui_btn_click.ogg")
-            checkLayer:removeFromParent()
-        end
-    end)
-
-    local checkBase = cc.Sprite:create("home/shop/second_purchase_confirmation_popup/base_popup.png")
-    checkBase:setAnchorPoint(0.5, 0.5)
-    checkBase:setPosition(display.cx, display.cy)
-    checkBase:addTo(checkLayer)
-    local sizeSetBase = checkBase:getContentSize()
-
-    local checkClose = ccui.Button:create("home/shop/second_purchase_confirmation_popup/button_close.png")
-    checkClose:setAnchorPoint(0.5, 0.5)
-    checkClose:setPosition(display.cx + sizeSetBase.width/2 - sizeSetBase.width/15, display.cy + sizeSetBase.height/2 - sizeSetBase.height/8)
-    checkClose:addTo(checkLayer)
-    checkClose:addTouchEventListener(function (sender, eventType)
-        if 2 == eventType then
-            audio_.playEffect("sound_ogg/ui_btn_click.ogg")
-            checkLayer:removeFromParent()
-        end
-    end)
-
-    -- 遮罩，屏蔽点击退出触摸事件
-    local baseMaskLayer = ccui.Layout:create()
-    baseMaskLayer:setAnchorPoint(0.5, 0.5)
-    baseMaskLayer:setPosition(display.cx, display.cy)
-    baseMaskLayer:setContentSize(sizeSetBase.width, sizeSetBase.height)
-    baseMaskLayer:setTouchEnabled(true)
-    baseMaskLayer:addTo(checkLayer, -1)
-
-    -- 确认购买
-    local purchaseButton = ccui.Button:create("home/shop/second_purchase_confirmation_popup/button_buy.png")
-    purchaseButton:setAnchorPoint(0.5, 0.5)
-    purchaseButton:setPosition(display.cx, display.cy - sizeSetBase.height*17/48)
-    purchaseButton:addTo(checkLayer)
-    purchaseButton:addTouchEventListener(function (sender, eventType)
-        if 2 == eventType then
-            _buttonCoinClikGrey(layer, itemWidth, itemHeight, button)
-            audio_.playEffect("sound_ogg/buy_paid_item.ogg", false)
-            checkLayer:removeFromParent()
-        end
-    end)
-
-    local priceLabel = display.newTTFLabel({
-        text = StoreList.TYPE_PRICE[dragonInformation.type],
-        font = "font/fzbiaozjw.ttf",
-        size = 30
-    })
-    priceLabel:align(display.CENTER, display.cx + sizeSetBase.width/20, display.cy - sizeSetBase.height*17/48)
-    priceLabel:setColor(cc.c3b(255,255,255))
-    priceLabel:enableOutline(cc.c4b(0,0,0,255),1)
-    priceLabel:addTo(checkLayer)
-
-    local coinIcon = ccui.Button:create("home/shop/second_purchase_confirmation_popup/icon_coin.png")
-    coinIcon:setAnchorPoint(0.5, 0.5)
-    coinIcon:setPosition(display.cx - sizeSetBase.width/15, display.cy - sizeSetBase.height*17/48)
-    coinIcon:addTo(checkLayer)
-
-    local dragonSprite = cc.Sprite:create(
-        "home/shop/coins_shop/commodity_icon_tower_fragment/"
-        .. dragonInformation["id"] .. ".png")
-    dragonSprite:setAnchorPoint(0.5, 0.5)
-    dragonSprite:setPosition(display.cx, display.cy)
-    dragonSprite:scale(0.8)
-    dragonSprite:addTo(checkLayer)
-
-    local number = dragonInformation["number"]
-    local numLabel = display.newTTFLabel({
-        text = string.format("X%d", number),
-        font = "font/fzbiaozjw.ttf",
-        size = 25
-    })
-    numLabel:align(display.CENTER, display.cx, display.cy - sizeSetBase.height*7/48)
-    numLabel:setColor(cc.c3b(255,206,55))
-    numLabel:enableOutline(cc.c4b(0,0,0,255),1)
-    numLabel:addTo(checkLayer)
-
-
-    --[[
-=======
 function _checkBuy(layer, itemWidth, itemHeight)
     -- 弹出二级界面确认
->>>>>>> dev_xz
     local checkButton = ccui.Button:create("home/shop/second_purchase_confirmation_popup/button_buy.png")
     checkButton:setAnchorPoint(0.5, 0.5)
     checkButton:setPosition(itemWidth * 2 / 3, itemHeight / 2)
@@ -692,10 +540,6 @@ function _checkBuy(layer, itemWidth, itemHeight)
         _buttonCoinClikGrey(layer, itemWidth, itemHeight)
         audio.playEffect("sound_ogg/buy_paid_item.ogg", false)
     end)
-<<<<<<< HEAD
-    ]]
-=======
->>>>>>> dev_xz
 end
 
 return ShopView

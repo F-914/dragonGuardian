@@ -5,14 +5,16 @@
 ---
 --[[--
     主界面中战斗部分
-    UserBattleLayer.lua
+    UserBattleLayer
 ]]
 local UserBattleLayer = class("UserBattleLayer", function()
     return display.newLayer()
 end)
-
+--local
 local GameData = require("app.test.GameData")
-local CreateSpriteUtil = require("src/app/test/CreateSpriteUtil.lua")
+local CreateSpriteUtil = require("app.test.CreateSpriteUtil")
+local StringDef = require("app.def.StringDef")
+--
 
 --[[--
     @description: 构造方法
@@ -36,7 +38,7 @@ function UserBattleLayer:init()
     teamLayer:setPosition(display.width * .5, display.height * .23)
     teamLayer:addTo(self)
 
-    local selectTeamSprite = display.newSprite("res/home/battle/base_selected_team.png")
+    local selectTeamSprite = display.newSprite(StringDef.PATH_BASE_SELECTED_TEAM)
     selectTeamSprite:setPosition(display.width * .5, display.height * .08)
     selectTeamSprite:addTo(teamLayer)
 
@@ -48,7 +50,7 @@ function UserBattleLayer:init()
         count = count + 1
     end
 
-    local battleButton = ccui.Button:create("res/home/battle/button_battle.png")
+    local battleButton = ccui.Button:create(StringDef.PATH_BUTTON_BATTLE)
     battleButton:setPosition(display.width * .5, display.height * .5)
     battleButton:addTo(self)
     battleButton:setScale(0.65)

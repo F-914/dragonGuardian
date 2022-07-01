@@ -1,9 +1,9 @@
 --[[--
     主界面
-    MainScene.lua
+    OutGameScene.lua
 ]]
-local MainScene = class("MainScene", function()
-    return display.newScene("MainScene")
+local OutGameScene = class("OutGameScene", function()
+    return display.newScene("OutGameScene")
 end)
 
 -- local
@@ -12,7 +12,7 @@ local StringDef = require("app.def.StringDef")
 local AtlasView = require("app.ui.AtlasView")
 local GameData = require("app.test.GameData")
 local MainUIBattleView = require("app.ui.MainUIBattleView")
-local MenuScene = require("app.scenes.MenuScene")
+local MenuView = require("app.ui.MenuView")
 local ShopView = require("app.ui.ShopView")
 local Log = require("app.utils.Log")
 local MenuConfig = require("app.test.MenuConfig")
@@ -21,7 +21,7 @@ local pageView
 local loadView
 --
 
-function MainScene:ctor()
+function OutGameScene:ctor()
     loadView = LoadView.new()
     loadView:addTo(self, 3)
     --test
@@ -31,7 +31,7 @@ function MainScene:ctor()
     self.atlasView = AtlasView.new()
     self.shopView = ShopView.new()
 
-    MenuScene.new(self, 1)
+    MenuView.new(self, 1)
     self:sliderView()
 
     self:addNodeEventListener(cc.NODE_ENTER_FRAME_EVENT, handler(self, self.update))
@@ -40,32 +40,32 @@ function MainScene:ctor()
     end, 1)
 end
 
-function MainScene:onEnter()
+function OutGameScene:onEnter()
 
     -- 主界面默认音乐播放
     if MenuConfig.IS_PLAY_BGM then
-        print("主界面音乐播放")
+        Log.i("主界面音乐播放")
         local audio = require("framework.audio")
-        audio.loadFile("sound_ogg/lobby_bgm_120bpm.ogg", function()
-            audio.playBGM("sound_ogg/lobby_bgm_120bpm.ogg", true)
+        audio.loadFile(StringDef.PATH_LOBBY_BGM_120BPM, function()
+            audio.playBGM(StringDef.PATH_LOBBY_BGM_120BPM, true)
         end)
     end
 
 end
 
-function MainScene:update(dt)
+function OutGameScene:update(dt)
     GameData:update(dt)
     self.mainUIBattleView_:update(dt)
 end
 
-function MainScene:onExit()
+function OutGameScene:onExit()
 end
 
 --[[--
     描述：删除加载界面
 ]]
-function MainScene:quitLoading()
-    print("loadingView", loadView)
+function OutGameScene:quitLoading()
+    Log.i("loadingView", loadView)
     loadView:removeFromParent()
 end
 
@@ -76,12 +76,12 @@ end
 
     @return none
 ]]
-function MainScene:setPage(num)
+function OutGameScene:setPage(num)
     Log.i("setPage")
     pageView:scrollToPage(num)
 end
 
-function MainScene:sliderView()
+function OutGameScene:sliderView()
     -- PageView
     pageView = ccui.PageView:create()
     -- 设置PageView容器尺寸
@@ -116,7 +116,7 @@ function MainScene:sliderView()
         if event == ccui.PageViewEventType.turning then
             -- getCurrentPageIndex() 获取当前翻到的页码 打印
             Log.i("当前页码是" .. pageView:getCurPageIndex() + 1)
-            MenuScene:bottomMenuControl(pageView:getCurPageIndex() + 1)
+            MenuView:bottomMenuControl(pageView:getCurPageIndex() + 1)
         end
     end
 
@@ -136,4 +136,4 @@ function MainScene:sliderView()
     --return sliderLayer
 end
 
-return MainScene
+return OutGameScene

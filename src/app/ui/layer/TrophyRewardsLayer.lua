@@ -8,11 +8,12 @@ end)
 
 --local
 local GameData = require("app.test.GameData")
-local CalibrateScaleSprite = require("src/app/ui/node/CalibrateScaleSprite.lua")
+local CalibrateScaleSprite = require("app.ui.node.CalibrateScaleSprite")
 local Log = require("app.utils.Log")
-local Factory = require("src/app/utils/Factory.lua")
-local TestDataFactory = require("src/app/test/TestDataFactory.lua")
-local OpenTreasureChest2nd = require("src/app/ui/secondaryui/OpenTreasure2nd.lua")
+local Factory = require("app.utils.Factory")
+local StringDef = require("app.def.StringDef")
+local TestDataFactory = require("app.test.TestDataFactory")
+local OpenTreasureChest2nd = require("app.ui.secondaryui.OpenTreasure2nd")
 --
 --[[--
     @description: 构造方法
@@ -31,24 +32,24 @@ end
     @return none
 ]]
 function TrophyRewardsLayer:init()
-    local spriteBG = display.newSprite("res/home/battle/high_ladder/background.png")
+    local spriteBG = display.newSprite(StringDef.PATH_HIGH_LADDER_BACKGROUND)
     --给的资源就不对称
     spriteBG:setPosition(display.width * .515, display.height * 0.75)
     spriteBG:setScale(1, .7)
     spriteBG:setContentSize(display.width - 20, display.height * .20)
     spriteBG:addTo(self)
 
-    local leftButton = ccui.Button:create("res/home/battle/high_ladder/icon_slide_left.png")
+    local leftButton = ccui.Button:create(StringDef.PATH_HIGH_LADDER_ICON_SLIDE_LEFT)
     leftButton:setPosition(50, display.height * .8)
     leftButton:addTouchEventListener(function(sender, eventType)
-        print("test left button")
+        Log.i("test left button")
     end)
     leftButton:addTo(self)
 
-    local rightButton = ccui.Button:create("res/home/battle/high_ladder/icon_slide_right.png")
+    local rightButton = ccui.Button:create(StringDef.PATH_HIGH_LADDER_ICON_SLIDE_RIGHT)
     rightButton:setPosition(display.width - 50, display.height * .8)
     rightButton:addTouchEventListener(function(sender, eventType)
-        print("test right button")
+        Log.i("test right button")
     end)
     rightButton:addTo(self)
     --各项属性初始化，暂时保持这样，后面可能会因为需求变化
@@ -61,7 +62,7 @@ function TrophyRewardsLayer:init()
     highLadderView:setDirection(2)
     highLadderView:addTo(self)
     --构建进度条
-    local calibrateScale = CalibrateScaleSprite.new("res/home/battle/high_ladder/calibrated scale/calibrated_scale.png",
+    local calibrateScale = CalibrateScaleSprite.new(StringDef.lPATH_HIGH_LADDER_CALIBRATED_SCALE,
         GameData.userKeyQuantity_)
     Log.i(" userKeyQuantity_ is " .. tostring(GameData.userKeyQuantity_))
     calibrateScale:setAnchorPoint(0, 0)
@@ -87,15 +88,15 @@ function TrophyRewardsLayer:init()
     for data, node in pairs(self.rewardsMap_) do
         node:setPosition(spSize.width * .4 + 2.5, spSize.height * .4 + 10)
         node:setScale(0.66)
-        print(data.order)
+        Log.i(data.order)
         local itemLayer = itemLayers[data.order]
         node.button_:addTouchEventListener(function(sender, eventType)
             if eventType == 2 then
                 local name = data.name
                 if name == "ordinary treasure chest"
-                        or name == "rare treasure chest"
-                        or name == "epic treasure chest"
-                        or name == "legendary treasure chest" then
+                    or name == "rare treasure chest"
+                    or name == "epic treasure chest"
+                    or name == "legendary treasure chest" then
 
                     local twoLevelUi = OpenTreasureChest2nd.new(TestDataFactory:getChestRewardData())
                     twoLevelUi:addTo(self:getParent())
@@ -106,7 +107,7 @@ function TrophyRewardsLayer:init()
         node:addTo(itemLayer)
     end
     --构建钥匙
-    local keySprite = display.newSprite("res/home/battle/high_ladder/calibrated scale/key.png")
+    local keySprite = display.newSprite(StringDef.PATH_HIGH_LADDER_CALIBRATED_SCALE_KEY)
     keySprite:setPosition(18, 35)
     keySprite:addTo(highLadderView)
 end

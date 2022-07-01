@@ -44,7 +44,7 @@ function CalibrateScaleSprite:init()
     self.size_ = size
     self:setScale(1.93, 1)
 
-    local yellowScale = display.newSprite("res/home/battle/high_ladder/calibrated scale/cutoff/cutoff.png")
+    local yellowScale = display.newSprite(StringDef.PATH_HIGH_LADDER_CALIBRATED_SCALE_CUTOFF)
     yellowScale:setAnchorPoint(0, 0)
     yellowScale:setPosition(3, 6)
     local factor = self.currentKey_ / GameData.maxKeyQuantity_
@@ -68,7 +68,7 @@ function CalibrateScaleSprite:init()
         local factor2 = num / GameData.maxKeyQuantity_
         local quantityTTF = display.newTTFLabel({
             text = tostring(num),
-            font = "res/font/fzbiaozjw.ttf",
+            font = StringDef.PATH_FONT_FZBIAOZJW,
             size = 18,
             color = cc.c3b(168, 176, 225)
         })
@@ -79,9 +79,9 @@ function CalibrateScaleSprite:init()
 
         local cutoffScale = nil
         if num < GameData.userKeyQuantity_ then
-            cutoffScale = display.newSprite("res/home/battle/high_ladder/calibrated scale/cutoff/cutoff_scale.png")
+            cutoffScale = display.newSprite(StringDef.PATH_HIGH_LADDER_CALIBRATED_SCALE_CUTOFF_SCALE)
         else
-            cutoffScale = display.newSprite("res/home/battle/high_ladder/calibrated scale/scale.png")
+            cutoffScale = display.newSprite(StringDef.PATH_HIGH_LADDER_CALIBRATED_SCALE_SCALE)
         end
 
         cutoffScale:setScale(0.5, 1)

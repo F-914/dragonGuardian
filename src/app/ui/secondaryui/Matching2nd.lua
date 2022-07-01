@@ -12,6 +12,9 @@
 local Matching2nd = class("Matching2nd", function()
     return ccui.Layout:create()
 end)
+
+local StringDef = require("app.def.StringDef")
+
 --[[--
     @description: 构造函数
     @parma Layer 原来的一级界面
@@ -23,6 +26,7 @@ function Matching2nd:ctor(Layer)
     self.baseLayer_ = Layer -- type: layer, 这个二级界面基于的界面
     self:init()
 end
+
 --[[--
     @description: 初始化，设置界面属性和子节点
     @parma none
@@ -35,13 +39,13 @@ function Matching2nd:init()
     self:setBackGroundColorOpacity(150)
     self:setPosition(0, 0)
 
-    local backSprite = display.newSprite("res/home/battle/second_matching/base_popup.png")
+    local backSprite = display.newSprite(StringDef.PATH_SECOND_MATCHING_BASE_POPUP)
     backSprite:setPosition(display.width * .5, display.height * .5)
     backSprite:addTo(self)
 
     local size = backSprite:getContentSize()
 
-    local cancelButton = ccui.Button:create("res/home/battle/second_matching/button_cancel.png")
+    local cancelButton = ccui.Button:create(StringDef.PATH_SECOND_MATCHING_BUTTON_CANCEL)
     cancelButton:setPosition(size.width * .5, size.height * .2)
     cancelButton:addTouchEventListener(function(sender, eventType)
         print("cancel")
@@ -52,7 +56,7 @@ function Matching2nd:init()
     end)
     cancelButton:addTo(backSprite)
 
-    local circleSprite = display.newSprite("res/home/battle/second_matching/image.png")
+    local circleSprite = display.newSprite(StringDef.PATH_SECOND_MATCHING_IMAGE)
     circleSprite:setPosition(size.width * .5, size.height * .55)
     circleSprite:addTo(backSprite)
 
@@ -67,6 +71,7 @@ function Matching2nd:init()
 
 
 end
+
 --[[--
     @description: 注册监听
     @parma none
@@ -75,6 +80,7 @@ end
 function Matching2nd:onEnter()
 
 end
+
 --[[--
     @description: 注销监听
     @parma none
@@ -83,6 +89,7 @@ end
 function Matching2nd:onExit()
 
 end
+
 --[[--
     @description:
     @parma dt type:number, 帧间隔
@@ -92,4 +99,5 @@ function Matching2nd:update(dt)
     self.circle_:setRotation(1 * self.frameCounter_)
     self.frameCounter_ = (self.frameCounter_ + 1) % 360
 end
+
 return Matching2nd

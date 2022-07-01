@@ -5,14 +5,15 @@
 ---
 --[[--
     表示奖品的精灵
-    RewardSprite.lua
+    RewardSprite
 ]]
 local RewardSprite = class("RewardSprite", function(res)
     return display.newSprite(res)
 end)
 --local
-local CreateSpriteUtil = require("src/app/test/CreateSpriteUtil.lua")
-local Factory = require("src/app/utils/Factory.lua")
+local CreateSpriteUtil = require("app.test.CreateSpriteUtil")
+local Factory = require("app.utils.Factory")
+local StringDef = require("app.def.StringDef")
 
 --[[--
     @description: 构造方法
@@ -37,7 +38,7 @@ function RewardSprite:ctor(res, data)
     if self.data_.quantity then
         quantityTTF = display.newTTFLabel({
             text = tostring(self.data_.quantity),
-            font = "res/font/fzbiaozjw.ttf",
+            font = StringDef.PATH_FONT_FZBIAOZJW,
             size = 18,
             color = cc.c3b(168, 176, 225)
         })
@@ -76,7 +77,7 @@ function RewardSprite:unlocked()
     --更新边框纹理
     --之所以改成这样是因为CCTextureCache这个纹理缓存不能用了，暂时先这样，下同
     --local texture = CCTextureCache:sharedTextureCache():addImage("res/home/battle/high_ladder/unlocked_unreceived_yellow_border.png")
-    self:setTexture("res/home/battle/high_ladder/unlocked_unreceived_yellow_border.png")
+    self:setTexture(StringDef.PATH_HIGH_LADDER_UNLOCKED_UNRECEIVED_YELLOW_BORDER)
 end
 
 --[[--
@@ -90,7 +91,7 @@ function RewardSprite:get()
 
     --更改纹理
     --local texture = CCTextureCache:sharedTextureCache():addImage("res/home/battle/high_ladder/can_receive.png")
-    self:setTexture("res/home/battle/high_ladder/can_receive.png")
+    self:setTexture(StringDef.PATH_HIGH_LADDER_CAN_RECEIVE)
 end
 
 --[[--

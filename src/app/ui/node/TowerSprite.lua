@@ -5,13 +5,14 @@
 ---
 --[[--
     塔节点
-    TowerSprite.lua
+    TowerSprite
 ]]
 local TowerSprite = class("towerSprite", function(res)
     return display.newSprite(res)
 end)
 
-local Factory = require("src/app/utils/Factory.lua")
+local StringDef = require("app.def.StringDef")
+local Factory = require("app.utils.Factory")
 
 --[[--
     @description: 构造函数
@@ -42,7 +43,7 @@ end
 function TowerSprite:update(dt)
     --local texture = CCTextureCache:sharedTextureCache():addImage("res/home/guide/subinterface_tower_list/level/Lv." ..
     --    self.data_.level .. ".png")
-    self.levelSprite_:setTexture("res/home/guide/subinterface_tower_list/level/Lv." ..
+    self.levelSprite_:setTexture(StringDef.PATH_PREFIX_SUBINTERFACE_TOWER_LEVEL ..
         self.data_.level .. ".png")
 end
 

@@ -5,21 +5,23 @@
 ---
 --[[--
     主界面的战斗界面
-    MainUIBattle.lua
+    MainUIBattleView.lua
 ]]
 
-local MainUIBattle = class("MainUIBattle", function()
+local MainUIBattleView = class("MainUIBattleView", function()
     return display.newColorLayer(cc.c4b(0, 0, 0, 0))
 end)
-local BattleBackGroundLayer = require("src/app/ui/layer/BattleBackGroundLayer.lua")
-local OutGameBattleLayer = require("src/app/ui/layer/OutGameBattleLayer.lua")
-local TrophyRewardsLayer = require("src/app/ui/layer/TrophyRewardsLayer.lua")
+--local
+local BattleBackGroundLayer = require("app.ui.layer.BattleBackGroundLayer")
+local OutGameBattleLayer = require("app.ui.layer.OutGameBattleLayer")
+local TrophyRewardsLayer = require("app.ui.layer.TrophyRewardsLayer")
+--
 --[[--
     @description: 构造函数
     @param none
     @return none
 ]]
-function MainUIBattle:ctor()
+function MainUIBattleView:ctor()
     self.battleBackGroundLayer_ = nil --type:layer, 背景层
     self.outGameBattleLayer_ = nil --type:layer, 显示战斗按钮和队伍的层
     self.trophyRewardLayer_ = nil --type:layer, 天梯奖励层
@@ -27,7 +29,7 @@ function MainUIBattle:ctor()
     self:initView()
 end
 
-function MainUIBattle:initView()
+function MainUIBattleView:initView()
     self.battleBackGroundLayer_ = BattleBackGroundLayer.new()
     self:addChild(self.battleBackGroundLayer_)
     self.outGameBattleLayer_ = OutGameBattleLayer.new()
@@ -39,14 +41,14 @@ end
 --[[--
     @description: 执行事件的注册
 ]]
-function MainUIBattle:onEnter()
+function MainUIBattleView:onEnter()
 
 end
 
 --[[--
     @description: 执行事件的注销
 ]]
-function MainUIBattle:onExit()
+function MainUIBattleView:onExit()
 
 end
 
@@ -55,10 +57,10 @@ end
     @param dt type:number, 帧间隔
     @return none
 ]]
-function MainUIBattle:update(dt)
+function MainUIBattleView:update(dt)
     self.trophyRewardLayer_:update(dt)
     self.battleBackGroundLayer_:update(dt)
     self.outGameBattleLayer_:update(dt)
 end
 
-return MainUIBattle
+return MainUIBattleView

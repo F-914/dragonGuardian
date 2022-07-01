@@ -5,9 +5,10 @@
 local LoadView = class("LoadView", function()
     return display.newColorLayer(cc.c4b(0, 0, 0, 0))
 end)
-
+--local
 local layer_
 require("socket")
+--
 
 function LoadView:ctor()
     self:initView()
@@ -18,7 +19,7 @@ end
     使用socket库中select函数，可以传递0.1给n，使得休眠的时间精度达到毫秒级别。
 ]]
 local function sleep(n)
-   socket.select(nil, nil, n)
+    socket.select(nil, nil, n)
 end
 
 function LoadView:initView()
@@ -48,18 +49,18 @@ function LoadView:initView()
         font = "font/fzhz.ttf",
         size = 20
     })
-    tipsLabel:align(display.CENTER, display.cx, display.cy/15)
-    tipsLabel:setColor(cc.c3b(255,255,255))
+    tipsLabel:align(display.CENTER, display.cx, display.cy / 15)
+    tipsLabel:setColor(cc.c3b(255, 255, 255))
     tipsLabel:addTo(layer_)
 
-    local num = 0   -- 加载进度
+    local num = 0 -- 加载进度
     local loadingLabel = display.newTTFLabel({
-        text = num.."%",
+        text = num .. "%",
         font = "font/fzhz.ttf",
         size = 20
     })
-    loadingLabel:align(display.RIGHT_CENTER, display.width, display.cy/15)
-    loadingLabel:setColor(cc.c3b(253,239,117))
+    loadingLabel:align(display.RIGHT_CENTER, display.width, display.cy / 15)
+    loadingLabel:setColor(cc.c3b(253, 239, 117))
     loadingLabel:addTo(layer_)
 
     ----------------------------------------------------------------------------
@@ -69,7 +70,7 @@ function LoadView:initView()
     barBaseSprite:setPosition(0, 0)
     barBaseSprite:addTo(layer_)
 
-    local barSprite = display.newScale9Sprite("loading/progress_stretch.png", 0, 0, cc.size(display.width/4, 15))
+    local barSprite = display.newScale9Sprite("loading/progress_stretch.png", 0, 0, cc.size(display.width / 4, 15))
     barSprite:setAnchorPoint(0, 0)
     barSprite:setPosition(0, 0)
     barSprite:setContentSize(0, 15)
@@ -81,18 +82,18 @@ function LoadView:initView()
     headBarSprite:setPosition(sizeCurBar.width, 0)
     headBarSprite:addTo(layer_)
 
-    local scheduler = cc.Director:getInstance():getScheduler()  --路径
-    local progress = 0  -- 进度
-    local timeSchedule = nil    -- 刷新计时器(每0.1秒刷新)
+    local scheduler = cc.Director:getInstance():getScheduler() --路径
+    local progress = 0 -- 进度
+    local timeSchedule = nil -- 刷新计时器(每0.1秒刷新)
     timeSchedule = scheduler:scheduleScriptFunc(function(dt)
         print("loading……")
-        progress = progress + display.width/100
+        progress = progress + display.width / 100
         barSprite:setContentSize(progress, 15)
         sizeCurBar = barSprite:getContentSize()
         headBarSprite:setPosition(sizeCurBar.width, 0)
         num = progress / display.width * 100
-        num = string.format("%d", num + 1)      -- 不知道为啥不+1的话会停在99%
-        loadingLabel:setString(num.."%")
+        num = string.format("%d", num + 1) -- 不知道为啥不+1的话会停在99%
+        loadingLabel:setString(num .. "%")
 
         if progress >= display.width then
             scheduler:unscheduleScriptEntry(timeSchedule)
@@ -106,8 +107,8 @@ end
     描述：调用函数关闭加载界面
 ]]
 function LoadView:quitLoading()
-    MainScene = require"app.scenes.MainScene"
-    MainScene:quitLoading()
+    OutGameScene = require "app.scenes.OutGameScene"
+    OutGameScene:quitLoading()
 end
 
 return LoadView

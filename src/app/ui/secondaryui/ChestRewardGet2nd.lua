@@ -5,8 +5,8 @@
 local ChestRewardGet2nd = class("ChestRewardGet2nd", function()
     return ccui.Layout:create()
 end)
-
-local Factory = require("src/app/utils/Factory.lua")
+local StringDef = require("app.def.StringDef")
+local Factory = require("app.utils.Factory")
 --[[--
     @description: 构造函数
     @param data type:table 奖励的数据
@@ -17,6 +17,7 @@ function ChestRewardGet2nd:ctor(data)
 
     self:init()
 end
+
 --[[--
     @description:初始化函数
     @param none
@@ -29,7 +30,7 @@ function ChestRewardGet2nd:init()
     self:setBackGroundColorOpacity(150)
     self:setPosition(0, 0)
 
-    local backSprite = display.newSprite("res/home/general/second_open_treasure_popup/base_popup.png")
+    local backSprite = display.newSprite(StringDef.PATH_SECOND_BASE_POPUP)
     backSprite:setPosition(display.width * .5, display.height * .5)
     backSprite:addTo(self)
 
@@ -48,12 +49,12 @@ function ChestRewardGet2nd:init()
         local towerReward = towerArr[i]
         towerReward:setScale(.8)
         towerReward:setPosition(size.width * .2 + size.width * .2 * xIncre,
-        size.height * .8 - size.height * .4 * yIncre
+            size.height * .8 - size.height * .4 * yIncre
         )
         towerReward:addTo(layout)
     end
 
-    local coinSprite = display.newSprite("res/home/general/second_open_treasure_popup/icon_coin.png")
+    local coinSprite = display.newSprite(StringDef.PATH_SECOND_ICON_COIN)
     coinSprite:setPosition(size.width * .43, size.height * .06)
     coinSprite:addTo(layout)
 
@@ -67,7 +68,7 @@ function ChestRewardGet2nd:init()
     quantityTTF:setPosition(size.width * .53, size.height * .06)
     quantityTTF:addTo(layout)
 
-    local button = ccui.Button:create("res/home/general/second_open_treasure_popup/button_confirm.png")
+    local button = ccui.Button:create(StringDef.PATH_SECOND_BUTTON_CONFIRM)
     button:setPosition(display.width * .5, display.height * .25)
     button:addTouchEventListener(function(sender, eventType)
         if eventType == 2 then

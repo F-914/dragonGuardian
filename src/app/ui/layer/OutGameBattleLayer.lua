@@ -5,10 +5,12 @@
 local OutGameBattleLayer = class("OutGameBattleLayer", function()
     return display.newLayer()
 end)
-
+--local
 local GameData = require("app.test.GameData")
-local Matching2nd = require("src/app/ui/secondaryui/Matching2nd.lua")
-local Factory = require("src/app/utils/Factory.lua")
+local Matching_2nd = require("app.ui.secondaryui.Matching2nd")
+local Factory = require("app.utils.Factory")
+local StringDef = require("app.def.StringDef")
+--
 --[[--
     @description: 构造方法
 ]]
@@ -31,7 +33,7 @@ function OutGameBattleLayer:init()
     teamLayer:setPosition(display.width * .5, display.height * .2)
     teamLayer:addTo(self)
 
-    local selectTeamSprite = display.newSprite("res/home/battle/base_selected_team.png")
+    local selectTeamSprite = display.newSprite(StringDef.PATH_BASE_SELECTED_TEAM)
     selectTeamSprite:setPosition(display.width * .5, display.height * .08)
     selectTeamSprite:addTo(teamLayer)
 
@@ -41,15 +43,15 @@ function OutGameBattleLayer:init()
         teamLayer:addChild(node)
     end
 
-    local battleButton = ccui.Button:create("res/home/battle/button_battle.png")
+    local battleButton = ccui.Button:create(StringDef.PATH_BUTTON_BATTLE)
     battleButton:setPosition(display.width * .5, display.height * .48)
     battleButton:addTo(self)
     battleButton:setScale(0.9)
     battleButton:addTouchEventListener(function(sender, eventType)
         if eventType == 2 then
-            local matchingView = Matching2nd.new(self)
+            local matchingView = Matching_2nd.new(self)
             self.twoLevelUi_ = matchingView
-            matchingView:addTo(self:getParent())
+            matchingView:addTo(display.getRunningScene(), 2)
         end
     end)
 
