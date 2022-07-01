@@ -1,44 +1,96 @@
+--[[--
+    根据数据创建出每行四个图标的图鉴版块，分为已收集和未收集
+    BagLayer.lua
+]]
 local ConstDef = require("src/app/def/ConstDef.lua")
-local BagLayer = class("BagLayer", function()
-    return display.newLayer()
-end)
-
-function BagLayer:ctor(lineupList)
-   self:init(lineupList)
-  
-end
-function BagLayer:init(lineupList)
-    --print(cc.Director:getInstance():getWinSize().width)
-    local height
-    if table.getn(lineupList)%4==0 then
-       height=table.getn(lineupList)/4
-    elseif table.getn(lineupList)%4~=0 then
-        height=table.getn(lineupList)/4+1
+local EventDef=require("src/app/def/EventDef.lua")
+local EventManager=require("src/app/manager/EventManager.lua")
+local BagLayer =
+    class(
+    "BagLayer",
+    function()
+        return display.newLayer()
     end
-    -- body
-   
-    local TotalLayout=ccui.Layout:create()
+)
+local list_={}
+function BagLayer:ctor(lineupList, types)
+    self.list=nil
+    self:init(lineupList, types)
+    self.list=list_
+end
+function BagLayer:init(lineupList, types)
+    local height--计算需要多少行
+    if  table.getn(lineupList)==0 then
+        height=1
+    elseif table.getn(lineupList) % 4 == 0 then
+        height = table.getn(lineupList) / 4
+    elseif table.getn(lineupList) % 4 ~= 0 then
+        height =math.floor(table.getn(lineupList) / 4 )+1
+    end
+ 
+    local test = display.newSprite(ConstDef.ICON_LIST[1])--获取每个图标的contentsize
+    local TotalLayout = ccui.Layout:create()
     self:add(TotalLayout)
     TotalLayout:setAnchorPoint(0.5,1)
-    TotalLayout:setContentSize(cc.Director:getInstance():getWinSize().width, 100*height)
-    for i = 1, table.getn(lineupList), 4 do 
-        local layout = ccui.Layout:create()
-        TotalLayout:add(layout)
-        layout:setAnchorPoint(0.5,0.5)
-        layout:setContentSize(TotalLayout:getContentSize().width, 100)
-        layout:setPosition(TotalLayout:getContentSize().width*0.5,TotalLayout:getContentSize().height-100*(i/4))
-        for j = 0, 3 do
-            if lineupList[i+j]==nil then
-                break
+    TotalLayout:setContentSize(cc.Director:getInstance():getWinSize().width, test:getContentSize().height*ConstDef.scale_* height+(height-1)*test:getContentSize().height*0.2*ConstDef.scale_)
+  
+    if types == "uncollected" then--根据已收集和未收集从不同的地址获取图片
+        for i = 1, table.getn(lineupList), 4 do
+            local layout = ccui.Layout:create()
+            TotalLayout:add(layout)
+            layout:setAnchorPoint(0.5, 1)
+            layout:setContentSize(TotalLayout:getContentSize().width,test:getContentSize().height*ConstDef.scale_)
+            layout:setPosition(
+                TotalLayout:getContentSize().width * 0.5,
+                TotalLayout:getContentSize().height - test:getContentSize().height*ConstDef.scale_* math.floor(i / 4)-math.floor(i / 4)*test:getContentSize().height*0.1*ConstDef.scale_
+            )
+            for j = 0, 3 do
+                if lineupList[i + j] == nil then
+                    break
+                end
+                local sprite = display.newSprite(ConstDef.ICON_UNCOLLECTED_LIST[lineupList[j + i]])
+                layout:add(sprite)
+                sprite:setScale(ConstDef.scale_)
+                sprite:setAnchorPoint(0, 1)
+                sprite:setPosition(layout:getContentSize().width * j * 0.25 + 20, 0)
+                sprite:setContentSize(sprite:getContentSize().width*ConstDef.scale_,sprite:getContentSize().height*ConstDef.scale_)
+
             end
-            local sprite = display.newSprite(ConstDef.ICON_LIST[lineupList[j+i]])
-            layout:add(sprite)
-            sprite:setScale(ConstDef.scale_)
-            sprite:setAnchorPoint(0, 1)
-            sprite:setPosition(layout:getContentSize().width * j* 0.25+20, 0)
         end
+    elseif types == "collected" then--根据已收集和未收集从不同的地址获取图片
+        for i = 1, table.getn(lineupList), 4 do  
+            local layout = ccui.Layout:create()
+            TotalLayout:add(layout)
+            layout:setAnchorPoint(0.5, 1)
+            layout:setContentSize(TotalLayout:getContentSize().width,  test:getContentSize().height*ConstDef.scale_ )
+            layout:setPosition(
+                TotalLayout:getContentSize().width * 0.5,
+                TotalLayout:getContentSize().height*1+100 - test:getContentSize().height*ConstDef.scale_* math.floor(i/ 4)-math.floor(i / 4)*test:getContentSize().height*0.1*ConstDef.scale_
+            )
+            for j = 0, 3 do
+                
+                if lineupList[i + j] == nil then
+                    
+                    break
+                end
+                local button = ccui.Button:create(ConstDef.ICON_LIST[lineupList[j + i].order],ConstDef.ICON_LIST[lineupList[j + i].order])
+                layout:add(button)
+                button:setAnchorPoint(0, 1)
+                button:setScale(ConstDef.scale_)
+                button:setPressedActionEnabled(true)
+                button:setTouchEnabled(true)
+                button:setPosition(layout:getContentSize().width * j * 0.25 + 20, 0)
+                button:addTouchEventListener(function(sender, eventType)     
+                    if eventType==2 then
+                        table.insert(ConstDef.BUTTON_CLICK, i+j)
+                    end
+                end)
+                table.insert(list_, button)
+            end
+        end
+        
     end
-   
+    
 end
 
 return BagLayer
