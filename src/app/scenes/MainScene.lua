@@ -7,6 +7,7 @@ local MainScene = class("MainScene", function()
 end)
 
 -- local
+local LoadView = require("app.ui.LoadView")
 local StringDef = require("app.def.StringDef")
 local AtlasView = require("app.ui.AtlasView")
 local GameData = require("app.test.GameData")
@@ -14,11 +15,15 @@ local MainUIBattleView = require("app.ui.MainUIBattleView")
 local MenuScene = require("app.scenes.MenuScene")
 local ShopView = require("app.ui.ShopView")
 local Log = require("app.utils.Log")
+local MenuConfig = require("app.test.MenuConfig")
 --
 local pageView
+local loadView
 --
 
 function MainScene:ctor()
+    loadView = LoadView.new()
+    loadView:addTo(self, 3)
     --test
     GameData:init()
     --
@@ -33,6 +38,16 @@ function MainScene:ctor()
     self:performWithDelay(function()
         self:scheduleUpdate()
     end, 1)
+
+    -- 主界面默认音乐播放
+    if MenuConfig.IS_PLAY_BGM then
+        print("主界面音乐播放")
+        local audio = require("framework.audio")
+        audio.loadFile("sound_ogg/lobby_bgm_120bpm.ogg",function ()
+            audio.playBGM("sound_ogg/lobby_bgm_120bpm.ogg",true)
+        end)
+    end
+
 end
 
 function MainScene:onEnter()
@@ -45,6 +60,14 @@ function MainScene:update(dt)
 end
 
 function MainScene:onExit()
+end
+
+--[[--
+    描述：删除加载界面
+]]
+function MainScene:quitLoading()
+    print("loadingView", loadView)
+    loadView:removeFromParent()
 end
 
 --[[--
