@@ -11,9 +11,7 @@ local TowerSprite = class("towerSprite", function(res)
     return display.newSprite(res)
 end)
 
---local
-local CreateSpriteUtil = require("src/app/test/CreateSpriteUtil.lua")
---
+local Factory = require("src/app/utils/Factory.lua")
 
 --[[--
     @description: 构造函数
@@ -23,8 +21,8 @@ local CreateSpriteUtil = require("src/app/test/CreateSpriteUtil.lua")
 function TowerSprite:ctor(res, data)
     self.data_ = data --type: table,精灵对应的数据
 
-    local towerType = CreateSpriteUtil:createTowerType(self.data_.type)
-    local towerLevel = CreateSpriteUtil:createTowerLevel(self.data_.level)
+    local towerType = Factory:createTowerType(self.data_.type)
+    local towerLevel = Factory:createTowerLevel(self.data_.level)
 
     self.levelSprite_ = towerLevel --type:sprite, 塔等级对应的精灵
 
@@ -42,9 +40,10 @@ end
     @return none
 ]]
 function TowerSprite:update(dt)
-    local texture = CCTextureCache:sharedTextureCache():addImage("res/home/guide/subinterface_tower_list/level/Lv." ..
+    --local texture = CCTextureCache:sharedTextureCache():addImage("res/home/guide/subinterface_tower_list/level/Lv." ..
+    --    self.data_.level .. ".png")
+    self.levelSprite_:setTexture("res/home/guide/subinterface_tower_list/level/Lv." ..
         self.data_.level .. ".png")
-    self.levelSprite_:setTexture(texture)
 end
 
 return TowerSprite

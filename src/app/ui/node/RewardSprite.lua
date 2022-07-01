@@ -12,7 +12,7 @@ local RewardSprite = class("RewardSprite", function(res)
 end)
 --local
 local CreateSpriteUtil = require("src/app/test/CreateSpriteUtil.lua")
---
+local Factory = require("src/app/utils/Factory.lua")
 
 --[[--
     @description: 构造方法
@@ -22,24 +22,16 @@ local CreateSpriteUtil = require("src/app/test/CreateSpriteUtil.lua")
 ]]
 function RewardSprite:ctor(res, data)
     self.data_ = data --type: table, 精灵对应的数据
-    --self.button_ = nil
+    self.button_ = nil --type: Button,用于按钮事件
     self.size_ = self:getContentSize() --type: table, 当前精灵的大小，用于计算和帧刷新
-    local button = CreateSpriteUtil:createRewardButton(self.data_.name)
+    local button = Factory:createRewardButton(self.data_.name)
+    self.button_ = button
 
-    local lockSp = CreateSpriteUtil:getBorderStateSprite(self.data_.isUnlock, self.data_.isGet)
+    local lockSp = Factory:createBorderStateSprite(self.data_.isUnlock, self.data_.isGet)
     if lockSp then
         lockSp:setPosition(self.size_.width * .5, 3)
-        --lockSp:setName("lockSp")
         lockSp:addTo(self)
     end
-
-    button:addTouchEventListener(function(sender, eventType)
-        --[[--
-            执行注册的方法
-            参数为rewardData
-        ]]
-        print("clicked reward button")
-    end)
 
     local quantityTTF = nil
     if self.data_.quantity then
@@ -82,8 +74,9 @@ function RewardSprite:unlocked()
     self.lockSp_ = nil
 
     --更新边框纹理
-    local texture = CCTextureCache:sharedTextureCache():addImage("res/home/battle/high_ladder/unlocked_unreceived_yellow_border.png")
-    self:setTexture(texture)
+    --之所以改成这样是因为CCTextureCache这个纹理缓存不能用了，暂时先这样，下同
+    --local texture = CCTextureCache:sharedTextureCache():addImage("res/home/battle/high_ladder/unlocked_unreceived_yellow_border.png")
+    self:setTexture("res/home/battle/high_ladder/unlocked_unreceived_yellow_border.png")
 end
 
 --[[--
@@ -96,8 +89,8 @@ function RewardSprite:get()
     lockSp:addTo(self)
 
     --更改纹理
-    local texture = CCTextureCache:sharedTextureCache():addImage("res/home/battle/high_ladder/can_receive.png")
-    self:setTexture(texture)
+    --local texture = CCTextureCache:sharedTextureCache():addImage("res/home/battle/high_ladder/can_receive.png")
+    self:setTexture("res/home/battle/high_ladder/can_receive.png")
 end
 
 --[[--
@@ -106,18 +99,7 @@ end
     @return none
 ]]
 function RewardSprite:update(dt)
-    --if self.data_.isUnlock == true then
-    --    if self.data_.isGet == true then
-    --        local lockSp = CreateSpriteUtil:getBorderStateSprite(true, true)
-    --        lockSp:setPosition(self.size_.width * .5, 0)
-    --        lockSp:setName("lockSp")
-    --        lockSp:addTo(self)
-    --    else
-    --        local localSp =
-    --    end
-    --else
-    --
-    --end
+
 end
 
 return RewardSprite

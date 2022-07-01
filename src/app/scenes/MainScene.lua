@@ -38,19 +38,18 @@ function MainScene:ctor()
     self:performWithDelay(function()
         self:scheduleUpdate()
     end, 1)
+end
+
+function MainScene:onEnter()
 
     -- 主界面默认音乐播放
     if MenuConfig.IS_PLAY_BGM then
         print("主界面音乐播放")
         local audio = require("framework.audio")
-        audio.loadFile("sound_ogg/lobby_bgm_120bpm.ogg",function ()
-            audio.playBGM("sound_ogg/lobby_bgm_120bpm.ogg",true)
+        audio.loadFile("sound_ogg/lobby_bgm_120bpm.ogg", function()
+            audio.playBGM("sound_ogg/lobby_bgm_120bpm.ogg", true)
         end)
     end
-
-end
-
-function MainScene:onEnter()
 
 end
 

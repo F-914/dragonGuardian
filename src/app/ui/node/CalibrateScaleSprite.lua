@@ -49,7 +49,7 @@ function CalibrateScaleSprite:init()
     yellowScale:setPosition(3, 6)
     local factor = self.currentKey_ / GameData.maxKeyQuantity_
     --这个放缩值谨慎修改
-    local scale = 3.134 * factor - 0.19
+    local scale = 3.13 * factor - 0.20
     yellowScale:setScale(scale, 1)
     yellowScale:addTo(self)
 
@@ -72,7 +72,7 @@ function CalibrateScaleSprite:init()
             size = 18,
             color = cc.c3b(168, 176, 225)
         })
-        local scale = factor2 * 3.13 - 0.19
+        local scale = factor2 * 3.127 - 0.18
         quantityTTF:setPosition(scale * 210, -10)
         quantityTTF:setScale(0.3, 0.8)
         quantityTTF:addTo(self)

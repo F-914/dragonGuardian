@@ -8,7 +8,8 @@
 ]]
 local GameData = {}
 --local
-local CreateSpriteUtil = require("app.test.CreateSpriteUtil")
+--local CreateSpriteUtil = require("app.test.CreateSpriteUtil")
+local TestDataFactory = require("src/app/test/TestDataFactory.lua")
 --
 
 --[[--
@@ -17,11 +18,11 @@ local CreateSpriteUtil = require("app.test.CreateSpriteUtil")
     @return none
 ]]
 function GameData:init()
-    self.rewards_ = CreateSpriteUtil:getRewardDataTest()
+    self.rewards_ = TestDataFactory:getRewardDataTest()
     self.userKeyQuantity_ = 100
     self.maxKeyQuantity_ = 500
-    self.keyRewardNodes_ = CreateSpriteUtil:createRewardNodesTest()
-    self.currentTeam_ = CreateSpriteUtil:createTeamTest()
+    self.keyRewardNodes_ = TestDataFactory:getRewardNodesTest()
+    self.currentTeam_ = TestDataFactory:getTeamDataTest()
 end
 
 --[[--
