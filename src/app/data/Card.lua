@@ -6,6 +6,8 @@ local Card = class("Card", require("app.data.BaseModel"))
 
 -- local
 local ConstDef = require("app.def.ConstDef")
+local EventDef = require("app.def.EventDef")
+local EventManager = require("app.manager.EventManager")
 --
 
 ---Card.ctor 构造函数
@@ -28,6 +30,7 @@ function Card:ctor(name, rarity, type, atk, atkTarget, atkUpgrade, atkEnhance, f
                    skills, extraDamage, fatalityRate, star)
     self:setCard(name, rarity, type, atk, atkTarget, atkUpgrade, atkEnhance, fireCd, fireCdEnhance, fireCdUpgrade, skills
         , extraDamage, fatalityRate, star)
+    EventManager:doEvent(EventDef.ID.CREATE_CARD, self)
 end
 
 function Card:setCard(name, rarity, type, atk, atkTarget, atkUpgrade, atkEnhance, fireCd, fireCdEnhance, fireCdUpgrade,

@@ -6,6 +6,8 @@ local Reward = class("Reward", require("app.data.base.BaseModel"))
 
 -- local
 local ConstDef = require("app.def.ConstDef")
+local EventDef = require("app.def.EventDef")
+local EventManager = require("app.manager.EventManager")
 --
 
 ---Reward.ctor 构造函数
@@ -17,6 +19,7 @@ local ConstDef = require("app.def.ConstDef")
 ---@return  Type Description
 function Reward:ctor(rewardName, locked, received, trophyCondition, amount)
     self:setReward(rewardName, locked, received, trophyCondition, amount)
+    EventManager:doEvent(EventDef.ID.CREATE_REWARD, self)
 end
 
 function Reward:setReward(rewardName, locked, received, trophyCondition, amount)

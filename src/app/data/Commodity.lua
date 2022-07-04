@@ -6,6 +6,8 @@ local Commodity = class("Commodity", require("app.data.base.BaseModel"))
 
 -- local
 local ConstDef = require("app.def.ConstDef")
+local EventDef = require("app.def.EventDef")
+local EventManager = require("app.manager.EventManager")
 --
 
 ---Commodity.ctor 构造函数
@@ -16,6 +18,7 @@ local ConstDef = require("app.def.ConstDef")
 ---@return  Type Description
 function Commodity:ctor(name, price, priceUnit, amount)
     self:setCommodity(name, price, priceUnit, amount)
+    EventManager:doEvent(EventDef.ID.CREATE_COMMODITY, self)
 end
 
 function Commodity:setCommodity(name, price, priceUnit, amount)

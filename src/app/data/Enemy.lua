@@ -6,6 +6,8 @@ local Enemy = class("Enemy", require("app.data.base.BaseModel"))
 
 -- local
 local ConstDef = require("app.def.ConstDef")
+local EventDef = require("app.def.EventDef")
+local EventManager = require("app.manager.EventManager")
 --
 
 ---Enemy.ctor 构造函数
@@ -16,6 +18,7 @@ local ConstDef = require("app.def.ConstDef")
 ---@return  Type Description
 function Enemy:ctor(name, hp, skills, description)
     self:setEnemy(name, hp, skills, desc)
+    EventManager:doEvent(EventDef.ID.CREATE_ENEMY, self)
 end
 
 function Enemy:setEnemy(name, hp, skills, desc)

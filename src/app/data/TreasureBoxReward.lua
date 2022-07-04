@@ -6,6 +6,8 @@ local TreasureBoxReward = class("TreasureBoxReward", require("app.data.pojo.Rewa
 
 -- local
 local ConstDef = require("app.def.ConstDef")
+local EventDef = require("app.def.EventDef")
+local EventManager = require("app.manager.EventManager")
 --
 
 ---TreasureBoxReward.ctor 构造函数
@@ -14,6 +16,7 @@ local ConstDef = require("app.def.ConstDef")
 ---@return  Type Description
 function TreasureBoxReward:ctor(treasureBoxType, rewardAmount)
     self:setTreasureBoxReward(treasureBoxType, rewardAmount)
+    EventManager:doEvent(EventDef.ID.CREATE_TREASUREBOXREWARD, self)
 end
 
 function TreasureBoxReward:setTreasureBoxReward(treasureBoxType, rewardAmount)

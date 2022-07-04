@@ -4,6 +4,11 @@
 ]]
 local Skill = class("Skill", require("app.data.base.BaseModel"))
 
+--local
+local EventDef = require("app.def.EventDef")
+local EventManager = require("app.manager.EventManager")
+--
+
 ---Skill.ctor 构造函数
 ---@param skillName         string 技能名
 ---@param skillVariable     string 影响的变量
@@ -13,6 +18,7 @@ local Skill = class("Skill", require("app.data.base.BaseModel"))
 ---@return  Type Description
 function Skill:ctor(skillName, skillVariable, skillValue, skillValueUpgrade, skillValueEnhance)
     self:setSkill(skillName, skillVariable, skillValue, skillValueUpgrade, skillValueEnhance)
+    EventManager:doEvent(EventDef.ID.CREATE_SKILL, self)
 end
 
 function Skill:setSkill(skillName, skillVariable, skillValue, skillValueUpgrade, skillValueEnhance)

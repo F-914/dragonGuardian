@@ -7,6 +7,8 @@ local Log    = require("app.utils.Log")
 
 -- local
 local ConstDef = require("app.def.ConstDef")
+local EventDef = require("app.def.EventDef")
+local EventManager = require("app.manager.EventManager")
 --
 
 ---Ladder.ctor 构造函数
@@ -14,6 +16,7 @@ local ConstDef = require("app.def.ConstDef")
 ---@return  Type Description
 function Ladder:ctor(ladderList)
     self:setLadder(ladderList)
+    EventManager:doEvent(EventDef.ID.CREATE_LADDER, self)
 end
 
 function Ladder:setLadder(ladderList)

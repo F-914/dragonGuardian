@@ -6,6 +6,8 @@ local CurrencyReward = class("CurrencyReward", require("app.data.pojo.Reward"))
 
 -- local
 local ConstDef = require("app.def.ConstDef")
+local EventDef = require("app.def.EventDef")
+local EventManager = require("app.manager.EventManager")
 --
 
 ---CurrencyReward.ctor 构造函数
@@ -17,6 +19,7 @@ local ConstDef = require("app.def.ConstDef")
 ---@return  Type Description
 function CurrencyReward:ctor(rewardType)
     self:setCurrencyReward(rewardType)
+    EventManager:doEvent(EventDef.ID.CREATE_CURRENCYREWARD, self)
 end
 
 function CurrencyReward:setCurrencyReward(rewardType)

@@ -6,7 +6,9 @@ local TreasureBox = class("TreasureBox", require("app.data.base.BaseModel"))
 
 -- local
 local ConstDef = require("app.def.ConstDef")
---`
+local EventDef = require("app.def.EventDef")
+local EventManager = require("app.manager.EventManager")
+--
 
 ---TreasureBox.ctor 构造函数
 ---@param name string 宝箱名
@@ -15,6 +17,7 @@ local ConstDef = require("app.def.ConstDef")
 ---@return  Type Description
 function TreasureBox:ctor(name, type, desc)
     self:setTreasureBox(name, type, desc)
+    EventManager:doEvent(EventDef.ID.CREATE_TREASUREBOX, self)
 end
 
 function TreasureBox:setTreasureBox(name, type, desc)

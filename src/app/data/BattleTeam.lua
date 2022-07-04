@@ -6,12 +6,15 @@ local BattleTeam = class("BattleTeam", require("app.data.base.BaseModel"))
 
 -- local
 local ConstDef = require("app.def.ConstDef")
+local EventDef = require("app.def.EventDef")
+local EventManager = require("app.manager.EventManager")
 --
 
 ---BattleTeam.ctor 构造函数
 ---@param myTeam table 队伍情况
 function BattleTeam:ctor(myTeam)
     self:setBattleTeam(myTeam)
+    EventManager:doEvent(EventDef.ID.CREATE_BATTLETEAM, self)
 end
 
 function BattleTeam:setBattleTeam(myTeam)
