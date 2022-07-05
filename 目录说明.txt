@@ -1,0 +1,14 @@
+1.demoserver
+c++工程目录
+
+2.deps
+c++依赖库目录
+
+3.bin
+c++可执行文件及lua文件目录，介绍如下：
+  bin/demoservice--飞机.exe   飞机小游戏服务器
+  bin/demoservice--塔防.exe   塔防游戏服务器
+  bin/cag_demo.ini            服务器配置文件
+  bin/db                      玩家数据存档目录
+  bin/log                     输出日志目录
+  bin/lua                     lua文件目录

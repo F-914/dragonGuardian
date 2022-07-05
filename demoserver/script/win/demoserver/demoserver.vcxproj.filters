@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\main.cpp" />
+    <ClCompile Include="..\..\..\src\demo_service.cpp" />
+    <ClCompile Include="..\..\..\src\client_msg_handler.cpp" />
+    <ClCompile Include="..\..\..\src\msg_thread.cpp" />
+    <ClCompile Include="..\..\..\src\game_thread.cpp" />
+    <ClCompile Include="..\..\..\src\base_thread.cpp" />
+    <ClCompile Include="..\..\..\src\lobby_thread.cpp" />
+    <ClCompile Include="..\..\..\src\lua\lua_c_func.cpp">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\deps\lua_cjson\fpconv.c">
+      <Filter>lua\cjson</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\deps\lua_cjson\lua_cjson.c">
+      <Filter>lua\cjson</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\deps\lua_cjson\strbuf.c">
+      <Filter>lua\cjson</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\src\demo_service.h" />
+    <ClInclude Include="..\..\..\src\client_msg_handler.h" />
+    <ClInclude Include="..\..\..\src\protocol_def.h" />
+    <ClInclude Include="..\..\..\src\message_filter.h" />
+    <ClInclude Include="..\..\..\src\msg_thread.h" />
+    <ClInclude Include="..\..\..\src\game_thread.h" />
+    <ClInclude Include="..\..\..\src\base_thread.h" />
+    <ClInclude Include="..\..\..\src\lobby_thread.h" />
+    <ClInclude Include="..\..\..\src\struct_def.h" />
+    <ClInclude Include="..\..\..\src\lua\lua_c_func.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\deps\lua_cjson\fpconv.h">
+      <Filter>lua\cjson</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\deps\lua_cjson\lua_cjson.h">
+      <Filter>lua\cjson</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\deps\lua_cjson\strbuf.h">
+      <Filter>lua\cjson</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="lua">
+      <UniqueIdentifier>{74e0be88-cb63-43e0-aa8d-3244844427c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lua\cjson">
+      <UniqueIdentifier>{89a0b1f2-1853-45b5-aa48-bab36779ef6b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
