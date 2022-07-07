@@ -12,6 +12,7 @@ local BaseModel = class("BaseModel")
 ---@param isDeath boolean
 function BaseModel:ctor(x, y, width, height, isDeath)
     self:setBaseModel(x, y, width, height, isDeath)
+    self.id_ = ""
 end
 
 function BaseModel:setBaseModel(x, y, width, height, isDeath)
@@ -20,6 +21,14 @@ function BaseModel:setBaseModel(x, y, width, height, isDeath)
     self.width_ = width -- 类型：number
     self.height_ = height -- 类型：number
     self.isDeath_ = isDeath -- 类型：boolean，是否死亡（销毁）
+end
+
+function BaseModel:setId(id)
+    self.id_ = id
+end
+
+function BaseModel:getId()
+    return self.id_
 end
 
 ---直接用 getX 的话可以会覆盖一些自带的函数 可能会在后续导致一些问题

@@ -13,7 +13,7 @@ function Factory:createChestRewardTower(data)
     local arr = {}
     local count = 1
     for _, ele in ipairs(data) do
-        local sprite = display.newSprite("res/home/general/second_open_treasure_popup/icon_tower/"..ele.name..".png")
+        local sprite = display.newSprite("res/home/general/second_open_treasure_popup/icon_tower/" .. ele.name .. ".png")
         local spSize = sprite:getContentSize()
         local rarityTTF = display.newTTFLabel({
             text = ele.rarity,
@@ -40,6 +40,7 @@ function Factory:createChestRewardTower(data)
     end
     return arr
 end
+
 --[[--
     @description: 用于从精灵列表创建一个队伍精灵
     @param teamData type: table 用于创建精灵的数组
@@ -50,29 +51,33 @@ function Factory:createTeamSprite(teamData)
     for i = 1, #teamData do
         local towerData = teamData[i]
         --解决循环嵌套
-        local towerSprite = require("src/app/ui/node/TowerSprite.lua").new("res/home/general/icon_tower/"..towerData.name..".png", towerData)
+        local towerSprite = require("src/app/ui/node/TowerSprite.lua").new("res/home/general/icon_tower/" ..
+            towerData. .. ".png", towerData)
         mapSprites[towerData] = towerSprite
     end
     return mapSprites
 end
+
 --[[--
     @description: 从名称创建一个代表塔类型的精灵
     @param type:string 塔类型的名称
     @return type:Sprite, 代表塔类型的精灵
 ]]
 function Factory:createTowerType(name)
-    local sprite = display.newSprite("res/home/guide/subinterface_tower_list/type_"..name..".png")
+    local sprite = display.newSprite("res/home/guide/subinterface_tower_list/type_" .. name .. ".png")
     return sprite
 end
+
 --[[--
     @description: 从等级信息创建一个代表塔等级的精灵
     @param type:string 代表塔等级的字符串
     @return type:Sprite 表示塔等级的精灵
 ]]
 function Factory:createTowerLevel(level)
-    local sprite = display.newSprite("res/home/guide/subinterface_tower_list/level/Lv."..level..".png")
+    local sprite = display.newSprite("res/home/guide/subinterface_tower_list/level/Lv." .. level .. ".png")
     return sprite
 end
+
 --[[--
     @description: 根据解锁状态确定边框
     @param none
@@ -81,18 +86,22 @@ end
 function Factory:createBorder(rewardData)
     if not rewardData.isUnlock then
         --解决循环嵌套，下同
-        local border = require("src/app/ui/node/RewardSprite.lua").new("res/home/battle/high_ladder/locked_blue_border.png", rewardData)
+        local border = require("src/app/ui/node/RewardSprite.lua").new("res/home/battle/high_ladder/locked_blue_border.png"
+            , rewardData)
         return border
     else
         if not rewardData.isGet then
-            local border = require("src/app/ui/node/RewardSprite.lua").new("res/home/battle/high_ladder/unlocked_unreceived_yellow_border.png", rewardData)
+            local border = require("src/app/ui/node/RewardSprite.lua").new("res/home/battle/high_ladder/unlocked_unreceived_yellow_border.png"
+                , rewardData)
             return border
         else
-            local border = require("src/app/ui/node/RewardSprite.lua").new("res/home/battle/high_ladder/can_receive.png", rewardData)
+            local border = require("src/app/ui/node/RewardSprite.lua").new("res/home/battle/high_ladder/can_receive.png"
+                , rewardData)
             return border
         end
     end
 end
+
 --[[--
     @description:根据领取和解锁状态确定边框是否带有下标
     @param isUnlocked type:bool, 解锁状态
@@ -112,6 +121,7 @@ function Factory:createBorderStateSprite(isUnlocked, isGet)
         end
     end
 end
+
 --[[--
     @description: 赶回一个奖品列表对应的按钮或者精灵列表
     @param type:table 奖励的列表
@@ -126,6 +136,7 @@ function Factory:createRewardList(rewardsData)
     end
     return rewardsMap
 end
+
 --[[--
     @description: 通过奖励的数据返回对应的按钮
     @param rewardData type:table 奖励的信息
@@ -168,6 +179,7 @@ function Factory:createRewardButton(name)
         return button
     end
 end
+
 --[[--
     @description: 通过奖励的名称创建对应的精灵
     @param name type: string 奖励的名称
@@ -210,6 +222,7 @@ function Factory:createRewardSprite(name)
         return sprite
     end
 end
+
 --[[--
     @description 根据宝箱名称创建对应的宝箱名称精灵
     @param name type:name 宝箱名称
@@ -232,6 +245,7 @@ function Factory:createChestFontSprite(name)
         return nil
     end
 end
+
 --[[--
     @description: 根据宝箱的数据创建宝箱奖励面板
     @param 宝箱奖励数据
@@ -264,15 +278,15 @@ function Factory:createChestRewardPane(chestRewardData)
     coinNumTTF:enableOutline(cc.c4b(0, 0, 0, 0), 1)
     coinNumTTF:addTo(baseCoinContainer)
 
-    local pSize = {width = size.width * .3, height = size.height * .4}
+    local pSize = { width = size.width * .3, height = size.height * .4 }
     local layoutR = self:createChestRewardItem(pSize, chestRewardData.RNumberFloor,
-    chestRewardData.RNumberUpper, "ordinary")
+        chestRewardData.RNumberUpper, "ordinary")
     local layoutSR = self:createChestRewardItem(pSize, chestRewardData.SRNumberFloor,
-    chestRewardData.SRNumberUpper, "rare")
+        chestRewardData.SRNumberUpper, "rare")
     local layoutSSR = self:createChestRewardItem(pSize, chestRewardData.SSRNumberFloor,
-    chestRewardData.SSRNumberUpper, "epic")
+        chestRewardData.SSRNumberUpper, "epic")
     local layoutUR = self:createChestRewardItem(pSize, chestRewardData.URNumberFloor,
-    chestRewardData.URNumberUpper, "legend")
+        chestRewardData.URNumberUpper, "legend")
     layoutR:setPosition(size.width * .45, size.height * .65)
     layoutSR:setPosition(size.width * .85, size.height * .65)
     layoutSSR:setPosition(size.width * .45, size.height * .2)
@@ -283,6 +297,7 @@ function Factory:createChestRewardPane(chestRewardData)
     layoutUR:addTo(layout)
     return layout
 end
+
 --[[--
     @description:作为上面函数的辅助，减少代码重复度
     @param size type:table 这部分奖励的所占的区域
@@ -291,7 +306,7 @@ end
     @param rarity type:string, 奖励的品质
     @return type sprite, 返回一个代表奖励的精灵
 ]]
-function Factory:createChestRewardItem(size,numFloor,numUpper, rarity)
+function Factory:createChestRewardItem(size, numFloor, numUpper, rarity)
     local layout = ccui.Layout:create()
     layout:setBackGroundColorType(3)
     layout:setAnchorPoint(.5, .5)

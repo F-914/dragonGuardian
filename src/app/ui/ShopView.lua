@@ -2,22 +2,25 @@
     商店场景
     ShopView.lua
 ]]
-local ShopView =
-class(
-    "ShopView",
-    function()
-        return display.newColorLayer(cc.c4b(0, 0, 0, 0))
-    end
+local ShopView = class(
+        "ShopView",
+        function()
+            return display.newColorLayer(cc.c4b(0, 0, 0, 0))
+        end
 )
 -- local
 local StoreList = require("app.test.StoreList")
 local Log = require("app.utils.Log")
-local audio_ = require("framework.audio")
+local audio = require("framework.audio")
+local UserInfo = require("app.data.UserInfo")
+local StringDef = require("app.def.StringDef")
+local ShopBackgroundLayer = require("app.ui.layer.ShopBackgroundLayer")
 --
 local _shopLayer
 local _buttonCoinClik
 local _buttonCoinClikGrey
 local _checkBuy
+local _userInfo
 --
 
 --[[--
@@ -28,17 +31,18 @@ local _checkBuy
     @return none
 ]]
 function ShopView:ctor()
+    self.shopBackgroundLayer_ = nil
+
     self:initView()
 end
 
 function ShopView:initView()
     self:loadMusic()
 
-    _shopLayer = ccui.Layout:create()
-    _shopLayer:setBackGroundImage("home/shop/background_shop.png")
-    _shopLayer:setPosition(display.width / 2, display.height / 2)
-    _shopLayer:setAnchorPoint(0.5, 0.5)
-    _shopLayer:setContentSize(display.width, display.height)
+    _userInfo = UserInfo:getInstance()
+
+    self.shopBackgroundLayer_ = ShopBackgroundLayer().new()
+    self:addChild(self.shopBackgroundLayer_)
 
     -- 滑动区域
     local itemWidth, itemHeight = display.width / 5, display.height / 6
@@ -47,6 +51,7 @@ function ShopView:initView()
     listView:setAnchorPoint(0.5, 0.5)
     listView:setPosition(display.cx, display.cy)
     listView:setDirection(1) -- 垂直
+    -- TODO 需要修改
     listView:addTo(_shopLayer)
 
     local dragonNum = 0
@@ -59,13 +64,13 @@ function ShopView:initView()
         if i == 1 then
             colLayer:setContentSize(display.width, itemHeight * 3 / 4)
             -- 金币商店
-            local coinTitleBase = cc.Sprite:create("home/shop/coins_shop/base_title.png")
+            local coinTitleBase = cc.Sprite:create(StringDef.PATH_COIN_SHOP_BASE_TITLE)
             coinTitleBase:setPosition(display.cx, itemHeight / 8)
             coinTitleBase:setAnchorPoint(0.5, 0.5)
             --coinTitleBase:scale(display.width / 720)
             coinTitleBase:addTo(colLayer)
 
-            local coinTitle = cc.Sprite:create("home/shop/coins_shop/title_coin_store.png")
+            local coinTitle = cc.Sprite:create(StringDef.PATH_COIN_SHOP_STORE_TITLE)
             coinTitle:setPosition(display.cx, itemHeight / 8)
             coinTitle:setAnchorPoint(0.5, 0.5)
             --coinTitle:scale(display.width / 720)
@@ -74,13 +79,13 @@ function ShopView:initView()
         elseif i == 2 then
             colLayer:setContentSize(display.width, itemHeight * 5 / 12)
             -- 商品刷新提示
-            local refreshBase = cc.Sprite:create("home/shop/coins_shop/base_remaining_refresh_time.png")
+            local refreshBase = cc.Sprite:create(StringDef.PATH_COIN_SHOP_BASE_REFRESH)
             refreshBase:setPosition(display.cx, itemHeight / 5)
             refreshBase:setAnchorPoint(0.5, 0.5)
             --refreshBase:scale(display.width / 720)
             refreshBase:addTo(colLayer)
 
-            local refreshTitle = cc.Sprite:create("home/shop/coins_shop/tips_remaining_refresh_time.png")
+            local refreshTitle = cc.Sprite:create(StringDef.PATH_COIN_SHOP_TIP_REFRESH)
             refreshTitle:setPosition(display.cx * 8 / 7, itemHeight / 5)
             refreshTitle:setAnchorPoint(1, 0.5)
             --refreshTitle:scale(display.width / 720)
@@ -88,7 +93,7 @@ function ShopView:initView()
 
             local refreshText = display.newTTFLabel({
                 text = "03:13",
-                font = "font/fzbiaozjw.ttf",
+                font = StringDef.PATH_FONT_FZBIAOZJW,
                 size = 30,
             })
             refreshText:setAnchorPoint(0, 0.5)
@@ -115,8 +120,7 @@ function ShopView:initView()
                 if dragonNum == 0 then
                     ---------------------------------------------------------------------
                     -- 免费钻石
-                    local freeButton = ccui.Button:create(
-                        "home/shop/coins_shop/base_free_merchandise.png")
+                    local freeButton = ccui.Button:create(StringDef.PATH_COIN_SHOP_FREE_DIAMOND)
                     dragonNum = dragonNum + 1
                     freeButton:setPosition(itemWidth * 2 / 3, itemHeight / 2)
                     freeButton:setAnchorPoint(0.5, 0.5)
@@ -124,16 +128,14 @@ function ShopView:initView()
                     --freeButton:scale(itemHeight/size.height)
                     freeButton:addTo(rowLayer)
 
-                    local freeTitle = cc.Sprite:create(
-                        "home/shop/coins_shop/icon_free.png")
+                    local freeTitle = cc.Sprite:create(StringDef.PATH_COIN_SHOP_ICON_FREE)
                     freeTitle:setPosition(itemWidth * 2 / 3, itemHeight / 6)
                     freeTitle:setAnchorPoint(0.5, 0.5)
                     local size = freeTitle:getContentSize()
                     --freeTitle:scale(itemHeight / size.height /6)
                     freeTitle:addTo(rowLayer)
 
-                    local diaIcon = cc.Sprite:create(
-                        "home/shop/coins_shop/commodity_icon_diamond.png")
+                    local diaIcon = cc.Sprite:create(StringDef.PATH_COIN_SHOP_DIAMOND)
                     diaIcon:setPosition(itemWidth * 2 / 3, itemHeight / 5 * 3)
                     diaIcon:setAnchorPoint(0.5, 0.5)
                     local size = diaIcon:getContentSize()
@@ -142,7 +144,7 @@ function ShopView:initView()
 
                     local diaNum = display.newTTFLabel({
                         text = "x100",
-                        font = "font/fzbiaozjw.ttf",
+                        font = StringDef.PATH_FONT_FZBIAOZJW,
                         size = 24
                     })
                     diaNum:align(display.CENTER, itemWidth * 2 / 3, itemHeight / 3)
@@ -158,7 +160,7 @@ function ShopView:initView()
                         end
                         if 2 == eventType then
                             Log.i("2")
-                            audio_.playEffect("sound_ogg/get_free_item.ogg")
+                            audio.playEffect(StringDef.PATH_GET_FREE_ITEM)
                             --freeButton:setTouchEnabled(false)
                             rowLayer:scale(1)
                         end
@@ -173,8 +175,8 @@ function ShopView:initView()
                     else
                         Log.i(dragon["id"], dragon.type)
                         local dragonButton = ccui.Button:create(
-                            "home/shop/coins_shop/commodity_icon_tower_fragment/"
-                            .. dragon["id"] .. ".png")
+                                "home/shop/coins_shop/commodity_icon_tower_fragment/"
+                                        .. dragon["id"] .. ".png")
                         dragonNum = dragonNum + 1
                         dragonButton:setPosition(itemWidth * 2 / 3, itemHeight / 2)
                         dragonButton:setAnchorPoint(0.5, 0.5)
@@ -184,7 +186,7 @@ function ShopView:initView()
 
                         -- 金币图标
                         local coinIcon = cc.Sprite:create(
-                            "home/shop/coins_shop/icon_coin.png")
+                                "home/shop/coins_shop/icon_coin.png")
                         if dragon.type == "epic" then
                             coinIcon:setPosition(itemWidth * 2 / 3 - 30, itemHeight / 6)
                         else
@@ -198,7 +200,7 @@ function ShopView:initView()
                         -- 价格
                         local dragonPrice = display.newTTFLabel({
                             text = StoreList.TYPE_PRICE[dragon.type],
-                            font = "font/fzbiaozjw.ttf",
+                            font = StringDef.PATH_FONT_FZBIAOZJW,
                             size = 25
                         })
                         dragonPrice:align(display.CENTER, itemWidth * 4 / 5, itemHeight / 6)
@@ -208,7 +210,7 @@ function ShopView:initView()
 
                         --碎片底图
                         local fragmentBase = cc.Sprite:create(
-                            "home/shop/coins_shop/base_fragments_number.png")
+                                "home/shop/coins_shop/base_fragments_number.png")
                         fragmentBase:setPosition(size.width * 20 / 19, itemHeight * 5 / 6)
                         fragmentBase:setAnchorPoint(1, 0.5)
                         local size = fragmentBase:getContentSize()
@@ -218,7 +220,7 @@ function ShopView:initView()
                         -- 碎片数量
                         local fragmentNum = display.newTTFLabel({
                             text = "x" .. dragon.number,
-                            font = "font/fzzchjw.ttf",
+                            font = StringDef.PATH_FONT_FZZCHJW,
                             size = 19
                         })
                         fragmentNum:align(display.CENTER, size.width * 2, itemHeight * 5 / 6)
@@ -233,7 +235,7 @@ function ShopView:initView()
                             end
                             if 2 == eventType then
                                 --dragonButton:setTouchEnabled(false)
-                                audio_.playEffect("sound_ogg/get_paid_item.ogg")
+                                audio.playEffect(StringDef.PATH_GET_PADI_ITEM)
                                 _buttonCoinClik(rowLayer, itemWidth, itemHeight, dragonButton, dragon)
                             end
                         end)
@@ -277,19 +279,19 @@ function ShopView:initView()
 
                 -- 稀有宝箱
                 local boxRareButton = ccui.Button:create(
-                    "home/shop/diamond_shop/base_rare.png")
+                        "home/shop/diamond_shop/base_rare.png")
                 boxRareButton:setPosition(itemWidth * 9 / 4, itemHeight * 3 / 4)
                 boxRareButton:setAnchorPoint(0.5, 0.5)
                 boxRareButton:addTo(rowRareLayer)
 
                 local boxRare = cc.Sprite:create(
-                    "home/shop/diamond_shop/box_rare.png")
+                        "home/shop/diamond_shop/box_rare.png")
                 boxRare:setPosition(itemWidth * 9 / 4, itemHeight * 3 / 4)
                 boxRare:setAnchorPoint(0.5, 0.5)
                 boxRare:addTo(rowRareLayer)
 
                 local boxRareDia = cc.Sprite:create(
-                    "home/shop/diamond_shop/commodity_icon_diamond.png")
+                        "home/shop/diamond_shop/commodity_icon_diamond.png")
                 boxRareDia:setPosition(itemWidth * 9 / 4 - itemHeight / 20, itemHeight / 4)
                 boxRareDia:setAnchorPoint(1, 0.5)
                 boxRareDia:addTo(rowRareLayer)
@@ -312,7 +314,7 @@ function ShopView:initView()
                     end
                     if 2 == eventType then
                         --boxRareButton:setTouchEnabled(false)
-                        audio_.playEffect("sound_ogg/open_box.ogg")
+                        audio.playEffect("sound_ogg/open_box.ogg")
                         rowRareLayer:scale(1)
                     end
                 end)
@@ -328,19 +330,19 @@ function ShopView:initView()
 
                 -- 普通宝箱
                 local boxNormalButton = ccui.Button:create(
-                    "home/shop/diamond_shop/base_normal.png")
+                        "home/shop/diamond_shop/base_normal.png")
                 boxNormalButton:setPosition(itemWidth * 21 / 11, itemHeight * 3 / 4)
                 boxNormalButton:setAnchorPoint(0.5, 0.5)
                 boxNormalButton:addTo(rowNormalLayer)
 
                 local boxNormal = cc.Sprite:create(
-                    "home/shop/diamond_shop/box_nomal.png")
+                        "home/shop/diamond_shop/box_nomal.png")
                 boxNormal:setPosition(itemWidth * 21 / 11, itemHeight * 3 / 4)
                 boxNormal:setAnchorPoint(0.5, 0.5)
                 boxNormal:addTo(rowNormalLayer)
 
                 local boxNormalDia = cc.Sprite:create(
-                    "home/shop/diamond_shop/commodity_icon_diamond.png")
+                        "home/shop/diamond_shop/commodity_icon_diamond.png")
                 boxNormalDia:setPosition(itemWidth * 21 / 11 - itemHeight / 20, itemHeight / 4)
                 boxNormalDia:setAnchorPoint(1, 0.5)
                 boxNormalDia:addTo(rowNormalLayer)
@@ -363,7 +365,7 @@ function ShopView:initView()
                     end
                     if 2 == eventType then
                         --boxNormalButton:setTouchEnabled(false)
-                        audio_.playEffect("sound_ogg/open_box.ogg")
+                        audio.playEffect("sound_ogg/open_box.ogg")
                         rowNormalLayer:scale(1)
                     end
                 end)
@@ -380,19 +382,19 @@ function ShopView:initView()
 
                 -- 史诗宝箱
                 local boxEpicButton = ccui.Button:create(
-                    "home/shop/diamond_shop/base_epic.png")
+                        "home/shop/diamond_shop/base_epic.png")
                 boxEpicButton:setPosition(itemWidth * 13 / 5, itemHeight * 3 / 4)
                 boxEpicButton:setAnchorPoint(0.5, 0.5)
                 boxEpicButton:addTo(rowEpicLayer)
 
                 local boxEpic = cc.Sprite:create(
-                    "home/shop/diamond_shop/box_epic.png")
+                        "home/shop/diamond_shop/box_epic.png")
                 boxEpic:setPosition(itemWidth * 13 / 5, itemHeight * 3 / 4)
                 boxEpic:setAnchorPoint(0.5, 0.5)
                 boxEpic:addTo(rowEpicLayer)
 
                 local boxEpicDia = cc.Sprite:create(
-                    "home/shop/diamond_shop/commodity_icon_diamond.png")
+                        "home/shop/diamond_shop/commodity_icon_diamond.png")
                 boxEpicDia:setPosition(itemWidth * 13 / 5 - itemHeight / 20, itemHeight / 4)
                 boxEpicDia:setAnchorPoint(1, 0.5)
                 boxEpicDia:addTo(rowEpicLayer)
@@ -415,7 +417,7 @@ function ShopView:initView()
                     end
                     if 2 == eventType then
                         --boxEpicButton:setTouchEnabled(false)
-                        audio_.playEffect("sound_ogg/open_box.ogg")
+                        audio.playEffect("sound_ogg/open_box.ogg")
                         rowEpicLayer:scale(1)
                     end
                 end)
@@ -434,19 +436,19 @@ function ShopView:initView()
                 --传说宝箱
                 colLayer:setContentSize(display.width, itemHeight + 80)
                 local boxLengendButton = ccui.Button:create(
-                    "home/shop/diamond_shop/base_legend.png")
+                        "home/shop/diamond_shop/base_legend.png")
                 boxLengendButton:setPosition(itemWidth * 9 / 4, itemHeight * 3 / 4)
                 boxLengendButton:setAnchorPoint(0.5, 0.5)
                 boxLengendButton:addTo(rowLegendLayer)
 
                 local boxLengend = cc.Sprite:create(
-                    "home/shop/diamond_shop/box_legend.png")
+                        "home/shop/diamond_shop/box_legend.png")
                 boxLengend:setPosition(itemWidth * 9 / 4, itemHeight * 3 / 4)
                 boxLengend:setAnchorPoint(0.5, 0.5)
                 boxLengend:addTo(rowLegendLayer)
 
                 local boxLengendDia = cc.Sprite:create(
-                    "home/shop/diamond_shop/commodity_icon_diamond.png")
+                        "home/shop/diamond_shop/commodity_icon_diamond.png")
                 boxLengendDia:setPosition(itemWidth * 9 / 4 - 30 - itemHeight / 20, itemHeight / 5)
                 boxLengendDia:setAnchorPoint(0.5, 0.5)
                 boxLengendDia:addTo(rowLegendLayer)
@@ -469,7 +471,7 @@ function ShopView:initView()
                     end
                     if 2 == eventType then
                         --boxLengendButton:setTouchEnabled(false)
-                        audio_.playEffect("sound_ogg/open_box.ogg")
+                        audio.playEffect("sound_ogg/open_box.ogg")
                         rowLegendLayer:scale(1)
                     end
                 end)
@@ -489,10 +491,14 @@ end
     @return none
 ]]
 function ShopView:loadMusic()
-    audio_.loadFile("sound_ogg/get_free_item.ogg", function(dt) end)
-    audio_.loadFile("sound_ogg/get_paid_item.ogg", function(dt) end)
-    audio_.loadFile("sound_ogg/open_box.ogg", function(dt) end)
-    audio_.loadFile("sound_ogg/buy_paid_item.ogg", function(dt) end)
+    audio.loadFile("sound_ogg/get_free_item.ogg", function(dt)
+    end)
+    audio.loadFile("sound_ogg/get_paid_item.ogg", function(dt)
+    end)
+    audio.loadFile("sound_ogg/open_box.ogg", function(dt)
+    end)
+    audio.loadFile("sound_ogg/buy_paid_item.ogg", function(dt)
+    end)
 end
 
 --[[--
@@ -549,7 +555,7 @@ function _checkBuy(layer, itemWidth, itemHeight, button, dragonInformation)
     checkLayer:setTouchEnabled(true)
     checkLayer:addTouchEventListener(function(sender, eventType)
         if 2 == eventType then
-            audio_.playEffect("sound_ogg/ui_btn_click.ogg")
+            audio.playEffect("sound_ogg/ui_btn_click.ogg")
             checkLayer:removeFromParent()
         end
     end)
@@ -563,11 +569,11 @@ function _checkBuy(layer, itemWidth, itemHeight, button, dragonInformation)
     local checkClose = ccui.Button:create("home/shop/second_purchase_confirmation_popup/button_close.png")
     checkClose:setAnchorPoint(0.5, 0.5)
     checkClose:setPosition(display.cx + sizeSetBase.width / 2 - sizeSetBase.width / 15,
-        display.cy + sizeSetBase.height / 2 - sizeSetBase.height / 8)
+            display.cy + sizeSetBase.height / 2 - sizeSetBase.height / 8)
     checkClose:addTo(checkLayer)
     checkClose:addTouchEventListener(function(sender, eventType)
         if 2 == eventType then
-            audio_.playEffect("sound_ogg/ui_btn_click.ogg")
+            audio.playEffect("sound_ogg/ui_btn_click.ogg")
             checkLayer:removeFromParent()
         end
     end)
@@ -588,7 +594,7 @@ function _checkBuy(layer, itemWidth, itemHeight, button, dragonInformation)
     purchaseButton:addTouchEventListener(function(sender, eventType)
         if 2 == eventType then
             _buttonCoinClikGrey(layer, itemWidth, itemHeight, button)
-            audio_.playEffect("sound_ogg/buy_paid_item.ogg", false)
+            audio.playEffect("sound_ogg/buy_paid_item.ogg", false)
             checkLayer:removeFromParent()
         end
     end)
@@ -609,8 +615,8 @@ function _checkBuy(layer, itemWidth, itemHeight, button, dragonInformation)
     coinIcon:addTo(checkLayer)
 
     local dragonSprite = cc.Sprite:create(
-        "home/shop/coins_shop/commodity_icon_tower_fragment/"
-        .. dragonInformation["id"] .. ".png")
+            "home/shop/coins_shop/commodity_icon_tower_fragment/"
+                    .. dragonInformation["id"] .. ".png")
     dragonSprite:setAnchorPoint(0.5, 0.5)
     dragonSprite:setPosition(display.cx, display.cy)
     dragonSprite:scale(0.8)
@@ -626,21 +632,6 @@ function _checkBuy(layer, itemWidth, itemHeight, button, dragonInformation)
     numLabel:setColor(cc.c3b(255, 206, 55))
     numLabel:enableOutline(cc.c4b(0, 0, 0, 255), 1)
     numLabel:addTo(checkLayer)
-
-
-    --[[
-    local checkButton = ccui.Button:create("home/shop/second_purchase_confirmation_popup/button_buy.png")
-    checkButton:setAnchorPoint(0.5, 0.5)
-    checkButton:setPosition(itemWidth * 2 / 3, itemHeight / 2)
-    checkButton:scale(0.25)
-    checkButton:addTo(layer)
-    checkButton:addTouchEventListener(function(sender, eventType)
-        --checkButton:setTouchEnabled(false)
-        checkButton:removeFromParent()
-        _buttonCoinClikGrey(layer, itemWidth, itemHeight)
-        audio.playEffect("sound_ogg/buy_paid_item.ogg", false)
-    end)
-    ]]
 end
 
 return ShopView

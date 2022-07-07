@@ -6,8 +6,9 @@ local LoadView = class("LoadView", function()
     return display.newColorLayer(cc.c4b(0, 0, 0, 0))
 end)
 --local
-local layer_
+local Log = require("app.utils.Log")
 require("socket")
+local _layer
 --
 
 function LoadView:ctor()
@@ -23,18 +24,18 @@ local function sleep(n)
 end
 
 function LoadView:initView()
-    layer_ = ccui.Layout:create()
-    layer_:setAnchorPoint(0.5, 0.5)
-    layer_:setContentSize(display.width, display.height)
-    layer_:setPosition(display.cx, display.cy)
-    layer_:addTo(self)
+    _layer = ccui.Layout:create()
+    _layer:setAnchorPoint(0.5, 0.5)
+    _layer:setContentSize(display.width, display.height)
+    _layer:setPosition(display.cx, display.cy)
+    _layer:addTo(self)
 
     local loadBase = ccui.Layout:create()
     loadBase:setBackGroundImage("loading/background.jpg")
     loadBase:setAnchorPoint(0.5, 0.5)
     loadBase:setPosition(display.cx, display.cy)
     loadBase:setContentSize(display.width, display.height)
-    loadBase:addTo(layer_)
+    loadBase:addTo(_layer)
 
     -- 遮罩
     local loadBaseMask = ccui.Layout:create()
@@ -42,7 +43,7 @@ function LoadView:initView()
     loadBaseMask:setPosition(display.cx, display.cy)
     loadBaseMask:setContentSize(display.width, display.height)
     loadBaseMask:setTouchEnabled(true)
-    loadBaseMask:addTo(layer_)
+    loadBaseMask:addTo(_layer)
 
     local tipsLabel = display.newTTFLabel({
         text = "大厅预加载，进行中...",
@@ -51,7 +52,7 @@ function LoadView:initView()
     })
     tipsLabel:align(display.CENTER, display.cx, display.cy / 15)
     tipsLabel:setColor(cc.c3b(255, 255, 255))
-    tipsLabel:addTo(layer_)
+    tipsLabel:addTo(_layer)
 
     local num = 0 -- 加载进度
     local loadingLabel = display.newTTFLabel({
@@ -61,33 +62,34 @@ function LoadView:initView()
     })
     loadingLabel:align(display.RIGHT_CENTER, display.width, display.cy / 15)
     loadingLabel:setColor(cc.c3b(253, 239, 117))
-    loadingLabel:addTo(layer_)
+    loadingLabel:addTo(_layer)
 
     ----------------------------------------------------------------------------
     -- 进度条
     local barBaseSprite = display.newScale9Sprite("loading/progress_base.png", 0, 0, cc.size(display.width, 15))
     barBaseSprite:setAnchorPoint(0, 0)
     barBaseSprite:setPosition(0, 0)
-    barBaseSprite:addTo(layer_)
+    barBaseSprite:addTo(_layer)
 
     local barSprite = display.newScale9Sprite("loading/progress_stretch.png", 0, 0, cc.size(display.width / 4, 15))
     barSprite:setAnchorPoint(0, 0)
     barSprite:setPosition(0, 0)
     barSprite:setContentSize(0, 15)
-    barSprite:addTo(layer_)
+    barSprite:addTo(_layer)
     local sizeCurBar = barSprite:getContentSize()
 
     local headBarSprite = cc.Sprite:create("loading/progress_head.png")
     headBarSprite:setAnchorPoint(0, 0)
     headBarSprite:setPosition(sizeCurBar.width, 0)
-    headBarSprite:addTo(layer_)
+    headBarSprite:addTo(_layer)
 
     local scheduler = cc.Director:getInstance():getScheduler() --路径
     local progress = 0 -- 进度
     local timeSchedule = nil -- 刷新计时器(每0.1秒刷新)
     timeSchedule = scheduler:scheduleScriptFunc(function(dt)
-        print("loading……")
+        Log.i("loading……")
         progress = progress + display.width / 100
+        Log.i(progress .. "")
         barSprite:setContentSize(progress, 15)
         sizeCurBar = barSprite:getContentSize()
         headBarSprite:setPosition(sizeCurBar.width, 0)

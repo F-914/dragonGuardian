@@ -1,6 +1,7 @@
 --[[--
     Reward.lua
-    奖励/宝箱对象基类
+    奖励对象基类
+    这个也可以当作一个接口，任何东西都可以作为奖励，nice
 ]]
 local Reward = class("Reward", require("app.data.base.BaseModel"))
 
@@ -12,22 +13,25 @@ local EventManager = require("app.manager.EventManager")
 
 ---Reward.ctor 构造函数
 ---@param rewardName      string 奖励名称
+---@param rewardType      number 奖励类型
 ---@param locked          boolean 是否被锁
 ---@param received        boolean 是否被领取
 ---@param trophyCondition number 解锁需要的奖杯数量
 ---@param amount          number 奖励的数量
----@return  Type Description
-function Reward:ctor(rewardName, locked, received, trophyCondition, amount)
-    self:setReward(rewardName, locked, received, trophyCondition, amount)
+function Reward:ctor(rewardName, rewardType, location, locked, received, trophyCondition, amount, reward)
+    self:setReward(rewardName, rewardType, location, locked, received, trophyCondition, amount, reward)
     EventManager:doEvent(EventDef.ID.CREATE_REWARD, self)
 end
 
-function Reward:setReward(rewardName, locked, received, trophyCondition, amount)
+function Reward:setReward(rewardName, rewardType, location, locked, received, trophyCondition, amount, reward)
     self.rewardName_ = rewardName
+    self.rewardType_ = rewardType
+    self.rewardLocation_ = location
     self.locked_ = locked
     self.received_ = received
     self.trophyCondition_ = trophyCondition
-    self.amount_ = amount
+    self.rewardAmount_ = amount
+    self.reward_ = reward
 end
 
 function Reward:getRewardName()
@@ -50,7 +54,7 @@ function Reward:setReceived(val)
     self.received_ = val
 end
 
-function Reward:gettrophyCondition()
+function Reward:getTrophyCondition()
     return self.trophyCondition_
 end
 

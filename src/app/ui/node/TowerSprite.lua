@@ -16,7 +16,8 @@ local Factory = require("app.utils.Factory")
 
 --[[--
     @description: 构造函数
-    @param res type:string, 图片资源
+    @param res type:string 图片资源
+    @param data type:Card 塔对象
     @return none
 ]]
 function TowerSprite:ctor(res, data)

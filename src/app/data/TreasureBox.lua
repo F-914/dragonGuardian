@@ -21,21 +21,21 @@ function TreasureBox:ctor(name, type, desc)
 end
 
 function TreasureBox:setTreasureBox(name, type, desc)
-    self.name_ = name
-    self.type_ = type
-    self.description_ = desc
+    self.treasureBoxName_ = name
+    self.treasureBoxType_ = type
+    self.treasureBoxDescription_ = desc
 end
 
-function TreasureBox:getName()
-    return self.name_
+function TreasureBox:getTreasureBoxName()
+    return self.treasureBoxName_
 end
 
-function TreasureBox:getType()
-    return self.type_
+function TreasureBox:getTreasureBoxType()
+    return self.treasureBoxType_
 end
 
 function TreasureBox:getDescription()
-    return self.description_
+    return self.treasureBoxDescription_
 end
 
 function TreasureBox:openIt()
