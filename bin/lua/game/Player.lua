@@ -1,12 +1,13 @@
 --[[--
     Player.lua
-    GameÖÐPlayer¶ÔÏó¶¨Òå
+    Gameï¿½ï¿½Playerï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 ]]
 
 Player = {
 	pid = 0,
 	nick = "",
 	hp = 0,
+	score=0,
 }
 
 Player.__index = Player
@@ -19,12 +20,14 @@ Player.new = function()
 	return self
 end
 
-Player.init = function(self, pid, nick, hp)
-	local self = {}
-	setmetatable(self, Player)
+Player.init = function(self, pid, nick, hp,score)
+	--local self = {}
+	--setmetatable(self, Player)
 	self.pid = pid
 	self.nick = nick
 	self.hp = hp
+	self.score=score
+	--print(self.pid)
 	return self
 end
 

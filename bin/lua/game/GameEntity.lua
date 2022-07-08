@@ -1,6 +1,6 @@
 --[[--
     GameEntity.lua
-    GameÊµÌå¶ÔÏó¶¨Òå
+    GameÊµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 ]]
 
 local cjson = require "cjson"
@@ -24,7 +24,7 @@ end
 
 GameEntity.init = function(self, serial, msg)
 	self.serialNumber = serial
-	self:addPlayer(msg)
+	--self:addPlayer(msg)
 	print("init game entity "..serial)
 end
 
