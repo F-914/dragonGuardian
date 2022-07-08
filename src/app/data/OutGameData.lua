@@ -10,6 +10,7 @@ local EventDef = require("app.def.EventDef")
 local EventManager = require("app.manager.EventManager")
 local UserInfo = require("app.data.UserInfo")
 local Shop = require("app.data.Shop")
+local TestDataFactory = require("app.test.TestDataFactory")
 --
 local _userInfo
 local _coinShop
@@ -29,11 +30,12 @@ function OutGameData:update(dt)
 end
 
 function OutGameData:initDiamondShop()
-
+    -- TODO 从服务器读数据
+    _diamondShop = TestDataFactory:getTestDiamondShop()
 end
 
 function OutGameData:initCoinShop()
-
+    _coinShop = TestDataFactory:getTestCoinShop()
 end
 
 function OutGameData:initUserInfo()
@@ -55,11 +57,11 @@ function OutGameData:getCoinShop()
     return _coinShop
 end
 
-function OutGameData:getCoinShopRefreshTime()
-    if _coinStore == nil then
-        self:initCoinShop()
+function OutGameData:getDiamondShop()
+    if _diamondShop == nil then
+        self:initDiamondShop()
     end
-    return _coinShop:getCoinShopRefreshTime()
+    return _diamondShop
 end
 
 return OutGameData

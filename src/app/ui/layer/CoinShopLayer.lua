@@ -21,23 +21,27 @@ end
 
 function CoinShopLayer:initView()
     local itemWidth, itemHeight = ConstDef.SHOP_ITEM_WIDTH, ConstDef.SHOP_ITEM_HEIGHT
-    -- 标题 “金币商店”
-    local titleLayer = ccui.Layout:create():addTo(self)
+    --标题 “金币商店”
+    local titleLayer = ccui.Layout:create()
     titleLayer:setContentSize(display.width, itemHeight * 3 / 4)
+    titleLayer:addTo(self)
     -- 金币商店
-    local coinTitleBase = cc.Sprite:create(StringDef.PATH_COIN_SHOP_BASE_TITLE):addTo(titleLayer)
+    local coinTitleBase = cc.Sprite:create(StringDef.PATH_COIN_SHOP_BASE_TITLE)
     coinTitleBase:setPosition(display.cx, itemHeight / 8)
     coinTitleBase:setAnchorPoint(0.5, 0.5)
+    coinTitleBase:addTo(titleLayer)
     --coinTitleBase:scale(display.width / 720)
-
-    local coinTitle = cc.Sprite:create(StringDef.PATH_COIN_SHOP_STORE_TITLE):addTo(titleLayer)
+    --
+    local coinTitle = cc.Sprite:create(StringDef.PATH_COIN_SHOP_STORE_TITLE)
     coinTitle:setPosition(display.cx, itemHeight / 8)
     coinTitle:setAnchorPoint(0.5, 0.5)
+    coinTitle:addTo(titleLayer)
     --coinTitle:scale(display.width / 720)
 
     -- 刷新提示
-    local freshLayer = ccui.Layout:create():addTo(self)
+    local freshLayer = ccui.Layout:create()
     freshLayer:setContentSize(display.width, itemHeight * 5 / 12)
+    freshLayer:addTo(self)
     -- 商品刷新提示
     local refreshBase = cc.Sprite:create(StringDef.PATH_COIN_SHOP_BASE_REFRESH)
     refreshBase:setPosition(display.cx, itemHeight / 5)
@@ -52,7 +56,7 @@ function CoinShopLayer:initView()
     refreshTitle:addTo(freshLayer)
     -- TODO 这块能不能来个EventManager
     local refreshText = display.newTTFLabel({
-        text = OutGameData:getCoinShopRefreshTime(),
+        text = OutGameData:getCoinShop():getCoinShopRefreshTime(),
         font = StringDef.PATH_FONT_FZBIAOZJW,
         size = 30,
     })

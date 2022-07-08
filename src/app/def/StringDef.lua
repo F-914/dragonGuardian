@@ -186,7 +186,8 @@ local StringDef = {
     PATH_COIN_SHOP_COIN = "home/shop/coins_shop/commodity_icon_coin.png",
     PATH_COIN_SHOP_BASE_FRAGMENT = "home/shop/coins_shop/base_fragments_number.png",
     PATH_COIN_SHOP_ICON_COIN = "home/shop/coins_shop/icon_coin.png",
-    PATH_COIN_SHOP_BASE_SHADE = "home/shop/coins_shop/base_shade.png",
+    PATH_COIN_SHOP_BASE_SHADE = "base_shade.png",
+    PATH_COIN_SHOP_STORE_TITLE = "home/shop/coins_shop/title_coin_store.png",
     PATH_SHOP_SECOND_PURCHASE_CONFIRM_BASE = "home/shop/second_purchase_confirmation_popup/base_popup.png",
     PATH_SHOP_SECOND_PURCHASE_CONFIRM_CLOSE = "home/shop/second_purchase_confirmation_popup/button_close.png",
     PATH_SHOP_SECOND_PURCHASE_CONFIRM_BUY = "home/shop/second_purchase_confirmation_popup/button_buy.png",
@@ -215,7 +216,17 @@ local StringDef = {
     --
     PATH_DIAMOND_SHOP_BASE_TITLE = "home/shop/diamond_shop/base_title.png",
     PATH_DIAMOND_SHOP_TITLE_STORE = "home/shop/diamond_shop/title_diamond_store.png",
+    PATH_DIAMOND_SHOP_ICON_DIAMOND = "home/shop/diamond_shop/commodity_icon_diamond.png",
+    --
+    PATH_DIAMOND_SHOP_BASE_NORMAL = "home/shop/diamond_shop/base_normal.png",
     PATH_DIAMOND_SHOP_BASE_RARE = "home/shop/diamond_shop/base_rare.png",
+    PATH_DIAMOND_SHOP_BASE_EPIC = "home/shop/diamond_shop/base_epic.png",
+    PATH_DIAMOND_SHOP_BASE_LEGEND = "home/shop/diamond_shop/base_legend.png",
+    --
+    PATH_DIAMOND_SHOP_BOX_NORMAL = "home/shop/diamond_shop/box_normal.png",
+    PATH_DIAMOND_SHOP_BOX_RARE = "home/shop/diamond_shop/box_rare.png",
+    PATH_DIAMOND_SHOP_BOX_EPIC = "home/shop/diamond_shop/box_epic.png",
+    PATH_DIAMOND_SHOP_BOX_LEGEND = "home/shop/diamond_shop/box_legend.png",
     --
     PATH_DIAMOND_SHOP_BASE_PRE = "home/shop/diamond_shop/base_",
     -- "home/shop/coins_shop/commodity_icon_tower_fragment/",

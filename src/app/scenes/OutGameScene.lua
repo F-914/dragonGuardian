@@ -69,8 +69,10 @@ end
     描述：删除加载界面
 ]]
 function OutGameScene:quitLoading()
-    Log.i("loadingView", loadView)
-    loadView:removeFromParent()
+    if loadView ~= nil then
+        Log.i("loadingView", loadView)
+        loadView:removeFromParent()
+    end
 end
 
 --[[--

@@ -3,20 +3,19 @@
 --- Created by Zoybzo.
 --- DateTime: 2022-07-05 13:14
 ---
-local ShopBackgroundLayer = class("ShopBackgroundLayer",
-        function()
-            return display.newLayer()
-        end)
+local ShopBackgroundLayer = class("ShopBackgroundLayer", require("app.ui.layer.BaseLayer"))
 --local
 local StringDef = require("app.def.StringDef")
 --
 --
 
 function ShopBackgroundLayer:ctor()
-    self:init()
+    ShopBackgroundLayer.super.ctor(self)
+    --
+    self:initView()
 end
 
-function ShopBackgroundLayer:init()
+function ShopBackgroundLayer:initView()
     local sprite = ccui.Layout:create()
     sprite:setBackGroundImage(StringDef.PATH_BACKGROUND_SHOP)
     sprite:setPosition(display.width / 2, display.height / 2)

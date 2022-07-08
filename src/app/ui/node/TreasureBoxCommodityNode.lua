@@ -29,8 +29,42 @@ function TreasureBoxCommodityNode:initView()
     boxLayer:pos(display.cx, itemHeight / 2)
     boxLayer:addTo(self)
     --
-    local boxButton = ccui.Button:create(self.commodity_:getTreasureBoxType())
-
+    local boxButton = ccui.Button:create(ConstDef.SHOP_BOX_TYPE_BASE_PATH[self.commodity_:getCommodityCommodity():getTreasureBoxType()])
+    boxButton:setPosition(itemWidth * 9 / 4, itemHeight * 3 / 4)
+    boxButton:setAnchorPoint(0.5, 0.5)
+    boxButton:addTo(boxLayer)
+    --
+    local box = cc.Sprite:create(ConstDef.SHOP_BOX_TYPE_BOX_PATH[self.commodity_:getCommodityCommodity():getTreasureBoxType()])
+    box:setPosition(itemWidth * 9 / 4, itemHeight * 3 / 4)
+    box:setAnchorPoint(0.5, 0.5)
+    box:addTo(boxLayer)
+    --
+    local boxDia = cc.Sprite:create(StringDef.PATH_DIAMOND_SHOP_ICON_DIAMOND)
+    boxDia:setPosition(itemWidth * 9 / 4 - itemHeight / 20, itemHeight / 4)
+    boxDia:setAnchorPoint(1, 0.5)
+    boxDia:addTo(boxLayer)
+    --
+    local boxPrice = display.newTTFLabel({
+        text = tostring(self.commodity_:getCommodityPrice()),
+        font = StringDef.PATH_FONT_FZBIAOZJW,
+        size = 25
+    })
+    boxPrice:align(display.LEFT_CENTER, itemWidth * 9 / 4, itemHeight / 4)
+    boxPrice:setColor(cc.c3b(255, 255, 255))
+    boxPrice:enableOutline(cc.c4b(15, 16, 59, 255), 1)
+    boxPrice:enableShadow(cc.c4b(17, 17, 60, 255), cc.size(0, -2), 1)
+    boxPrice:addTo(boxLayer)
+    -- 点击事件
+    boxButton:addTouchEventListener(function(sender, eventType)
+        if 0 == eventType then
+            boxLayer:scale(0.8)
+        end
+        if 2 == eventType then
+            --boxButton:setTouchEnabled(false)
+            audio.playEffect(StringDef.PATH_OPEN_BOX)
+            boxLayer:scale(1)
+        end
+    end)
 end
 
 return TreasureBoxCommodityNode

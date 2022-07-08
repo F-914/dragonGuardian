@@ -126,7 +126,6 @@ local ConstDef = {
         HP_FIRST = 6, -- 血量优先
     },
     TOWER_RARITY = {
-        -- 或许你会说R是Rare，这样做的原因可以参考 中杯大杯 和 大杯超大杯，乐
         R = 1, -- 普通
         SR = 2, -- 稀有
         SSR = 3, -- 史诗
@@ -136,10 +135,19 @@ local ConstDef = {
         R = 1,
         SR = 2,
         SSR = 3,
-        UR = 4
+        UR = 4,
     },
-    TREASUREBOX_TYPE = {
-
+    SHOP_BOX_TYPE_BASE_PATH = {
+        StringDef.PATH_DIAMOND_SHOP_BASE_NORMAL,
+        StringDef.PATH_DIAMOND_SHOP_BASE_RARE,
+        StringDef.PATH_DIAMON_SHOP_BASE_EPIC,
+        StringDef.PATH_DIAMOND_SHOP_BASE_LEGEND,
+    },
+    SHOP_BOX_TYPE_BOX_PATH = {
+        StringDef.PATH_DIAMOND_SHOP_BOX_NORMAL,
+        StringDef.PATH_DIAMOND_SHOP_BOX_RARE,
+        StringDef.PATH_DIAMON_SHOP_BOX_EPIC,
+        StringDef.PATH_DIAMOND_SHOP_BOX_LEGEND,
     },
     CURRENCY_TYPE = {
         COIN = "COIN",

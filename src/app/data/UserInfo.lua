@@ -37,12 +37,11 @@ function UserInfo:testData()
     self.diamondAmount_ = 789999
     self.trophyAmount_ = 101
     self.battleTeam_ = {}
-    self.ladderList_ = {}
+    self.ladder_ = {}
     self.cardList_ = {}
 end
 
-function UserInfo:setUserInfo(account, avatar, nickname, coinAmount, diamondAmount, trophyAmount, battleTeam, ladderList
-, cardList)
+function UserInfo:setUserInfo(account, avatar, nickname, coinAmount, diamondAmount, trophyAmount, battleTeam, ladder, cardList)
     self.account_ = account
     self.avatar_ = avatar
     self.nickname_ = nickname
@@ -50,7 +49,7 @@ function UserInfo:setUserInfo(account, avatar, nickname, coinAmount, diamondAmou
     self.diamondAmount_ = diamondAmount
     self.trophyAmount_ = trophyAmount
     self.battleTeam_ = battleTeam
-    self.ladderList_ = ladderList
+    self.ladder_ = ladder
     self.cardList_ = cardList
 end
 

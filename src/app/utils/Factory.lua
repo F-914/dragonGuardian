@@ -52,7 +52,7 @@ function Factory:createTeamSprite(teamData)
         local towerData = teamData[i]
         --解决循环嵌套
         local towerSprite = require("src/app/ui/node/TowerSprite.lua").new("res/home/general/icon_tower/" ..
-            towerData. .. ".png", towerData)
+                towerData.name .. ".png", towerData)
         mapSprites[towerData] = towerSprite
     end
     return mapSprites
@@ -87,16 +87,16 @@ function Factory:createBorder(rewardData)
     if not rewardData.isUnlock then
         --解决循环嵌套，下同
         local border = require("src/app/ui/node/RewardSprite.lua").new("res/home/battle/high_ladder/locked_blue_border.png"
-            , rewardData)
+        , rewardData)
         return border
     else
         if not rewardData.isGet then
             local border = require("src/app/ui/node/RewardSprite.lua").new("res/home/battle/high_ladder/unlocked_unreceived_yellow_border.png"
-                , rewardData)
+            , rewardData)
             return border
         else
             local border = require("src/app/ui/node/RewardSprite.lua").new("res/home/battle/high_ladder/can_receive.png"
-                , rewardData)
+            , rewardData)
             return border
         end
     end
@@ -280,13 +280,13 @@ function Factory:createChestRewardPane(chestRewardData)
 
     local pSize = { width = size.width * .3, height = size.height * .4 }
     local layoutR = self:createChestRewardItem(pSize, chestRewardData.RNumberFloor,
-        chestRewardData.RNumberUpper, "ordinary")
+            chestRewardData.RNumberUpper, "ordinary")
     local layoutSR = self:createChestRewardItem(pSize, chestRewardData.SRNumberFloor,
-        chestRewardData.SRNumberUpper, "rare")
+            chestRewardData.SRNumberUpper, "rare")
     local layoutSSR = self:createChestRewardItem(pSize, chestRewardData.SSRNumberFloor,
-        chestRewardData.SSRNumberUpper, "epic")
+            chestRewardData.SSRNumberUpper, "epic")
     local layoutUR = self:createChestRewardItem(pSize, chestRewardData.URNumberFloor,
-        chestRewardData.URNumberUpper, "legend")
+            chestRewardData.URNumberUpper, "legend")
     layoutR:setPosition(size.width * .45, size.height * .65)
     layoutSR:setPosition(size.width * .85, size.height * .65)
     layoutSSR:setPosition(size.width * .45, size.height * .2)

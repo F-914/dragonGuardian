@@ -8,6 +8,7 @@ end)
 --local
 local Log = require("app.utils.Log")
 require("socket")
+--
 local _layer
 --
 
@@ -24,6 +25,7 @@ local function sleep(n)
 end
 
 function LoadView:initView()
+
     _layer = ccui.Layout:create()
     _layer:setAnchorPoint(0.5, 0.5)
     _layer:setContentSize(display.width, display.height)

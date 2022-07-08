@@ -6,25 +6,21 @@
 local ShopLayer = class("ShopLayer", require("app.ui.layer.BaseLayer"))
 --local
 local StringDef = require("app.def.StringDef")
-local UserInfo = require("app.data.UserInfo")
 local CoinShopLayer = require("app.ui.layer.CoinShopLayer")
 local DiamondShopLayer = require("app.ui.layer.DiamondShopLayer")
 --
-local _userInfo
 --
 
 function ShopLayer:ctor()
-    ShopLayer.super.ctor(slef)
+    ShopLayer.super.ctor(self)
     --
     self.coinShopLayer_ = nil
-    self.diamondShopLayer = nil
-    _userInfo = UserInfo.getInstance()
+    self.diamondShopLayer_ = nil
     --
     self:initView()
 end
 
 function ShopLayer:initView()
-    local itemWidth, itemHeight = display.width / 5, display.height / 6
     local listView = ccui.ListView:create()
     listView:setContentSize(display.width, display.height * 7 / 8) -- 滑动区域大小
     listView:setAnchorPoint(0.5, 0.5)
@@ -32,6 +28,19 @@ function ShopLayer:initView()
     listView:setDirection(1) -- 垂直
     listView:addTo(self)
 
-    self.coinShopLayer_ = CoinShopLayer.new():addTo(listView)
-    self.diamondShopLayer = DiamondShopLayer.new():addTo(listView)
+    self.coinShopLayer_ = CoinShopLayer.new()
+    listView:addChild(self.coinShopLayer_)
+
+    --self.diamondShopLayer_ = DiamondShopLayer.new()
+    --listView:addChild(self.diamondShopLayer_)
 end
+
+function ShopLayer:onEnter()
+
+end
+
+function ShopLayer:onExit()
+
+end
+
+return ShopLayer

@@ -5,6 +5,7 @@
 ---
 local DiamondShopLayer = class("DiamondShopLayer", require("app.ui.layer.BaseLayer"))
 --local
+local Log = require("app.utils.Log")
 local StringDef = require("app.def.StringDef")
 local OutGameData = require("app.data.OutGameData")
 local ConstDef = require("app.def.ConstDef")
@@ -20,6 +21,7 @@ end
 
 function DiamondShopLayer:initView()
     local itemWidth, itemHeight = ConstDef.SHOP_ITEM_WIDTH, ConstDef.SHOP_ITEM_HEIGHT
+    self:setContentSize(display.width, itemHeight)
     -- 标题 “金币商店”
     local titleLayer = ccui.Layout:create():addTo(self)
     titleLayer:setContentSize(display.width, itemHeight * 3 / 4)
@@ -37,9 +39,10 @@ function DiamondShopLayer:initView()
     diaTitle:addTo(titleLayer)
     -- 商品
     -- 滑动区域
+    -- TODO 这里仿照CoinShop做一个类似的滑动区域 需要修改的地方应该是 pos和 contentSize
     local rowViewDragon
     -- 本来打算做成一个CommodityNode，然后把商品放进去就行，但是不同的商品类型视图差距过大，所以还是做成一种商品一个样子吧
-    local list = OutGameData:getCoinShop():getCommodityList()
+    local list = OutGameData:getDiamondShop():getCommodityList()
     for i = 1, #(list) do
         if i % ConstDef.ROW_COMMODITY_NUMBER == 1 then
             rowViewDragon = ccui.ListView:create()
@@ -50,10 +53,9 @@ function DiamondShopLayer:initView()
             rowViewDragon:addTo(self)
         end
         local node
-        if list[i]:getCommodityType() == ConstDef.COMMODITY_TYPE.CURRENCY then
-            node = CurrencyCommodityNode.new(list[i])
-        elseif list[i]:getCommodityType() == ConstDef.COMMODITY_TYPE.TOWER then
-            node = TowerCommodityNode.new(list[i])
+        if list[i]:getCommodityType() == ConstDef.COMMODITY_TYPE.TREASUREBOX then
+            Log.i("list[i] is nil ? " .. tostring(list[i] == nil))
+            node = TreasureBoxCommodityNode.new(list[i])
         else
             -- 出错了
             Log.e("Error Commodity Type in CommodityNode:initView()")
