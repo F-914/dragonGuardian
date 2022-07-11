@@ -51,6 +51,7 @@ function Commodity:getCommodityAmount()
     return self.commodityAmount_
 end
 
+--- 这个名字可能很傻逼 但是为了防止命名撞了不得已只能这样 QAQ
 function Commodity:getCommodityCommodity()
     return self.commodityCommodity_
 end

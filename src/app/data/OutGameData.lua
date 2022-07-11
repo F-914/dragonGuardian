@@ -15,18 +15,63 @@ local TestDataFactory = require("app.test.TestDataFactory")
 local _userInfo
 local _coinShop
 local _diamondShop
+local _treasureBoxRewardWinningRate
 --
 
 function OutGameData:init()
-    _userInfo = UserInfo.getInstance()
+    _userInfo = UserInfo:getInstance()
     self:initCoinShop()
     self:initDiamondShop()
+    self:initTreasureBoxRewardWinningRate()
     --_coinShop = Shop.new()
     --_diamondShop = Shop.new()
 end
 
 function OutGameData:update(dt)
 
+end
+
+-- 调用 OutGameData:getTreasureBoxRewardWinningRate()[ConstDef.TREASUREBOX_RARITY.R][ConstDef.TREASUREBOX_REWARD.R]
+function OutGameData:getTreasureBoxRewardWinningRate()
+    if _treasureBoxRewardWinningRate == nil then
+        self:updateTreasureBoxRewardWinningRate()
+    end
+    return _treasureBoxRewardWinningRate
+end
+
+function OutGameData:updateTreasureBoxRewardWinningRate()
+    -- TODO 感觉这个数据可能很少会发生变动，但是也不排除后续更新的可能
+    _treasureBoxRewardWinningRate = {
+        {
+            -- 普通宝箱的没有找到
+            { {}, {} },
+            { {}, {} },
+            { {}, {} },
+            { {}, {} },
+            { {}, {} }
+        },
+        {
+            { { 130 }, { 130 } },
+            { { 40 }, { 40 } },
+            { { 7 }, { 7 } },
+            { { 0 }, { 1 } },
+            { { 1230 }, { 1230 } }
+        },
+        {
+            { { 139 }, { 139 } },
+            { { 36 }, { 36 } },
+            { { 7 }, { 7 } },
+            { { 0 }, { 1 } },
+            { { 1280 }, { 1280 } }
+        },
+        {
+            { { 187 }, { 187 } },
+            { { 51 }, { 51 } },
+            { { 21 }, { 21 } },
+            { { 1 }, { 1 } },
+            { { 3040 }, { 3040 } }
+        }
+    }
 end
 
 function OutGameData:initDiamondShop()

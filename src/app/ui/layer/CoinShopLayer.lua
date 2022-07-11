@@ -10,6 +10,7 @@ local OutGameData = require("app.data.OutGameData")
 local ConstDef = require("app.def.ConstDef")
 local CurrencyCommodityNode = require("app.ui.node.CurrencyCommodityNode")
 local TowerCommodityNode = require("app.ui.node.TowerCommodityNode")
+local Log = require("app.utils.Log")
 --
 --local _userInfo -- 本来是想着拿个单例，但是不确定拿过来之后是引用还是拷贝 就没有用这个
 --
@@ -21,76 +22,88 @@ end
 
 function CoinShopLayer:initView()
     local itemWidth, itemHeight = ConstDef.SHOP_ITEM_WIDTH, ConstDef.SHOP_ITEM_HEIGHT
-    --标题 “金币商店”
-    local titleLayer = ccui.Layout:create()
-    titleLayer:setContentSize(display.width, itemHeight * 3 / 4)
-    titleLayer:addTo(self)
-    -- 金币商店
-    local coinTitleBase = cc.Sprite:create(StringDef.PATH_COIN_SHOP_BASE_TITLE)
-    coinTitleBase:setPosition(display.cx, itemHeight / 8)
-    coinTitleBase:setAnchorPoint(0.5, 0.5)
-    coinTitleBase:addTo(titleLayer)
-    --coinTitleBase:scale(display.width / 720)
-    --
-    local coinTitle = cc.Sprite:create(StringDef.PATH_COIN_SHOP_STORE_TITLE)
-    coinTitle:setPosition(display.cx, itemHeight / 8)
-    coinTitle:setAnchorPoint(0.5, 0.5)
-    coinTitle:addTo(titleLayer)
-    --coinTitle:scale(display.width / 720)
-
-    -- 刷新提示
-    local freshLayer = ccui.Layout:create()
-    freshLayer:setContentSize(display.width, itemHeight * 5 / 12)
-    freshLayer:addTo(self)
-    -- 商品刷新提示
-    local refreshBase = cc.Sprite:create(StringDef.PATH_COIN_SHOP_BASE_REFRESH)
-    refreshBase:setPosition(display.cx, itemHeight / 5)
-    refreshBase:setAnchorPoint(0.5, 0.5)
-    --refreshBase:scale(display.width / 720)
-    refreshBase:addTo(freshLayer)
-
-    local refreshTitle = cc.Sprite:create(StringDef.PATH_COIN_SHOP_TIP_REFRESH)
-    refreshTitle:setPosition(display.cx * 8 / 7, itemHeight / 5)
-    refreshTitle:setAnchorPoint(1, 0.5)
-    --refreshTitle:scale(display.width / 720)
-    refreshTitle:addTo(freshLayer)
+    local coinShopLayer = cc.CSLoader:getInstance():createNodeWithFlatBuffersFile("CoinShopLayer.csb"):addTo(self)
+    -- 刷新时间倒计时
+    local freshLayer = tolua.cast(ccui.Helper:seekWidgetByName(coinShopLayer, "freshTime"), "ccui.Layout")
     -- TODO 这块能不能来个EventManager
     local refreshText = display.newTTFLabel({
         text = OutGameData:getCoinShop():getCoinShopRefreshTime(),
         font = StringDef.PATH_FONT_FZBIAOZJW,
         size = 30,
     })
-    refreshText:setAnchorPoint(0, 0.5)
-    refreshText:setPosition(display.cx * 11 / 9, itemHeight / 5)
+    refreshText:setAnchorPoint(0, -0.35)
+    refreshText:setContentSize(freshLayer:getContentSize())
+    Log.i("freshLayer Position: " .. freshLayer:getPositionX() .. ' ' .. freshLayer:getPositionY())
     refreshText:setColor(cc.c3b(255, 206, 55))
     refreshText:enableOutline(cc.c4b(0, 0, 0, 255), 1)
     refreshText:addTo(freshLayer)
     -- 商品
-    -- 滑动区域
-    local rowViewDragon
-    -- 本来打算做成一个CommodityNode，然后把商品放进去就行，但是不同的商品类型视图差距过大，所以还是做成一种商品一个样子吧
+    local storeRows = {
+        tolua.cast(ccui.Helper:seekWidgetByName(coinShopLayer, "rowListView1"), "ccui.ListView"),
+        tolua.cast(ccui.Helper:seekWidgetByName(coinShopLayer, "rowListView2"), "ccui.ListView")
+    }
     local list = OutGameData:getCoinShop():getCommodityList()
     for i = 1, #(list) do
-        if i % ConstDef.ROW_COMMODITY_NUMBER == 1 then
-            rowViewDragon = ccui.ListView:create()
-            rowViewDragon:setContentSize(itemWidth * 13 / 3, itemHeight + 20) -- 滑动区域大小
-            rowViewDragon:setAnchorPoint(0.5, 0.5)
-            rowViewDragon:setPosition(display.cx, itemHeight / 2)
-            rowViewDragon:setDirection(2) -- 水平
-            rowViewDragon:addTo(self)
-        end
         local node
         if list[i]:getCommodityType() == ConstDef.COMMODITY_TYPE.CURRENCY then
+            Log.i("node: currency")
             node = CurrencyCommodityNode.new(list[i])
         elseif list[i]:getCommodityType() == ConstDef.COMMODITY_TYPE.TOWER then
+            Log.i("node: tower")
             node = TowerCommodityNode.new(list[i])
         else
             -- 出错了
             Log.e("Error Commodity Type in CommodityNode:initView()")
             exit()
         end
-        node:addTo(rowViewDragon)
+        local index = 1
+        if i > ConstDef.ROW_COMMODITY_NUMBER then
+            index = 2
+        end
+        --node:addTo(storeRows[index])
+        storeRows[index]:pushBackCustomItem(node)
     end
+    --local storeLayer = ccui.ListView:create()
+    --storeLayer:setContentSize(display.width * 0.7, display.height * 0.45)
+    --storeLayer:setAnchorPoint(0.5, 0.5)
+    --storeLayer:setPosition(display.width * 0.5, display.height * 0.45)
+    ----storeLayer:setItemsMargin(0.01)
+    ----storeLayer:setBackGroundImage(StringDef.PATH_COIN_SHOP_TOWER_FRAGMENT_01)
+    --storeLayer:setDirection(1) -- 垂直
+    --storeLayer:addTo(self)
+    ----Log.i("storeLayer: " .. tostring(storeLayer:getContentSize()[1]))
+    --
+    --local rowViewDragon
+    ---- 本来打算做成一个CommodityNode，然后把商品放进去就行，但是不同的商品类型视图差距过大，所以还是做成一种商品一个样子吧
+    --local x, y = display.width * 0.5, display.height * 0.55
+    --local node
+    --for i = 1, #(list) do
+    --    local cnt = 0
+    --    if i % ConstDef.ROW_COMMODITY_NUMBER == 1 then
+    --        rowViewDragon = ccui.ListView:create()
+    --        rowViewDragon:setContentSize(display.width * 0.7, display.height * 0.2) -- 滑动区域大小
+    --        rowViewDragon:setAnchorPoint(0.5, 0.5)
+    --        rowViewDragon:setItemsMargin(0.03)
+    --        rowViewDragon:setPosition(display.width * 0.5, 0)
+    --        rowViewDragon:setBackGroundImage(StringDef.PATH_COIN_SHOP_TOWER_FRAGMENT_02)
+    --        rowViewDragon:setDirection(2) -- 水平
+    --        rowViewDragon:addTo(storeLayer)
+    --        cnt = cnt + 1
+    --    end
+    --if list[i]:getCommodityType() == ConstDef.COMMODITY_TYPE.CURRENCY then
+    --    Log.i("node: currency")
+    --    node = CurrencyCommodityNode.new(list[i], x, y)
+    --elseif list[i]:getCommodityType() == ConstDef.COMMODITY_TYPE.TOWER then
+    --    Log.i("node: tower")
+    --    node = TowerCommodityNode.new(list[i])
+    --else
+    --    -- 出错了
+    --    Log.e("Error Commodity Type in CommodityNode:initView()")
+    --    exit()
+    --end
+    --    rowViewDragon:addChild(node)
+    --    --Log.i("" .. tostring(rowViewDragon:getChildrenCount()))
+    --end
 end
 
 function CoinShopLayer:onEnter()

@@ -37,25 +37,25 @@ end
 function Card:setCard(cardId, name, rarity, type, atk, atkTarget, atkUpgrade, atkEnhance, fireCd, fireCdEnhance, fireCdUpgrade,
                       skills, extraDamage, fatalityRate, star, location)
     self.cardId_ = cardId
-    self.name_ = name
-    self.rarity_ = rarity
-    self.type_ = type
-    self.skills = skills
+    self.cardName_ = name
+    self.cardRarity_ = rarity
+    self.cardType_ = type
+    self.cardSkills = skills
 
-    self.atk_ = atk
-    self.atkTarget_ = atkTarget
-    self.atkUpgrade_ = atkUpgrade
-    self.atkEnhance_ = atkEnhance
-    self.extraDamage_ = extraDamage
+    self.cardAtk_ = atk
+    self.cardAtkTarget_ = atkTarget
+    self.cardAtkUpgrade_ = atkUpgrade
+    self.cardAtkEnhance_ = atkEnhance
+    self.cardExtraDamage_ = extraDamage
 
-    self.fireCd_ = fireCd
-    self.fireCdEnhance_ = fireCdEnhance
-    self.fireCdUpgrade_ = fireCdUpgrade
+    self.cardFireCd_ = fireCd
+    self.cardFireCdEnhance_ = fireCdEnhance
+    self.cardFireCdUpgrade_ = fireCdUpgrade
 
-    self.fatalityRate_ = fatalityRate
-    self.star_ = star
+    self.cardFatalityRate_ = fatalityRate
+    self.cardStar_ = star
 
-    self.location_ = location
+    self.cardLocation_ = location
 end
 
 function Card:getCardId()
@@ -64,74 +64,74 @@ end
 
 --- 稀有度
 ---@return number
-function Card:getRarity()
-    return self.rarity_
+function Card:getCardRarity()
+    return self.cardRarity_
 end
 
 --- 类型
 ---@return number
-function Card:getType()
-    return self.type_
+function Card:getCardType()
+    return self.cardType_
 end
 
 -- 攻击目标
-function Card:getTarget()
-    return self.atkTarget_
+function Card:getCardTarget()
+    return self.cardAtkTarget_
 end
 
 -- 防御塔名称
-function Card:getName()
-    return self.name_
+function Card:getCardName()
+    return self.cardName_
 end
 
 -- 攻击力
-function Card:getAtk()
-    return self.atk_
+function Card:getCardAtk()
+    return self.cardAtk_
 end
 
 -- 升级后攻击力变化
-function Card:getAtkUpgrade()
-    return self.atkUpgrade_
+function Card:getCardAtkUpgrade()
+    return self.cardAtkUpgrade_
 end
 
 -- 强化后攻击力变化
-function Card:getAtkEnhance()
-    return self.atkEnhance_
+function Card:getCardAtkEnhance()
+    return self.cardAtkEnhance_
 end
 
 -- 攻速
-function Card:getFireCd()
-    return self.fireCd_
+function Card:getCardFireCd()
+    return self.cardFireCd_
 end
 
 -- 升级后攻速变化
-function Card:getFireCdUpgrade()
-    return self.fireCdUpgrade_
+function Card:getCardFireCdUpgrade()
+    return self.cardFireCdUpgrade_
 end
 
 -- 强化后攻速变化
-function Card:getFireCdEnhance()
-    return self.fireCdEnhance_
+function Card:getCardFireCdEnhance()
+    return self.cardFireCdEnhance_
 end
 
 -- 技能 table
-function Card:getSkills()
-    return self.skills_
+function Card:getCardSkills()
+    return self.cardSkills_
 end
 
 --- 额外伤害
-function Card:getExtraDamage()
-    return self.extraDamage_
+function Card:getCardExtraDamage()
+    return self.cardExtraDamage_
 end
 
 --- 致死率
-function Card:getFatalityRate()
-    return self.fatalityRate_
+function Card:getCardFatalityRate()
+    return self.cardFatalityRate_
 end
 
 --- 星级
-function Card:getStar()
-    return self.star_
+function Card:getCardStar()
+    return self.cardStar_
 end
 
 return Card

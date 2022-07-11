@@ -697,6 +697,7 @@ function MenuView:createAvatarSelection(layer)
     avatarConfirm:addTo(secAvatarLayer)
     avatarConfirm:addTouchEventListener(function(sender, eventType)
         if 2 == eventType then
+            -- TODO 这块得改一下
             audio.playEffect("sound_ogg/ui_btn_click.ogg")
             --MenuConfig.AVATER.ICON_PATH = TowerDef[curAvatarID].ICON_PATH
             _userInfo:setAvatar(TowerDef[curAvatarID].ICON_PATH)

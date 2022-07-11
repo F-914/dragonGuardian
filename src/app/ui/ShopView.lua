@@ -1,6 +1,6 @@
 --[[--
-    商店场景
-    ShopView.lua
+  商店场景
+ ShopView.lua
 ]]
 local ShopView = class(
         "ShopView",
@@ -28,7 +28,6 @@ local ShopLayer = require("app.ui.layer.ShopLayer")
     @return none
 ]]
 function ShopView:ctor()
-
     self.shopBackgroundLayer_ = nil
     self.shopLayer_ = nil
     --

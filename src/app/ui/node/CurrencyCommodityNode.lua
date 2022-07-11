@@ -12,95 +12,104 @@ local ConstDef = require("app.def.ConstDef")
 local StringDef = require("app.def.StringDef")
 local Commodity = require("app.data.Commodity")
 local OutGameData = require("app.data.OutGameData")
+local Log = require("app.utils.Log")
 --
 --
-function CurrencyCommodityNode:ctor(commodity)
+function CurrencyCommodityNode:ctor(commodity, x, y)
     self.commodity_ = commodity
+    self.x_ = x
+    self.y_ = y
     --
     self:initView()
 end
 
 function CurrencyCommodityNode:initView()
+    local itemWidth, itemHeight = ConstDef.SHOP_ITEM_WIDTH, ConstDef.SHOP_ITEM_HEIGHT
+
     local commodityLayer = ccui.Layout:create()
-    commodityLayer:setContentSize(ConstDef.SHOP_ITEM_WIDTH * 13 / 9, ConstDef.SHOP_ITEM_HEIGHT)
-    commodityLayer:setAnchorPoint(0.5, 0.5)
+    commodityLayer:setContentSize(display.width * 0.2, display.height * 0.2)
+    --commodityLayer:setBackGroundImage(StringDef.PATH_COIN_SHOP_TOWER_FRAGMENT_01)
+    commodityLayer:setAnchorPoint(0, 0)
+    commodityLayer:setPosition(self.x_, self.y_)
     commodityLayer:addTo(self)
     --
     local button = ccui.Button:create(StringDef.PATH_COIN_SHOP_FREE_DIAMOND)
-    button:setPosition(ConstDef.SHOP_ITEM_WIDTH * 2 / 3, ConstDef.SHOP_ITEM_HEIGHT / 2)
-    button:setAnchorPoint(0.5, 0.5)
+    button:setContentSize(display.width * 0.2, display.height * 0.2)
+    button:setAnchorPoint(0, 0)
+    button:setPosition(self.x_, self.y_)
     button:addTo(commodityLayer)
+    Log.i("button!!")
     -- 根据货币类型填充内容物
-    local currencyType = self.commodity_:getCurrencyType()
-    local icon
-    if currencyType == ConstDef.CURRENCY_TYPE.COIN then
-        icon = cc.Sprite:create(StringDef.PATH_COIN_SHOP_COIN)
-    elseif currencyType == ConstDef.CURRENCY_TYPE.DIAMOND then
-        icon = cc.Sprite:create(StringDef.PATH_COIN_SHOP_DIAMOND)
-    else
-        -- 两种都不是，这个时候出问题了
-        -- TODO 感觉非常需要写一个用来报错的函数 但是感觉 lua 不会有反射的 哇超 lua 有反射 可以
-        Log.e("Error Currency Type in CommodityNode:initView()")
-        exit()
-    end
-    --
-    icon:setPosition(ConstDef.SHOP_ITEM_WIDTH * 2 / 3, ConstDef.SHOP_ITEM_HEIGHT / 5 * 3)
-    icon:setAnchorPoint(0.5, 0.5)
-    icon:addTo(commodityLayer)
-    -- 设置货币数量
-    local num = display.newTTFLabel({
-        text = "x" .. tostring(self.commodity_:getCommodityAmount()),
-        font = StringDef.PATH_FONT_FZBIAOZJW,
-        size = 24
-    })
-    num:align(display.CENTER, itemWidth * 2 / 3, itemHeight / 3)
-    num:setColor(cc.c3b(173, 196, 255))
-    num:enableOutline(cc.c4b(0, 0, 0, 255), 1)
-    num:addTo(commodityLayer)
-    -- 设置商品价格
-    local price = self.commodity_:getCommodityPrice()
-    if price == 0 then
-        local priceTitle = cc.Sprite:create(StringDef.PATH_COIN_SHOP_ICON_FREE)
-        priceTitle:setPosition(ConstDef.SHOP_ITEM_WIDTH * 2 / 3, ConstDef.SHOP_ITEM_HEIGHT / 6)
-        priceTitle:setAnchorPoint(0.5, 0.5)
-        --priceTitle:scale(itemHeight / size.height /6)
-    else
-        -- 金币图标
-        local coinIcon = cc.Sprite:create(StringDef.PATH_COIN_SHOP_ICON_COIN)
-        if self.commodity_:getCardType() == ConstDef.TOWER_RARITY.SSR then
-            coinIcon:setPosition(ConstDef.SHOP_ITEM_WIDTH * 2 / 3 - 30, ConstDef.SHOP_ITEM_HEIGHT / 6)
-        else
-            coinIcon:setPosition(ConstDef.SHOP_ITEM_WIDTH * 2 / 3 - 23, ConstDef.SHOP_ITEM_HEIGHT / 6)
-        end
-        coinIcon:setAnchorPoint(0.5, 0.5)
-        local sizeCoin = coinIcon:getContentSize()
-        --coinIcon:scale(itemHeight / sizeCoin.height /6)
-        coinIcon:addTo(commodityLayer)
-        -- 价格
-        local dragonPrice = display.newTTFLabel({
-            text = self.commodity_:getCommodityPrice(),
-            font = StringDef.PATH_FONT_FZBIAOZJW,
-            size = 25
-        })
-        dragonPrice:align(display.CENTER, ConstDef.SHOP_ITEM_WIDTH * 4 / 5, ConstDef.SHOP_ITEM_HEIGHT / 6)
-        dragonPrice:setColor(cc.c3b(255, 255, 255))
-        dragonPrice:enableOutline(cc.c4b(0, 0, 0, 255), 1)
-        dragonPrice:addTo(commodityLayer)
-    end
-    -- 设置点击事件
-    button:addTouchEventListener(function(sender, eventType)
-        if 0 == eventType then
-            Log.i("0")
-            commodityLayer:scale(0.8)
-        end
-        if 2 == eventType then
-            Log.i("2")
-            -- TODO 记得把声音加载了先
-            audio.playEffect(StringDef.PATH_GET_FREE_ITEM)
-            --freeButton:setTouchEnabled(false)
-            commodityLayer:scale(1)
-        end
-    end)
+    --local currencyType = self.commodity_:getCommodityCommodity():getCurrencyType()
+    --local icon
+    --if currencyType == ConstDef.CURRENCY_TYPE.COIN then
+    --    icon = cc.Sprite:create(StringDef.PATH_COIN_SHOP_COIN)
+    --elseif currencyType == ConstDef.CURRENCY_TYPE.DIAMOND then
+    --    icon = cc.Sprite:create(StringDef.PATH_COIN_SHOP_DIAMOND)
+    --else
+    --    -- 两种都不是，这个时候出问题了
+    --    -- TODO 感觉非常需要写一个用来报错的函数 但是感觉 lua 不会有反射的 哇超 lua 有反射 可以
+    --    Log.e("Error Currency Type in CommodityNode:initView()")
+    --    exit()
+    --end
+    ----
+    ----icon:setPosition(itemWidth * 2 / 3, itemHeight / 5 * 3)
+    --icon:setAnchorPoint(0.5, 0.5)
+    --icon:addTo(commodityLayer)
+    ---- 设置货币数量
+    --local num = display.newTTFLabel({
+    --    text = "x" .. tostring(self.commodity_:getCommodityAmount()),
+    --    font = StringDef.PATH_FONT_FZBIAOZJW,
+    --    size = 24
+    --})
+    --num:align(display.CENTER, itemWidth * 2 / 3, itemHeight / 3)
+    --num:setColor(cc.c3b(173, 196, 255))
+    --num:enableOutline(cc.c4b(0, 0, 0, 255), 1)
+    --num:addTo(commodityLayer)
+    ---- 设置商品价格
+    --local price = self.commodity_:getCommodityPrice()
+    --if price == 0 then
+    --    local priceTitle = cc.Sprite:create(StringDef.PATH_COIN_SHOP_ICON_FREE)
+    --    --priceTitle:setPosition(itemWidth * 2 / 3, itemHeight / 6)
+    --    priceTitle:setAnchorPoint(0.5, 0.5)
+    --    --priceTitle:scale(itemHeight / size.height /6)
+    --else
+    --    -- 金币图标
+    --    local coinIcon = cc.Sprite:create(StringDef.PATH_COIN_SHOP_ICON_COIN)
+    --    if self.commodity_:getCardType() == ConstDef.TOWER_RARITY.SSR then
+    --        --coinIcon:setPosition(itemWidth * 2 / 3 - 30, itemHeight / 6)
+    --    else
+    --        --coinIcon:setPosition(itemWidth * 2 / 3 - 23, itemHeight / 6)
+    --    end
+    --    coinIcon:setAnchorPoint(0.5, 0.5)
+    --    local sizeCoin = coinIcon:getContentSize()
+    --    --coinIcon:scale(itemHeight / sizeCoin.height /6)
+    --    coinIcon:addTo(commodityLayer)
+    --    -- 价格
+    --    local dragonPrice = display.newTTFLabel({
+    --        text = self.commodity_:getCommodityPrice(),
+    --        font = StringDef.PATH_FONT_FZBIAOZJW,
+    --        size = 25
+    --    })
+    --    dragonPrice:align(display.CENTER, itemWidth * 4 / 5, itemHeight / 6)
+    --    dragonPrice:setColor(cc.c3b(255, 255, 255))
+    --    dragonPrice:enableOutline(cc.c4b(0, 0, 0, 255), 1)
+    --    dragonPrice:addTo(commodityLayer)
+    --end
+    ---- 设置点击事件
+    --button:addTouchEventListener(function(sender, eventType)
+    --    if 0 == eventType then
+    --        Log.i("0")
+    --        commodityLayer:scale(0.8)
+    --    end
+    --    if 2 == eventType then
+    --        Log.i("2")
+    --        -- TODO 记得把声音加载了先
+    --        audio.playEffect(StringDef.PATH_GET_FREE_ITEM)
+    --        --freeButton:setTouchEnabled(false)
+    --        commodityLayer:scale(1)
+    --    end
+    --end)
 end
 
 return CurrencyCommodityNode

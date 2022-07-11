@@ -290,17 +290,17 @@ end
 
 function TestDataFactory:getTestCoinShop()
     local commodityList = {
-        Commodity.new(
-                "免费金币",
-                ConstDef.COMMODITY_TYPE.CURRENCY,
-                0,
-                ConstDef.CURRENCY_TYPE.COIN,
-                1,
-                Currency.new(
-                        ConstDef.CURRENCY_TYPE.COIN,
-                        999
-                )
-        ),
+        --Commodity.new(
+        --        "免费金币",
+        --        ConstDef.COMMODITY_TYPE.CURRENCY,
+        --        0,
+        --        ConstDef.CURRENCY_TYPE.COIN,
+        --        1,
+        --        Currency.new(
+        --                ConstDef.CURRENCY_TYPE.COIN,
+        --                999
+        --        )
+        --),
         Commodity.new(
                 "是龙？是卡？是防御塔？",
                 ConstDef.COMMODITY_TYPE.TOWER,
@@ -395,29 +395,29 @@ function TestDataFactory:getTestCoinShop()
                         2,
                         3
                 )),
-        Commodity.new("托尔",
-                ConstDef.COMMODITY_TYPE.TOWER,
-                350,
-                ConstDef.CURRENCY_TYPE.COIN,
-                1,
-                Card.new(
-                        1,
-                        "龙女仆托尔捏",
-                        ConstDef.TOWER_RARITY.R,
-                        ConstDef.TOWER_TYPE.ATTACK,
-                        math.random(100),
-                        ConstDef.TOWER_ATK_TARGET.BACK,
-                        math.random(100),
-                        math.random(100),
-                        math.random(100),
-                        math.random(100),
-                        math.random(100),
-                        {},
-                        math.random(100),
-                        0.00,
-                        2,
-                        5
-                )),
+        --Commodity.new("托尔",
+        --        ConstDef.COMMODITY_TYPE.TOWER,
+        --        350,
+        --        ConstDef.CURRENCY_TYPE.COIN,
+        --        1,
+        --        Card.new(
+        --                1,
+        --                "龙女仆托尔捏",
+        --                ConstDef.TOWER_RARITY.R,
+        --                ConstDef.TOWER_TYPE.ATTACK,
+        --                math.random(100),
+        --                ConstDef.TOWER_ATK_TARGET.BACK,
+        --                math.random(100),
+        --                math.random(100),
+        --                math.random(100),
+        --                math.random(100),
+        --                math.random(100),
+        --                {},
+        --                math.random(100),
+        --                0.00,
+        --                2,
+        --                5
+        --        )),
     }
     local freshTime = "72:74"
     local coinShop = Shop.new(commodityList, freshTime)
