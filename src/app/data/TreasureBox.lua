@@ -12,30 +12,30 @@ local EventManager = require("app.manager.EventManager")
 
 ---TreasureBox.ctor 构造函数
 ---@param name string 宝箱名
----@param type string 宝箱类型
+---@param type number 宝箱类型
 ---@param desc string 宝箱描述
----@return  Type Description
+---@return  nil Description
 function TreasureBox:ctor(name, type, desc)
     self:setTreasureBox(name, type, desc)
     EventManager:doEvent(EventDef.ID.CREATE_TREASUREBOX, self)
 end
 
 function TreasureBox:setTreasureBox(name, type, desc)
-    self.name_ = name
-    self.type_ = type
-    self.description_ = desc
+    self.treasureBoxName_ = name
+    self.treasureBoxType_ = type
+    self.treasureBoxDescription_ = desc
 end
 
-function TreasureBox:getName()
-    return self.name_
+function TreasureBox:getTreasureBoxName()
+    return self.treasureBoxName_
 end
 
-function TreasureBox:getType()
-    return self.type_
+function TreasureBox:getTreasureBoxType()
+    return self.treasureBoxType_
 end
 
 function TreasureBox:getDescription()
-    return self.description_
+    return self.treasureBoxDescription_
 end
 
 function TreasureBox:openIt()

@@ -2,7 +2,7 @@
     CardReward.lua
     钻石/金币奖励
 ]]
-local CardReward = class("CardReward", require("app.data.pojo.Reward"))
+local CardReward = class("CardReward", require("app.data.Reward"))
 
 -- local
 local ConstDef = require("app.def.ConstDef")

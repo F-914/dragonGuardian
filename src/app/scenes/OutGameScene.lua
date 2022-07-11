@@ -16,9 +16,11 @@ local MenuView = require("app.ui.MenuView")
 local ShopView = require("app.ui.ShopView")
 local Log = require("app.utils.Log")
 local MenuConfig = require("app.test.MenuConfig")
+local UserInfo = require("app.data.UserInfo")
 --
 local pageView
 local loadView
+local _userInfo
 --
 
 function OutGameScene:ctor()
@@ -26,6 +28,7 @@ function OutGameScene:ctor()
     loadView:addTo(self, 3)
     --test
     GameData:init()
+    _userInfo = UserInfo:getInstance()
     --
     self.mainUIBattleView_ = MainUIBattleView.new()
     self.atlasView = AtlasView.new()
@@ -55,6 +58,7 @@ end
 
 function OutGameScene:update(dt)
     GameData:update(dt)
+    _userInfo:update(dt)
     self.mainUIBattleView_:update(dt)
 end
 
@@ -65,8 +69,10 @@ end
     描述：删除加载界面
 ]]
 function OutGameScene:quitLoading()
-    Log.i("loadingView", loadView)
-    loadView:removeFromParent()
+    if loadView ~= nil then
+        Log.i("loadingView", loadView)
+        loadView:removeFromParent()
+    end
 end
 
 --[[--

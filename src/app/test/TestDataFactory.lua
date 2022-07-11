@@ -3,6 +3,16 @@
     TestDataFactory.lua
 ]]
 local TestDataFactory = {}
+
+--local
+local ConstDef = require("app.def.ConstDef")
+local Card = require("app.data.Card")
+local Shop = require("app.data.Shop")
+local Commodity = require("app.data.Commodity")
+local TreasureBox = require("app.data.TreasureBox")
+local Currency = require("app.data.Currency")
+--
+
 --[[--
     @description:该函数仅用于测试
     @return 返回一个用于测试的奖品列表
@@ -83,12 +93,18 @@ function TestDataFactory:getRewardDataTest()
         },
     }
 end
+
 --[[--
     @description: 用于测试，生成队伍信息
     @param none
     @return type: table 返回一个队伍信息构成的列表
 ]]
 function TestDataFactory:getTeamDataTest()
+    --local battleTeam = {}
+    --for i = 1, 5 do
+    --    table.insert(battleTeam, self:getRandomCard(i))
+    --end
+    --return battleTeam
     return {
         [1] = {
             name = "01",
@@ -120,9 +136,9 @@ function TestDataFactory:getTeamDataTest()
             level = "5",
             location = 5
         },
-
     }
 end
+
 function TestDataFactory:getRewardNodesTest()
     return {
         50,
@@ -137,6 +153,7 @@ function TestDataFactory:getRewardNodesTest()
         500,
     }
 end
+
 function TestDataFactory:getChestRewardData()
     return {
         name = "rare treasure chest",
@@ -151,6 +168,7 @@ function TestDataFactory:getChestRewardData()
         URNumberUpper = 1
     }
 end
+
 function TestDataFactory:getOpenChestItemData()
     return {
         coinNum = 3200,
@@ -197,4 +215,270 @@ function TestDataFactory:getOpenChestItemData()
         }
     }
 end
+
+--function TestDataFactory:getRandomInTable(table)
+--    return table[math.random(#(table))]
+--end
+--
+--function TestDataFactory:getRandomCardReward(location, trophyCondition)
+--    local data = CardReward.new(self:getRandomInTable(ConstDef.TOWER_TYPE))
+--    data:setReward(
+--            "randomCard",
+--            ConstDef.REWARD_TYPE.CARD,
+--            location,
+--            math.random(2) and 1,
+--            math.random(2) and 1,
+--            trophyCondition,
+--            math.random(10)
+--    )
+--    return data
+--end
+--
+--function TestDataFactory:getRandomCurrencyReward(location)
+--    local data = CurrencyReward.new(self:getRandomInTable(ConstDef.CURRENCY_TYPE))
+--    data:setReward(
+--            "randomCurrency",
+--            ConstDef.REWARD_TYPE.CURRENCY,
+--            location,
+--            math.random(2) and 1,
+--            math.random(2) and 1,
+--            trophyCondition,
+--            math.random(999999)
+--    )
+--    return data
+--end
+--
+--function TestDataFactory:getRandomTreasureBoxReward(location)
+--    local data = TreasureBoxReward.new(self:getRandomInTable(ConstDef.TREASUREBOX_RARITY))
+--    data:setReward(
+--            "randomTreasureBoxReward",
+--            ConstDef.REWARD_TYPE.TREASUREBOX,
+--            location,
+--            math.random(2) and 1,
+--            math.random(2) and 1,
+--            trophyCondition,
+--            1
+--    )
+--    return data
+--end
+--
+--function TestDataFactory:getRandomCard(location)
+--    local data = Card.new(
+--            "randomCard",
+--            self:getRandomInTable(ConstDef.TOWER_RARITY),
+--            self:getRandomInTable(ConstDef.TOWER_TYPE),
+--            math.random(100), --atk
+--            self:getRandomInTable(ConstDef.TOWER_ATK_TARGET),
+--            math.random(),
+--            math.random(),
+--            math.random(),
+--            math.random(), -- firecd
+--            math.random(),
+--            math.random(),
+--            {}, --skills
+--            math.random(),
+--            math.random(),
+--            math.random(),
+--            location
+--    )
+--    return data
+--end
+
+function TestDataFactory:getTestCommodity()
+
+end
+
+function TestDataFactory:getTestCoinShop()
+    local commodityList = {
+        Commodity.new(
+                "免费金币",
+                ConstDef.COMMODITY_TYPE.CURRENCY,
+                0,
+                ConstDef.CURRENCY_TYPE.COIN,
+                1,
+                Currency.new(
+                        ConstDef.CURRENCY_TYPE.COIN,
+                        999
+                )
+        ),
+        Commodity.new(
+                "是龙？是卡？是防御塔？",
+                ConstDef.COMMODITY_TYPE.TOWER,
+                350,
+                ConstDef.CURRENCY_TYPE.COIN,
+                1,
+                Card.new(
+                        1,
+                        "平平无奇防御塔",
+                        ConstDef.TOWER_RARITY.R,
+                        ConstDef.TOWER_TYPE.ATTACK,
+                        math.random(100),
+                        ConstDef.TOWER_ATK_TARGET.BACK,
+                        math.random(100),
+                        math.random(100),
+                        math.random(100),
+                        math.random(100),
+                        math.random(100),
+                        {},
+                        math.random(100),
+                        0.00,
+                        2,
+                        1
+                )
+        ),
+        Commodity.new("是龙？是卡？是防御塔？",
+                ConstDef.COMMODITY_TYPE.TOWER,
+                350,
+                ConstDef.CURRENCY_TYPE.COIN,
+                1,
+                Card.new(
+                        1,
+                        "平平无奇防御塔",
+                        ConstDef.TOWER_RARITY.R,
+                        ConstDef.TOWER_TYPE.ATTACK,
+                        math.random(100),
+                        ConstDef.TOWER_ATK_TARGET.BACK,
+                        math.random(100),
+                        math.random(100),
+                        math.random(100),
+                        math.random(100),
+                        math.random(100),
+                        {},
+                        math.random(100),
+                        0.00,
+                        2,
+                        1
+                )),
+        Commodity.new("塔塔开！",
+                ConstDef.COMMODITY_TYPE.TOWER,
+                999,
+                ConstDef.CURRENCY_TYPE.COIN,
+                1,
+                Card.new(
+                        1,
+                        "Alan",
+                        ConstDef.TOWER_RARITY.R,
+                        ConstDef.TOWER_TYPE.ATTACK,
+                        math.random(100),
+                        ConstDef.TOWER_ATK_TARGET.HP_FIRST,
+                        math.random(100),
+                        math.random(100),
+                        math.random(100),
+                        math.random(100),
+                        math.random(100),
+                        {},
+                        math.random(100),
+                        0.00,
+                        3,
+                        2
+                )),
+        Commodity.new("BT7274",
+                ConstDef.COMMODITY_TYPE.TOWER,
+                99999,
+                ConstDef.CURRENCY_TYPE.COIN,
+                1,
+                Card.new(
+                        1,
+                        "BT7274",
+                        ConstDef.TOWER_RARITY.R,
+                        ConstDef.TOWER_TYPE.ATTACK,
+                        math.random(100),
+                        ConstDef.TOWER_ATK_TARGET.FRONT,
+                        999999,
+                        math.random(100),
+                        math.random(100),
+                        math.random(100),
+                        math.random(100),
+                        {},
+                        math.random(100),
+                        0.00,
+                        2,
+                        3
+                )),
+        Commodity.new("托尔",
+                ConstDef.COMMODITY_TYPE.TOWER,
+                350,
+                ConstDef.CURRENCY_TYPE.COIN,
+                1,
+                Card.new(
+                        1,
+                        "龙女仆托尔捏",
+                        ConstDef.TOWER_RARITY.R,
+                        ConstDef.TOWER_TYPE.ATTACK,
+                        math.random(100),
+                        ConstDef.TOWER_ATK_TARGET.BACK,
+                        math.random(100),
+                        math.random(100),
+                        math.random(100),
+                        math.random(100),
+                        math.random(100),
+                        {},
+                        math.random(100),
+                        0.00,
+                        2,
+                        5
+                )),
+    }
+    local freshTime = "72:74"
+    local coinShop = Shop.new(commodityList, freshTime)
+    return coinShop
+end
+
+function TestDataFactory:getTestDiamondShop()
+    local commodityList = {
+        Commodity.new(
+                "普通宝箱",
+                ConstDef.COMMODITY_TYPE.TREASUREBOX,
+                250,
+                ConstDef.CURRENCY_TYPE.DIAMOND,
+                1,
+                TreasureBox.new(
+                        "超级无敌普通宝箱",
+                        ConstDef.TREASUREBOX_RARITY.R,
+                        "只是一个普通宝箱捏"
+                )
+        ),
+        Commodity.new(
+                "稀有宝箱",
+                ConstDef.COMMODITY_TYPE.TREASUREBOX,
+                500,
+                ConstDef.CURRENCY_TYPE.DIAMOND,
+                1,
+                TreasureBox.new(
+                        "超级无敌劈里啪啦稀有宝箱",
+                        ConstDef.TREASUREBOX_RARITY.R,
+                        "只是一个稀有宝箱捏"
+                )
+        ),
+        Commodity.new(
+                "史诗宝箱",
+                ConstDef.COMMODITY_TYPE.TREASUREBOX,
+                500,
+                ConstDef.CURRENCY_TYPE.DIAMOND,
+                1,
+                TreasureBox.new(
+                        "宇宙第一超级无敌劈里啪啦史诗宝箱",
+                        ConstDef.TREASUREBOX_RARITY.R,
+                        "只是一个史诗宝箱捏"
+                )
+        ),
+        Commodity.new(
+                "传说宝箱",
+                ConstDef.COMMODITY_TYPE.TREASUREBOX,
+                500,
+                ConstDef.CURRENCY_TYPE.DIAMOND,
+                1,
+                TreasureBox.new(
+                        "%￥……&%……&￥……（*￥……宇宙第一超级无敌劈里啪啦传说宝箱",
+                        ConstDef.TREASUREBOX_RARITY.R,
+                        "只是一个传说宝箱捏"
+                )
+        ),
+    }
+    -- 刷新时间不能有啊不能有
+    local freshTime = nil
+    local diamondShop = Shop.new(commodityList, freshTime)
+    return diamondShop
+end
+
 return TestDataFactory

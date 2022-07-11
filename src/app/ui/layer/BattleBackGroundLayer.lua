@@ -8,9 +8,7 @@
     BattleBackGroundLayer.lua
 ]]
 
-local BattleBackGroundLayer = class("BattleBackGroundLayer", function()
-    return display.newLayer()
-end)
+local BattleBackGroundLayer = class("BattleBackGroundLayer", require("app.ui.layer.BaseLayer"))
 --local
 local StringDef = require("app.def.StringDef")
 --
@@ -21,6 +19,7 @@ local StringDef = require("app.def.StringDef")
     @return none
 ]]
 function BattleBackGroundLayer:ctor()
+    BattleBackGroundLayer.super.ctor(self)
     self.BGScaleFactor_ = 1 --拉伸因子，留待扩展
     self:init()
 end

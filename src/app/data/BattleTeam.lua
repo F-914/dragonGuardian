@@ -12,16 +12,33 @@ local EventManager = require("app.manager.EventManager")
 
 ---BattleTeam.ctor 构造函数
 ---@param myTeam table 队伍情况
-function BattleTeam:ctor(myTeam)
-    self:setBattleTeam(myTeam)
+function BattleTeam:ctor(myTeam, StandbyTeam)
+    self:setBattleTeam(myTeam, StandbyTeam)
     EventManager:doEvent(EventDef.ID.CREATE_BATTLETEAM, self)
 end
 
-function BattleTeam:setBattleTeam(myTeam)
+function BattleTeam:setBattleTeam(myTeam, standbyTeam)
     if myTeam == nil then
         myTeam = {}
     end
+    if standbyTeam > #(myTeam) then
+        Log.e("Array out of bounds in BattleTeam:setBattleTeam()")
+        exit()
+    end
     self.team_ = myTeam
+    self.standbyTeam_ = standbyTeam
+end
+
+function BattleTeam:setStandbyTeam(index)
+    if index > #(self.team_) then
+        Log.e("Array out of bounds in BattleTeam:setStandbyTeam()")
+        return
+    end
+    self.standbyTeam_ = index
+end
+
+function BattleTeam:getStandbyTeam()
+    return self.standbyTeam_
 end
 
 ---BattleTeam.getTeamSize 获取队伍中队员数量

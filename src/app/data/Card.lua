@@ -2,7 +2,7 @@
     Card.lua
     防御塔对象
 ]]
-local Card = class("Card", require("app.data.BaseModel"))
+local Card = class("Card", require("app.data.base.BaseModel"))
 
 -- local
 local ConstDef = require("app.def.ConstDef")
@@ -11,6 +11,7 @@ local EventManager = require("app.manager.EventManager")
 --
 
 ---Card.ctor 构造函数
+---@param cardId        number 防御塔 ID
 ---@param name          string 防御塔的名字
 ---@param rarity        string 稀有度
 ---@param type          string 类型，四种类型中的某一种
@@ -23,18 +24,19 @@ local EventManager = require("app.manager.EventManager")
 ---@param fireCdUpgrade number 升级后攻速变化
 ---@param skills        table 拥有的技能
 ---@param extraDamage   number 每次攻击带来的额外伤害
----@param fatalityRate  nubmer 单次攻击的致命率
+---@param fatalityRate  number 单次攻击的致命率
 ---@param star          number 星级
----@return  Type Description
-function Card:ctor(name, rarity, type, atk, atkTarget, atkUpgrade, atkEnhance, fireCd, fireCdEnhance, fireCdUpgrade,
-                   skills, extraDamage, fatalityRate, star)
-    self:setCard(name, rarity, type, atk, atkTarget, atkUpgrade, atkEnhance, fireCd, fireCdEnhance, fireCdUpgrade, skills
-        , extraDamage, fatalityRate, star)
+---@return  nil Description
+function Card:ctor(cardId, name, rarity, type, atk, atkTarget, atkUpgrade, atkEnhance, fireCd, fireCdEnhance, fireCdUpgrade,
+                   skills, extraDamage, fatalityRate, star, location)
+    self:setCard(cardId, name, rarity, type, atk, atkTarget, atkUpgrade, atkEnhance, fireCd, fireCdEnhance, fireCdUpgrade, skills
+    , extraDamage, fatalityRate, star, location)
     EventManager:doEvent(EventDef.ID.CREATE_CARD, self)
 end
 
-function Card:setCard(name, rarity, type, atk, atkTarget, atkUpgrade, atkEnhance, fireCd, fireCdEnhance, fireCdUpgrade,
-                      skills, extraDamage, fatalityRate, star)
+function Card:setCard(cardId, name, rarity, type, atk, atkTarget, atkUpgrade, atkEnhance, fireCd, fireCdEnhance, fireCdUpgrade,
+                      skills, extraDamage, fatalityRate, star, location)
+    self.cardId_ = cardId
     self.name_ = name
     self.rarity_ = rarity
     self.type_ = type
@@ -52,6 +54,12 @@ function Card:setCard(name, rarity, type, atk, atkTarget, atkUpgrade, atkEnhance
 
     self.fatalityRate_ = fatalityRate
     self.star_ = star
+
+    self.location_ = location
+end
+
+function Card:getCardId()
+    return self.cardId_
 end
 
 --- 稀有度

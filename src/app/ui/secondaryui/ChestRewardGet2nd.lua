@@ -5,6 +5,7 @@
 local ChestRewardGet2nd = class("ChestRewardGet2nd", function()
     return ccui.Layout:create()
 end)
+
 local StringDef = require("app.def.StringDef")
 local Factory = require("app.utils.Factory")
 --[[--
@@ -49,7 +50,7 @@ function ChestRewardGet2nd:init()
         local towerReward = towerArr[i]
         towerReward:setScale(.8)
         towerReward:setPosition(size.width * .2 + size.width * .2 * xIncre,
-            size.height * .8 - size.height * .4 * yIncre
+                size.height * .8 - size.height * .4 * yIncre
         )
         towerReward:addTo(layout)
     end
