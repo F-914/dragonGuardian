@@ -7,6 +7,8 @@ local InGameUpLayer = class("InGameUpLayer", function()
 end)
 
 --local
+local ConstDef = require("app.def.ConstDef")
+local InGameData = require("app.data.InGameData")
 local  Log = require("app.utils.Log")
 local TowerArrayDef = require("app.def.TowerArrayDef")
 local InGameDownLayer = require("app.ui.layer.InGameDownLayer")
@@ -135,9 +137,12 @@ function InGameUpLayer:init()
     giveUpButton:setPosition(display.width*17/20, display.cy + display.cy/8)
     giveUpButton:addTouchEventListener(function(sender, eventType)
         if 2 == eventType then
-            InGameDownLayer:stopCreateEnemy()
-            local popup = GiveUp2nd.new()
-            popup:addTo(self)
+            -- InGameDownLayer:stopCreateEnemy()
+            -- local popup = GiveUp2nd.new()
+            -- popup:addTo(self)
+            print("游戏状态：",InGameData:getGameState())
+            InGameData:setGameState(ConstDef.GAME_STATE.PAUSE)
+            print("游戏状态：",InGameData:getGameState())
         end
     end)
     giveUpButton:addTo(self)
@@ -273,6 +278,10 @@ function InGameUpLayer:enemyArray()
         towerTypeSprite:addTo(layer)
 
     end
+end
+
+function InGameUpLayer:onEnter()
+    print("...enter")
 end
 
 return InGameUpLayer

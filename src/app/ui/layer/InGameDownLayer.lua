@@ -7,6 +7,8 @@ local InGameDownLayer = class("InGameDownLayer", function()
 end)
 
 --local
+local ConstDef = require("app.def.ConstDef")
+local InGameData = require("app.data.InGameData")
 local InGameEnemySprite = require("app.ui.node.InGameEnemySprite")
 local X_LEFT = 0
 local X_RIGHT = display.width*17/20 - display.cx/22
@@ -27,7 +29,6 @@ function InGameDownLayer:init()
     basemapDown:setAnchorPoint(0.5, 0.5)
     basemapDown:setPosition(display.cx, display.cy)
     basemapDown:addTo(self)
-
     self:createEnemy()
 end
 
@@ -38,16 +39,18 @@ function InGameDownLayer:createEnemy()
     -- 连续生成敌人
     local num = 0
     timeCreateEnemySchdule = schedule:scheduleScriptFunc(function (dt)
-        if num < littleEnemyNum then
-            num = num + 1
-            local enemy = InGameEnemySprite.new(1)
-            self:addChild(enemy)
-            self:enemyMovePlayer(enemy)
-        elseif num == littleEnemyNum then
-            num = 0
-            local enemy = InGameEnemySprite.new(2)
-            self:addChild(enemy)
-            self:enemyMovePlayer(enemy)
+        if InGameData:getGameState() == ConstDef.GAME_STATE.PLAY then
+            if num < littleEnemyNum then
+                num = num + 1
+                local enemy = InGameEnemySprite.new(1)
+                self:addChild(enemy)
+                self:enemyMovePlayer(enemy)
+            elseif num == littleEnemyNum then
+                num = 0
+                local enemy = InGameEnemySprite.new(2)
+                self:addChild(enemy)
+                self:enemyMovePlayer(enemy)
+            end
         end
     end, 0.5, false)
 end
@@ -70,34 +73,35 @@ function InGameDownLayer:enemyMovePlayer(enemy)
     local deltaY = 10
 
 	timeSchedule = schedule:scheduleScriptFunc(function (dt)
-        curX = enemy:getPositionX()
-        curY = enemy:getPositionY()
+        if InGameData:getGameState() == ConstDef.GAME_STATE.PLAY then
+            curX = enemy:getPositionX()
+            curY = enemy:getPositionY()
 
-		if step == 1 then
-            -- 左下到左上
-            if curY + deltaY < Y_UP_PLAYER then
-			    enemy:setPosition(curX, curY + deltaY)
-            else
-			    enemy:setPosition(curX, Y_UP_PLAYER)
-                step = 2
+            if step == 1 then
+                -- 左下到左上
+                if curY + deltaY < Y_UP_PLAYER then
+                    enemy:setPosition(curX, curY + deltaY)
+                else
+                    enemy:setPosition(curX, Y_UP_PLAYER)
+                    step = 2
+                end
+            elseif step == 2 then
+                -- 左上到右上
+                if curX + deltaX < X_RIGHT then
+                    enemy:setPosition(curX + deltaX, curY)
+                else
+                    enemy:setPosition(X_RIGHT, curY)
+                    step = 3
+                end
+            elseif step == 3 then
+                -- 右上到右下
+                if curY > Y_DOWN_PLAYER then
+                    enemy:setPosition(curX, curY - deltaY)
+                else
+                    schedule:unscheduleScriptEntry(timeSchedule)
+                    enemy:removeFromParent()
+                end
             end
-		elseif step == 2 then
-            -- 左上到右上
-            if curX + deltaX < X_RIGHT then
-			    enemy:setPosition(curX + deltaX, curY)
-            else
-			    enemy:setPosition(X_RIGHT, curY)
-                step = 3
-            end
-		elseif step == 3 then
-            -- 右上到右下
-            if curY > Y_DOWN_PLAYER then
-			    enemy:setPosition(curX, curY - deltaY)
-            else
-                schedule:unscheduleScriptEntry(timeSchedule)
-                enemy:removeFromParent()
-            end
-
 		end
 	end, 0.05, false)
 end

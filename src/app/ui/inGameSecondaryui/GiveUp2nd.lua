@@ -7,6 +7,11 @@ local GiveUp2nd = class("GiveUp2nd", function()
     return display.newLayer()
 end)
 
+--local
+local ConstDef = require("app.def.ConstDef")
+local InGameData = require("app.data.InGameData")
+--
+
 function GiveUp2nd:ctor()
     self:init()
 end
@@ -24,7 +29,8 @@ function GiveUp2nd:init()
     maskLayer:setTouchEnabled(true)
     maskLayer:addTouchEventListener(function(sender, eventType)
         if 2 == eventType then
-            self:removeFromParent()
+            --self:removeFromParent()
+            InGameData:setGameState(ConstDef.GAME_STATE.PLAY)
         end
     end)
 
@@ -58,7 +64,8 @@ function GiveUp2nd:init()
     cancleButton:addTo(self)
     cancleButton:addTouchEventListener(function(sender, eventType)
         if 2 == eventType then
-            self:removeFromParent()
+            --self:removeFromParent()
+            InGameData:setGameState(ConstDef.GAME_STATE.PLAY)
         end
     end)
 
@@ -68,7 +75,8 @@ function GiveUp2nd:init()
     confirmButton:addTo(self)
     confirmButton:addTouchEventListener(function(sender, eventType)
         if 2 == eventType then
-            self:removeFromParent()
+            --self:removeFromParent()
+            InGameData:setGameState(ConstDef.GAME_STATE.PLAY)
         end
     end)
 
