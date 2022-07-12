@@ -8,7 +8,9 @@ UserInfo.instance_ = nil
 -- local
 local ConstDef = require("app.def.ConstDef")
 local StringDef = require("app.def.StringDef")
-local TestDataFactory = require("src/app/test/TestDataFactory.lua")
+local TestDataFactory = require("app.test.TestDataFactory")
+local BattleTeam = require("app.data.BattleTeam")
+local Card = require("app.data.Card")
 --
 
 function UserInfo:ctor(account, avatar, nickname, coinAmount, diamondAmount, trophyAmount, battleTeam, ladderList,
@@ -36,7 +38,32 @@ function UserInfo:testData()
     self.coinAmount_ = 123456
     self.diamondAmount_ = 789999
     self.trophyAmount_ = 101
-    self.battleTeam_ = {}
+    self.battleTeam_ = {
+        BattleTeam.new(
+            {
+                {
+                    Card.new(),
+                    Card.new(),
+                    Card.new(),
+                    Card.new(),
+                    Card.new(),
+                },
+                {
+                    Card.new(),
+                    Card.new(),
+                    Card.new(),
+                    Card.new(),
+                    Card.new(),
+                },
+                { Card.new(),
+                    Card.new(),
+                    Card.new(),
+                    Card.new(),
+                    Card.new(), }
+            },
+            1
+        )
+    }
     self.ladder_ = {}
     self.cardList_ = {}
 end

@@ -12,7 +12,7 @@ local UserInfo = require("app.data.UserInfo")
 local Shop = require("app.data.Shop")
 local TestDataFactory = require("app.test.TestDataFactory")
 --网络部分
-local OutGameMsgController = require("src/app/network/OutGameMsgController.lua")
+local OutGameMsgController = require("app.network.OutGameMsgController")
 local MsgDef = require("src/app/def/MsgDef.lua")
 local TableUtil = require("src/app/utils/TableUtil.lua")
 
@@ -26,10 +26,10 @@ local _isAlive
 
 function OutGameData:init()
     --连接到服务器
-    OutGameMsgController:connect()
-    self:register()
+    -- OutGameMsgController:connect()
+    -- self:register()
 
-    _userInfo = UserInfo.getInstance()
+    self:initUserInfo()
     self:initCoinShop()
     self:initDiamondShop()
     self:initTreasureBoxRewardWinningRate()
@@ -108,11 +108,10 @@ function OutGameData:initCoinShop()
 end
 
 function OutGameData:initUserInfo()
-
+    _userInfo = UserInfo:getInstance()
 end
 
 function OutGameData:register()
-
     OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.USERINFO_INIT, handler(self, self.initUserInfo))
     OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.DIAMONDSHOP_INIT, handler(self, self.initDiamondShop))
     OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.COINSHOP_INIT, handler(self, self.initCoinShop))

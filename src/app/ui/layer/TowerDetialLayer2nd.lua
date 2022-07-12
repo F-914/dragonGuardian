@@ -2,7 +2,7 @@
     图鉴界面的二级界面，用于实现塔的详情
     TowerDetial_2nd.lua
 ]]
-local ConstDef = require("src/app/test/ConstDef.lua")
+local ConstDef = require("app.def.ConstDef")
 local PATH_POPUP = "res/home/guide/second_tower_infor_popup/base_popup.png"
 local PATH_BASE_SKILL_INTRODUCTION = "res/home/guide/second_tower_infor_popup/base_skill_introduction.png"
 local PATH_SKILL_INTRODUCTION = "res/home/guide/second_tower_infor_popup/text_details/skill_introduction.png"

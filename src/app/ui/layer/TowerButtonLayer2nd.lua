@@ -6,7 +6,7 @@ local TowerButtonLayer2nd = class("TowerButtonLayer2nd", require("src/app/ui/lay
 local PATH_PROGRESS_BASE = "res/home/guide/subinterface_tower_list/progress_base_fragments_number.png"
 local PATH_PROGRESS = "res/home/guide/subinterface_tower_list/progress_progress_fragments_number.png"
 local PATH_TTF = "res/front/fzhzgbjw.ttf"
-local ConstDef = require("src/app/test/ConstDef.lua")
+local ConstDef = require("app.def.ConstDef")
 local PATH_LEVEL = {
     "res/home/guide/subinterface_current_lineup/level/Lv.1.png",
     "res/home/guide/subinterface_current_lineup/level/Lv.2.png",

@@ -5,8 +5,8 @@
 local OutGameMsgController = {}
 local SimpleTCP = require("src/framework/SimpleTCP.lua")
 local json = require("src/framework/json.lua")
-local ByteArray = require("src/app/network/ByteArray.lua")
-local Log = require("src/app/utils/Log.lua")
+local ByteArray = require("app.network.ByteArray")
+local Log = require("app.utils.Log")
 
 local TAG = "OutGameMsgController"
 --[[--
@@ -23,6 +23,7 @@ function OutGameMsgController:init(serviceIP, servicePort, heartBeatInterval)
     self.isConnected_ = false
     self.listenerMap_ = {}
 end
+
 --[[--
     @description: 连接至服务器
 
@@ -32,10 +33,12 @@ function OutGameMsgController:connect()
         Log.w(TAG, "already connected")
         return
     end
+    Log.i("IP: " .. tostring(self.serviceIP_))
     self.socket_ = SimpleTCP.new(self.serviceIP_, self.servicePort_, self.handleMessage)
     self.socket_:connect()
     self.isConnected_ = true
 end
+
 --[[--
     @description: 断开连接
 ]]
@@ -47,12 +50,14 @@ function OutGameMsgController:disConnect()
     self.socket_ = nil
     self.isConnected_ = false
 end
+
 --[[--
     @description: 确认连接状态
 ]]
 function OutGameMsgController:isConnect()
     return self.isConnected_
 end
+
 --[[--
     @description: 发送消息到服务器
     @param msg type:table 需要发送的数据
@@ -72,6 +77,7 @@ function OutGameMsgController:sendMsg(msg)
     self.socket_:send(ba:getPack())
     return true
 end
+
 --[[--
     @description:接受消息，分发事件
     @param event type:string 消息的类型
@@ -105,6 +111,7 @@ function OutGameMsgController:handleMessage(event, data)
     end
 
 end
+
 --[[--
     @description: 注册监听
     @param key type: 表示接收到的消息的类型，是常量，在MsgDef中定义
@@ -121,6 +128,7 @@ function OutGameMsgController:registerListener(key, listener)
     end
     self.listenerMap_[key] = listener
 end
+
 --[[--
     @description: 注销事件
     @param key type: 表示接收到的消息的类型，是常量，在MsgDef中定义
@@ -131,4 +139,5 @@ function OutGameMsgController:unRegisterListener(key)
     end
     self.listenerMap_[key] = nil
 end
+
 return OutGameMsgController
