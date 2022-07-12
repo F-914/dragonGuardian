@@ -49,11 +49,16 @@ end
 function Factory:createTeamSprite(teamData)
     local mapSprites = {}
     for i = 1, #teamData do
-        local towerData = teamData[i]
+        local cardData = teamData[i]
         --解决循环嵌套
         local towerSprite = require("src/app/ui/node/TowerSprite.lua").new("res/home/general/icon_tower/" ..
+<<<<<<< HEAD
                 towerData.name .. ".png", towerData)
         mapSprites[towerData] = towerSprite
+=======
+            cardData.Id .. ".png", cardData)
+        mapSprites[cardData] = towerSprite
+>>>>>>> origin/dev_xz
     end
     return mapSprites
 end
@@ -87,16 +92,28 @@ function Factory:createBorder(rewardData)
     if not rewardData.isUnlock then
         --解决循环嵌套，下同
         local border = require("src/app/ui/node/RewardSprite.lua").new("res/home/battle/high_ladder/locked_blue_border.png"
+<<<<<<< HEAD
         , rewardData)
+=======
+            , rewardData)
+>>>>>>> origin/dev_xz
         return border
     else
         if not rewardData.isGet then
             local border = require("src/app/ui/node/RewardSprite.lua").new("res/home/battle/high_ladder/unlocked_unreceived_yellow_border.png"
+<<<<<<< HEAD
             , rewardData)
             return border
         else
             local border = require("src/app/ui/node/RewardSprite.lua").new("res/home/battle/high_ladder/can_receive.png"
             , rewardData)
+=======
+                , rewardData)
+            return border
+        else
+            local border = require("src/app/ui/node/RewardSprite.lua").new("res/home/battle/high_ladder/can_receive.png"
+                , rewardData)
+>>>>>>> origin/dev_xz
             return border
         end
     end
@@ -108,12 +125,12 @@ end
     @param isGet type:isGet, 是否领取
     @return 返回一个表示下标的精灵
 ]]
-function Factory:createBorderStateSprite(isUnlocked, isGet)
-    if not isUnlocked then
+function Factory:createBorderStateSprite(locked, received)
+    if locked then
         local unlockSp = display.newSprite("res/home/battle/high_ladder/locked.png")
         return unlockSp
     else
-        if isGet then
+        if received then
             local lockSp = display.newSprite("res/home/battle/high_ladder/130.png")
             return lockSp
         else
@@ -127,22 +144,26 @@ end
     @param type:table 奖励的列表
     @return type:map key rewardData, value rewardSprite
 ]]
-function Factory:createRewardList(rewardsData)
+function Factory:createRewardList(ladderList)
     local rewardsMap = {}
-    for i = 1, #rewardsData do
-        local rewardData = rewardsData[i]
+    for i = 1, #ladderList do
+        local rewardData = ladderList[i]
         local rewardSprite = self:createBorder(rewardData)
         rewardsMap[rewardData] = rewardSprite
     end
     return rewardsMap
 end
+<<<<<<< HEAD
 
+=======
+---该方法待重写,暂时不能用
+>>>>>>> origin/dev_xz
 --[[--
     @description: 通过奖励的数据返回对应的按钮
     @param rewardData type:table 奖励的信息
     @return type: Button 返回一个按钮
 ]]
-function Factory:createRewardButton(name)
+function Factory:createRewardButton(rewardName, rewardType)
     if name == "gold" then
         local button = ccui.Button:create("res/home/battle/high_ladder/coin.png")
         return button
@@ -280,6 +301,7 @@ function Factory:createChestRewardPane(chestRewardData)
 
     local pSize = { width = size.width * .3, height = size.height * .4 }
     local layoutR = self:createChestRewardItem(pSize, chestRewardData.RNumberFloor,
+<<<<<<< HEAD
             chestRewardData.RNumberUpper, "ordinary")
     local layoutSR = self:createChestRewardItem(pSize, chestRewardData.SRNumberFloor,
             chestRewardData.SRNumberUpper, "rare")
@@ -287,6 +309,15 @@ function Factory:createChestRewardPane(chestRewardData)
             chestRewardData.SSRNumberUpper, "epic")
     local layoutUR = self:createChestRewardItem(pSize, chestRewardData.URNumberFloor,
             chestRewardData.URNumberUpper, "legend")
+=======
+        chestRewardData.RNumberUpper, "ordinary")
+    local layoutSR = self:createChestRewardItem(pSize, chestRewardData.SRNumberFloor,
+        chestRewardData.SRNumberUpper, "rare")
+    local layoutSSR = self:createChestRewardItem(pSize, chestRewardData.SSRNumberFloor,
+        chestRewardData.SSRNumberUpper, "epic")
+    local layoutUR = self:createChestRewardItem(pSize, chestRewardData.URNumberFloor,
+        chestRewardData.URNumberUpper, "legend")
+>>>>>>> origin/dev_xz
     layoutR:setPosition(size.width * .45, size.height * .65)
     layoutSR:setPosition(size.width * .85, size.height * .65)
     layoutSSR:setPosition(size.width * .45, size.height * .2)

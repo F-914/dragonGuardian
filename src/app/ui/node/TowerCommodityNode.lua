@@ -4,11 +4,11 @@
 --- DateTime: 2022-07-07 12:02
 ---
 local TowerCommodityNode = class("TowerCommodityNode",
---function() return cc.Node:create() end)
---        require("app.ui.layer.BaseLayer"))
-        function()
-            return ccui.Layout:create()
-        end)
+    --function() return cc.Node:create() end)
+    --        require("app.ui.layer.BaseLayer"))
+    function()
+        return ccui.Layout:create()
+    end)
 --local
 local Log = require("app.utils.Log")
 local audio = require("framework.audio")
@@ -33,7 +33,9 @@ function TowerCommodityNode:initView()
     -- button
     local commodityButton = tolua.cast(ccui.Helper:seekWidgetByName(commodityLayer, "commodityButton"), "ccui.Button")
     Log.i("CardId: " .. tostring(self.commodity_:getCommodityCommodity():getCardId()))
-    commodityButton:loadTextures(ConstDef.ICON_TOWER_FRAGMENT[self.commodity_:getCommodityCommodity():getCardId()], ConstDef.ICON_TOWER_FRAGMENT[self.commodity_:getCommodityCommodity():getCardId()], ConstDef.ICON_TOWER_FRAGMENT[self.commodity_:getCommodityCommodity():getCardId()])
+    commodityButton:loadTextures(ConstDef.ICON_TOWER_FRAGMENT[self.commodity_:getCommodityCommodity():getCardId()],
+        ConstDef.ICON_TOWER_FRAGMENT[self.commodity_:getCommodityCommodity():getCardId()],
+        ConstDef.ICON_TOWER_FRAGMENT[self.commodity_:getCommodityCommodity():getCardId()])
     -- 碎片数量
     local fragmentLayer = tolua.cast(ccui.Helper:seekWidgetByName(commodityLayer, "fragmentNumber"), "ccui.Layout")
     Log.i("Amount: " .. tostring(self.commodity_:getCommodityAmount()))

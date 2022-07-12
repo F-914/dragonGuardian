@@ -12,6 +12,9 @@ local EventManager = require("app.manager.EventManager")
 --
 
 ---Reward.ctor 构造函数
+---这个应该具体写清楚具体有哪些名称和类型吧
+-- 奖励名称可以随意一点 这个是为了后续拓展方面留下来的
+-- 奖励类型即 reward属性指向的对象的类型 记录在 ConstDef.REWARD_TYPE
 ---@param rewardName      string 奖励名称
 ---@param rewardType      number 奖励类型
 ---@param locked          boolean 是否被锁

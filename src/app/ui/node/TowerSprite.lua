@@ -24,7 +24,7 @@ function TowerSprite:ctor(res, data)
     self.data_ = data --type: table,精灵对应的数据
 
     local towerType = Factory:createTowerType(self.data_.type)
-    local towerLevel = Factory:createTowerLevel(self.data_.level)
+    local towerLevel = Factory:createTowerLevel(self.data_.star)
 
     self.levelSprite_ = towerLevel --type:sprite, 塔等级对应的精灵
 
@@ -42,10 +42,8 @@ end
     @return none
 ]]
 function TowerSprite:update(dt)
-    --local texture = CCTextureCache:sharedTextureCache():addImage("res/home/guide/subinterface_tower_list/level/Lv." ..
-    --    self.data_.level .. ".png")
     self.levelSprite_:setTexture(StringDef.PATH_PREFIX_SUBINTERFACE_TOWER_LEVEL ..
-        self.data_.level .. ".png")
+        self.data_.star .. ".png")
 end
 
 return TowerSprite

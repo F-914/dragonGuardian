@@ -98,12 +98,28 @@ function UserInfo:setAvatar(avatar)
     self.avatar_ = avatar
 end
 
-function UserInfo:getCollected()
-    return self.instance_.collected_
+function UserInfo:setUserInfoLadder(ladder)
+    self.ladder_ = ladder
 end
 
-function UserInfo:getUnCollected()
-    return self.instance_.unCollected_
+function UserInfo:getUserInfoLadder()
+    return self.ladder_
+end
+
+function UserInfo:setUserInfoDiamondAmount(diamondAmount)
+    self.diamondAmount_ = diamondAmount
+end
+
+function UserInfo:setUserInfoCoinAmount(coinAmount)
+    self.coinAmount_ = coinAmount
+end
+
+function UserInfo:setUserInfoTrophyAmount(trophyAmount)
+    self.trophyAmount_ = trophyAmount
+end
+
+function UserInfo:getUserInfoCardList()
+    return self.cardList_
 end
 
 return UserInfo

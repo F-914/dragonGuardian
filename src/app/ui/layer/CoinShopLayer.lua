@@ -63,47 +63,6 @@ function CoinShopLayer:initView()
         --node:addTo(storeRows[index])
         storeRows[index]:pushBackCustomItem(node)
     end
-    --local storeLayer = ccui.ListView:create()
-    --storeLayer:setContentSize(display.width * 0.7, display.height * 0.45)
-    --storeLayer:setAnchorPoint(0.5, 0.5)
-    --storeLayer:setPosition(display.width * 0.5, display.height * 0.45)
-    ----storeLayer:setItemsMargin(0.01)
-    ----storeLayer:setBackGroundImage(StringDef.PATH_COIN_SHOP_TOWER_FRAGMENT_01)
-    --storeLayer:setDirection(1) -- 垂直
-    --storeLayer:addTo(self)
-    ----Log.i("storeLayer: " .. tostring(storeLayer:getContentSize()[1]))
-    --
-    --local rowViewDragon
-    ---- 本来打算做成一个CommodityNode，然后把商品放进去就行，但是不同的商品类型视图差距过大，所以还是做成一种商品一个样子吧
-    --local x, y = display.width * 0.5, display.height * 0.55
-    --local node
-    --for i = 1, #(list) do
-    --    local cnt = 0
-    --    if i % ConstDef.ROW_COMMODITY_NUMBER == 1 then
-    --        rowViewDragon = ccui.ListView:create()
-    --        rowViewDragon:setContentSize(display.width * 0.7, display.height * 0.2) -- 滑动区域大小
-    --        rowViewDragon:setAnchorPoint(0.5, 0.5)
-    --        rowViewDragon:setItemsMargin(0.03)
-    --        rowViewDragon:setPosition(display.width * 0.5, 0)
-    --        rowViewDragon:setBackGroundImage(StringDef.PATH_COIN_SHOP_TOWER_FRAGMENT_02)
-    --        rowViewDragon:setDirection(2) -- 水平
-    --        rowViewDragon:addTo(storeLayer)
-    --        cnt = cnt + 1
-    --    end
-    --if list[i]:getCommodityType() == ConstDef.COMMODITY_TYPE.CURRENCY then
-    --    Log.i("node: currency")
-    --    node = CurrencyCommodityNode.new(list[i], x, y)
-    --elseif list[i]:getCommodityType() == ConstDef.COMMODITY_TYPE.TOWER then
-    --    Log.i("node: tower")
-    --    node = TowerCommodityNode.new(list[i])
-    --else
-    --    -- 出错了
-    --    Log.e("Error Commodity Type in CommodityNode:initView()")
-    --    exit()
-    --end
-    --    rowViewDragon:addChild(node)
-    --    --Log.i("" .. tostring(rowViewDragon:getChildrenCount()))
-    --end
 end
 
 function CoinShopLayer:onEnter()

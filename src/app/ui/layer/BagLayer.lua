@@ -52,12 +52,12 @@ function BagLayer:init(lineupList, types)
     ttf.fontFilePath = PATH_TTF
     ttf.fontSize = 20
     local height
-    if table.getn(lineupList) == 0 then
+    if #(lineupList) == 0 then
         height = 1
-    elseif table.getn(lineupList) % 4 == 0 then
-        height = table.getn(lineupList) / 4
-    elseif table.getn(lineupList) % 4 ~= 0 then
-        height = math.floor(table.getn(lineupList) / 4) + 1
+    elseif #(lineupList) % 4 == 0 then
+        height = #(lineupList) / 4
+    elseif #(lineupList) % 4 ~= 0 then
+        height = math.floor(#(lineupList) / 4) + 1
     end
     -- body
     local test = display.newSprite(ConstDef.ICON_LIST[1])
@@ -70,7 +70,7 @@ function BagLayer:init(lineupList, types)
         (height - 1) * test:getContentSize().height * 0.2 * ConstDef.scale_)
 
     if types == "uncollected" then
-        for i = 1, table.getn(lineupList), 4 do
+        for i = 1, #(lineupList), 4 do
             local layout = ccui.Layout:create()
             TotalLayout:add(layout)
             layout:setAnchorPoint(0.5, 1)
@@ -96,7 +96,7 @@ function BagLayer:init(lineupList, types)
     elseif types == "collected" then
 
 
-        for i = 1, table.getn(lineupList), 4 do
+        for i = 1, #(lineupList), 4 do
 
             local layout = ccui.Layout:create()
             TotalLayout:add(layout)
@@ -108,14 +108,12 @@ function BagLayer:init(lineupList, types)
                 test:getContentSize().height * ConstDef.scale_ * math.floor(i / 4) -
                 math.floor(i / 4) * test:getContentSize().height * 0.1 * ConstDef.scale_
             )
-
             for j = 0, 3 do
 
                 if lineupList[i + j] == nil then
 
                     break
                 end
-
                 local button = ccui.Button:create(ConstDef.ICON_LIST[lineupList[j + i].order],
                     ConstDef.ICON_LIST[lineupList[j + i].order])
                 layout:add(button)

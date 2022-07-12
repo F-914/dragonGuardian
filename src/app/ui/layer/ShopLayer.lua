@@ -4,9 +4,9 @@
 --- DateTime: 2022-07-05 15:00
 ---
 local ShopLayer = class("ShopLayer",
-        function()
-            return display.newLayer()
-        end)
+    function()
+        return display.newLayer()
+    end)
 --local
 local StringDef = require("app.def.StringDef")
 local CoinShopLayer = require("app.ui.layer.CoinShopLayer")

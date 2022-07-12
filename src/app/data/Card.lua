@@ -68,14 +68,17 @@ local EventManager = require("app.manager.EventManager")
 ---@param extraDamage   number 每次攻击带来的额外伤害
 ---@param fatalityRate  number 单次攻击的致命率
 ---@return  nil Description
-function Card:ctor(cardId, name, rarity, type, level, atk, atkTarget, atkUpgrade, atkEnhance, fireCd, fireCdEnhance, fireCdUpgrade,
+function Card:ctor(cardId, name, rarity, type, level, atk, atkTarget, atkUpgrade, atkEnhance, fireCd, fireCdEnhance,
+                   fireCdUpgrade,
                    skills, extraDamage, fatalityRate, location)
-    self:setCard(cardId, name, rarity, type, level, atk, atkTarget, atkUpgrade, atkEnhance, fireCd, fireCdEnhance, fireCdUpgrade, skills
-    , extraDamage, fatalityRate, location)
+    self:setCard(cardId, name, rarity, type, level, atk, atkTarget, atkUpgrade, atkEnhance, fireCd, fireCdEnhance,
+        fireCdUpgrade, skills
+        , extraDamage, fatalityRate, location)
     EventManager:doEvent(EventDef.ID.CREATE_CARD, self)
 end
 
-function Card:setCard(cardId, name, rarity, type, level, atk, atkTarget, atkUpgrade, atkEnhance, fireCd, fireCdEnhance, fireCdUpgrade,
+function Card:setCard(cardId, name, rarity, type, level, atk, atkTarget, atkUpgrade, atkEnhance, fireCd, fireCdEnhance,
+                      fireCdUpgrade,
                       skills, extraDamage, fatalityRate, location)
     self.cardId_ = cardId
     self.cardName_ = name

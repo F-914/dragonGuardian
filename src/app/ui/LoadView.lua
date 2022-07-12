@@ -8,7 +8,10 @@ end)
 --local
 local Log = require("app.utils.Log")
 require("socket")
+<<<<<<< HEAD
 --
+=======
+>>>>>>> origin/dev_xz
 local _layer
 --
 
@@ -25,7 +28,10 @@ local function sleep(n)
 end
 
 function LoadView:initView()
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/dev_xz
     _layer = ccui.Layout:create()
     _layer:setAnchorPoint(0.5, 0.5)
     _layer:setContentSize(display.width, display.height)
@@ -89,9 +95,15 @@ function LoadView:initView()
     local progress = 0 -- 进度
     local timeSchedule = nil -- 刷新计时器(每0.1秒刷新)
     timeSchedule = scheduler:scheduleScriptFunc(function(dt)
+<<<<<<< HEAD
         --Log.i("loading……")
         progress = progress + display.width / 100
         --Log.i(progress .. "")
+=======
+        Log.i("loading……")
+        progress = progress + display.width / 100
+        Log.i(progress .. "")
+>>>>>>> origin/dev_xz
         barSprite:setContentSize(progress, 15)
         sizeCurBar = barSprite:getContentSize()
         headBarSprite:setPosition(sizeCurBar.width, 0)

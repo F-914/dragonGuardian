@@ -12,9 +12,9 @@ local EventManager = require("app.manager.EventManager")
 
 local DELTA = 5
 local X_LEFT = 0
-local X_RIGHT = display.width*17/20 - display.cx/22
+local X_RIGHT = display.width * 17 / 20 - display.cx / 22
 local Y_DOWN_PLAYER = 0
-local Y_UP_PLAYER = display.cy*14/20
+local Y_UP_PLAYER = display.cy * 14 / 20
 --
 
 ---Enemy.ctor 构造函数
@@ -28,7 +28,7 @@ local Y_UP_PLAYER = display.cy*14/20
 function Enemy:ctor(name, type, hp, skills, description)
     self.x_ = 0
     self.y_ = 0
-    self.step_ = 1	--运动步骤（1-3）
+    self.step_ = 1 --运动步骤（1-3）
     self:setEnemy(name, type, hp, skills, desc)
     EventManager:doEvent(EventDef.ID.CREATE_ENEMY, self)
 end
@@ -85,7 +85,7 @@ end
 ]]
 function Enemy:destory()
     Log.i("destory")
-    self.isDeath_ = true 
+    self.isDeath_ = true
     EventManager:doEvent(EventDef.ID.DESTORY_ENEMY, self)
 end
 

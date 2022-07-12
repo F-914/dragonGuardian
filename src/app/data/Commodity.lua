@@ -22,7 +22,8 @@ function Commodity:ctor(name, type, price, priceUnit, amount, commodity)
     EventManager:doEvent(EventDef.ID.CREATE_COMMODITY, self)
 end
 
-function Commodity:setCommodity(commodityName, commodityType, commodityPrice, commodityPriceUnit, commodityAmount, commodity)
+function Commodity:setCommodity(commodityName, commodityType, commodityPrice, commodityPriceUnit, commodityAmount,
+                                commodity)
     self.commodityName_ = commodityName
     self.commodityType_ = commodityType
     self.commodityPrice_ = commodityPrice

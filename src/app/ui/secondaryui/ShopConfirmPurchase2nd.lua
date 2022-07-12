@@ -100,7 +100,11 @@ function ShopConfirmPurchase2nd:initView()
     coinIcon:setPosition(display.cx - sizeSetBase.width / 15, display.cy - sizeSetBase.height * 17 / 48)
     coinIcon:addTo(checkLayer)
     -- 商品图
+<<<<<<< HEAD
     local dragonSprite = cc.Sprite:create(ConstDef.ICON_TOWER_FRAGMENT[self.commodity_:getCommodityCommodity():getCardId()])
+=======
+    local dragonSprite = cc.Sprite:create(ConstDef.ICON_TOWER_FRAGMENT[self.commodity_:getCardId()])
+>>>>>>> origin/dev_xz
     dragonSprite:setAnchorPoint(0.5, 0.5)
     dragonSprite:setPosition(display.cx, display.cy)
     dragonSprite:scale(0.8)

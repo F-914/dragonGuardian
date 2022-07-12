@@ -43,50 +43,6 @@ function DiamondShopLayer:initView()
         --node:addTo(storeRows[index])
         storeRows[index]:pushBackCustomItem(node)
     end
-
-    --local itemWidth, itemHeight = ConstDef.SHOP_ITEM_WIDTH, ConstDef.SHOP_ITEM_HEIGHT
-    --self:setContentSize(display.width, itemHeight)
-    ---- 标题 “金币商店”
-    --local titleLayer = ccui.Layout:create():addTo(self)
-    --titleLayer:setContentSize(display.width, itemHeight * 3 / 4)
-    ---- 钻石商店
-    --local diaTitleBase = cc.Sprite:create(StringDef.PATH_DIAMOND_SHOP_BASE_TITLE)
-    --diaTitleBase:setPosition(display.cx, itemHeight * 5 / 12)
-    --diaTitleBase:setAnchorPoint(0.5, 0.5)
-    ----diaTitleBase:scale(display.width / 720)
-    --diaTitleBase:addTo(titleLayer)
-    --
-    --local diaTitle = cc.Sprite:create(StringDef.PATH_DIAMOND_SHOP_TITLE_STORE)
-    --diaTitle:setPosition(display.cx, itemHeight * 5 / 12)
-    --diaTitle:setAnchorPoint(0.5, 0.5)
-    ----diaTitle:scale(display.width / 720)
-    --diaTitle:addTo(titleLayer)
-    ---- 商品
-    ---- 滑动区域
-    ---- TODO 这里仿照CoinShop做一个类似的滑动区域 需要修改的地方应该是 pos和 contentSize
-    --local rowViewDragon
-    ---- 本来打算做成一个CommodityNode，然后把商品放进去就行，但是不同的商品类型视图差距过大，所以还是做成一种商品一个样子吧
-    --local list = OutGameData:getDiamondShop():getCommodityList()
-    --for i = 1, #(list) do
-    --    if i % ConstDef.ROW_COMMODITY_NUMBER == 1 then
-    --        rowViewDragon = ccui.ListView:create()
-    --        rowViewDragon:setContentSize(itemWidth * 13 / 3, itemHeight + 20) -- 滑动区域大小
-    --        rowViewDragon:setAnchorPoint(0.5, 0.5)
-    --        rowViewDragon:setPosition(display.cx, itemHeight / 2)
-    --        rowViewDragon:setDirection(2) -- 水平
-    --        rowViewDragon:addTo(self)
-    --    end
-    --    local node
-    --    if list[i]:getCommodityType() == ConstDef.COMMODITY_TYPE.TREASUREBOX then
-    --        Log.i("list[i] is nil ? " .. tostring(list[i] == nil))
-    --        node = TreasureBoxCommodityNode.new(list[i])
-    --    else
-    --        -- 出错了
-    --        Log.e("Error Commodity Type in CommodityNode:initView()")
-    --        exit()
-    --    end
-    --    node:addTo(rowViewDragon)
-    --end
 end
 
 function DiamondShopLayer:onEnter()
