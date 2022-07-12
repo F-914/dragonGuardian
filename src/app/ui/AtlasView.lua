@@ -81,24 +81,24 @@ function AtlasView:ctor()
         local order=ConstDef.BUTTON_CLICK[1]
         if #(ConstDef.BUTTON_CLICK)==0 then
            return
-        else 
+        else
             local card=nil
             for v,k in ipairs(collectedList) do--此处collectedList不能直接使用，需要换为用户拥有的已收集列表
                 if k.order==order then
                      card=collectedList[v]
                 end
             end
-          
+
            local tower=TowerDetialLayer.new(card,collected_)
            self:add(tower)
-           tower.use:addTouchEventListener(function(sender, eventType)--注册塔的详情中，“使用”按钮的点击事件        
+           tower.use:addTouchEventListener(function(sender, eventType)--注册塔的详情中，“使用”按钮的点击事件
             if eventType==2 then
                local popup = PopupLayer.new(order)
                self:add(popup)
                popup:setPosition(0,0)
                tower:setVisible(false)
                tower:removeFromParent()
-               
+
                for i=1,5 do--将当前阵容队列中的图标设置为可点击
                 lineup1_.button[i]:setTouchEnabled(true)
                 lineup2_.button[i]:setTouchEnabled(true)
@@ -115,15 +115,15 @@ function AtlasView:ctor()
                lineup3_:setLineupOrder(3)
 
                EventManager:doEvent(EventDef.ID.HIDE_BAG)
-               popup.cancel:addTouchEventListener(function(sender, eventType)         
+               popup.cancel:addTouchEventListener(function(sender, eventType)
                 if eventType==2 then
-                  
+
                     popup:setVisible(false)
                     popup:removeFromParent()
-                    
+
                     EventManager:doEvent(EventDef.ID.SHOW_BAG)
                     EventManager:doEvent(EventDef.ID.RESUME_BAG_BUTTON)
-                  
+
                 end
             end)
 
@@ -132,7 +132,7 @@ function AtlasView:ctor()
                 BagList_[i]:setTouchEnabled(false)
             end
         end
-    end
+    end)
     self:initView()
     self:registerScriptHandler(
         function(event)
