@@ -25,17 +25,16 @@ local EventManager = require("app.manager.EventManager")
 ---@param skills        table 拥有的技能
 ---@param extraDamage   number 每次攻击带来的额外伤害
 ---@param fatalityRate  number 单次攻击的致命率
----@param star          number 星级
 ---@return  nil Description
 function Card:ctor(cardId, name, rarity, type, atk, atkTarget, atkUpgrade, atkEnhance, fireCd, fireCdEnhance, fireCdUpgrade,
-                   skills, extraDamage, fatalityRate, star, location)
+                   skills, extraDamage, fatalityRate, location)
     self:setCard(cardId, name, rarity, type, atk, atkTarget, atkUpgrade, atkEnhance, fireCd, fireCdEnhance, fireCdUpgrade, skills
-    , extraDamage, fatalityRate, star, location)
+    , extraDamage, fatalityRate, location)
     EventManager:doEvent(EventDef.ID.CREATE_CARD, self)
 end
 
 function Card:setCard(cardId, name, rarity, type, atk, atkTarget, atkUpgrade, atkEnhance, fireCd, fireCdEnhance, fireCdUpgrade,
-                      skills, extraDamage, fatalityRate, star, location)
+                      skills, extraDamage, fatalityRate, location)
     self.cardId_ = cardId
     self.cardName_ = name
     self.cardRarity_ = rarity
@@ -53,7 +52,6 @@ function Card:setCard(cardId, name, rarity, type, atk, atkTarget, atkUpgrade, at
     self.cardFireCdUpgrade_ = fireCdUpgrade
 
     self.cardFatalityRate_ = fatalityRate
-    self.cardStar_ = star
 
     self.cardLocation_ = location
 end
@@ -127,11 +125,6 @@ end
 --- 致死率
 function Card:getCardFatalityRate()
     return self.cardFatalityRate_
-end
-
---- 星级
-function Card:getCardStar()
-    return self.cardStar_
 end
 
 return Card
