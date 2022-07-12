@@ -17,6 +17,7 @@ local StringDef = require("app.def.StringDef")
 local Commodity = require("app.data.Commodity")
 local OutGameData = require("app.data.OutGameData")
 local ShopConfirmPurchase2nd = require("app.ui.secondaryui.ShopConfirmPurchase2nd")
+local TypeConvert = require("app.utils.TypeConvert")
 --
 --
 function TowerCommodityNode:ctor(commodity)
@@ -26,11 +27,64 @@ function TowerCommodityNode:ctor(commodity)
 end
 
 function TowerCommodityNode:initView()
-    local commodityLayer = cc.CSLoader:getInstance():createNodeWithFlatBuffersFile("CommodityLayer.csb"):addTo(self)
+    local commodityLayer = cc.CSLoader:getInstance():createNodeWithFlatBuffersFile("CommodityLayer.csb")
+    --commodityLayer:setAnchorPoint(-0.3, 0.55)
+    commodityLayer:setAnchorPoint(0.5, 0.5)
+    commodityLayer:addTo(self)
     -- button
     local commodityButton = tolua.cast(ccui.Helper:seekWidgetByName(commodityLayer, "commodityButton"), "ccui.Button")
+    Log.i("CardId: " .. tostring(self.commodity_:getCommodityCommodity():getCardId()))
     commodityButton:loadTextures(ConstDef.ICON_TOWER_FRAGMENT[self.commodity_:getCommodityCommodity():getCardId()], ConstDef.ICON_TOWER_FRAGMENT[self.commodity_:getCommodityCommodity():getCardId()], ConstDef.ICON_TOWER_FRAGMENT[self.commodity_:getCommodityCommodity():getCardId()])
-    local fragmentNumber =
+    -- 碎片数量
+    local fragmentLayer = tolua.cast(ccui.Helper:seekWidgetByName(commodityLayer, "fragmentNumber"), "ccui.Layout")
+    Log.i("Amount: " .. tostring(self.commodity_:getCommodityAmount()))
+    local fragmentNum = display.newTTFLabel({
+        text = "x" .. TypeConvert.Integer2StringLeadingZero(self.commodity_:getCommodityAmount(), 3),
+        font = StringDef.PATH_FONT_FZZCHJW,
+        size = 19
+    })
+    --fragmentNum:align(display.CENTER, fragmentLayer:getContentSize().width * 2, ConstDef.SHOP_ITEM_HEIGHT * 5 / 6)
+    fragmentNum:setAnchorPoint(0.8, 0.5)
+    fragmentNum:setPosition(fragmentLayer:getPosition())
+    fragmentNum:setColor(cc.c3b(255, 206, 55))
+    fragmentNum:enableOutline(cc.c4b(0, 0, 0, 255), 1)
+    fragmentNum:addTo(fragmentLayer)
+    -- 设置商品价格
+    local priceLayer = tolua.cast(ccui.Helper:seekWidgetByName(commodityLayer, "priceField"), "ccui.Layout")
+    local price = self.commodity_:getCommodityPrice()
+    Log.i("Price: " .. tostring(price))
+    if price == 0 then
+        local priceTitle = cc.Sprite:create(StringDef.PATH_COIN_SHOP_ICON_FREE)
+        priceTitle:setAnchorPoint(1.7, 0.5)
+        priceTitle:setPosition(priceLayer:getPosition())
+        priceTitle:addTo(priceLayer)
+    else
+        -- 价格
+        local dragonPrice = display.newTTFLabel({
+            text = self.commodity_:getCommodityPrice(),
+            font = StringDef.PATH_FONT_FZBIAOZJW,
+            size = 23
+        })
+        --dragonPrice:align(display.CENTER, itemWidth * 4 / 5, itemHeight / 6)
+        dragonPrice:setAnchorPoint(1.7, 0.5)
+        dragonPrice:setPosition(priceLayer:getPosition())
+        dragonPrice:setColor(cc.c3b(255, 255, 255))
+        dragonPrice:enableOutline(cc.c4b(0, 0, 0, 255), 1)
+        dragonPrice:addTo(priceLayer)
+    end
+    -- 设置点击事件
+    -- TODO 点击后会缩小，然后由于上面是通过调整AnchorPoint来确定最终位置，导致缩小画面出现问题 需要进行修改
+    commodityButton:addTouchEventListener(function(sender, eventType)
+        if 0 == eventType then
+            commodityLayer:scale(0.8)
+        end
+        if 2 == eventType then
+            --dragonButton:setTouchEnabled(false)
+            audio.playEffect(StringDef.PATH_GET_PADI_ITEM)
+            _buttonCoinClick(commodityLayer, commodityButton, self.commodity_)
+        end
+    end)
+
 
     --local itemWidth, itemHeight = ConstDef.SHOP_ITEM_WIDTH, ConstDef.SHOP_ITEM_HEIGHT
     --
@@ -111,7 +165,7 @@ end
 function _buttonCoinClick(layer, button, commodity)
     Log.i("_buttonCoinClick(layer, button, commodity) in TowerCommodityNode")
     layer:scale(1)
-    ShopConfirmPurchase2nd.new(layer, button, commodity, itemWidth, itemHeight)
+    ShopConfirmPurchase2nd.new(layer, button, commodity, ConstDef.SHOP_ITEM_WIDTH, ConstDef.SHOP_ITEM_HEIGHT)
 end
 
 return TowerCommodityNode

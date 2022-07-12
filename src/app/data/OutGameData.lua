@@ -34,12 +34,12 @@ end
 -- 调用 OutGameData:getTreasureBoxRewardWinningRate()[ConstDef.TREASUREBOX_RARITY.R][ConstDef.TREASUREBOX_REWARD.R]
 function OutGameData:getTreasureBoxRewardWinningRate()
     if _treasureBoxRewardWinningRate == nil then
-        self:updateTreasureBoxRewardWinningRate()
+        self:initTreasureBoxRewardWinningRate()
     end
     return _treasureBoxRewardWinningRate
 end
 
-function OutGameData:updateTreasureBoxRewardWinningRate()
+function OutGameData:initTreasureBoxRewardWinningRate()
     -- TODO 感觉这个数据可能很少会发生变动，但是也不排除后续更新的可能
     _treasureBoxRewardWinningRate = {
         {

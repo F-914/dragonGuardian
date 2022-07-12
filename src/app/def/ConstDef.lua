@@ -110,6 +110,10 @@ local ConstDef = {
         StringDef.PATH_COIN_SHOP_TOWER_FRAGMENT_19,
         StringDef.PATH_COIN_SHOP_TOWER_FRAGMENT_20,
     },
+    ICON_CURRENCY_TYPE = {
+        StringDef.PATH_COIN_SHOP_COIN,
+        StringDef.PATH_COIN_SHOP_DIAMOND,
+    },
     LINEUP_LIST = { --图鉴界面中的三个阵容
         lineupOne = { 1, 1, 1, 1, 1 },
         lineupTwo = { 2, 2, 2, 2, 2 },
@@ -157,13 +161,13 @@ local ConstDef = {
         StringDef.PATH_DIAMOND_SHOP_BOX_LEGEND,
     },
     CURRENCY_TYPE = {
-        COIN = "COIN",
-        DIAMOND = "DIAMON",
+        COIN = 1,
+        DIAMOND = 2,
     },
     COMMODITY_TYPE = {
-        TOWER = "TOWER",
-        CURRENCY = "CURRENCY",
-        TREASUREBOX = "TREASUREBOX",
+        TOWER = 1,
+        CURRENCY = 2,
+        TREASUREBOX = 3,
     },
     TOWER_TYPE = {
         ATTACK = 1, -- 攻击类别

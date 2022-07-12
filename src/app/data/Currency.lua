@@ -19,6 +19,7 @@ function Currency:ctor(type, amount)
     EventManager:doEvent(EventDef.ID.CREATE_CARD, self)
 end
 
+-- 当货币作为Commodity时，以Commodity中的Amount为准
 function Currency:setCurrency(type, amount)
     self.currencyType_ = type
     self.currencyAmount_ = amount
