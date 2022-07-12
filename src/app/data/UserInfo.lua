@@ -41,7 +41,8 @@ function UserInfo:testData()
     self.cardList_ = {}
 end
 
-function UserInfo:setUserInfo(account, avatar, nickname, coinAmount, diamondAmount, trophyAmount, battleTeam, ladder, cardList)
+function UserInfo:setUserInfo(account, avatar, nickname, coinAmount, diamondAmount, trophyAmount, battleTeam, ladder,
+                              cardList)
     self.account_ = account
     self.avatar_ = avatar
     self.nickname_ = nickname
@@ -95,6 +96,14 @@ end
 
 function UserInfo:setAvatar(avatar)
     self.avatar_ = avatar
+end
+
+function UserInfo:getCollected()
+    return self.instance_.collected_
+end
+
+function UserInfo:getUnCollected()
+    return self.instance_.unCollected_
 end
 
 return UserInfo
