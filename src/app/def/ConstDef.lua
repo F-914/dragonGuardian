@@ -151,13 +151,13 @@ local ConstDef = {
     SHOP_BOX_TYPE_BASE_PATH = {
         StringDef.PATH_DIAMOND_SHOP_BASE_NORMAL,
         StringDef.PATH_DIAMOND_SHOP_BASE_RARE,
-        StringDef.PATH_DIAMON_SHOP_BASE_EPIC,
+        StringDef.PATH_DIAMOND_SHOP_BASE_EPIC,
         StringDef.PATH_DIAMOND_SHOP_BASE_LEGEND,
     },
     SHOP_BOX_TYPE_BOX_PATH = {
         StringDef.PATH_DIAMOND_SHOP_BOX_NORMAL,
         StringDef.PATH_DIAMOND_SHOP_BOX_RARE,
-        StringDef.PATH_DIAMON_SHOP_BOX_EPIC,
+        StringDef.PATH_DIAMOND_SHOP_BOX_EPIC,
         StringDef.PATH_DIAMOND_SHOP_BOX_LEGEND,
     },
     CURRENCY_TYPE = {

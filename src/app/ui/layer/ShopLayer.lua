@@ -26,6 +26,9 @@ end
 function ShopLayer:initView()
     local listView = ccui.ListView:create()
     listView:setContentSize(display.width, display.height * 7 / 8) -- 滑动区域大小
+    -- TODO 这里的滑动出了点问题
+    listView:setBounceEnabled(true)
+    --listView:setScrollBarEnabled(false)
     listView:setAnchorPoint(0.5, 0.5)
     listView:setPosition(display.cx, display.cy)
     listView:setDirection(1) -- 垂直
@@ -33,9 +36,12 @@ function ShopLayer:initView()
 
     self.coinShopLayer_ = CoinShopLayer.new()
     listView:addChild(self.coinShopLayer_)
+    --listView:pushBackCustomItem(self.coinShopLayer_)
 
     self.diamondShopLayer_ = DiamondShopLayer.new()
     listView:addChild(self.diamondShopLayer_)
+    --listView:pushBackCustomItem(self.coinShopLayer_)
+
 end
 
 function ShopLayer:onEnter()

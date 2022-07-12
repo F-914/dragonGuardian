@@ -447,7 +447,7 @@ function TestDataFactory:getTestDiamondShop()
                 1,
                 TreasureBox.new(
                         "超级无敌劈里啪啦稀有宝箱",
-                        ConstDef.TREASUREBOX_RARITY.R,
+                        ConstDef.TREASUREBOX_RARITY.SR,
                         "只是一个稀有宝箱捏"
                 )
         ),
@@ -459,7 +459,7 @@ function TestDataFactory:getTestDiamondShop()
                 1,
                 TreasureBox.new(
                         "宇宙第一超级无敌劈里啪啦史诗宝箱",
-                        ConstDef.TREASUREBOX_RARITY.R,
+                        ConstDef.TREASUREBOX_RARITY.SSR,
                         "只是一个史诗宝箱捏"
                 )
         ),
@@ -471,7 +471,7 @@ function TestDataFactory:getTestDiamondShop()
                 1,
                 TreasureBox.new(
                         "%￥……&%……&￥……（*￥……宇宙第一超级无敌劈里啪啦传说宝箱",
-                        ConstDef.TREASUREBOX_RARITY.R,
+                        ConstDef.TREASUREBOX_RARITY.UR,
                         "只是一个传说宝箱捏"
                 )
         ),

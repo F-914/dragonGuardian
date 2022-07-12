@@ -28,7 +28,6 @@ end
 
 function TowerCommodityNode:initView()
     local commodityLayer = cc.CSLoader:getInstance():createNodeWithFlatBuffersFile("CommodityLayer.csb")
-    --commodityLayer:setAnchorPoint(-0.3, 0.55)
     commodityLayer:setAnchorPoint(0.5, 0.5)
     commodityLayer:addTo(self)
     -- button
@@ -43,7 +42,6 @@ function TowerCommodityNode:initView()
         font = StringDef.PATH_FONT_FZZCHJW,
         size = 19
     })
-    --fragmentNum:align(display.CENTER, fragmentLayer:getContentSize().width * 2, ConstDef.SHOP_ITEM_HEIGHT * 5 / 6)
     fragmentNum:setAnchorPoint(0.8, 0.5)
     fragmentNum:setPosition(fragmentLayer:getPosition())
     fragmentNum:setColor(cc.c3b(255, 206, 55))
@@ -65,7 +63,6 @@ function TowerCommodityNode:initView()
             font = StringDef.PATH_FONT_FZBIAOZJW,
             size = 23
         })
-        --dragonPrice:align(display.CENTER, itemWidth * 4 / 5, itemHeight / 6)
         dragonPrice:setAnchorPoint(1.7, 0.5)
         dragonPrice:setPosition(priceLayer:getPosition())
         dragonPrice:setColor(cc.c3b(255, 255, 255))
@@ -84,81 +81,6 @@ function TowerCommodityNode:initView()
             _buttonCoinClick(commodityLayer, commodityButton, self.commodity_)
         end
     end)
-
-
-    --local itemWidth, itemHeight = ConstDef.SHOP_ITEM_WIDTH, ConstDef.SHOP_ITEM_HEIGHT
-    --
-    --local commodityLayer = ccui.Layout:create()
-    --commodityLayer:setContentSize(display.width * 0.2, display.height * 0.2)
-    --commodityLayer:setAnchorPoint(0, 0)
-    --commodityLayer:addTo(self)
-    ----
-    ---- 根据塔的id填充背景
-    --local button = ccui.Button:create(ConstDef.ICON_TOWER_FRAGMENT[self.commodity_:getCommodityCommodity():getCardId()])
-    ----button:setPosition(itemWidth * 2 / 3, itemHeight / 2)
-    --button:setContentSize(0.2, 0.2)
-    --button:setAnchorPoint(0, 0)
-    --local size = button:getContentSize()
-    --button:addTo(commodityLayer)
-    -- 根据商品数量填充右上角碎片数量
-    ----碎片底图
-    --local fragmentBase = cc.Sprite:create(StringDef.PATH_COIN_SHOP_BASE_FRAGMENT)
-    ----fragmentBase:setPosition(size.width * 20 / 19, itemHeight * 5 / 6)
-    --fragmentBase:setAnchorPoint(1, 0.5)
-    --local size = fragmentBase:getContentSize()
-    ----fragmentBase:scale(itemHeight / size.height /6)
-    --fragmentBase:addTo(commodityLayer)
-    ---- 碎片数量
-    --local fragmentNum = display.newTTFLabel({
-    --    text = "x" .. tostring(self.commodity_:getCommodityAmount()),
-    --    font = StringDef.PATH_FONT_FZZCHJW,
-    --    size = 19
-    --})
-    --fragmentNum:align(display.CENTER, size.width * 2, itemHeight * 5 / 6)
-    --fragmentNum:setColor(cc.c3b(255, 206, 55))
-    --fragmentNum:enableOutline(cc.c4b(0, 0, 0, 255), 1)
-    --fragmentNum:addTo(commodityLayer)
-    ---- 设置商品价格
-    --local price = self.commodity_:getCommodityPrice()
-    --if price == 0 then
-    --    local priceTitle = cc.Sprite:create(StringDef.PATH_COIN_SHOP_ICON_FREE)
-    --    --priceTitle:setPosition(itemWidth * 2 / 3, itemHeight / 6)
-    --    priceTitle:setAnchorPoint(0.5, 0.5)
-    --    --priceTitle:scale(itemHeight / size.height /6)
-    --else
-    --    -- 金币图标
-    --    local coinIcon = cc.Sprite:create(StringDef.PATH_COIN_SHOP_ICON_COIN)
-    --    if self.commodity_:getCommodityCommodity():getCardType() == ConstDef.TOWER_RARITY.SSR then
-    --        --coinIcon:setPosition(itemWidth * 2 / 3 - 30, itemHeight / 6)
-    --    else
-    --        --coinIcon:setPosition(itemWidth * 2 / 3 - 23, itemHeight / 6)
-    --    end
-    --    coinIcon:setAnchorPoint(0.5, 0.5)
-    --    local sizeCoin = coinIcon:getContentSize()
-    --    --coinIcon:scale(itemHeight / sizeCoin.height /6)
-    --    coinIcon:addTo(commodityLayer)
-    --    -- 价格
-    --    local dragonPrice = display.newTTFLabel({
-    --        text = self.commodity_:getCommodityPrice(),
-    --        font = StringDef.PATH_FONT_FZBIAOZJW,
-    --        size = 25
-    --    })
-    --    --dragonPrice:align(display.CENTER, itemWidth * 4 / 5, itemHeight / 6)
-    --    dragonPrice:setColor(cc.c3b(255, 255, 255))
-    --    dragonPrice:enableOutline(cc.c4b(0, 0, 0, 255), 1)
-    --    dragonPrice:addTo(commodityLayer)
-    --end
-    ---- 设置点击事件
-    --button:addTouchEventListener(function(sender, eventType)
-    --    if 0 == eventType then
-    --        commodityLayer:scale(0.8)
-    --    end
-    --    if 2 == eventType then
-    --        --dragonButton:setTouchEnabled(false)
-    --        audio.playEffect(StringDef.PATH_GET_PADI_ITEM)
-    --        _buttonCoinClick(commodityLayer, button, self.commodity_)
-    --    end
-    --end)
 end
 
 -- TODO 这块的layer可能出问题奥

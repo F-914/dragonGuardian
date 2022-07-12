@@ -21,7 +21,7 @@ function CoinShopLayer:ctor()
 end
 
 function CoinShopLayer:initView()
-    local itemWidth, itemHeight = ConstDef.SHOP_ITEM_WIDTH, ConstDef.SHOP_ITEM_HEIGHT
+    --local itemWidth, itemHeight = ConstDef.SHOP_ITEM_WIDTH, ConstDef.SHOP_ITEM_HEIGHT
     local coinShopLayer = cc.CSLoader:getInstance():createNodeWithFlatBuffersFile("CoinShopLayer.csb"):addTo(self)
     -- 刷新时间倒计时
     local freshLayer = tolua.cast(ccui.Helper:seekWidgetByName(coinShopLayer, "freshTime"), "ccui.Layout")
