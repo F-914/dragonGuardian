@@ -15,6 +15,7 @@ end)
 -- local
 local StringDef = require("app.def.StringDef")
 local GameData = require("app.test.GameData")
+local OutGameData = require("src.app.data.OutGameData")
 local Log = require("app.utils.Log")
 --
 
@@ -24,11 +25,13 @@ local Log = require("app.utils.Log")
     @param userKeyQuantity: number ,用户当前的要是数量
     @return none
 ]]
-function CalibrateScaleSprite:ctor(res, userKeyQuantity)
-    self.currentKey_ = userKeyQuantity --记录当前钥匙数量，用于帧刷新和创建进度条
-    Log.i("userKeyQuantity is nil ? " .. tostring(userKeyQuantity == nil))
+function CalibrateScaleSprite:ctor(res)
+    self.trophyAmount_ = nil --记录当前钥匙数量，用于帧刷新和创建进度条
+    self.rewordNodeData_ = nil --用于访问奖励数据
+
     self.yellowScale_ = nil --用于帧刷新
-    self.size_ = nil --用于帧刷新
+    self.decorateBar_ = nil --用于帧刷新
+
     self:init()
 end
 
@@ -38,58 +41,58 @@ end
     @return none
 ]]
 function CalibrateScaleSprite:init()
+    ---数据源
 
-    local size = self:getContentSize()
+    self.trophyAmount_ = OutGameData
+            :getUserInfo()
+            :getTrophyAmount()
+    self.rewordNodeData_ = OutGameData
+            :getUserInfo()
+            :getUserInfoLadder()
+            :getLadderList()
 
-    self.size_ = size
-    self:setScale(1.93, 1)
+
+    self:setScale(3, 1)
 
     local yellowScale = display.newSprite(StringDef.PATH_HIGH_LADDER_CALIBRATED_SCALE_CUTOFF)
-    yellowScale:setAnchorPoint(0, 0)
-    yellowScale:setPosition(3, 6)
-    local factor = self.currentKey_ / GameData.maxKeyQuantity_
-    --这个放缩值谨慎修改
-    local scale = 3.13 * factor - 0.20
-    yellowScale:setScale(scale, 1)
+    yellowScale:setAnchorPoint(1, 0)
+    yellowScale:setScale(3, .8)
+    yellowScale:setPosition(26.5 + (self.trophyAmount_/50 - 1) * 40.1, 9)
     yellowScale:addTo(self)
 
-    --该地方有瑕疵，留待后续修改
-    --local spriteDecorate = display.newSprite("res/home/battle/high_ladder/calibrated scale/rectangle.png")
-    --spriteDecorate:setAnchorPoint(0, 0)
-    --spriteDecorate:setPosition(0, 0)
-    ----spriteDecorate:setScale(scale * 0.045, 1)
-    --spriteDecorate:setContentSize(self.size_.width * factor, self.height)
-    --spriteDecorate:addTo(yellowScale)
+    local spriteDecorate = display.newSprite(StringDef.PATH_HIGH_LADDER_DECORATE_BAR)
+    spriteDecorate:setAnchorPoint(1, 0)
+    spriteDecorate:setScale(.5, .8)
+    spriteDecorate:setPosition(28.5 + (self.trophyAmount_/50 - 1) * 40.1, 7)
+    spriteDecorate:addTo(self)
 
+    ---获取进度条的指针，用于后续的刷新
     self.yellowScale_ = yellowScale
-    local keyRewardNodes = GameData.keyRewardNodes_
-    for i = 1, #keyRewardNodes do
-        local num = keyRewardNodes[i]
-        local factor2 = num / GameData.maxKeyQuantity_
+    self.decorateBar_ = spriteDecorate
+
+    for i = 1, #self.rewordNodeData_ do
+        local num = self.rewordNodeData_[i].trophyCondition
         local quantityTTF = display.newTTFLabel({
             text = tostring(num),
             font = StringDef.PATH_FONT_FZBIAOZJW,
             size = 18,
             color = cc.c3b(168, 176, 225)
         })
-        local scale = factor2 * 3.127 - 0.18
-        quantityTTF:setPosition(scale * 210, -10)
-        quantityTTF:setScale(0.3, 0.8)
+        quantityTTF:setPosition(26 + (i - 1) * 40.1, -10)
+        quantityTTF:setScale(0.3, 0.9)
         quantityTTF:addTo(self)
 
         local cutoffScale = nil
-        if num < GameData.userKeyQuantity_ then
+        if num < self.trophyAmount_ then
             cutoffScale = display.newSprite(StringDef.PATH_HIGH_LADDER_CALIBRATED_SCALE_CUTOFF_SCALE)
         else
             cutoffScale = display.newSprite(StringDef.PATH_HIGH_LADDER_CALIBRATED_SCALE_SCALE)
         end
 
         cutoffScale:setScale(0.5, 1)
-        cutoffScale:setPosition(scale * 210, 13)
+        cutoffScale:setPosition(26 + (i - 1) * 40.1, 13)
         cutoffScale:addTo(self)
     end
-
-
 end
 
 --[[--
@@ -99,11 +102,10 @@ end
 ]]
 function CalibrateScaleSprite:update(dt)
     --监听到用户的钥匙数量发生变化
-    if not self.currentKey_ == GameData.userKeyQuantity then
-        self.currentKey_ = GameData.userKeyQuantity
-        local factor = self.currentKey_ / GameData.maxKeyQuantity_
-        local scale = 3.13 * factor - 0.19
-        self.yellowScale_:setScale(scale, 1)
+    if not self.trophyAmount_ ~= GameData.trophyAmount_ then
+        self.trophyAmount_ = GameData.trophyAmount_
+        self.decorateBar_:setPosition(28.5 + (self.trophyAmount_/50 - 1) * 40.1, 7)
+        self.yellowScale_:setPosition(26.5 + (self.trophyAmount_/50 - 1) * 40.1, 9)
     end
 end
 
