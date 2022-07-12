@@ -10,6 +10,48 @@ local EventDef = require("app.def.EventDef")
 local EventManager = require("app.manager.EventManager")
 --
 
+
+--# card
+--## Now
+--cardId
+--cardName
+--cardRarity
+--cardType
+--cardSkills
+--cardAtk
+--cardAtkTarget
+--cardATkEnahnce
+--cardExtraDamage
+--cardFireCd
+--cardFireCdEnhance
+--cardFireCdUpgrade
+--cardFatalityRate
+--cardStar
+--cardLevel
+--cardLocation
+--## Both
+--cardId -- 卡片的ID 用来标志是20个卡牌中的哪一种
+--cardName -- 卡片的名字
+--cardRarity -- 卡片的稀有度 不知道在游戏内不同稀有度的卡牌会不会有不同的样子
+--cardType -- 卡片的四种类型
+--cardSkills -- 卡片的技能 在游戏外需要有查看技能的选项，在游戏内需要使用技能
+--cardAtk -- 卡片的攻击力 随着等级或者星级变化而变化
+--cardAtkTarget -- 卡片的攻击目标
+--cardATkEnahnce -- 强化后的攻击力
+--cardAtkUpgrade -- 升级后的攻击力
+--cardFireCd -- 卡片的攻速
+--cardFireCdEnhance -- 强化后的攻速
+--cardFireCdUpgrade -- 升级后的攻速
+--cardLocation -- 卡片在小队中的序号
+---- 每种卡牌的单独的属性 后续需要再新增
+--cardFatalityRate -- 致命率
+--cardExtraDamage -- 额外伤害
+--## InGame
+--cardStar -- 卡片的星级
+--卡片合成之类的相关函数
+--## OutGame
+--cardAtkLevel -- 卡片的等级
+
 ---Card.ctor 构造函数
 ---@param cardId        number 防御塔 ID
 ---@param name          string 防御塔的名字
@@ -26,19 +68,20 @@ local EventManager = require("app.manager.EventManager")
 ---@param extraDamage   number 每次攻击带来的额外伤害
 ---@param fatalityRate  number 单次攻击的致命率
 ---@return  nil Description
-function Card:ctor(cardId, name, rarity, type, atk, atkTarget, atkUpgrade, atkEnhance, fireCd, fireCdEnhance, fireCdUpgrade,
+function Card:ctor(cardId, name, rarity, type, level, atk, atkTarget, atkUpgrade, atkEnhance, fireCd, fireCdEnhance, fireCdUpgrade,
                    skills, extraDamage, fatalityRate, location)
-    self:setCard(cardId, name, rarity, type, atk, atkTarget, atkUpgrade, atkEnhance, fireCd, fireCdEnhance, fireCdUpgrade, skills
+    self:setCard(cardId, name, rarity, type, level, atk, atkTarget, atkUpgrade, atkEnhance, fireCd, fireCdEnhance, fireCdUpgrade, skills
     , extraDamage, fatalityRate, location)
     EventManager:doEvent(EventDef.ID.CREATE_CARD, self)
 end
 
-function Card:setCard(cardId, name, rarity, type, atk, atkTarget, atkUpgrade, atkEnhance, fireCd, fireCdEnhance, fireCdUpgrade,
+function Card:setCard(cardId, name, rarity, type, level, atk, atkTarget, atkUpgrade, atkEnhance, fireCd, fireCdEnhance, fireCdUpgrade,
                       skills, extraDamage, fatalityRate, location)
     self.cardId_ = cardId
     self.cardName_ = name
     self.cardRarity_ = rarity
     self.cardType_ = type
+    self.cardLevel_ = level
     self.cardSkills = skills
 
     self.cardAtk_ = atk
