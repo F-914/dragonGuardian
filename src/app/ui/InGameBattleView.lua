@@ -80,6 +80,7 @@ end
     @return none
 ]]
 function InGameBattleView:update(dt)
+    self.inGameDownLayer_:update(dt)
 end
 
 return InGameBattleView

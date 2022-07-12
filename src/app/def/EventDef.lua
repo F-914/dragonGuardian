@@ -23,6 +23,7 @@ EventDef.ID = {
     CREATE_SKILL = 15,
     CREATE_TREASUREBOX = 16,
     CREATE_TREASUREBOXREWARD = 17,
+    DESTORY_ENEMY = 18,
 }
 
 return EventDef

@@ -11,23 +11,24 @@ end)
 local ConstDef = require("app.def.ConstDef")
 local EventDef = require("app.def.EventDef")
 local EventManager = require("app.manager.EventManager")
+local TimeManager = require("app.manager.TimeManager")
 local InGameData = require("app.data.InGameData")
 local isRun = false    --用于存储boss图标动画是否已执行
 --
 
--- 延时调用
--- @params callback(function) 回调函数
--- @params time(float) 延时时间(s)
--- @return 定时器
-local delayDoSomething = function(callback, time)
-    local handle
-    handle = cc.Director:getInstance():getScheduler():scheduleScriptFunc(function()
-        cc.Director:getInstance():getScheduler():unscheduleScriptEntry(handle)
-        callback()
-    end, time, false)
+-- -- 延时调用
+-- -- @params callback(function) 回调函数
+-- -- @params time(float) 延时时间(s)
+-- -- @return 定时器
+-- local TimeManager:delayDoSomething = function(callback, time)
+--     local handle
+--     handle = cc.Director:getInstance():getScheduler():scheduleScriptFunc(function()
+--         cc.Director:getInstance():getScheduler():unscheduleScriptEntry(handle)
+--         callback()
+--     end, time, false)
 
-    return handle
-end
+--     return handle
+-- end
 
 function BossSelect2nd:ctor()
     self:init()
@@ -119,7 +120,7 @@ function BossSelect2nd:randomBoss(deltaX, num)
                 local x = display.cx + deltaX + self.bossDelta_[self.boss_]
                 bossSprite:runAction(cc.EaseExponentialOut:create(cc.MoveTo:create(1,cc.p(x, display.cy))))
                 scheduler:unscheduleScriptEntry(timeSchedule)
-                delayDoSomething(function ()
+                TimeManager:delayDoSomething(function ()
                     self:aniSelected()
                     isRun = true
                 end, 0.4)
@@ -144,7 +145,7 @@ function BossSelect2nd:aniSelected()
         bossSprite:addTo(self)
 
         bossSprite:runAction(cc.EaseExponentialOut:create(cc.ScaleTo:create(0.5,3)))
-        delayDoSomething(function ()
+        TimeManager:delayDoSomething(function ()
             self:removeFromParent()
             InGameData:setGameState(ConstDef.GAME_STATE.PLAY)
         end, 1)

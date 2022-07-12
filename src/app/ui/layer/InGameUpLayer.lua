@@ -280,8 +280,4 @@ function InGameUpLayer:enemyArray()
     end
 end
 
-function InGameUpLayer:onEnter()
-    print("...enter")
-end
-
 return InGameUpLayer

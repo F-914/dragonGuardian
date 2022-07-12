@@ -7,6 +7,7 @@ local InGameScene = class("InGameScene", function()
 end)
 
 --local
+local InGameData = require("app.data.InGameData")
 local InGameBattleView = require("app.ui.InGameBattleView")
 --
 
@@ -22,6 +23,7 @@ end
 
 function InGameScene:onEnter()
     print("OnEnter")
+    InGameData:createEnemyInterval()
 end
 
 function InGameScene:onExit()
@@ -29,7 +31,11 @@ function InGameScene:onExit()
 end
 
 function InGameScene:update(dt)
-    self.inGameBattleView_:update(dt)
+    InGameData:update(dt)
+
+    if InGameData:isPlaying() then
+        self.inGameBattleView_:update(dt)
+    end
 end
 
 

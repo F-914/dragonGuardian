@@ -11,10 +11,15 @@ local Log = require("app.utils.Log")
 local enemySprite_
 local enemyLifeTTF_
 
-function InGameEnemySprite:ctor(type)	--type=1:小型敌人，type=2:大型敌人
-	if type == 1 then
+function InGameEnemySprite:ctor(type, data)	--type=1:小型敌人，type=2:大型敌人
+	self.data_ = data
+	self.type_ = type
+
+	if self.type_ == 1 then
+		Log.i("create enemy 1")
 		self:littleEnemy()
-	elseif type == 2 then
+	elseif self.type_ == 2 then
+		Log.i("create enemy 2")
 		self:entireEnemy()
 	else
 		Log.w("The parameter range is 1(little enemy) or 2(entire enemy)")
@@ -34,7 +39,7 @@ function InGameEnemySprite:littleEnemy()
 
 	-- 血量
 	enemyLifeTTF_ = display.newTTFLabel({
-        text = "500",
+        text = self.data_:getHp(),
         font = "font/fzbiaozjw.ttf",
         size = 20
     })
@@ -65,6 +70,25 @@ function InGameEnemySprite:entireEnemy()
     enemyLifeTTF_:setColor(cc.c3b(255,255,255))
 	enemyLifeTTF_:enableOutline(cc.c4b(0,0,0,255), 1)
     enemyLifeTTF_:addTo(self)
+end
+
+--[[--
+	hp改变
+]]
+function InGameEnemySprite:changeHp()
+	enemyLifeTTF_:setString(self.data_:getDeHp() - 50)
+end
+
+--[[--
+    帧刷新
+
+    @param dt 类型：number，帧间隔，单位秒
+
+    @return none
+]]
+function InGameEnemySprite:update(dt)
+    print("update")
+    self:setPosition(self.data_:getMyX(), self.data_:getMyY())
 end
 
 return InGameEnemySprite

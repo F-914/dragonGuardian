@@ -3,6 +3,7 @@
     游戏内数据
 ]]
 local InGameData = {}
+local Enemy = require("app.data.Enemy")
 local ConstDef = require("app.def.ConstDef")
 local EventDef = require("app.def.EventDef")
 local EventManager = require("app.manager.EventManager")
@@ -11,6 +12,9 @@ local EventManager = require("app.manager.EventManager")
 local cards_ = {}
 local enemies_ = {}
 local bullets_ = {}
+local schedule = cc.Director:getInstance():getScheduler()	--计时器路径
+local timeCreateEnemySchdule = nil  -- 敌人生成计时器
+local littleEnemyNum = 5    -- 每五只小怪一只精英怪
 
 --[[--
     初始化数据
@@ -109,6 +113,17 @@ function InGameData:getGameState()
 end
 
 --[[--
+    获取怪物信息
+
+    @param none
+
+    @return table
+]]
+function InGameData:getEnemies()
+    return enemies_
+end
+
+--[[--
     帧刷新
 
     @param dt 类型：number，帧间隔，单位秒
@@ -118,6 +133,19 @@ end
 function InGameData:update(dt)
     if self.gameState_ ~= ConstDef.GAME_STATE.PLAY then
         return
+    end
+
+    --self:createEnemy(1)
+
+    local destoryPlanes = {}
+
+    for i = 1, #enemies_ do
+        enemies_[i]:update(dt)
+        if not enemies_[i]:isDeath() then
+            --self:checkCollider(enemies_[i], bullets_, allies_)
+        else
+            destoryPlanes[#destoryPlanes + 1] = enemies_[i]
+        end
     end
 
     -- self:shoot(dt)
@@ -213,11 +241,14 @@ end
 --[[--
     产生敌人
 
-    @param dt 类型：number，时间间隔，单位秒
+    @param num 类型：number，敌人类型
 
     @return none
 ]]
-function InGameData:createEnemy(dt)
+function InGameData:createEnemy(num)
+    local enemy = Enemy.new("name", num, 300)  --调出create状态
+    enemies_[#enemies_+1] = enemy
+
     -- self.enemyTick_ = self.enemyTick_ + dt
     -- if self.enemyTick_ > ENEMY_INTERVAL then
     --     self.enemyTick_ = self.enemyTick_ - ENEMY_INTERVAL
@@ -227,5 +258,34 @@ function InGameData:createEnemy(dt)
     --     enemies_[#enemies_ + 1] = enemy
     -- end
 end
+
+--[[--
+    描述：计时器连续生成敌人
+]]
+function InGameData:createEnemyInterval()
+    -- 连续生成敌人
+    -- local num = 0
+    timeCreateEnemySchdule = schedule:scheduleScriptFunc(function (dt)
+        if InGameData:getGameState() == ConstDef.GAME_STATE.PLAY then
+            -- if num < littleEnemyNum then
+            --     num = num + 1
+                self:createEnemy(1)
+            -- elseif num == littleEnemyNum then
+            --     num = 0
+            --     local enemy = InGameEnemySprite.new(2)
+            --     self:addChild(enemy)
+            --     self:enemyMovePlayer(enemy)
+            -- end
+        end
+    end, 0.5, false)
+end
+
+--[[--
+    描述：停止敌人生成计时器
+]]
+function InGameData:stopCreateEnemy()
+    schedule:unscheduleScriptEntry(timeCreateEnemySchdule)
+end
+
 
 return InGameData
