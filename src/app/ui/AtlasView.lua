@@ -78,7 +78,14 @@ function AtlasView:ctor()
         if table.getn(ConstDef.BUTTON_CLICK)==0 then
            return
         else 
-           local tower=TowerDetialLayer.new(ConstDef.BUTTON_CLICK[1],collected_)
+            local card=nil
+            for v,k in ipairs(collectedList) do--此处collectedList不能直接使用，需要换为用户拥有的已收集列表
+                if k.order==order then
+                     card=collectedList[v]
+                end
+            end
+          
+           local tower=TowerDetialLayer.new(card,collected_)
            self:add(tower)
            tower.use:addTouchEventListener(function(sender, eventType)--注册塔的详情中，“使用”按钮的点击事件        
             if eventType==2 then
@@ -213,7 +220,7 @@ function AtlasView:createLineupList()
         layout3:setContentSize(lineupLayout:getContentSize().width, lineupLayout:getContentSize().height)
         pageView:addPage(layout3)
 
-    checkbox1:setSelected(true)
+    checkbox1:setSelected(true)--创造三个checkbox实现阵容切换
     checkbox1:setTouchEnabled(false)
     checkbox2:setSelected(false)
     checkbox3:setSelected(false)

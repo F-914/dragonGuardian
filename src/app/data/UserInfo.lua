@@ -22,11 +22,13 @@ function UserInfo:getSingleton()
     return self.instance_
 end
 
-function UserInfo:setUserInfo(account, nickname, coinAmount, diamondAmount)
+function UserInfo:setUserInfo(account, nickname, coinAmount, diamondAmount,collected,unCollected)
     self.instance_.account_ = account
     self.instance_.nickname_ = nickname
     self.instance_.coinAmount_ = coinAmount
     self.instance_.diamondAmount_ = diamondAmount
+    self.instance_.collected_=collected
+    self.instance_.unCollected_=unCollected
 end
 
 function UserInfo:getAccount()
@@ -44,5 +46,10 @@ end
 function UserInfo:getDiamondAmount()
     return self.instance_.diamondAmount_
 end
-
+function UserInfo:getCollected()
+    return self.instance_.collected_
+end
+function UserInfo:getUnCollected()
+    return self.instance_.unCollected_
+end
 return UserInfo
