@@ -104,4 +104,19 @@ function UserInfo:getUserInfoLadder()
     return self.ladder_
 end
 
+
+function UserInfo:setUserInfoDiamondAmount(diamondAmount)
+    self.diamondAmount_ = diamondAmount
+end
+function UserInfo:setUserInfoCoinAmount(coinAmount)
+    self.coinAmount_ = coinAmount
+end
+function UserInfo:setUserInfoTrophyAmount(trophyAmount)
+    self.trophyAmount_ = trophyAmount
+end
+function UserInfo:getUserInfoCardList()
+    return self.cardList_
+end
+
+
 return UserInfo

@@ -19,72 +19,132 @@ local TableUtil = require("src/app/utils/TableUtil.lua")
 local _userInfo
 local _coinShop
 local _diamondShop
+local _isAlive
 --
 
 function OutGameData:init()
     --连接到服务器
     OutGameMsgController:connect()
-
+    self:register()
 
     _userInfo = UserInfo.getInstance()
-    --这里应该通过向服务端发送用户账户和密码信息，来获取用户的数据
-    --然后将用户的数据填充
-    --注册回调函数
-    OutGameMsgController:registerListener(MsgDef.INIT_USERINFO, handler(self, self.serviceDataSync))
+
     ---这个传递的表格暂时这样
     ---每一个传递的msg都应该有type类型
-    OutGameMsgController:sendMsg({
-        type = MsgDef.INIT_USERINFO,
-        account = _userInfo.account,
-    })
+    --OutGameMsgController:sendMsg({
+    --    type = MsgDef.INIT_USERINFO,
+    --    account = _userInfo.account,
+    --})
+end
+function OutGameData:register()
+
+    OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.USERINFO_INIT, handler(self, self.initUserInfo))
+    OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.DIAMONDSHOP_INIT, handler(self, self.initDiamondShop))
+    OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.COINSHOP_INIT, handler(self, self.initCoinShop))
+    OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.USERINFO_DS, handler(self, self.userInfoDS))
+    OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.DIAMONDSHOP_DS, handler(self, self.diamondShopDS))
+    OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.COINSHOP_DS, handler(self, self.coinShopDS))
+    OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.CARD_COLLECT, handler(self, self.addCard))
+    OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.CARD_ATTRIBUTE_CHANGE, handler(self, self.changeCardAttribute))
+    OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.ASSERT_CHANGE, handler(self, self.assertChange))
+end
 
 
-    self:initCoinShop()
-    self:initDiamondShop()
-    --_coinShop = Shop.new()
-    --_diamondShop = Shop.new()
-end
 --[[--
-    @description 初始化或者同步服务器和客户端userinfo的数据
-    @param msg type:string, 由服务器发送的消息
+    @description 本地同步来自服务器userinfo的数据
+    @param msg type:table, 由服务器发送的消息
 ]]
-function OutGameData:serviceUserInfoDataSync(msg)
-    TableUtil:toUserInfo(msg)
+function OutGameData:userInfoDS(msg)
+    ---不能这么写
+    --TableUtil:toUserInfo(msg)
 end
 --[[--
-    @description 初始化或者同步金币商店数据
+    @description 本地同步来自服务器userinfo的数据
     每一次同步都会弃用原来的数据,会造成资源浪费
-    但是同步频率不高,应该影响不大吧????
-    @param msg type:string, 由服务器发送的消息
+    @param msg type:table, 由服务器发送的消息
 ]]
-function OutGameData:serviceCoinShopSync(msg)
-    _coinShop = TableUtil:toShop(msg)
+function OutGameData:coinShopDS(msg)
+    --_coinShop = TableUtil:toShop(msg)
 end
 --[[--
-    @description 初始化或者同步钻石商店数据
+    @description 本地同步来自服务器userinfo的数据
     每一次同步都会弃用原来的数据,会造成资源浪费
-    但是同步频率不高,应该影响不大吧????
-    @param msg type:string, 由服务器发送的消息
+    @param msg type:table, 由服务器发送的消息
 ]]
-function OutGameData:serviceDiamondShopSync(msg)
-    _diamondShop = TableUtil:toShop(msg)
+function OutGameData:diamondShopDS(msg)
+    --_diamondShop = TableUtil:toShop(msg)
 end
 
 function OutGameData:update(dt)
-    ---在这里,应该每隔一段时间就进行数据同步
+    ---在这里,进行计时，每隔一段时间进行发送消息进行数据同步
+    ---同时隔一段事件发送心跳消息，确认在线
 end
 
-function OutGameData:initDiamondShop()
-
-end
-
-function OutGameData:initCoinShop()
+function OutGameData:initDiamondShop(msg)
 
 end
 
-function OutGameData:initUserInfo()
+function OutGameData:initCoinShop(msg)
 
 end
+
+function OutGameData:initUserInfo(msg)
+
+end
+--[[--
+    @description 接受来自服务器的消息，确定新增的卡片,并将数据同步至本地数据
+    这样一次性会发送比较多的数据吧，可能需要修改
+    @msg, type:table 来自服务器的消息
+    @return none
+]]
+function OutGameData:addCard(msg)
+
+end
+--[[--
+    @description 确认来自服务器的消息，将数据同步至本地数据
+    @msg type:table 来自服务器的消息
+]]
+function OutGameData:changeCardAttribute(msg)
+
+end
+
+--[[--
+    @description 将购买的商品的数据同步至本地
+    这是用户购买的卡片的列表
+
+    msg中需要由userInfo属性，userInfo中需要有coinAmount和diamondAmount
+    以及cardList属性
+
+    以开宝箱为例， 在用户购买宝箱后，将开出的奖励和金币钻石的变化后的值传给服务器，服务器将数据确认保存后
+    再将数据传回本地，确保本地数据和服务器统一
+    另一方面，这个函数的运行要再奖励显示界面之前，不能显示奖励之后再传递消息给服务器
+
+    其他同理
+
+    @msg type:table 来自服务器的数据
+]]
+function OutGameData:purchaseCommodity(msg)
+    _userInfo:setUserInfoCoinAmount(msg.userInfo.coinAmount)
+    _userInfo:setUserInfoDiamondAmount(msg.userInfo.diamondAmount)
+
+    --将卡片数据合并至userInfo中
+    local msgCards = msg.userInfo.cardList
+    for i = 1, #msgCards do
+        local card = TableUtil:toCard(msgCards[i])
+        table.insert(_userInfo:getUserInfoCardList(), card)
+    end
+
+end
+--[[--
+    @description 将金币和钻石的变化后的数据同步至本地
+    msg中需要有userInfo属性，userInfo属性中必须有coinAmount和diamondAmount
+    @msg type：table 来自服务器的数据
+]]
+function OutGameData:assertChange(msg)
+    _userInfo:setUserInfoCoinAmount(msg.userInfo.coinAmount)
+    _userInfo:setUserInfoDiamondAmount(msg.userInfo.diamondAmount)
+end
+
 
 -- 不太确定函数返回的是引用还是复制的值，所以调用的时候还是先调用这个再用别的
 function OutGameData:getUserInfo()
@@ -102,7 +162,7 @@ function OutGameData:getCoinShop()
 end
 
 function OutGameData:getCoinShopRefreshTime()
-    if _coinStore == nil then
+    if _coinShop == nil then
         self:initCoinShop()
     end
     return _coinShop:getCoinShopRefreshTime()
