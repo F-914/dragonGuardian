@@ -73,13 +73,6 @@ function InGameEnemySprite:entireEnemy()
 end
 
 --[[--
-	hp改变
-]]
-function InGameEnemySprite:changeHp()
-	enemyLifeTTF_:setString(self.data_:getDeHp() - 50)
-end
-
---[[--
     帧刷新
 
     @param dt 类型：number，帧间隔，单位秒
@@ -87,7 +80,7 @@ end
     @return none
 ]]
 function InGameEnemySprite:update(dt)
-    print("update")
+	--enemyLifeTTF_:setString(self.data_:getDeHp())
     self:setPosition(self.data_:getMyX(), self.data_:getMyY())
 end
 

@@ -174,15 +174,15 @@ function InGameTowerButton:touchMove()
     self:addNodeEventListener(cc.NODE_TOUCH_EVENT, function(event)
         dump(event)
         if event.name == "began" then
-            print("touch")
+            Log.i("touch")
             return true
         elseif event.name == "moved" then
-            print("move")
+            Log.i("move")
             local curX = event.prevX
             local curY = event.prevY
             self:setPosition(curX, curY)
         elseif event.name == "ended" then
-            print("ended")
+            Log.i("ended")
             self:setPosition(self.nodeX_, self.nodeY_)
         end
     end)

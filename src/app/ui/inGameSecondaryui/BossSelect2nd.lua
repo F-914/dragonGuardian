@@ -130,7 +130,6 @@ function BossSelect2nd:randomBoss(deltaX, num)
             end
         end
     end, 0.01, false)
-    print("turns")
 end
 
 --[[--

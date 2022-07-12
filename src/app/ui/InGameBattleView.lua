@@ -46,7 +46,6 @@ end
     @return none
 ]]
 function InGameBattleView:onEnter()
-    print("enter")
     EventManager:regListener(EventDef.ID.GAMESTATE_CHANGE, self, function(state)
         if state == ConstDef.GAME_STATE.PLAY then
             --self.inGameDownLayer_:createEnemy()

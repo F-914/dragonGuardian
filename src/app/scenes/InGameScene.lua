@@ -22,7 +22,6 @@ function InGameScene:ctor()
 end
 
 function InGameScene:onEnter()
-    print("OnEnter")
     InGameData:createEnemyInterval()
 end
 

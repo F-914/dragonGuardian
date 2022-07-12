@@ -39,7 +39,7 @@ end
 ]]
 function InGameDownLayer:onEnter()
     EventManager:regListener(EventDef.ID.CREATE_ENEMY, self, function(enemy)
-        --修改：可变换的敌人类型
+        --修改：可变换的敌人类型(用数字table存储种类顺序？)
         local enemyNode = InGameEnemySprite.new(1, enemy)
         self:addChild(enemyNode)
         self.enemyMap_[enemy] = enemyNode
