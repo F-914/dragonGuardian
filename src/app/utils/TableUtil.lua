@@ -184,4 +184,19 @@ function TableUtil:removeTableFunction(obj)
     end
     return res
 end
+--[[--
+    @description:将之前去除函数的对象数据进一步封装成发送的消息
+    @param type type:string, 该消息的类型，
+    @param data type:table,对象去除函数后的数据
+    @param index type:string, 数据的索引名称
+    @param ... 留待扩展
+    @return type:table, 经过json打包过后直接可以发送的消息
+]]
+function TableUtil:encapsulateAsMsg(type, data, index, ...)
+    local msg = {}
+    msg.type = type
+    msg[index] = data
+    return msg
+end
+
 return TableUtil
