@@ -5,6 +5,7 @@
 local EventDef = {}
 
 EventDef.ID = {
+    GAMESTATE_CHANGE = 0, --游戏状态变更
     DESTORY_POPUP = 1, --销毁使用弹窗(特定图鉴二级面板)
     SHOW_BAG = 2, --显示图鉴界面中的图鉴
     HIDE_BAG = 3, --隐藏图鉴界面中的图鉴
@@ -23,6 +24,7 @@ EventDef.ID = {
     CREATE_TREASUREBOX = 16,
     CREATE_TREASUREBOXREWARD = 17,
     CREATE_IN_GAME_CARD = 18,
+    DESTORY_ENEMY = 19,
 }
 
 return EventDef
