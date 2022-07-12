@@ -17,6 +17,7 @@ local EventManager = require("app.manager.EventManager")
 -- 奖励类型即 reward属性指向的对象的类型 记录在 ConstDef.REWARD_TYPE
 ---@param rewardName      string 奖励名称
 ---@param rewardType      number 奖励类型
+---@param location        number reward的序号
 ---@param locked          boolean 是否被锁
 ---@param received        boolean 是否被领取
 ---@param trophyCondition number 解锁需要的奖杯数量

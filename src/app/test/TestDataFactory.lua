@@ -18,94 +18,94 @@ local Currency = require("app.data.Currency")
     @return 返回一个用于测试的奖品列表
 ]]
 function TestDataFactory:getRewardDataTest()
-    local rewardData = {}
-    for i = 1, 30 do
-        local data = nil
-        if i < 10 then
-            data = self:getRandomCardReward(i, i * 10)
-        elseif i < 20 then
-            data = self:getRandomCurrencyReward(i)
-        else
-            data = self:getRandomTreasureBoxReward(i)
-        end
-        table.insert(rewardData, data)
-    end
-    return rewardData
+    -- local rewardData = {}
+    -- for i = 1, 30 do
+    --     local data = nil
+    --     if i < 10 then
+    --         data = self:getRandomCardReward(i, i * 10)
+    --     elseif i < 20 then
+    --         data = self:getRandomCurrencyReward(i)
+    --     else
+    --         data = self:getRandomTreasureBoxReward(i)
+    --     end
+    --     table.insert(rewardData, data)
+    -- end
+    -- return rewardData
 
-    -- return {
-    --     [1] = {
-    --         order = 1,
-    --         numOfTrophy = 50,
-    --         name = "gold",
-    --         quantity = 400,
-    --         isGet = true,
-    --         isUnlock = true
-    --     },
-    --     [2] = {
-    --         order = 2,
-    --         numOfTrophy = 100,
-    --         name = "ordinary treasure chest",
-    --         isGet = true,
-    --         isUnlock = true
-    --     },
-    --     [3] = {
-    --         order = 3,
-    --         numOfTrophy = 150,
-    --         name = "diamond",
-    --         quantity = 400,
-    --         isGet = false,
-    --         isUnlock = true
-    --     },
-    --     [4] = {
-    --         order = 4,
-    --         numOfTrophy = 200,
-    --         name = "rare treasure chest",
-    --         isGet = false,
-    --         isUnlock = false
-    --     },
-    --     [5] = {
-    --         order = 5,
-    --         numOfTrophy = 250,
-    --         name = "ordinary unknown",
-    --         isGet = false,
-    --         isUnlock = false
-    --     },
-    --     [6] = {
-    --         order = 6,
-    --         numOfTrophy = 300,
-    --         name = "epic treasure chest",
-    --         isGet = false,
-    --         isUnlock = false
-    --     },
-    --     [7] = {
-    --         order = 7,
-    --         numOfTrophy = 350,
-    --         name = "rare unknown",
-    --         isGet = false,
-    --         isUnlock = false
-    --     },
-    --     [8] = {
-    --         order = 8,
-    --         numOfTrophy = 400,
-    --         name = "legendary treasure chest",
-    --         isGet = false,
-    --         isUnlock = false
-    --     },
-    --     [9] = {
-    --         order = 9,
-    --         numOfTrophy = 450,
-    --         name = "epic unknown",
-    --         isGet = false,
-    --         isUnlock = false
-    --     },
-    --     [10] = {
-    --         order = 10,
-    --         numOfTrophy = 500,
-    --         name = "legendary unknown",
-    --         isGet = false,
-    --         isUnlock = false
-    --     },
-    -- }
+    return {
+        [1] = {
+            order = 1,
+            numOfTrophy = 50,
+            name = "gold",
+            quantity = 400,
+            isGet = true,
+            isUnlock = true
+        },
+        [2] = {
+            order = 2,
+            numOfTrophy = 100,
+            name = "ordinary treasure chest",
+            isGet = true,
+            isUnlock = true
+        },
+        [3] = {
+            order = 3,
+            numOfTrophy = 150,
+            name = "diamond",
+            quantity = 400,
+            isGet = false,
+            isUnlock = true
+        },
+        [4] = {
+            order = 4,
+            numOfTrophy = 200,
+            name = "rare treasure chest",
+            isGet = false,
+            isUnlock = false
+        },
+        [5] = {
+            order = 5,
+            numOfTrophy = 250,
+            name = "ordinary unknown",
+            isGet = false,
+            isUnlock = false
+        },
+        [6] = {
+            order = 6,
+            numOfTrophy = 300,
+            name = "epic treasure chest",
+            isGet = false,
+            isUnlock = false
+        },
+        [7] = {
+            order = 7,
+            numOfTrophy = 350,
+            name = "rare unknown",
+            isGet = false,
+            isUnlock = false
+        },
+        [8] = {
+            order = 8,
+            numOfTrophy = 400,
+            name = "legendary treasure chest",
+            isGet = false,
+            isUnlock = false
+        },
+        [9] = {
+            order = 9,
+            numOfTrophy = 450,
+            name = "epic unknown",
+            isGet = false,
+            isUnlock = false
+        },
+        [10] = {
+            order = 10,
+            numOfTrophy = 500,
+            name = "legendary unknown",
+            isGet = false,
+            isUnlock = false
+        },
+    }
 end
 
 --[[--

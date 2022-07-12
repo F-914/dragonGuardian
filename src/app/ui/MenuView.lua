@@ -3,10 +3,10 @@
     MenuView.lua
 ]]
 local MenuView = class(
-        "MenuView",
-        function()
-            return display.newColorLayer(cc.c4b(0, 0, 0, 0))
-        end
+    "MenuView",
+    function()
+        return display.newColorLayer(cc.c4b(0, 0, 0, 0))
+    end
 )
 -- local
 local _priority = 0 -- 存储层优先级
@@ -334,7 +334,7 @@ function MenuView:bottomMenuControl(num)
         _shopIcon:runAction(cc.MoveTo:create(0.08, cc.p(_sizeTab.width / 2, _sizeTab.height / 2)))
         _shopTitle:setVisible(false)
         _guideIcon:runAction(cc.MoveTo:create(0.08,
-                cc.p(display.width - _sizeTab.width / 2, _sizeTab.height / 2 + _sizeTab.height / 5)))
+            cc.p(display.width - _sizeTab.width / 2, _sizeTab.height / 2 + _sizeTab.height / 5)))
         _guideTitle:setVisible(true)
     end
 end
@@ -389,8 +389,8 @@ function MenuView:createSecondMenu(layer)
     local announcIcon = cc.Sprite:create("home/top_player_info/second_menu/button_announcement.png")
     announcIcon:setAnchorPoint(0.5, 0.5)
     announcIcon:setPosition(secMenuBaseCX - sizeSecMenuBase.width * 7 / 24,
-            secMenuBaseCY + sizeSecMenuBase.height * 3 /
-                    9)
+        secMenuBaseCY + sizeSecMenuBase.height * 3 /
+        9)
     announcIcon:addTo(secMenuLayer)
 
     ------------------------------------------------------------------------------------------------
@@ -442,8 +442,8 @@ function MenuView:createSecondMenu(layer)
     local settingIcon = cc.Sprite:create("home/top_player_info/second_menu/button_setting.png")
     settingIcon:setAnchorPoint(0.5, 0.5)
     settingIcon:setPosition(secMenuBaseCX - sizeSecMenuBase.width * 7 / 24,
-            secMenuBaseCY - sizeSecMenuBase.height * 3 /
-                    9)
+        secMenuBaseCY - sizeSecMenuBase.height * 3 /
+        9)
     settingIcon:addTo(secMenuLayer)
 
     settingButton:addTouchEventListener(function(sender, eventType)
@@ -491,7 +491,7 @@ function MenuView:createSecondSetting(layer)
     local setClose = ccui.Button:create("home/top_player_info/second_setting/button_close.png")
     setClose:setAnchorPoint(0.5, 0.5)
     setClose:setPosition(display.cx + sizeSetBase.width / 2 - sizeSetBase.width / 17,
-            display.cy + sizeSetBase.height / 2 - sizeSetBase.height / 10)
+        display.cy + sizeSetBase.height / 2 - sizeSetBase.height / 10)
     setClose:addTo(secAvatarLayer)
     setClose:addTouchEventListener(function(sender, eventType)
         if 2 == eventType then
@@ -548,11 +548,11 @@ function MenuView:createSecondSetting(layer)
 
     --CheckBox音效
     local ckbEffect = ccui.CheckBox:create(
-            "home/top_player_info/second_setting/CheckBox_on.png", --普通状态
-            "home/top_player_info/second_setting/CheckBox_on.png", --普通按下
-            "home/top_player_info/second_setting/CheckBox_off.png", --选中状态
-            "home/top_player_info/second_setting/CheckBox_on.png", --普通禁用
-            "home/top_player_info/second_setting/CheckBox_off.png"--选中禁用
+        "home/top_player_info/second_setting/CheckBox_on.png", --普通状态
+        "home/top_player_info/second_setting/CheckBox_on.png", --普通按下
+        "home/top_player_info/second_setting/CheckBox_off.png", --选中状态
+        "home/top_player_info/second_setting/CheckBox_on.png", --普通禁用
+        "home/top_player_info/second_setting/CheckBox_off.png"--选中禁用
     )
     ckbEffect:setPosition(cc.p(display.width / 2 - sizeSetBase.width / 15, display.height / 2 + sizeSetBase.height / 5))
     ckbEffect:setAnchorPoint(0, 0.5)
@@ -586,11 +586,11 @@ function MenuView:createSecondSetting(layer)
 
     --CheckBox音乐
     local ckbBgm = ccui.CheckBox:create(
-            "home/top_player_info/second_setting/CheckBox_on.png", --普通状态
-            "home/top_player_info/second_setting/CheckBox_on.png", --普通按下
-            "home/top_player_info/second_setting/CheckBox_off.png", --选中状态
-            "home/top_player_info/second_setting/CheckBox_on.png", --普通禁用
-            "home/top_player_info/second_setting/CheckBox_off.png"--选中禁用
+        "home/top_player_info/second_setting/CheckBox_on.png", --普通状态
+        "home/top_player_info/second_setting/CheckBox_on.png", --普通按下
+        "home/top_player_info/second_setting/CheckBox_off.png", --选中状态
+        "home/top_player_info/second_setting/CheckBox_on.png", --普通禁用
+        "home/top_player_info/second_setting/CheckBox_off.png"--选中禁用
     )
     ckbBgm:setPosition(cc.p(display.width / 2 - sizeSetBase.width / 15, display.height / 2 + sizeSetBase.height / 15))
     ckbBgm:setAnchorPoint(0, 0.5)
@@ -609,7 +609,7 @@ function MenuView:createSecondSetting(layer)
     local introduceTitle = cc.Sprite:create("home/top_player_info/second_setting/title_skill_introduce.png")
     introduceTitle:setAnchorPoint(0, 0.5)
     introduceTitle:setPosition(cc.p(display.width / 3 - sizeSetBase.width / 10, display.height / 2 -
-            sizeSetBase.height / 15))
+        sizeSetBase.height / 15))
     introduceTitle:addTo(secAvatarLayer)
 
     -- 事件回调函数
@@ -623,11 +623,11 @@ function MenuView:createSecondSetting(layer)
 
     --CheckBox技能介绍
     local ckbIntro = ccui.CheckBox:create(
-            "home/top_player_info/second_setting/CheckBox_on.png", --普通状态
-            "home/top_player_info/second_setting/CheckBox_on.png", --普通按下
-            "home/top_player_info/second_setting/CheckBox_off.png", --选中状态
-            "home/top_player_info/second_setting/CheckBox_on.png", --普通禁用
-            "home/top_player_info/second_setting/CheckBox_off.png"--选中禁用
+        "home/top_player_info/second_setting/CheckBox_on.png", --普通状态
+        "home/top_player_info/second_setting/CheckBox_on.png", --普通按下
+        "home/top_player_info/second_setting/CheckBox_off.png", --选中状态
+        "home/top_player_info/second_setting/CheckBox_on.png", --普通禁用
+        "home/top_player_info/second_setting/CheckBox_off.png"--选中禁用
     )
     ckbIntro:setPosition(cc.p(display.width / 2 - sizeSetBase.width / 15, display.height / 2 - sizeSetBase.height / 15))
     ckbIntro:setAnchorPoint(0, 0.5)
@@ -674,7 +674,7 @@ function MenuView:createAvatarSelection(layer)
     local selectionClose = ccui.Button:create("home/top_player_info/second_avatar_selection/button_close.png")
     selectionClose:setAnchorPoint(0.5, 0.5)
     selectionClose:setPosition(display.cx + sizeSetBase.width / 2 - sizeSetBase.width / 17,
-            display.cy + sizeSetBase.height / 2 - sizeSetBase.height / 23)
+        display.cy + sizeSetBase.height / 2 - sizeSetBase.height / 23)
     selectionClose:addTo(secAvatarLayer)
     selectionClose:addTouchEventListener(function(sender, eventType)
         if 2 == eventType then
@@ -697,10 +697,7 @@ function MenuView:createAvatarSelection(layer)
     avatarConfirm:addTo(secAvatarLayer)
     avatarConfirm:addTouchEventListener(function(sender, eventType)
         if 2 == eventType then
-<<<<<<< HEAD
             -- TODO 这块得改一下
-=======
->>>>>>> origin/dev_xz
             audio.playEffect("sound_ogg/ui_btn_click.ogg")
             --MenuConfig.AVATER.ICON_PATH = TowerDef[curAvatarID].ICON_PATH
             _userInfo:setAvatar(TowerDef[curAvatarID].ICON_PATH)

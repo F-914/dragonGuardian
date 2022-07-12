@@ -2,8 +2,7 @@
     创建图鉴界面
     AtlasView
 ]]
-local AtlasView =
-class(
+local AtlasView = class(
     "AtlasView",
     function()
         return display.newColorLayer(cc.c4b(0, 0, 0, 0))
@@ -77,63 +76,24 @@ end
     @return none
 ]]
 function AtlasView:ctor()
-<<<<<<< HEAD
-    local function clickListener()--注册每0.1秒监听的函数，用于检测点击时间
-        local order=ConstDef.BUTTON_CLICK[1]
-        if #(ConstDef.BUTTON_CLICK)==0 then
-           return
-        else
-            local card=nil
-            for v,k in ipairs(collectedList) do--此处collectedList不能直接使用，需要换为用户拥有的已收集列表
-                if k.order==order then
-                     card=collectedList[v]
-                end
-            end
-
-           local tower=TowerDetialLayer.new(card,collected_)
-           self:add(tower)
-           tower.use:addTouchEventListener(function(sender, eventType)--注册塔的详情中，“使用”按钮的点击事件
-            if eventType==2 then
-               local popup = PopupLayer.new(order)
-               self:add(popup)
-               popup:setPosition(0,0)
-               tower:setVisible(false)
-               tower:removeFromParent()
-
-               for i=1,5 do--将当前阵容队列中的图标设置为可点击
-                lineup1_.button[i]:setTouchEnabled(true)
-                lineup2_.button[i]:setTouchEnabled(true)
-                lineup3_.button[i]:setTouchEnabled(true)
-               end
-               lineup1_:setOrder(order)
-               lineup2_:setOrder(order)
-               lineup3_:setOrder(order)
-               lineup1_:setPopup(popup)
-               lineup2_:setPopup(popup)
-               lineup3_:setPopup(popup)
-               lineup1_:setLineupOrder(1)
-               lineup2_:setLineupOrder(2)
-               lineup3_:setLineupOrder(3)
-
-               EventManager:doEvent(EventDef.ID.HIDE_BAG)
-               popup.cancel:addTouchEventListener(function(sender, eventType)
-                if eventType==2 then
-
-                    popup:setVisible(false)
-                    popup:removeFromParent()
-
-                    EventManager:doEvent(EventDef.ID.SHOW_BAG)
-                    EventManager:doEvent(EventDef.ID.RESUME_BAG_BUTTON)
-
-=======
-    local function clickListener() --注册每0.1秒监听的函数，用于检测点击时间
+    local function clickListener()
+        --注册每0.1秒监听的函数，用于检测点击时间
         local order = ConstDef.BUTTON_CLICK[1]
         if #(ConstDef.BUTTON_CLICK) == 0 then
             return
         else
-            local tower = TowerDetialLayer.new(ConstDef.BUTTON_CLICK[1], collected_)
+            local card = nil
+            for v, k in ipairs(collectedList) do
+                --此处collectedList不能直接使用，需要换为用户拥有的已收集列表
+                if k.order == order then
+                    card = collectedList[v]
+                end
+            end
+
+            local tower = TowerDetialLayer.new(card, collected_)
             self:add(tower)
-            tower.use:addTouchEventListener(function(sender, eventType) --注册塔的详情中，“使用”按钮的点击事件
+            tower.use:addTouchEventListener(function(sender, eventType)
+                --注册塔的详情中，“使用”按钮的点击事件
                 if eventType == 2 then
                     local popup = PopupLayer.new(order)
                     self:add(popup)
@@ -141,7 +101,8 @@ function AtlasView:ctor()
                     tower:setVisible(false)
                     tower:removeFromParent()
 
-                    for i = 1, 5 do --将当前阵容队列中的图标设置为可点击
+                    for i = 1, 5 do
+                        --将当前阵容队列中的图标设置为可点击
                         lineup1_.button[i]:setTouchEnabled(true)
                         lineup2_.button[i]:setTouchEnabled(true)
                         lineup3_.button[i]:setTouchEnabled(true)
@@ -168,21 +129,17 @@ function AtlasView:ctor()
 
                         end
                     end)
->>>>>>> origin/dev_xz
+
+                    table.remove(ConstDef.BUTTON_CLICK, 1)
+                    for i = 1, #(BagList_) do
+                        --将图鉴中的塔设置为不可点击
+                        BagList_[i]:setTouchEnabled(false)
+                    end
                 end
             end)
-
-            table.remove(ConstDef.BUTTON_CLICK, 1)
-            for i = 1, #(BagList_) do --将图鉴中的塔设置为不可点击
-                BagList_[i]:setTouchEnabled(false)
-            end
         end
-<<<<<<< HEAD
-    end)
-=======
     end
 
->>>>>>> origin/dev_xz
     self:initView()
     self:registerScriptHandler(
         function(event)
@@ -193,7 +150,8 @@ function AtlasView:ctor()
             end
         end
     )
-    EventManager:regListener(EventDef.ID.RESUME_BAG_BUTTON, self, function() --注册恢复图鉴中的塔为可点击
+    EventManager:regListener(EventDef.ID.RESUME_BAG_BUTTON, self, function()
+        --注册恢复图鉴中的塔为可点击
         for i = 1, #(BagList_) do
             BagList_[i]:setTouchEnabled(true)
         end
@@ -274,11 +232,12 @@ function AtlasView:createLineupList()
     layout3:setContentSize(lineupLayout:getContentSize().width, lineupLayout:getContentSize().height)
     pageView:addPage(layout3)
 
-    checkbox1:setSelected(true)--创造三个checkbox实现阵容切换
+    checkbox1:setSelected(true) --创造三个checkbox实现阵容切换
     checkbox1:setTouchEnabled(false)
     checkbox2:setSelected(false)
     checkbox3:setSelected(false)
-    local function onChangedCheckbox(sender, eventType) --使得pageview根据checkbox进行滑动的函数
+    local function onChangedCheckbox(sender, eventType)
+        --使得pageview根据checkbox进行滑动的函数
         if sender == checkbox1 then
             pageView:scrollToPage(0)
             checkbox2:setSelected(false)
@@ -351,7 +310,6 @@ function AtlasView:createBag()
         heightUncollect = math.floor(#(ConstDef.UNCOLLECTED) / 4) + 1
     end
 
-
     local splitLineCollected = display.newSprite(PATH_SPLITLINE_COLLECTED) --已收集的分割线
     collected_ = BagLayer.new(ConstDef.COLLECTED, "collected")
     BagList_ = collected_.list
@@ -386,7 +344,6 @@ function AtlasView:createBag()
     layoutUncollect:add(uncollected_)
     uncollected_:setPosition(layoutUncollect:getContentSize().width * 0.5, layoutUncollect:getContentSize().height)
 
-
     local listView = ccui.ListView:create() --创建listview
     self:add(listView)
     listView:setDirection(ccui.ListViewDirection.vertical)
@@ -397,12 +354,13 @@ function AtlasView:createBag()
     listView:add(layoutCollect)
     listView:add(layoutUncollect)
 
-
-    EventManager:regListener(EventDef.ID.HIDE_BAG, self, function() --注册隐藏图鉴
+    EventManager:regListener(EventDef.ID.HIDE_BAG, self, function()
+        --注册隐藏图鉴
         layoutCollect:setVisible(false)
         layoutUncollect:setVisible(false)
     end)
-    EventManager:regListener(EventDef.ID.SHOW_BAG, self, function() --注册显示图鉴
+    EventManager:regListener(EventDef.ID.SHOW_BAG, self, function()
+        --注册显示图鉴
         layoutCollect:setVisible(true)
         layoutUncollect:setVisible(true)
     end)
@@ -429,7 +387,8 @@ end
     @param none
     @return none
 ]]
-function AtlasView:onExit() --退出时注销注册的事件
+function AtlasView:onExit()
+    --退出时注销注册的事件
 
     EventManager:unRegListener(EventDef.ID.SHOW_BAG, self)
     EventManager:unRegListener(EventDef.ID.HIDE_BAG, self)
