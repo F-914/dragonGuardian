@@ -14,9 +14,9 @@ local EventManager = require("app.manager.EventManager")
 local cards_ = {}
 local enemies_ = {}
 local bullets_ = {}
-local schedule = cc.Director:getInstance():getScheduler()	--计时器路径
-local timeCreateEnemySchdule = nil  -- 敌人生成计时器
-local littleEnemyNum = 5    -- 每五只小怪一只精英怪
+local schedule = cc.Director:getInstance():getScheduler() --计时器路径
+local timeCreateEnemySchdule = nil -- 敌人生成计时器
+local littleEnemyNum = 5 -- 每五只小怪一只精英怪
 
 
 local SHOOT_INTERVAL = 0.2 -- 类型：number，射击间隔
@@ -255,8 +255,8 @@ end
     @return none
 ]]
 function InGameData:createEnemy(num)
-    local enemy = Enemy.new("name", num, 300)  --调出create状态
-    enemies_[#enemies_+1] = enemy
+    local enemy = Enemy.new("name", num, 300) --调出create状态
+    enemies_[#enemies_ + 1] = enemy
 
     -- self.enemyTick_ = self.enemyTick_ + dt
     -- if self.enemyTick_ > ENEMY_INTERVAL then
@@ -274,11 +274,11 @@ end
 function InGameData:createEnemyInterval()
     -- 连续生成敌人
     -- local num = 0
-    timeCreateEnemySchdule = schedule:scheduleScriptFunc(function (dt)
+    timeCreateEnemySchdule = schedule:scheduleScriptFunc(function(dt)
         if InGameData:getGameState() == ConstDef.GAME_STATE.PLAY then
             -- if num < littleEnemyNum then
             --     num = num + 1
-                self:createEnemy(1)
+            self:createEnemy(1)
             -- elseif num == littleEnemyNum then
             --     num = 0
             --     local enemy = InGameEnemySprite.new(2)
@@ -295,6 +295,5 @@ end
 function InGameData:stopCreateEnemy()
     schedule:unscheduleScriptEntry(timeCreateEnemySchdule)
 end
-
 
 return InGameData

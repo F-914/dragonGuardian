@@ -10,6 +10,7 @@ local GameData = require("app.test.GameData")
 local Matching_2nd = require("app.ui.secondaryui.Matching2nd")
 local Factory = require("app.utils.Factory")
 local StringDef = require("app.def.StringDef")
+local OutGameData = require("app.data.OutGameData")
 --
 --[[--
     @description: 构造方法
@@ -24,7 +25,7 @@ end
     @description: 初始化方法
 ]]
 function OutGameBattleLayer:init()
-    local teamData = GameData.currentTeam_
+    local teamData = OutGameData:getUserInfo():getBattleTeam():getCurrentBattleTeam()
     self.teamMap_ = Factory:createTeamSprite(teamData)
 
     local teamLayer = display.newLayer()

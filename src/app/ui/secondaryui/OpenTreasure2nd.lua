@@ -15,9 +15,11 @@ local StringDef = require("app.def.StringDef")
     @param treasureData type:table, 宝箱中的数据
     @return none
 ]]
-function OpenTreasureChest2nd:ctor(treasureData)
-    self.treasureData_ = treasureData
+function OpenTreasureChest2nd:ctor(treasureData, node)
 
+    self.treasureData_ = treasureData --这个treasureData并不是宝箱的奖励,而
+                                      --是宝箱可能的奖励,仅用于显示
+    self.node_ = node
     self:init()
 end
 
@@ -62,9 +64,16 @@ function OpenTreasureChest2nd:init()
     openButton:setPosition(size.width * .5, 0)
     openButton:addTouchEventListener(function(sender, eventType)
         if eventType == 2 then
-
+            --[[--
+                这里用于调用outGameData的打开宝箱的函数
+                这个函数需要生成随机奖励,并将数据上传服务器,并同步
+                最后返回宝箱的奖励信息
+                下面暂时用假数据替代
+            ]]
             --self:playOpenChestAnimation()
             local newView = ChestRewardGet2nd.new(TestDataFactory:getOpenChestItemData())
+            self.node_:get()
+
             newView:addTo(self:getParent())
             self:removeSelf()
         end

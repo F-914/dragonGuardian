@@ -8,7 +8,9 @@ UserInfo.instance_ = nil
 -- local
 local ConstDef = require("app.def.ConstDef")
 local StringDef = require("app.def.StringDef")
-local TestDataFactory = require("src/app/test/TestDataFactory.lua")
+local TestDataFactory = require("app.test.TestDataFactory")
+local BattleTeam = require("app.data.BattleTeam")
+local Card = require("app.data.Card")
 --
 
 function UserInfo:ctor(account, avatar, nickname, coinAmount, diamondAmount, trophyAmount, battleTeam, ladderList,
@@ -36,12 +38,38 @@ function UserInfo:testData()
     self.coinAmount_ = 123456
     self.diamondAmount_ = 789999
     self.trophyAmount_ = 101
-    self.battleTeam_ = {}
+    self.battleTeam_ = {
+        BattleTeam.new(
+            {
+                {
+                    Card.new(),
+                    Card.new(),
+                    Card.new(),
+                    Card.new(),
+                    Card.new(),
+                },
+                {
+                    Card.new(),
+                    Card.new(),
+                    Card.new(),
+                    Card.new(),
+                    Card.new(),
+                },
+                { Card.new(),
+                    Card.new(),
+                    Card.new(),
+                    Card.new(),
+                    Card.new(), }
+            },
+            1
+        )
+    }
     self.ladder_ = {}
     self.cardList_ = {}
 end
 
-function UserInfo:setUserInfo(account, avatar, nickname, coinAmount, diamondAmount, trophyAmount, battleTeam, ladder, cardList)
+function UserInfo:setUserInfo(account, avatar, nickname, coinAmount, diamondAmount, trophyAmount, battleTeam, ladder,
+                              cardList)
     self.account_ = account
     self.avatar_ = avatar
     self.nickname_ = nickname
@@ -95,6 +123,30 @@ end
 
 function UserInfo:setAvatar(avatar)
     self.avatar_ = avatar
+end
+
+function UserInfo:setUserInfoLadder(ladder)
+    self.ladder_ = ladder
+end
+
+function UserInfo:getUserInfoLadder()
+    return self.ladder_
+end
+
+function UserInfo:setUserInfoDiamondAmount(diamondAmount)
+    self.diamondAmount_ = diamondAmount
+end
+
+function UserInfo:setUserInfoCoinAmount(coinAmount)
+    self.coinAmount_ = coinAmount
+end
+
+function UserInfo:setUserInfoTrophyAmount(trophyAmount)
+    self.trophyAmount_ = trophyAmount
+end
+
+function UserInfo:getUserInfoCardList()
+    return self.cardList_
 end
 
 return UserInfo

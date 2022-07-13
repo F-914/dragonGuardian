@@ -110,6 +110,10 @@ local ConstDef = {
         StringDef.PATH_COIN_SHOP_TOWER_FRAGMENT_19,
         StringDef.PATH_COIN_SHOP_TOWER_FRAGMENT_20,
     },
+    ICON_CURRENCY_TYPE = {
+        StringDef.PATH_COIN_SHOP_COIN,
+        StringDef.PATH_COIN_SHOP_DIAMOND,
+    },
     LINEUP_LIST = { --图鉴界面中的三个阵容
         lineupOne = { 1, 1, 1, 1, 1 },
         lineupTwo = { 2, 2, 2, 2, 2 },
@@ -137,26 +141,38 @@ local ConstDef = {
         SSR = 3,
         UR = 4,
     },
+    TREASUREBOX_REWARD = {
+        R = 1,
+        SR = 2,
+        SSR = 3,
+        UR = 4,
+        COIN = 5,
+    },
     SHOP_BOX_TYPE_BASE_PATH = {
         StringDef.PATH_DIAMOND_SHOP_BASE_NORMAL,
         StringDef.PATH_DIAMOND_SHOP_BASE_RARE,
-        StringDef.PATH_DIAMON_SHOP_BASE_EPIC,
+        StringDef.PATH_DIAMOND_SHOP_BASE_EPIC,
         StringDef.PATH_DIAMOND_SHOP_BASE_LEGEND,
     },
     SHOP_BOX_TYPE_BOX_PATH = {
         StringDef.PATH_DIAMOND_SHOP_BOX_NORMAL,
         StringDef.PATH_DIAMOND_SHOP_BOX_RARE,
-        StringDef.PATH_DIAMON_SHOP_BOX_EPIC,
+        StringDef.PATH_DIAMOND_SHOP_BOX_EPIC,
         StringDef.PATH_DIAMOND_SHOP_BOX_LEGEND,
     },
     CURRENCY_TYPE = {
-        COIN = "COIN",
-        DIAMOND = "DIAMON",
+        COIN = 1,
+        DIAMOND = 2,
     },
     COMMODITY_TYPE = {
-        TOWER = "TOWER",
-        CURRENCY = "CURRENCY",
-        TREASUREBOX = "TREASUREBOX",
+        TOWER = 1,
+        CURRENCY = 2,
+        TREASUREBOX = 3,
+        UR = 4
+        -- 这是个啥……我也不知道这是啥了
+    },
+    TREASUREBOX_TYPE = {
+
     },
     TOWER_TYPE = {
         ATTACK = 1, -- 攻击类别

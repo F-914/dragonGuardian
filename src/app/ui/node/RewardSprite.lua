@@ -25,19 +25,21 @@ function RewardSprite:ctor(res, data)
     self.data_ = data --type: table, 精灵对应的数据
     self.button_ = nil --type: Button,用于按钮事件
     self.size_ = self:getContentSize() --type: table, 当前精灵的大小，用于计算和帧刷新
-    local button = Factory:createRewardButton(self.data_.name)
+    local button = Factory:createRewardButton(self.data_.rewardName_, self.data_.rewardType_)
     self.button_ = button
 
-    local lockSp = Factory:createBorderStateSprite(self.data_.isUnlock, self.data_.isGet)
+    local lockSp = Factory:createBorderStateSprite(self.data_.locked, self.data_.received)
     if lockSp then
         lockSp:setPosition(self.size_.width * .5, 3)
         lockSp:addTo(self)
     end
 
     local quantityTTF = nil
-    if self.data_.quantity then
+    if self.data_.amount ~= 1 then
         quantityTTF = display.newTTFLabel({
-            text = tostring(self.data_.quantity),
+            -- TODO 这个quanity和amount不知道是哪个对，两个都保留了然后注释了一个
+            -- text = tostring(self.data_.quantity),
+            text = tostring(self.data_.amount),
             font = StringDef.PATH_FONT_FZBIAOZJW,
             size = 18,
             color = cc.c3b(168, 176, 225)
@@ -56,17 +58,8 @@ function RewardSprite:ctor(res, data)
     self:init()
 end
 
---[[-
-    @description: 进行解锁状态变化事件的注册，暂无
-]]
-function RewardSprite:init()
-    --[[--
-        注册方法块，暂无
-    ]]
-end
-
 --[[--
-    @description: 当奖励解锁时调用这个方法，更新纹理，该方法用于注册后调用
+    @description: 当奖励解锁时调用这个方法,需要注册后调用
 ]]
 function RewardSprite:unlocked()
     --去除锁纹理
@@ -81,9 +74,11 @@ function RewardSprite:unlocked()
 end
 
 --[[--
-    @description: 当奖励被领取时，调用这个方法，更新视图，该方法用于注册
+    @description: 该方法用于点击领取按钮后
 ]]
 function RewardSprite:get()
+    --调用
+
     --加上领取标志
     local lockSp = CreateSpriteUtil:getBorderStateSprite(true, true)
     lockSp:setPosition(self.size_.width * .5, 0)

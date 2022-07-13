@@ -1,12 +1,12 @@
 --[[--
-    商店场景
-    ShopView.lua
+  商店场景
+ ShopView.lua
 ]]
 local ShopView = class(
-        "ShopView",
-        function()
-            return display.newColorLayer(cc.c4b(0, 0, 0, 0))
-        end)
+    "ShopView",
+    function()
+        return display.newColorLayer(cc.c4b(0, 0, 0, 0))
+    end)
 -- local
 local StoreList = require("app.test.StoreList")
 local Log = require("app.utils.Log")
@@ -28,7 +28,6 @@ local ShopLayer = require("app.ui.layer.ShopLayer")
     @return none
 ]]
 function ShopView:ctor()
-
     self.shopBackgroundLayer_ = nil
     self.shopLayer_ = nil
     --

@@ -176,6 +176,8 @@ local StringDef = {
     PATH_HIGH_LADDER_CALIBRATED_SCALE_CUTOFF_SCALE = "res/home/battle/high_ladder/calibrated scale/cutoff/cutoff_scale.png",
     PATH_HIGH_LADDER_UNLOCKED_UNRECEIVED_YELLOW_BORDER = "res/home/battle/high_ladder/unlocked_unreceived_yellow_border.png",
     PATH_HIGH_LADDER_CAN_RECEIVE = "res/home/battle/high_ladder/can_receive.png",
+    PATH_HIGH_LADDER_DECORATE_BAR = "res/home/battle/high_ladder/calibrated scale/rectangle.png",
+
     PATH_BACKGROUND_SHOP = "home/shop/background_shop.png",
     PATH_COIN_SHOP_BASE_TITLE = "home/shop/coins_shop/base_title.png",
     PATH_COIN_SHOP_BASE_REFRESH = "home/shop/coins_shop/base_remaining_refresh_time.png",
@@ -186,7 +188,7 @@ local StringDef = {
     PATH_COIN_SHOP_COIN = "home/shop/coins_shop/commodity_icon_coin.png",
     PATH_COIN_SHOP_BASE_FRAGMENT = "home/shop/coins_shop/base_fragments_number.png",
     PATH_COIN_SHOP_ICON_COIN = "home/shop/coins_shop/icon_coin.png",
-    PATH_COIN_SHOP_BASE_SHADE = "base_shade.png",
+    --PATH_COIN_SHOP_BASE_SHADE = "base_shade.png",
     PATH_COIN_SHOP_STORE_TITLE = "home/shop/coins_shop/title_coin_store.png",
     PATH_SHOP_SECOND_PURCHASE_CONFIRM_BASE = "home/shop/second_purchase_confirmation_popup/base_popup.png",
     PATH_SHOP_SECOND_PURCHASE_CONFIRM_CLOSE = "home/shop/second_purchase_confirmation_popup/button_close.png",

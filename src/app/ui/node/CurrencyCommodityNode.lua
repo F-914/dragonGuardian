@@ -3,15 +3,17 @@
 --- Created by Zoybzo.
 --- DateTime: 2022-07-07 11:55
 ---
-local CurrencyCommodityNode = class("CurrencyCommodityNode", function()
-    return cc.Node:create()
-end)
+local CurrencyCommodityNode = class("CurrencyCommodityNode",
+    function()
+        return ccui.Layout:create()
+    end)
 --local
 local audio = require("framework.audio")
 local ConstDef = require("app.def.ConstDef")
 local StringDef = require("app.def.StringDef")
 local Commodity = require("app.data.Commodity")
 local OutGameData = require("app.data.OutGameData")
+local Log = require("app.utils.Log")
 --
 --
 function CurrencyCommodityNode:ctor(commodity)
@@ -21,74 +23,31 @@ function CurrencyCommodityNode:ctor(commodity)
 end
 
 function CurrencyCommodityNode:initView()
-    local commodityLayer = ccui.Layout:create()
-    commodityLayer:setContentSize(ConstDef.SHOP_ITEM_WIDTH * 13 / 9, ConstDef.SHOP_ITEM_HEIGHT)
+    local commodityLayer = cc.CSLoader:getInstance():createNodeWithFlatBuffersFile("CurrencyCommodityLayer.csb")
+    --commodityLayer:setAnchorPoint(-0.3, 0.55)
     commodityLayer:setAnchorPoint(0.5, 0.5)
     commodityLayer:addTo(self)
-    --
-    local button = ccui.Button:create(StringDef.PATH_COIN_SHOP_FREE_DIAMOND)
-    button:setPosition(ConstDef.SHOP_ITEM_WIDTH * 2 / 3, ConstDef.SHOP_ITEM_HEIGHT / 2)
-    button:setAnchorPoint(0.5, 0.5)
-    button:addTo(commodityLayer)
-    -- 根据货币类型填充内容物
-    local currencyType = self.commodity_:getCurrencyType()
-    local icon
-    if currencyType == ConstDef.CURRENCY_TYPE.COIN then
-        icon = cc.Sprite:create(StringDef.PATH_COIN_SHOP_COIN)
-    elseif currencyType == ConstDef.CURRENCY_TYPE.DIAMOND then
-        icon = cc.Sprite:create(StringDef.PATH_COIN_SHOP_DIAMOND)
-    else
-        -- 两种都不是，这个时候出问题了
-        -- TODO 感觉非常需要写一个用来报错的函数 但是感觉 lua 不会有反射的 哇超 lua 有反射 可以
-        Log.e("Error Currency Type in CommodityNode:initView()")
-        exit()
-    end
-    --
-    icon:setPosition(ConstDef.SHOP_ITEM_WIDTH * 2 / 3, ConstDef.SHOP_ITEM_HEIGHT / 5 * 3)
-    icon:setAnchorPoint(0.5, 0.5)
-    icon:addTo(commodityLayer)
+    -- button
+    local commodityButton = tolua.cast(ccui.Helper:seekWidgetByName(commodityLayer, "commodityButton"), "ccui.Button")
+    -- 设置货币类型
+    local currencyTypeLayer = tolua.cast(ccui.Helper:seekWidgetByName(commodityLayer, "commodityLayout"), "ccui.Layout")
+    currencyTypeLayer:setBackGroundImage(ConstDef.ICON_CURRENCY_TYPE[
+        self.commodity_:getCommodityCommodity():getCurrencyType()])
     -- 设置货币数量
+    local numberLayer = tolua.cast(ccui.Helper:seekWidgetByName(commodityLayer, "numberField"), "ccui.Layout")
     local num = display.newTTFLabel({
         text = "x" .. tostring(self.commodity_:getCommodityAmount()),
         font = StringDef.PATH_FONT_FZBIAOZJW,
         size = 24
     })
-    num:align(display.CENTER, itemWidth * 2 / 3, itemHeight / 3)
+    --num:align(display.CENTER, itemWidth * 2 / 3, itemHeight / 3)
+    num:setPosition(numberLayer:getPosition())
+    num:setAnchorPoint(0.5, 2.25)
     num:setColor(cc.c3b(173, 196, 255))
     num:enableOutline(cc.c4b(0, 0, 0, 255), 1)
-    num:addTo(commodityLayer)
-    -- 设置商品价格
-    local price = self.commodity_:getCommodityPrice()
-    if price == 0 then
-        local priceTitle = cc.Sprite:create(StringDef.PATH_COIN_SHOP_ICON_FREE)
-        priceTitle:setPosition(ConstDef.SHOP_ITEM_WIDTH * 2 / 3, ConstDef.SHOP_ITEM_HEIGHT / 6)
-        priceTitle:setAnchorPoint(0.5, 0.5)
-        --priceTitle:scale(itemHeight / size.height /6)
-    else
-        -- 金币图标
-        local coinIcon = cc.Sprite:create(StringDef.PATH_COIN_SHOP_ICON_COIN)
-        if self.commodity_:getCardType() == ConstDef.TOWER_RARITY.SSR then
-            coinIcon:setPosition(ConstDef.SHOP_ITEM_WIDTH * 2 / 3 - 30, ConstDef.SHOP_ITEM_HEIGHT / 6)
-        else
-            coinIcon:setPosition(ConstDef.SHOP_ITEM_WIDTH * 2 / 3 - 23, ConstDef.SHOP_ITEM_HEIGHT / 6)
-        end
-        coinIcon:setAnchorPoint(0.5, 0.5)
-        local sizeCoin = coinIcon:getContentSize()
-        --coinIcon:scale(itemHeight / sizeCoin.height /6)
-        coinIcon:addTo(commodityLayer)
-        -- 价格
-        local dragonPrice = display.newTTFLabel({
-            text = self.commodity_:getCommodityPrice(),
-            font = StringDef.PATH_FONT_FZBIAOZJW,
-            size = 25
-        })
-        dragonPrice:align(display.CENTER, ConstDef.SHOP_ITEM_WIDTH * 4 / 5, ConstDef.SHOP_ITEM_HEIGHT / 6)
-        dragonPrice:setColor(cc.c3b(255, 255, 255))
-        dragonPrice:enableOutline(cc.c4b(0, 0, 0, 255), 1)
-        dragonPrice:addTo(commodityLayer)
-    end
+    num:addTo(numberLayer)
     -- 设置点击事件
-    button:addTouchEventListener(function(sender, eventType)
+    commodityButton:addTouchEventListener(function(sender, eventType)
         if 0 == eventType then
             Log.i("0")
             commodityLayer:scale(0.8)

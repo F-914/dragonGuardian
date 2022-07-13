@@ -50,4 +50,11 @@ function BattleTeam:getTeamSize()
     return #(self.team_)
 end
 
+--[[--
+    @description: 获取当前出战的队伍
+]]
+function BattleTeam:getCurrentBattleTeam()
+    return self.team_[self.standbyTeam_]
+end
+
 return BattleTeam

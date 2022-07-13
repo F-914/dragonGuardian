@@ -14,6 +14,8 @@ local Factory = require("app.utils.Factory")
 local StringDef = require("app.def.StringDef")
 local TestDataFactory = require("app.test.TestDataFactory")
 local OpenTreasureChest2nd = require("app.ui.secondaryui.OpenTreasure2nd")
+local OutGameData = require("src/app/data/OutGameData.lua")
+
 --
 --[[--
     @description: 构造方法
@@ -32,6 +34,14 @@ end
     @return none
 ]]
 function TrophyRewardsLayer:init()
+
+    --各项属性初始化，暂时保持这样，后面可能会因为需求变化
+    --self.rewardsMap_ = Factory:createRewardList(GameData.rewards_)
+    self.rewardsMap_ = Factory:createRewardList(OutGameData
+        :getUserInfo()
+        :getUserInfoLadder()
+        :getLadderList())
+
     local spriteBG = display.newSprite(StringDef.PATH_HIGH_LADDER_BACKGROUND)
     --给的资源就不对称
     spriteBG:setPosition(display.width * .515, display.height * 0.75)
@@ -52,8 +62,6 @@ function TrophyRewardsLayer:init()
         Log.i("test right button")
     end)
     rightButton:addTo(self)
-    --各项属性初始化，暂时保持这样，后面可能会因为需求变化
-    self.rewardsMap_ = Factory:createRewardList(GameData.rewards_)
     --构建天梯列表
     local highLadderView = ccui.ListView:create()
     highLadderView:setPosition(70, display.height * .69)
@@ -64,7 +72,7 @@ function TrophyRewardsLayer:init()
     --构建进度条
     local calibrateScale = CalibrateScaleSprite.new(StringDef.lPATH_HIGH_LADDER_CALIBRATED_SCALE,
         GameData.userKeyQuantity_)
-    Log.i(" userKeyQuantity_ is " .. tostring(GameData.userKeyQuantity_))
+
     calibrateScale:setAnchorPoint(0, 0)
     calibrateScale:setPosition(12, 15)
     calibrateScale:addTo(highLadderView)
@@ -88,17 +96,18 @@ function TrophyRewardsLayer:init()
     for data, node in pairs(self.rewardsMap_) do
         node:setPosition(spSize.width * .4 + 2.5, spSize.height * .4 + 10)
         node:setScale(0.66)
+        ---pair遍历时没有顺序,我觉得reward加一个表示顺序的属性吧
         Log.i(data.order)
         local itemLayer = itemLayers[data.order]
         node.button_:addTouchEventListener(function(sender, eventType)
             if eventType == 2 then
-                local name = data.name
+                local name = data.rewardName
                 if name == "ordinary treasure chest"
                     or name == "rare treasure chest"
                     or name == "epic treasure chest"
                     or name == "legendary treasure chest" then
 
-                    local twoLevelUi = OpenTreasureChest2nd.new(TestDataFactory:getChestRewardData())
+                    local twoLevelUi = OpenTreasureChest2nd.new(TestDataFactory:getChestRewardData(), node)
                     twoLevelUi:addTo(self:getParent())
 
                 end

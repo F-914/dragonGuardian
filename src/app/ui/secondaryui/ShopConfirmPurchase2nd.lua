@@ -57,7 +57,7 @@ function ShopConfirmPurchase2nd:initView()
     local checkClose = ccui.Button:create(StringDef.PATH_SHOP_SECOND_PURCHASE_CONFIRM_CLOSE)
     checkClose:setAnchorPoint(0.5, 0.5)
     checkClose:setPosition(display.cx + sizeSetBase.width / 2 - sizeSetBase.width / 15,
-            display.cy + sizeSetBase.height / 2 - sizeSetBase.height / 8)
+        display.cy + sizeSetBase.height / 2 - sizeSetBase.height / 8)
     checkClose:addTo(checkLayer)
     checkClose:addTouchEventListener(function(sender, eventType)
         if 2 == eventType then
@@ -100,7 +100,8 @@ function ShopConfirmPurchase2nd:initView()
     coinIcon:setPosition(display.cx - sizeSetBase.width / 15, display.cy - sizeSetBase.height * 17 / 48)
     coinIcon:addTo(checkLayer)
     -- 商品图
-    local dragonSprite = cc.Sprite:create(ConstDef.ICON_TOWER_FRAGMENT[self.commodity_:getCardId()])
+    local dragonSprite = cc.Sprite:create(ConstDef.ICON_TOWER_FRAGMENT[
+        self.commodity_:getCommodityCommodity():getCardId()])
     dragonSprite:setAnchorPoint(0.5, 0.5)
     dragonSprite:setPosition(display.cx, display.cy)
     dragonSprite:scale(0.8)
