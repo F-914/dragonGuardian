@@ -14,9 +14,9 @@ local EventManager = require("app.manager.EventManager")
 
     @return none
 ]]
-function Bullet:ctor(type, skills)
-    self.x_ = 0
-    self.y_ = 0
+function Bullet:ctor(type, x, y)
+    self.x_ = x
+    self.y_ = y
     EventManager:doEvent(EventDef.ID.CREATE_BULLET, self, type)
 end
 

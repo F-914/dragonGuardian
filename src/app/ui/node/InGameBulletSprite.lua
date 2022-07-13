@@ -6,9 +6,6 @@ local InGameBulletSprite = class("InGameBulletSprite", function(res)
     return display.newSprite(res)
 end)
 
---local
-local bulletSprite_
---
 
 --[[--
     构造函数
@@ -18,21 +15,12 @@ local bulletSprite_
 
     @return none
 ]]
-function InGameBulletSprite:ctor(type, data)
+function InGameBulletSprite:ctor(res, data)
     self.data_ = data -- 类型：Bullet，子弹数据
-    print("type", type)
-    self:init(type)
-    --self:setPosition(self.data_:getMyX(), self.data_:getMyY())
+
+    self:setPosition(display.cx, display.cy)
+    self:setAnchorPoint(0.5, 0.5)
 end
-
-function InGameBulletSprite:init(type)
-    bulletSprite_ = cc.Sprite:create("battle_in_game/battle_view/bullet/"..type..".png")
-    bulletSprite_:setPosition(display.cx, display.cy)
-    bulletSprite_:setAnchorPoint(0.5, 0.5)
-    bulletSprite_:addTo(self)
-end
-
-
 
 --[[--
     帧刷新

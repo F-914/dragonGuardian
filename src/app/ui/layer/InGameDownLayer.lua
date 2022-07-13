@@ -44,16 +44,18 @@ end
 function InGameDownLayer:onEnter()
     EventManager:regListener(EventDef.ID.CREATE_CARD, self, function(card)
         --card是InGameData中的Card数据（参考下方init中参数来源），用于传递统一管理的数据
-        local tower = InGameTowerButton.new(1,card)
+        local tower = InGameTowerButton.new(1,card)     -- 1指的是在我方生成
         tower:addTo(self)
         self.cardMap_[card] = tower
+        InGameData:shoot(tower:getNum(1), tower:getPositionX(), tower:getPositionY())
+        --EventManager:doEvent(EventDef.ID.CREATE_BULLET, self, 1, tower:getPositionX(), tower:getPositionY())
     end)
 
-    EventManager:regListener(EventDef.ID.CREATE_BULLET, self, function(bullet, type)
-        --尝试新加一个参数type控制生成子弹的种类，然后发现bullet和上下同级事件定义里的参数card和enemy好像都有点问题
+    EventManager:regListener(EventDef.ID.CREATE_BULLET, self, function(bullet, type, x, y)
         print("bullet",bullet)
         print("type",type)
-        local bulletNode = InGameBulletSprite.new(type, bullet)
+        local bulletNode = InGameBulletSprite.new("battle_in_game/battle_view/bullet/"..type..".png", bullet)
+        bulletNode:setPosition(display.cx, display.cy)
         self:addChild(bulletNode)
         self.bulletMap_[bullet] = bulletNode
 

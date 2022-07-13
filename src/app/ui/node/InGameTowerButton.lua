@@ -34,6 +34,19 @@ function InGameTowerButton:ctor(type, data)   -- 塔属于我方type=1，还是�
 end
 
 --[[--
+    描述：返回当前塔编号
+
+    @param type     --number，1：我方塔，2：对方塔
+]]
+function InGameTowerButton:getNum(type)
+    if type == 1 then
+        return self.numPlayer_
+    elseif type == 2 then
+        return self.numEnemy_
+    end
+end
+
+--[[--
     描述：初始化创建塔
 ]]
 function InGameTowerButton:buildPlayerTower(num)

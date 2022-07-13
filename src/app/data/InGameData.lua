@@ -153,7 +153,7 @@ function InGameData:update(dt)
         end
     end
 
-    self:shoot(dt)
+    --self:shoot(dt)
 
     local destoryBullets = {}
     for i = 1, #bullets_ do
@@ -226,17 +226,17 @@ end
 
     @return none
 ]]
-function InGameData:shoot(dt)
-    if self.shoot_ == nil then
-        self.shoot_ = 0
-    end
-    self.shoot_ = self.shoot_ + dt
-    if self.shoot_ > SHOOT_INTERVAL then
-        self.shoot_ = self.shoot_ - SHOOT_INTERVAL
+function InGameData:shoot(type, x, y)
+    -- if self.shoot_ == nil then
+    --     self.shoot_ = 0
+    -- end
+    -- self.shoot_ = self.shoot_ + dt
+    -- if self.shoot_ > SHOOT_INTERVAL then
+    --     self.shoot_ = self.shoot_ - SHOOT_INTERVAL
 
-        -- 产生子弹
-        local bullet = Bullet.new(2)
-        bullets_[#bullets_ + 1] = bullet
+        -- -- 产生子弹
+        -- local bullet = Bullet.new(1)
+        -- bullets_[#bullets_ + 1] = bullet
 
         -- for i = 1, #allies_ do
         --     local bullet = Bullet.new()
@@ -244,7 +244,14 @@ function InGameData:shoot(dt)
         --     bullet:setX(allies_[i]:getX())
         --     bullet:setY(allies_[i]:getY() + 30)
         -- end
-    end
+    -- end
+    local timeCreateBulletSchdule = schedule:scheduleScriptFunc(function(dt)
+        if self:getGameState() == ConstDef.GAME_STATE.PLAY then
+             -- 产生子弹
+            local bullet = Bullet.new(type, x, y)
+            bullets_[#bullets_ + 1] = bullet
+        end
+    end, 0.2, false)
 end
 
 --[[--
