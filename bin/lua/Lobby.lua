@@ -138,7 +138,7 @@ function main()
 end
 --[[
     @description: 修改用户的金币/钻石
-    @param msg 类型:json 要求msg必须含有loginName，assert，change，其中assert是钻石或者金币，change是变动的数值，该函数
+    @param msg 类型:json 要求msg必须含有loginName，assert，change，其中assert是钻石或者金币，update是变动后的数值，该函数
 	                     会回传一个确认消息permission，修改成功或者失败
     @return none
 ]]
@@ -154,24 +154,14 @@ function assetsChange(msg)
 		__G__TRACKBACK__("属性名称错误")
 		return
 	end
-
-
     local assert=data[msg["assert"]]
-	local change=msg["change"]
-	local back={}
-	if(assert+change>=0) then 
-		data[msg["asset"]]=assert+change
-		back["permission"]="yes"
-		
-	else
-		back["permission"]="no"
-	end
+    data[msg["asset"]]=msg["update"]
 	local saveData=cjson.encode(data)
 	savePlayerDBData(id,saveData)
-    
+
+    local back={}
+	back["permission"]="yes"
     back["type"]=MsgDef.ACKTYPE.LOBBY.ASSERT_CHANGE
-	back["afterchange"]=data[msg["assert"]]
-	back["assert"]=msg["assert"]
 	back["pid"]=id
 	local backMsg=cjson.encode(back)
     sendMsg2ClientByPid(id, backMsg)
@@ -187,13 +177,13 @@ function collectCard(msg)
     local id, data_str = requestPlayerDBData(msg["loginName"])
 
 	if (data_str == nil or data_str == '') then
-		__G__TRACKBACK__("该玩家不存在")
+		__G__TRACKBACK__("PLAYER NOT EXIST")
 		return
 	end
 
 	local data=cjson.decode(data_str)
 	if(msg["card"]==nil) then
-		__G__TRACKBACK__("卡片信息不存在")
+		__G__TRACKBACK__("CARD NOT EXIST")
 		return
     end
     table.insert(data["COLLECTED"],msg["card"])--此处可根据数据结构修改
@@ -211,7 +201,7 @@ end
 --[[
     @description: 改变卡牌的属性
     @param msg 类型:json 要求msg必须含有三个成员loginName，order，attribute，change其中order是对应的卡牌序列，
-	                attribute是需要修改的属性,change是变化的值
+	                attribute是需要修改的属性,update是变化后的值
     @return none
 ]]
 function cardAttributeChange(msg)
@@ -225,7 +215,6 @@ function cardAttributeChange(msg)
 	local data=cjson.decode(data_str)
 	local order=msg["order"]
 	local attribute=msg["attribute"]
-	local change=msg["change"]
 	if(data["COLLECTED"][order]==nil) then
 		__G__TRACKBACK__("CARD UNCOLLECTED")
 		return
@@ -233,7 +222,7 @@ function cardAttributeChange(msg)
 		__G__TRACKBACK__("ATTRIBUTE NOT EXIST")
 		return
 	end
-	data["COLLECTED"][order][attribute]=change+data["COLLECTED"][order][attribute]
+	data["COLLECTED"][order][attribute]=msg["update"]
 
     local saveData=cjson.encode(data)
 	savePlayerDBData(id,saveData)
@@ -243,7 +232,7 @@ function cardAttributeChange(msg)
 	back["type"]=MsgDef.ACKTYPE.LOBBY.CARD_ATTRIBUTE_CHANGE
 	back["order"]=msg["order"]
 	back["attribute"]=msg["attribute"]
-	back["afterchange"]=data["COLLECTED"][order][attribute]
+	back["confirm"]=msg["suc"]
 	local backMsg=cjson.encode(back)
     sendMsg2ClientByPid(id, backMsg)
 end
