@@ -15,7 +15,7 @@ local StringDef = require("app.def.StringDef")
 local TestDataFactory = require("app.test.TestDataFactory")
 local OpenTreasureChest2nd = require("app.ui.secondaryui.OpenTreasure2nd")
 local OutGameData = require("app.data.OutGameData")
-
+local ConstDef = require("src/app/def/ConstDef.lua")
 --
 --[[--
     @description: 构造方法
@@ -68,7 +68,7 @@ function TrophyRewardsLayer:init()
     highLadderView:addTo(self)
     --构建进度条
     local calibrateScale = CalibrateScaleSprite.new(StringDef.lPATH_HIGH_LADDER_CALIBRATED_SCALE,
-            GameData.userKeyQuantity_)
+        GameData.userKeyQuantity_)
 
     calibrateScale:setAnchorPoint(0, 0)
     calibrateScale:setPosition(12, 15)
@@ -98,15 +98,23 @@ function TrophyRewardsLayer:init()
         local itemLayer = itemLayers[data.order]
         node.button_:addTouchEventListener(function(sender, eventType)
             if eventType == 2 then
-                local name = data.rewardName
-                if name == "ordinary treasure chest"
-                        or name == "rare treasure chest"
-                        or name == "epic treasure chest"
-                        or name == "legendary treasure chest" then
-
-                    local twoLevelUi = OpenTreasureChest2nd.new(TestDataFactory:getChestRewardData(), node)
+                local rewardName = data.rewardName
+                local rewardType = data.rewardType
+                if rewardType == ConstDef.REWARD_TYPE.TREASUREBOX then
+                    ---将reward类里面的实际奖励传递给二级界面
+                    local twoLevelUi = OpenTreasureChest2nd.new(data.reward, node)
                     twoLevelUi:addTo(self:getParent())
-
+                elseif rewardType == ConstDef.REWARD_TYPE.CARD then
+                    --[[--
+                        这里直接发消息到服务器，确定玩家领取到一张卡片
+                    ]]
+                elseif rewardType == ConstDef.REWARD_TYPE.RANDOM then
+                    --[[--
+                        同理
+                    ]]
+                elseif rewardType == ConstDef.REWARD_TYPE.CURRENCY then
+                    --[[--
+                    ]]
                 end
             end
         end)
