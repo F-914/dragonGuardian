@@ -14,7 +14,7 @@ local Factory = require("app.utils.Factory")
 local StringDef = require("app.def.StringDef")
 local TestDataFactory = require("app.test.TestDataFactory")
 local OpenTreasureChest2nd = require("app.ui.secondaryui.OpenTreasure2nd")
-local OutGameData = require("src/app/data/OutGameData.lua")
+local OutGameData = require("app.data.OutGameData")
 
 --
 --[[--
@@ -37,10 +37,7 @@ function TrophyRewardsLayer:init()
 
     --各项属性初始化，暂时保持这样，后面可能会因为需求变化
     --self.rewardsMap_ = Factory:createRewardList(GameData.rewards_)
-    self.rewardsMap_ = Factory:createRewardList(OutGameData
-        :getUserInfo()
-        :getUserInfoLadder()
-        :getLadderList())
+    self.rewardsMap_ = Factory:createRewardList(OutGameData:getUserInfo():getUserInfoLadder():getLadderList())
 
     local spriteBG = display.newSprite(StringDef.PATH_HIGH_LADDER_BACKGROUND)
     --给的资源就不对称
@@ -71,7 +68,7 @@ function TrophyRewardsLayer:init()
     highLadderView:addTo(self)
     --构建进度条
     local calibrateScale = CalibrateScaleSprite.new(StringDef.lPATH_HIGH_LADDER_CALIBRATED_SCALE,
-        GameData.userKeyQuantity_)
+            GameData.userKeyQuantity_)
 
     calibrateScale:setAnchorPoint(0, 0)
     calibrateScale:setPosition(12, 15)
@@ -103,9 +100,9 @@ function TrophyRewardsLayer:init()
             if eventType == 2 then
                 local name = data.rewardName
                 if name == "ordinary treasure chest"
-                    or name == "rare treasure chest"
-                    or name == "epic treasure chest"
-                    or name == "legendary treasure chest" then
+                        or name == "rare treasure chest"
+                        or name == "epic treasure chest"
+                        or name == "legendary treasure chest" then
 
                     local twoLevelUi = OpenTreasureChest2nd.new(TestDataFactory:getChestRewardData(), node)
                     twoLevelUi:addTo(self:getParent())

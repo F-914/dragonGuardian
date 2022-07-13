@@ -15,7 +15,9 @@ end)
 -- local
 local StringDef = require("app.def.StringDef")
 local GameData = require("app.test.GameData")
-local OutGameData = require("src.app.data.OutGameData")
+-- require的方式不一样好像会导致OutGameData被引入的不一样 比如下面这种被注释的情况就会导致OutGameData没有初始化过
+--local OutGameData = require("src.app.data.OutGameData")
+local OutGameData = require("app.data.OutGameData")
 local Log = require("app.utils.Log")
 --
 
@@ -44,13 +46,12 @@ function CalibrateScaleSprite:init()
     ---数据源
 
     self.trophyAmount_ = OutGameData
-        :getUserInfo()
-        :getTrophyAmount()
+            :getUserInfo()
+            :getTrophyAmount()
     self.rewordNodeData_ = OutGameData
-        :getUserInfo()
-        :getUserInfoLadder()
-        :getLadderList()
-
+            :getUserInfo()
+            :getUserInfoLadder()
+            :getLadderList()
 
     self:setScale(3, 1)
 
@@ -71,7 +72,7 @@ function CalibrateScaleSprite:init()
     self.decorateBar_ = spriteDecorate
 
     for i = 1, #self.rewordNodeData_ do
-        local num = self.rewordNodeData_[i].trophyCondition
+        local num = self.rewordNodeData_[i].trophyCondition_
         local quantityTTF = display.newTTFLabel({
             text = tostring(num),
             font = StringDef.PATH_FONT_FZBIAOZJW,

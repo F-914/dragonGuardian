@@ -45,17 +45,22 @@ function RewardSprite:ctor(res, data)
             color = cc.c3b(168, 176, 225)
         })
     end
-    if quantityTTF then
-        button:setPosition(self.size_.width * .5, self.size_.height * .5 + 5)
-        quantityTTF:setPosition(self.size_.width * .5, self.size_.height * .5 - 30)
-        button:addTo(self)
-        quantityTTF:addTo(self)
-    else
-        button:setPosition(self.size_.width * .5, self.size_.height * .5)
-        button:addTo(self)
-    end
+    -- TODO 需要改的有点多 后面再改
+    --if quantityTTF then
+    --    button:setPosition(self.size_.width * .5, self.size_.height * .5 + 5)
+    --    quantityTTF:setPosition(self.size_.width * .5, self.size_.height * .5 - 30)
+    --    button:addTo(self)
+    --    quantityTTF:addTo(self)
+    --else
+    --    button:setPosition(self.size_.width * .5, self.size_.height * .5)
+    --    button:addTo(self)
+    --end
     self.lockSp_ = lockSp --lockSp 用于帧刷新
     self:init()
+end
+
+function RewardSprite:init()
+
 end
 
 --[[--

@@ -39,7 +39,7 @@ function OutGameBattleLayer:init()
     selectTeamSprite:addTo(teamLayer)
 
     for data, node in pairs(self.teamMap_) do
-        node:setPosition(-70 + display.width * 0.2 * data.location, display.height * .075)
+        node:setPosition(-70 + display.width * 0.2 * data.cardLocation_, display.height * .075)
         node:setScale(0.8)
         teamLayer:addChild(node)
     end

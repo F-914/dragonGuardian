@@ -57,6 +57,8 @@ local EventManager = require("app.manager.EventManager")
 ---@param name          string 防御塔的名字
 ---@param rarity        string 稀有度
 ---@param type          string 类型，四种类型中的某一种
+---@param level         number 卡牌等级
+---@param cardAmount    number 该种卡牌的数量 当卡牌作为商品时 购买所得到的卡牌数量以Commodity中的Amount为准
 ---@param atk           number 攻击力
 ---@param atkTarget     string 攻击目标，前方/随机/血量最高
 ---@param atkUpgrade    number 升级后攻击力变化
@@ -68,16 +70,16 @@ local EventManager = require("app.manager.EventManager")
 ---@param extraDamage   number 每次攻击带来的额外伤害
 ---@param fatalityRate  number 单次攻击的致命率
 ---@return  nil Description
-function Card:ctor(cardId, name, rarity, type, level, atk, atkTarget, atkUpgrade, atkEnhance, fireCd, fireCdEnhance,
+function Card:ctor(cardId, name, rarity, type, level, cardAmount, atk, atkTarget, atkUpgrade, atkEnhance, fireCd, fireCdEnhance,
                    fireCdUpgrade,
                    skills, extraDamage, fatalityRate, location)
-    self:setCard(cardId, name, rarity, type, level, atk, atkTarget, atkUpgrade, atkEnhance, fireCd, fireCdEnhance,
-        fireCdUpgrade, skills
-        , extraDamage, fatalityRate, location)
+    self:setCard(cardId, name, rarity, type, level, cardAmount, atk, atkTarget, atkUpgrade, atkEnhance, fireCd, fireCdEnhance,
+            fireCdUpgrade, skills
+    , extraDamage, fatalityRate, location)
     EventManager:doEvent(EventDef.ID.CREATE_CARD, self)
 end
 
-function Card:setCard(cardId, name, rarity, type, level, atk, atkTarget, atkUpgrade, atkEnhance, fireCd, fireCdEnhance,
+function Card:setCard(cardId, name, rarity, type, level, cardAmount, atk, atkTarget, atkUpgrade, atkEnhance, fireCd, fireCdEnhance,
                       fireCdUpgrade,
                       skills, extraDamage, fatalityRate, location)
     self.cardId_ = cardId
@@ -85,6 +87,7 @@ function Card:setCard(cardId, name, rarity, type, level, atk, atkTarget, atkUpgr
     self.cardRarity_ = rarity
     self.cardType_ = type
     self.cardLevel_ = level
+    self.cardAmount_ = cardAmount
     self.cardSkills = skills
 
     self.cardAtk_ = atk

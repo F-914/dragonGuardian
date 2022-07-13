@@ -149,6 +149,12 @@ local StringDef = {
     PATH_TEXTURE_TARGET = "res/home/guide/second_tower_infor_popup/text_details/goal.png",
     PATH_TEXTURE_SKILL_SLOW = "res/home/guide/second_tower_infor_popup/text_details/skill_slowing_effect.png",
 
+    PATH_SUBINTERFACE_TOWER_TYPE_ATTACK = "home/guide/subinterface_tower_list/type_attack.png",
+    PATH_SUBINTERFACE_TOWER_TYPE_DISTURB = "home/guide/subinterface_tower_list/type_disturb.png",
+    PATH_SUBINTERFACE_TOWER_TYPE_AUX = "home/guide/subinterface_tower_list/type_assist.png",
+    PATH_SUBINTERFACE_TOWER_TYPE_CONTROL = "home/guide/subinterface_tower_list/type_control.png",
+
+
     PATH_ICON_PROPERTY_TYPE = "res/home/guide/second_tower_infor_popup/icon_property/type.png",
     PATH_ICON_PROPERTY_ATK = "res/home/guide/second_tower_infor_popup/icon_property/atk.png",
     PATH_ICON_PROPERTY_ATK_SPEED = "res/home/guide/second_tower_infor_popup/icon_property/atk_speed.png",

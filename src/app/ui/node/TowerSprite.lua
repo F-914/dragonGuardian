@@ -23,8 +23,8 @@ local Factory = require("app.utils.Factory")
 function TowerSprite:ctor(res, data)
     self.data_ = data --type: table,精灵对应的数据
 
-    local towerType = Factory:createTowerType(self.data_.type)
-    local towerLevel = Factory:createTowerLevel(self.data_.star)
+    local towerType = Factory:createTowerType(self.data_.cardType_)
+    local towerLevel = Factory:createTowerLevel(self.data_.cardLevel_)
 
     self.levelSprite_ = towerLevel --type:sprite, 塔等级对应的精灵
 
@@ -43,7 +43,7 @@ end
 ]]
 function TowerSprite:update(dt)
     self.levelSprite_:setTexture(StringDef.PATH_PREFIX_SUBINTERFACE_TOWER_LEVEL ..
-        self.data_.star .. ".png")
+            self.data_.star .. ".png")
 end
 
 return TowerSprite

@@ -10,6 +10,7 @@ local EventDef = require("app.def.EventDef")
 local EventManager = require("app.manager.EventManager")
 local UserInfo = require("app.data.UserInfo")
 local Shop = require("app.data.Shop")
+local Log = require("app.utils.Log")
 local TestDataFactory = require("app.test.TestDataFactory")
 --网络部分
 local OutGameMsgController = require("app.network.OutGameMsgController")
@@ -29,7 +30,9 @@ function OutGameData:init()
     -- OutGameMsgController:connect()
     -- self:register()
 
-    self:initUserInfo()
+    _userInfo = UserInfo:getInstance()
+    Log.i("OutGameData:init: " .. tostring(_userInfo == nil))
+    --self:initUserInfo()
     self:initCoinShop()
     self:initDiamondShop()
     self:initTreasureBoxRewardWinningRate()
@@ -108,6 +111,7 @@ function OutGameData:initCoinShop()
 end
 
 function OutGameData:initUserInfo()
+    Log.i("OutGameData:initUserInfo")
     _userInfo = UserInfo:getInstance()
 end
 
@@ -120,7 +124,7 @@ function OutGameData:register()
     OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.COINSHOP_DS, handler(self, self.coinShopDS))
     OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.CARD_COLLECT, handler(self, self.addCard))
     OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.CARD_ATTRIBUTE_CHANGE,
-        handler(self, self.changeCardAttribute))
+            handler(self, self.changeCardAttribute))
     OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.ASSERT_CHANGE, handler(self, self.assertChange))
 end
 
@@ -226,9 +230,11 @@ end
 
 -- 不太确定函数返回的是引用还是复制的值，所以调用的时候还是先调用这个再用别的
 function OutGameData:getUserInfo()
+    Log.i("getUserInfo: " .. tostring(_userInfo == nil))
     if _userInfo == nil then
         self:initUserInfo()
     end
+    Log.i("userInfo is nil ? " .. tostring(_userInfo == nil))
     return _userInfo
 end
 

@@ -4,6 +4,11 @@
     Factory.lua
 ]]
 local Factory = {}
+--local
+local TypeConvert = require("app.utils.TypeConvert")
+local OutGameData = require("app.data.OutGameData")
+local ConstDef = require("app.def.ConstDef")
+--
 --[[--
     @description: 创建用于宝箱奖励的贴图
     @data type:table, 奖励的数据
@@ -49,10 +54,11 @@ end
 function Factory:createTeamSprite(teamData)
     local mapSprites = {}
     for i = 1, #teamData do
-        local cardData = teamData[i]
+        local cardId = teamData[i]
+        local cardData = OutGameData:getUserInfo():getCardList()[cardId]
         --解决循环嵌套
         local towerSprite = require("src/app/ui/node/TowerSprite.lua").new("res/home/general/icon_tower/" ..
-            cardData.cardId .. ".png", cardData)
+                TypeConvert.Integer2StringLeadingZero(cardId, 2) .. ".png", cardData)
         mapSprites[cardData] = towerSprite
     end
     return mapSprites
@@ -64,7 +70,7 @@ end
     @return type:Sprite, 代表塔类型的精灵
 ]]
 function Factory:createTowerType(name)
-    local sprite = display.newSprite("res/home/guide/subinterface_tower_list/type_" .. name .. ".png")
+    local sprite = display.newSprite(ConstDef.ICON_SUBINSTANCE_TOWER_LIST_TYPE[name])
     return sprite
 end
 
@@ -87,16 +93,16 @@ function Factory:createBorder(rewardData)
     if not rewardData.isUnlock then
         --解决循环嵌套，下同
         local border = require("src/app/ui/node/RewardSprite.lua").new("res/home/battle/high_ladder/locked_blue_border.png"
-            , rewardData)
+        , rewardData)
         return border
     else
         if not rewardData.isGet then
             local border = require("src/app/ui/node/RewardSprite.lua").new("res/home/battle/high_ladder/unlocked_unreceived_yellow_border.png"
-                , rewardData)
+            , rewardData)
             return border
         else
             local border = require("src/app/ui/node/RewardSprite.lua").new("res/home/battle/high_ladder/can_receive.png"
-                , rewardData)
+            , rewardData)
             return border
         end
     end
@@ -144,17 +150,18 @@ end
     @return type: Button 返回一个按钮
 ]]
 function Factory:createRewardButton(rewardName, rewardType)
-    if name == "gold" then
+    --local button = ccui.Button:create(ConstDef.ICON_REWARD[rewardType])
+    if rewardName == "gold" then
         local button = ccui.Button:create("res/home/battle/high_ladder/coin.png")
         return button
-    elseif name == "diamond" then
+    elseif rewardName == "diamond" then
         local button = ccui.Button:create("res/home/battle/high_ladder/diamond.png")
         return button
-    elseif name == "ordinary treasure chest" then
+    elseif rewardName == "ordinary treasure chest" then
         local button = ccui.Button:create("res/home/general/second_open_confirm_popup/icon_box_normal.png")
         button:setScale(0.5)
         return button
-    elseif name == "rare treasure chest" then
+    elseif rewardName == "rare treasure chest" then
         local button = ccui.Button:create("res/home/general/second_open_confirm_popup/icon_box_rare.png")
         button:setScale(0.5)
         return button
@@ -281,13 +288,13 @@ function Factory:createChestRewardPane(chestRewardData)
 
     local pSize = { width = size.width * .3, height = size.height * .4 }
     local layoutR = self:createChestRewardItem(pSize, chestRewardData.RNumberFloor,
-        chestRewardData.RNumberUpper, "ordinary")
+            chestRewardData.RNumberUpper, "ordinary")
     local layoutSR = self:createChestRewardItem(pSize, chestRewardData.SRNumberFloor,
-        chestRewardData.SRNumberUpper, "rare")
+            chestRewardData.SRNumberUpper, "rare")
     local layoutSSR = self:createChestRewardItem(pSize, chestRewardData.SSRNumberFloor,
-        chestRewardData.SSRNumberUpper, "epic")
+            chestRewardData.SSRNumberUpper, "epic")
     local layoutUR = self:createChestRewardItem(pSize, chestRewardData.URNumberFloor,
-        chestRewardData.URNumberUpper, "legend")
+            chestRewardData.URNumberUpper, "legend")
     layoutR:setPosition(size.width * .45, size.height * .65)
     layoutSR:setPosition(size.width * .85, size.height * .65)
     layoutSSR:setPosition(size.width * .45, size.height * .2)
