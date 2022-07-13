@@ -30,12 +30,18 @@ function OutGameData:init()
     -- OutGameMsgController:connect()
     -- self:register()
 
+    -- TODO 如果在这里调用init就会出错，但是直接get是没有问题的
     _userInfo = UserInfo:getInstance()
     Log.i("OutGameData:init: " .. tostring(_userInfo == nil))
     --self:initUserInfo()
-    self:initCoinShop()
-    self:initDiamondShop()
+    _coinShop = TestDataFactory:getTestCoinShop()
+    --self:initCoinShop()
+    Log.i("OutGameData:init: " .. tostring(_coinShop == nil))
+    _diamondShop = TestDataFactory:getTestDiamondShop()
+    --self:initDiamondShop()
+    Log.i("OutGameData:init: " .. tostring(_diamondShop == nil))
     self:initTreasureBoxRewardWinningRate()
+
 
     ---这个传递的表格暂时这样
     ---每一个传递的msg都应该有type类型
@@ -107,6 +113,7 @@ function OutGameData:initDiamondShop()
 end
 
 function OutGameData:initCoinShop()
+    Log.i("OutGameData:initCoinShop()")
     _coinShop = TestDataFactory:getTestCoinShop()
 end
 
@@ -239,9 +246,11 @@ function OutGameData:getUserInfo()
 end
 
 function OutGameData:getCoinShop()
+    Log.i("_coinShop is nullptr ? " .. (tostring(_coinShop == nil)))
     if _coinShop == nil then
         self:initCoinShop()
     end
+    Log.i("After init: _coinShop is nullptr ? " .. (tostring(_coinShop == nil)))
     return _coinShop
 end
 

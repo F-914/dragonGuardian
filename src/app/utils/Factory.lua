@@ -8,7 +8,8 @@ local Factory = {}
 local TypeConvert = require("app.utils.TypeConvert")
 local OutGameData = require("app.data.OutGameData")
 local ConstDef = require("app.def.ConstDef")
-local Log = require("src/app/utils/Log.lua")
+local Log = require("app.utils.Log")
+local StringDef = require("app.def.StringDef")
 --[[--
     @description: 创建用于宝箱奖励的贴图
     @data type:table, 奖励的数据
@@ -58,11 +59,7 @@ function Factory:createTeamSprite(teamData)
         local cardData = OutGameData:getUserInfo():getCardList()[cardId]
         --解决循环嵌套
         local towerSprite = require("src/app/ui/node/TowerSprite.lua").new("res/home/general/icon_tower/" ..
-<<<<<<< HEAD
                 TypeConvert.Integer2StringLeadingZero(cardId, 2) .. ".png", cardData)
-=======
-            cardData.cardId .. ".png", cardData)
->>>>>>> origin/dev_xz
         mapSprites[cardData] = towerSprite
     end
     return mapSprites
@@ -153,55 +150,86 @@ end
     @param rewardData type:table 奖励的信息
     @return type: Button 返回一个按钮
 ]]
-function Factory:createRewardButton(rewardName, rewardType)
-<<<<<<< HEAD
-    --local button = ccui.Button:create(ConstDef.ICON_REWARD[rewardType])
-    if rewardName == "gold" then
-=======
-    if rewardName == "coin" then
->>>>>>> origin/dev_xz
-        local button = ccui.Button:create("res/home/battle/high_ladder/coin.png")
-        return button
-    elseif rewardName == "diamond" then
-        local button = ccui.Button:create("res/home/battle/high_ladder/diamond.png")
-        return button
-<<<<<<< HEAD
-    elseif rewardName == "ordinary treasure chest" then
-        local button = ccui.Button:create("res/home/general/second_open_confirm_popup/icon_box_normal.png")
-        button:setScale(0.5)
-        return button
-    elseif rewardName == "rare treasure chest" then
-=======
-    elseif rewardName == "box_normal" then
-        local button = ccui.Button:create("res/home/general/second_open_confirm_popup/icon_box_normal.png")
-        button:setScale(0.5)
-        return button
-    elseif rewardName == "box_rare" then
->>>>>>> origin/dev_xz
-        local button = ccui.Button:create("res/home/general/second_open_confirm_popup/icon_box_rare.png")
-        button:setScale(0.5)
-        return button
-    elseif rewardName == "box_epic" then
-        local button = ccui.Button:create("res/home/general/second_open_confirm_popup/icon_box_epic.png")
-        button:setScale(0.5)
-        return button
-    elseif rewardName == "box_legend" then
-        local button = ccui.Button:create("res/home/general/second_open_confirm_popup/icon_box_legend.png")
-        button:setScale(0.5)
-        return button
-    elseif rewardName == "normal" then
-        local button = ccui.Button:create("res/home/general/second_open_confirm_popup/icon_normal.png")
-        return button
-    elseif rewardName == "rare" then
-        local button = ccui.Button:create("res/home/general/second_open_confirm_popup/icon_rare.png")
-        return button
-    elseif rewardName == "epic" then
-        local button = ccui.Button:create("res/home/general/second_open_confirm_popup/icon_epic.png")
-        return button
-    elseif rewardName == "legend" then
-        local button = ccui.Button:create("res/home/general/second_open_confirm_popup/icon_legend.png")
-        return button
+-- 本来想改成通过table来直接拿res的样子，但是改起来的话要动的东西有点多，就这样吧
+function Factory:createRewardButton(rewardData)
+    local button
+    local rewardType = rewardData:getRewardType()
+    if rewardType == ConstDef.REWARD_TYPE.CURRENCY then
+        local type = rewardData:getRewardReward():getCurrencyType()
+        if type == ConstDef.CURRENCY_TYPE.COIN then
+            button = ccui.Button:create(StringDef.PATH_HIGH_LADDER_COIN)
+        elseif type == ConstDef.CURRENCY_TYPE.DIAMOND then
+            button = ccui.Button:create(StringDef.PATH_HIGH_LADDER_DIAMOND)
+        end
+    elseif rewardType == ConstDef.REWARD_TYPE.CARD then
+        local type = rewardData:getRewardReward():getCardRarity()
+        if type == ConstDef.TOWER_RARITY.R then
+            button = ccui.Button:create(StringDef.PATH_SECOND_CONFIRM_RANDOM_CARD_NORMAL)
+        elseif type == ConstDef.TOWER_RARITY.SR then
+            button = ccui.Button:create(StringDef.PATH_SECOND_CONFIRM_RANDOM_CARD_RARE)
+        elseif type == ConstDef.TOWER_RARITY.SSR then
+            button = ccui.Button:create(StringDef.PATH_SECOND_CONFIRM_RANDOM_CARD_EPIC)
+        elseif type == ConstDef.TOWER_RARITY.UR then
+            button = ccui.Button:create(StringDef.PATH_SECOND_CONFIRM_RANDOM_CARD_LEGEND)
+        end
+    elseif rewardType == ConstDef.REWARD_TYPE.TREASUREBOX then
+        local type = rewardData:getRewardReward():getTreasureBoxType()
+        if type == ConstDef.TREASUREBOX_RARITY.R then
+            button = ccui.Button:create(StringDef.PATH_SECOND_CONFIRM_BOX_NORMAL)
+            button:setScale(0.5)
+        elseif type == ConstDef.TREASUREBOX_RARITY.SR then
+            button = ccui.Button:create(StringDef.PATH_SECOND_CONFIRM_BOX_RARE)
+            button:setScale(0.5)
+        elseif type == ConstDef.TREASUREBOX_RARITY.SSR then
+            button = ccui.Button:create(StringDef.PATH_SECOND_CONFIRM_BOX_EPIC)
+            button:setScale(0.5)
+        elseif type == ConstDef.TREASUREBOX_RARITY.UR then
+            button = ccui.Button:create(StringDef.PATH_SECOND_CONFIRM_BOX_LEGEND)
+            button:setScale(0.5)
+        end
+    elseif rewardType == ConstDef.REWARD_TYPE.RANDOM then
+        Log.i("TODO " .. "Factory:createRewardButton(rewardData): random button")
+    else
+        Log.e("Erroe rewardDataType in Factory:createRewardButton(rewardData)")
     end
+    return button
+    --if rewardName == "coin" then
+    --    local button = ccui.Button:create("res/home/battle/high_ladder/coin.png")
+    --    return button
+    --elseif rewardName == "diamond" then
+    --    local button = ccui.Button:create("res/home/battle/high_ladder/diamond.png")
+    --    return button
+    --elseif rewardName == "box_normal" then
+    --    local button = ccui.Button:create("res/home/general/second_open_confirm_popup/icon_box_normal.png")
+    --    button:setScale(0.5)
+    --    return button
+    --elseif rewardName == "box_rare" then
+    --    local button = ccui.Button:create("res/home/general/second_open_confirm_popup/icon_box_rare.png")
+    --    button:setScale(0.5)
+    --    return button
+    --elseif rewardName == "box_epic" then
+    --    local button = ccui.Button:create("res/home/general/second_open_confirm_popup/icon_box_epic.png")
+    --    button:setScale(0.5)
+    --    return button
+    --elseif rewardName == "box_legend" then
+    --    local button = ccui.Button:create("res/home/general/second_open_confirm_popup/icon_box_legend.png")
+    --    button:setScale(0.5)
+    --    return button
+    --elseif rewardName == "normal" then
+    --    local button = ccui.Button:create("res/home/general/second_open_confirm_popup/icon_normal.png")
+    --    return button
+    --elseif rewardName == "rare" then
+    --    local button = ccui.Button:create("res/home/general/second_open_confirm_popup/icon_rare.png")
+    --    return button
+    --elseif rewardName == "epic" then
+    --    local button = ccui.Button:create("res/home/general/second_open_confirm_popup/icon_epic.png")
+    --    return button
+    --elseif rewardName == "legend" then
+    --    local button = ccui.Button:create("res/home/general/second_open_confirm_popup/icon_legend.png")
+    --    return button
+    --else
+    --    Log.e("Error rewardName in Factory:createRewardButton(rewardName, rewardType)")
+    --end
 end
 
 --[[--
@@ -287,25 +315,14 @@ function Factory:createChestRewardPane(chestRewardData)
     coinNumTTF:addTo(baseCoinContainer)
 
     local pSize = { width = size.width * .3, height = size.height * .4 }
-<<<<<<< HEAD
-    local layoutR = self:createChestRewardItem(pSize, chestRewardData.RNumberFloor,
-            chestRewardData.RNumberUpper, "ordinary")
-    local layoutSR = self:createChestRewardItem(pSize, chestRewardData.SRNumberFloor,
-            chestRewardData.SRNumberUpper, "rare")
-    local layoutSSR = self:createChestRewardItem(pSize, chestRewardData.SSRNumberFloor,
-            chestRewardData.SSRNumberUpper, "epic")
-    local layoutUR = self:createChestRewardItem(pSize, chestRewardData.URNumberFloor,
-            chestRewardData.URNumberUpper, "legend")
-=======
     local layoutR = self:createChestRewardItem(pSize, chestRewardData[1][1],
-        chestRewardData[1][2], "R")
+            chestRewardData[1][2], "R")
     local layoutSR = self:createChestRewardItem(pSize, chestRewardData[2][1],
-        chestRewardData[2][2], "SR")
+            chestRewardData[2][2], "SR")
     local layoutSSR = self:createChestRewardItem(pSize, chestRewardData[3][1],
-        chestRewardData[3][2], "SSR")
+            chestRewardData[3][2], "SSR")
     local layoutUR = self:createChestRewardItem(pSize, chestRewardData[4][1],
-        chestRewardData[4][2], "UR")
->>>>>>> origin/dev_xz
+            chestRewardData[4][2], "UR")
     layoutR:setPosition(size.width * .45, size.height * .65)
     layoutSR:setPosition(size.width * .85, size.height * .65)
     layoutSSR:setPosition(size.width * .45, size.height * .2)

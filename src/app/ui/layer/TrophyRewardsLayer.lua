@@ -15,7 +15,7 @@ local StringDef = require("app.def.StringDef")
 local TestDataFactory = require("app.test.TestDataFactory")
 local OpenTreasureChest2nd = require("app.ui.secondaryui.OpenTreasure2nd")
 local OutGameData = require("app.data.OutGameData")
-local ConstDef = require("src/app/def/ConstDef.lua")
+local ConstDef = require("app.def.ConstDef")
 --
 --[[--
     @description: 构造方法
@@ -68,7 +68,7 @@ function TrophyRewardsLayer:init()
     highLadderView:addTo(self)
     --构建进度条
     local calibrateScale = CalibrateScaleSprite.new(StringDef.lPATH_HIGH_LADDER_CALIBRATED_SCALE,
-        GameData.userKeyQuantity_)
+            GameData.userKeyQuantity_)
 
     calibrateScale:setAnchorPoint(0, 0)
     calibrateScale:setPosition(12, 15)
@@ -94,8 +94,8 @@ function TrophyRewardsLayer:init()
         node:setPosition(spSize.width * .4 + 2.5, spSize.height * .4 + 10)
         node:setScale(0.66)
         ---pair遍历时没有顺序,我觉得reward加一个表示顺序的属性吧
-        Log.i(data.order)
-        local itemLayer = itemLayers[data.order]
+        Log.i("data.order: " .. tostring(data:getRewardLocation()))
+        local itemLayer = itemLayers[data:getRewardLocation()]
         node.button_:addTouchEventListener(function(sender, eventType)
             if eventType == 2 then
                 local rewardName = data.rewardName
@@ -103,6 +103,7 @@ function TrophyRewardsLayer:init()
                 if rewardType == ConstDef.REWARD_TYPE.TREASUREBOX then
                     ---将reward类里面的实际奖励传递给二级界面
                     local twoLevelUi = OpenTreasureChest2nd.new(data.reward, node)
+                    Log.i("twoLevelUi:addTo: self:getParent() is nullptr ? ")
                     twoLevelUi:addTo(self:getParent())
                 elseif rewardType == ConstDef.REWARD_TYPE.CARD then
                     --[[--
@@ -118,6 +119,7 @@ function TrophyRewardsLayer:init()
                 end
             end
         end)
+        Log.i("itemLayer is nullptr ? " .. tostring(itemLayer == nil))
         node:addTo(itemLayer)
     end
     --构建钥匙

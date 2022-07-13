@@ -38,8 +38,20 @@ function Reward:setReward(rewardName, rewardType, location, locked, received, tr
     self.reward_ = reward
 end
 
+function Reward:getRewardType()
+    return self.rewardType_
+end
+
+function Reward:getRewardReward()
+    return self.reward_
+end
+
 function Reward:getRewardName()
     return self.rewardName_
+end
+
+function Reward:getRewardLocation()
+    return self.rewardLocation_
 end
 
 function Reward:isLocked()

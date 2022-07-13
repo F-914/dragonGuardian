@@ -11,6 +11,7 @@ local Shop = require("app.data.Shop")
 local Commodity = require("app.data.Commodity")
 local TreasureBox = require("app.data.TreasureBox")
 local Currency = require("app.data.Currency")
+local Log = require("app.utils.Log")
 --
 
 --[[--
@@ -446,6 +447,7 @@ function TestDataFactory:getTestCoinShop()
     }
     local freshTime = "72:74"
     local coinShop = Shop.new(commodityList, freshTime)
+    Log.i("coinShop is nullptr ? " .. tostring(coinShop == nil))
     return coinShop
 end
 

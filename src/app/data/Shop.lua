@@ -12,6 +12,7 @@ local Shop = class("Shop", require("app.data.base.BaseModel"))
 --local
 local EventDef = require("app.def.EventDef")
 local EventManager = require("app.manager.EventManager")
+local Log = require("app.utils.Log")
 --
 
 ---@param freshTime string 钻石商店可以不传这个
@@ -30,6 +31,7 @@ function Shop:getCommodityList()
 end
 
 function Shop:getCoinShopRefreshTime()
+    Log.i("freshTime: " .. self.freshTime_)
     return self.freshTime_
 end
 

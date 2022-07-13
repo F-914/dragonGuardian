@@ -35,7 +35,7 @@ function RewardSprite:ctor(res, data)
 
     self.button_ = nil --type: Button,用于按钮事件
     self.size_ = self:getContentSize() --type: table, 当前精灵的大小，用于计算和帧刷新
-    local button = Factory:createRewardButton(self.data_.rewardName_, self.data_.rewardType_)
+    local button = Factory:createRewardButton(self.data_)
     self.button_ = button
 
     local lockSp = Factory:createBorderStateSprite(self.data_.locked, self.data_.received)
@@ -47,13 +47,10 @@ function RewardSprite:ctor(res, data)
     local quantityTTF = nil
     if self.data_.amount ~= 1 then
         quantityTTF = display.newTTFLabel({
-            -- TODO 这个quanity和amount不知道是哪个对，两个都保留了然后注释了一个
-<<<<<<< HEAD
+            -- 这个quanity和amount不知道是哪个对，两个都保留了然后注释了一个
             -- text = tostring(self.data_.quantity),
-=======
             -- 这个只对数量不是一的东西生效，比如金币和钻石，所以应该是
             -- amount就行
->>>>>>> origin/dev_xz
             text = tostring(self.data_.amount),
             font = StringDef.PATH_FONT_FZBIAOZJW,
             size = 18,
@@ -61,26 +58,23 @@ function RewardSprite:ctor(res, data)
         })
     end
     -- TODO 需要改的有点多 后面再改
-    --if quantityTTF then
-    --    button:setPosition(self.size_.width * .5, self.size_.height * .5 + 5)
-    --    quantityTTF:setPosition(self.size_.width * .5, self.size_.height * .5 - 30)
-    --    button:addTo(self)
-    --    quantityTTF:addTo(self)
-    --else
-    --    button:setPosition(self.size_.width * .5, self.size_.height * .5)
-    --    button:addTo(self)
-    --end
+    if quantityTTF then
+        button:setPosition(self.size_.width * .5, self.size_.height * .5 + 5)
+        quantityTTF:setPosition(self.size_.width * .5, self.size_.height * .5 - 30)
+        button:addTo(self)
+        quantityTTF:addTo(self)
+    else
+        button:setPosition(self.size_.width * .5, self.size_.height * .5)
+        button:addTo(self)
+    end
     self.lockSp_ = lockSp --lockSp 用于帧刷新
     self:init()
 end
 
-<<<<<<< HEAD
 function RewardSprite:init()
 
 end
 
-=======
->>>>>>> origin/dev_xz
 --[[--
     @description: 当奖励解锁时调用这个方法,需要注册后调用
 ]]
@@ -119,7 +113,7 @@ end
 ]]
 function RewardSprite:update(dt)
     if self.received_ ~= self.data_.received_
-        or self.locked_ ~= self.data_.locked_ then
+            or self.locked_ ~= self.data_.locked_ then
         self.received_ = self.data_.received_
         self.locked_ = self.data_.locked_
         if self.locked_ == false and self.received_ == false then
