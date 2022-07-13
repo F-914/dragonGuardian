@@ -15,7 +15,7 @@ local StringDef = require("app.def.StringDef")
 local TestDataFactory = require("app.test.TestDataFactory")
 local OpenTreasureChest2nd = require("app.ui.secondaryui.OpenTreasure2nd")
 local OutGameData = require("src/app/data/OutGameData.lua")
-
+local ConstDef = require("src/app/def/ConstDef.lua")
 --
 --[[--
     @description: 构造方法
@@ -38,9 +38,9 @@ function TrophyRewardsLayer:init()
     --各项属性初始化，暂时保持这样，后面可能会因为需求变化
     --self.rewardsMap_ = Factory:createRewardList(GameData.rewards_)
     self.rewardsMap_ = Factory:createRewardList(OutGameData
-            :getUserInfo()
-            :getUserInfoLadder()
-            :getLadderList())
+        :getUserInfo()
+        :getUserInfoLadder()
+        :getLadderList())
 
     local spriteBG = display.newSprite(StringDef.PATH_HIGH_LADDER_BACKGROUND)
     --给的资源就不对称
@@ -101,15 +101,23 @@ function TrophyRewardsLayer:init()
         local itemLayer = itemLayers[data.order]
         node.button_:addTouchEventListener(function(sender, eventType)
             if eventType == 2 then
-                local name = data.rewardName
-                if name == "ordinary treasure chest"
-                    or name == "rare treasure chest"
-                    or name == "epic treasure chest"
-                    or name == "legendary treasure chest" then
-
-                    local twoLevelUi = OpenTreasureChest2nd.new(TestDataFactory:getChestRewardData(), node)
+                local rewardName = data.rewardName
+                local rewardType = data.rewardType
+                if rewardType == ConstDef.REWARD_TYPE.TREASUREBOX then
+                    ---将reward类里面的实际奖励传递给二级界面
+                    local twoLevelUi = OpenTreasureChest2nd.new(data.reward, node)
                     twoLevelUi:addTo(self:getParent())
-
+                elseif rewardType == ConstDef.REWARD_TYPE.CARD then
+                    --[[--
+                        这里直接发消息到服务器，确定玩家领取到一张卡片
+                    ]]
+                elseif rewardType == ConstDef.REWARD_TYPE.RANDOM then
+                    --[[--
+                        同理
+                    ]]
+                elseif rewardType == ConstDef.REWARD_TYPE.CURRENCY then
+                    --[[--
+                    ]]
                 end
             end
         end)
