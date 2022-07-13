@@ -18,11 +18,21 @@ local StringDef = require("app.def.StringDef")
 --[[--
     @description: 构造方法
     @param res type:string, 精灵纹理
-    @param data type:table, 精灵对应的数据
+    @param data type:Reward, 精灵对应的对象
     @return none
 ]]
 function RewardSprite:ctor(res, data)
     self.data_ = data --type: table, 精灵对应的数据
+    self.locked_ = data.locked_
+    self.received_ = data.received_
+    ---这两个属性用来与data中的属性比较，
+    ---如果不同，
+    ---就更改纹理，如果相同，就不更改，
+    ---之前本来不是想的这种实现方式，
+    ---而是采用领取奖励后调用纹理贴图变化的函数，
+    ---更改成这种模式的目的，就是减少各个界面和二级界面的耦合，最好达到
+    ---界面之间没有任何耦合，界面只负责暂时数据，以及提供控制器
+
     self.button_ = nil --type: Button,用于按钮事件
     self.size_ = self:getContentSize() --type: table, 当前精灵的大小，用于计算和帧刷新
     local button = Factory:createRewardButton(self.data_.rewardName_, self.data_.rewardType_)
@@ -37,6 +47,9 @@ function RewardSprite:ctor(res, data)
     local quantityTTF = nil
     if self.data_.amount ~= 1 then
         quantityTTF = display.newTTFLabel({
+            -- TODO 这个quanity和amount不知道是哪个对，两个都保留了然后注释了一个
+            -- 这个只对数量不是一的东西生效，比如金币和钻石，所以应该是
+            -- amount就行
             text = tostring(self.data_.amount),
             font = StringDef.PATH_FONT_FZBIAOZJW,
             size = 18,
@@ -56,7 +69,6 @@ function RewardSprite:ctor(res, data)
     self:init()
 end
 
-
 --[[--
     @description: 当奖励解锁时调用这个方法,需要注册后调用
 ]]
@@ -75,7 +87,7 @@ end
 --[[--
     @description: 该方法用于点击领取按钮后
 ]]
-function RewardSprite:get()
+function RewardSprite:receive()
     --调用
 
     --加上领取标志
@@ -94,7 +106,16 @@ end
     @return none
 ]]
 function RewardSprite:update(dt)
-
+    if self.received_ ~= self.data_.received_
+        or self.locked_ ~= self.data_.locked_ then
+        self.received_ = self.data_.received_
+        self.locked_ = self.data_.locked_
+        if self.locked_ == false and self.received_ == false then
+            self:unlocked()
+        elseif self.locked_ == false and self.received_ == true then
+            self:receive()
+        end
+    end
 end
 
 return RewardSprite
