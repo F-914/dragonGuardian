@@ -3,6 +3,8 @@
     游戏内数据
 ]]
 local InGameData = {}
+local Log = require("app.utils.Log")
+local Bullet = require("app.data.Bullet")
 local Enemy = require("app.data.Enemy")
 local ConstDef = require("app.def.ConstDef")
 local EventDef = require("app.def.EventDef")
@@ -16,6 +18,9 @@ local schedule = cc.Director:getInstance():getScheduler()	--计时器路径
 local timeCreateEnemySchdule = nil  -- 敌人生成计时器
 local littleEnemyNum = 5    -- 每五只小怪一只精英怪
 
+
+local SHOOT_INTERVAL = 0.2 -- 类型：number，射击间隔
+
 --[[--
     初始化数据
 
@@ -26,12 +31,14 @@ local littleEnemyNum = 5    -- 每五只小怪一只精英怪
 function InGameData:init()
     self.life_ = 100 -- 类型：number，生命值
     self.score_ = 0 -- 类型：number，得分
+    self.shoot_ = 0 -- 类型：number，开炮时间tick
 
     -- 类型：number，历史最高
     -- self.history_ = cc.UserDefault:getInstance():getIntegerForKey("history", 0)
 
     -- 类型：number，游戏状态
     self.gameState_ = ConstDef.GAME_STATE.INIT
+
 end
 
 --[[--
@@ -135,31 +142,27 @@ function InGameData:update(dt)
         return
     end
 
-    --self:createEnemy(1)
-
-    local destoryPlanes = {}
+    local destoryEnemys = {}
 
     for i = 1, #enemies_ do
         enemies_[i]:update(dt)
         if not enemies_[i]:isDeath() then
             --self:checkCollider(enemies_[i], bullets_, allies_)
         else
-            destoryPlanes[#destoryPlanes + 1] = enemies_[i]
+            destoryEnemys[#destoryEnemys + 1] = enemies_[i]
         end
     end
 
-    -- self:shoot(dt)
-    -- self:createEnemyPlane(dt)
+    self:shoot(dt)
 
-    -- local destoryBullets = {}
-    -- local destoryPlanes = {}
-    -- for i = 1, #bullets_ do
-    --     local bullet = bullets_[i]
-    --     bullet:update(dt)
-    --     if bullet:isDeath() then
-    --         destoryBullets[#destoryBullets + 1] = bullet
-    --     end
-    -- end
+    local destoryBullets = {}
+    for i = 1, #bullets_ do
+        local bullet = bullets_[i]
+        bullet:update(dt)
+        -- if bullet:isDeath() then
+        --     destoryBullets[#destoryBullets + 1] = bullet
+        -- end
+    end
 
     -- for i = 1, #enemies_ do
     --     enemies_[i]:update(dt)
@@ -224,18 +227,24 @@ end
     @return none
 ]]
 function InGameData:shoot(dt)
-    -- self.shootTick_ = self.shootTick_ + dt
-    -- if self.shootTick_ > SHOOT_INTERVAL then
-    --     self.shootTick_ = self.shootTick_ - SHOOT_INTERVAL
+    if self.shoot_ == nil then
+        self.shoot_ = 0
+    end
+    self.shoot_ = self.shoot_ + dt
+    if self.shoot_ > SHOOT_INTERVAL then
+        self.shoot_ = self.shoot_ - SHOOT_INTERVAL
 
-    --     -- 产生子弹
-    --     for i = 1, #allies_ do
-    --         local bullet = Bullet.new()
-    --         bullets_[#bullets_ + 1] = bullet
-    --         bullet:setX(allies_[i]:getX())
-    --         bullet:setY(allies_[i]:getY() + 30)
-    --     end
-    -- end
+        -- 产生子弹
+        local bullet = Bullet.new(2)
+        bullets_[#bullets_ + 1] = bullet
+
+        -- for i = 1, #allies_ do
+        --     local bullet = Bullet.new()
+        --     bullets_[#bullets_ + 1] = bullet
+        --     bullet:setX(allies_[i]:getX())
+        --     bullet:setY(allies_[i]:getY() + 30)
+        -- end
+    end
 end
 
 --[[--

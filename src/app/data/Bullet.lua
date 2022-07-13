@@ -2,7 +2,7 @@
     Bullet.lua
     子弹数据文件
 ]]
-local Bullet = class("Bullet", require("app.data.Object"))
+local Bullet = class("Bullet", require("app.data.base.BaseModel"))
 local ConstDef = require("app.def.ConstDef")
 local EventDef = require("app.def.EventDef")
 local EventManager = require("app.manager.EventManager")
@@ -14,21 +14,18 @@ local EventManager = require("app.manager.EventManager")
 
     @return none
 ]]
-function Bullet:ctor()
-    Bullet.super.ctor(self, 0, 0, ConstDef.BULLET_SIZE.WIDTH, ConstDef.BULLET_SIZE.HEIGHT)
-
-    EventManager:doEvent(EventDef.ID.CREATE_BULLET, self)
+function Bullet:ctor(type, skills)
+    self.x_ = 0
+    self.y_ = 0
+    EventManager:doEvent(EventDef.ID.CREATE_BULLET, self, type)
 end
 
---[[--
-    子弹命中爆炸
+function Bullet:getMyX()
+    return self.x_
+end
 
-    @param none
-
-    @return none
-]]
-function Bullet:bomb()
-    EventManager:doEvent(EventDef.ID.BULLET_BOMB, self)
+function Bullet:getMyY()
+    return self.y_
 end
 
 --[[--
@@ -51,13 +48,13 @@ end
     @return none
 ]]
 function Bullet:update(dt)
-    self.y_ = self.y_ + ConstDef.BULLET_SPEED * dt
+    self.y_ = self.y_ + 100 * dt
 
-    if not self.isDeath_ then
-        if self.y_ > display.top + ConstDef.BULLET_SIZE.HEIGHT then
-            self:destory()
-        end
-    end
+    -- if not self.isDeath_ then
+    --     if self.y_ > display.height then
+    --         self:destory()
+    --     end
+    -- end
 end
 
 return Bullet

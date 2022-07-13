@@ -7,11 +7,14 @@ local InGameDownLayer = class("InGameDownLayer", function()
 end)
 
 --local
+local Log = require("app.utils.Log")
 local ConstDef = require("app.def.ConstDef")
 local InGameData = require("app.data.InGameData")
 local EventDef = require("app.def.EventDef")
 local EventManager = require("app.manager.EventManager")
 local InGameEnemySprite = require("app.ui.node.InGameEnemySprite")
+local InGameTowerButton = require("app.ui.node.InGameTowerButton")
+local InGameBulletSprite = require("app.ui.node.InGameBulletSprite")
 local X_LEFT = 0
 local X_RIGHT = display.width*17/20 - display.cx/22
 local Y_DOWN_PLAYER = 0
@@ -22,8 +25,9 @@ local littleEnemyNum = 5    -- 每五只小怪一只精英怪
 --
 
 function InGameDownLayer:ctor()
-    --self.bulletMap_ = {} -- 类型：table，Key：bullet， Value：bulletSprite 子弹
+    self.bulletMap_ = {} -- 类型：table，Key：bullet， Value：bulletSprite 子弹
     self.enemyMap_ = {}
+    self.cardMap_ = {}  --存放生成的塔
 
     self:setContentSize(display.width, display.height)
     self:init()
@@ -38,8 +42,37 @@ end
     @return none
 ]]
 function InGameDownLayer:onEnter()
+    EventManager:regListener(EventDef.ID.CREATE_CARD, self, function(card)
+        --card是InGameData中的Card数据（参考下方init中参数来源），用于传递统一管理的数据
+        local tower = InGameTowerButton.new(1,card)
+        tower:addTo(self)
+        self.cardMap_[card] = tower
+    end)
+
+    EventManager:regListener(EventDef.ID.CREATE_BULLET, self, function(bullet, type)
+        --尝试新加一个参数type控制生成子弹的种类，然后发现bullet和上下同级事件定义里的参数card和enemy好像都有点问题
+        print("bullet",bullet)
+        print("type",type)
+        local bulletNode = InGameBulletSprite.new(type, bullet)
+        self:addChild(bulletNode)
+        self.bulletMap_[bullet] = bulletNode
+
+        -- audio.playEffect("sounds/fireEffect.ogg", false)
+        Log.i("CREATE_BULLET ")
+    end)
+
+    -- EventManager:regListener(EventDef.ID.DESTORY_BULLET, self, function(bullet)
+    --     -- local node = self.bulletMap_[bullet]
+    --     -- node:removeFromParent()
+    --     -- self.bulletMap_[bullet] = nil
+    --     Log.i("DESTORY_BULLET")
+    -- end)
+
     EventManager:regListener(EventDef.ID.CREATE_ENEMY, self, function(enemy)
+        --在Enemy.lua构造时调用，Enemy在InGameData中创造并利用计时器如update调用
+        --（敌人生成自定义计时器在scene调用）
         --修改：可变换的敌人类型(用数字table存储种类顺序？)
+        --enemy是InGameData中的数据（参考下方init中参数来源），用于传递统一管理的数据
         local enemyNode = InGameEnemySprite.new(1, enemy)
         self:addChild(enemyNode)
         self.enemyMap_[enemy] = enemyNode
@@ -61,6 +94,9 @@ end
     @return none
 ]]
 function InGameDownLayer:onExit()
+    EventManager:unRegListener(EventDef.ID.CREATE_CARD, self)
+    EventManager:unRegListener(EventDef.ID.CREATE_BULLET, self)
+    EventManager:unRegListener(EventDef.ID.DESTORY_BULLET, self)
     EventManager:unRegListener(EventDef.ID.CREATE_ENEMY, self)
     EventManager:unRegListener(EventDef.ID.DESTORY_ENEMY, self)
 end
@@ -164,6 +200,9 @@ end
 ]]
 function InGameDownLayer:update(dt)
     for _, node in pairs(self.enemyMap_) do
+        node:update(dt)
+    end
+    for _, node in pairs(self.bulletMap_) do
         node:update(dt)
     end
 end

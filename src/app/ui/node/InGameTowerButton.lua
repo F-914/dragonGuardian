@@ -18,7 +18,9 @@ local Log = require("app.utils.Log")
 local towerTypeSprite
 local sizeTowerButton
 
-function InGameTowerButton:ctor(type)   -- 塔属于我方type=1，还是对方type=2
+function InGameTowerButton:ctor(type, data)   -- 塔属于我方type=1，还是对方type=2
+    self.data_ = data   --联系InGameData中的数据（还未使用）
+
     if type == 1 then
         self.numPlayer_ = math.random(1, 5)   -- 生成第几个塔
         self:buildPlayerTower(self.numPlayer_)
