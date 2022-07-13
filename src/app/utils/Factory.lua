@@ -4,6 +4,9 @@
     Factory.lua
 ]]
 local Factory = {}
+
+local ConstDef = require("src/app/def/ConstDef.lua")
+local Log = require("src/app/utils/Log.lua")
 --[[--
     @description: 创建用于宝箱奖励的贴图
     @data type:table, 奖励的数据
@@ -52,7 +55,7 @@ function Factory:createTeamSprite(teamData)
         local cardData = teamData[i]
         --解决循环嵌套
         local towerSprite = require("src/app/ui/node/TowerSprite.lua").new("res/home/general/icon_tower/" ..
-            cardData.Id .. ".png", cardData)
+            cardData.cardId .. ".png", cardData)
         mapSprites[cardData] = towerSprite
     end
     return mapSprites
@@ -136,6 +139,7 @@ function Factory:createRewardList(ladderList)
     end
     return rewardsMap
 end
+
 ---该方法待重写,暂时不能用
 --[[--
     @description: 通过奖励的数据返回对应的按钮
@@ -143,112 +147,96 @@ end
     @return type: Button 返回一个按钮
 ]]
 function Factory:createRewardButton(rewardName, rewardType)
-    if name == "gold" then
+    if rewardName == "coin" then
         local button = ccui.Button:create("res/home/battle/high_ladder/coin.png")
         return button
-    elseif name == "diamond" then
+    elseif rewardName == "diamond" then
         local button = ccui.Button:create("res/home/battle/high_ladder/diamond.png")
         return button
-    elseif name == "ordinary treasure chest" then
+    elseif rewardName == "box_normal" then
         local button = ccui.Button:create("res/home/general/second_open_confirm_popup/icon_box_normal.png")
         button:setScale(0.5)
         return button
-    elseif name == "rare treasure chest" then
+    elseif rewardName == "box_rare" then
         local button = ccui.Button:create("res/home/general/second_open_confirm_popup/icon_box_rare.png")
         button:setScale(0.5)
         return button
-    elseif name == "epic treasure chest" then
+    elseif rewardName == "box_epic" then
         local button = ccui.Button:create("res/home/general/second_open_confirm_popup/icon_box_epic.png")
         button:setScale(0.5)
         return button
-    elseif name == "legendary treasure chest" then
+    elseif rewardName == "box_legend" then
         local button = ccui.Button:create("res/home/general/second_open_confirm_popup/icon_box_legend.png")
         button:setScale(0.5)
         return button
-    elseif name == "ordinary unknown" then
+    elseif rewardName == "normal" then
         local button = ccui.Button:create("res/home/general/second_open_confirm_popup/icon_normal.png")
         return button
-    elseif name == "rare unknown" then
+    elseif rewardName == "rare" then
         local button = ccui.Button:create("res/home/general/second_open_confirm_popup/icon_rare.png")
         return button
-    elseif name == "epic unknown" then
+    elseif rewardName == "epic" then
         local button = ccui.Button:create("res/home/general/second_open_confirm_popup/icon_epic.png")
         return button
-    elseif name == "legendary unknown" then
+    elseif rewardName == "legend" then
         local button = ccui.Button:create("res/home/general/second_open_confirm_popup/icon_legend.png")
         return button
     end
 end
 
 --[[--
-    @description: 通过奖励的名称创建对应的精灵
-    @param name type: string 奖励的名称
+    @description: 通过奖励宝箱创建对应的精灵
+    @param type type:number 奖励的类型
     @return type:sprite 对应的精灵
 ]]
-function Factory:createRewardSprite(name)
-    if name == "gold" then
-        local sprite = display.newSprite("res/home/battle/high_ladder/coin.png")
-        return sprite
-    elseif name == "diamond" then
-        local sprite = display.newSprite("res/home/battle/high_ladder/diamond.png")
-        return sprite
-    elseif name == "ordinary treasure chest" then
+function Factory:createRewardSprite(type)
+    if type == ConstDef.TREASUREBOX_TYPE.R then
         local sprite = display.newSprite("res/home/general/second_open_confirm_popup/icon_box_normal.png")
         sprite:setScale(0.5)
         return sprite
-    elseif name == "rare treasure chest" then
+    elseif type == ConstDef.TREASUREBOX_TYPE.SR then
         local sprite = display.newSprite("res/home/general/second_open_confirm_popup/icon_box_rare.png")
         sprite:setScale(0.5)
         return sprite
-    elseif name == "epic treasure chest" then
+    elseif type == ConstDef.TREASUREBOX_TYPE.SSR then
         local sprite = display.newSprite("res/home/general/second_open_confirm_popup/icon_box_epic.png")
         sprite:setScale(0.5)
         return sprite
-    elseif name == "legendary treasure chest" then
+    elseif type == ConstDef.TREASUREBOX_TYPE.UR then
         local sprite = display.newSprite("res/home/general/second_open_confirm_popup/icon_box_legend.png")
         sprite:setScale(0.5)
         return sprite
-    elseif name == "ordinary unknown" then
-        local sprite = display.newSprite("res/home/general/second_open_confirm_popup/icon_normal.png")
-        return sprite
-    elseif name == "rare unknown" then
-        local sprite = display.newSprite("res/home/general/second_open_confirm_popup/icon_rare.png")
-        return sprite
-    elseif name == "epic unknown" then
-        local sprite = display.newSprite("res/home/general/second_open_confirm_popup/icon_epic.png")
-        return sprite
-    elseif name == "legendary unknown" then
-        local sprite = display.newSprite("res/home/general/second_open_confirm_popup/icon_legend.png")
-        return sprite
+    else
+        Log.e("param type is a unknown type")
     end
 end
 
 --[[--
-    @description 根据宝箱名称创建对应的宝箱名称精灵
-    @param name type:name 宝箱名称
+    @description 根据宝箱类型创建对应的宝箱名称精灵
+    @param type type:number 宝箱名称
     @return type: sprite 代表宝箱名称的精灵
 ]]
-function Factory:createChestFontSprite(name)
-    if name == "ordinary treasure chest" then
+function Factory:createChestFontSprite(type)
+    if type == ConstDef.TREASUREBOX_TYPE.R then
         local fontSprite = display.newSprite("res/home/general/second_open_confirm_popup/title_box_normal.png")
         return fontSprite
-    elseif name == "rare treasure chest" then
+    elseif type == ConstDef.TREASUREBOX_TYPE.SR then
         local fontSprite = display.newSprite("res/home/general/second_open_confirm_popup/title_box_rare.png")
         return fontSprite
-    elseif name == "epic treasure chest" then
+    elseif type == ConstDef.TREASUREBOX_TYPE.SSR then
         local fontSprite = display.newSprite("res/home/general/second_open_confirm_popup/title_box_epic.png")
         return fontSprite
-    elseif name == "legendary treasure chest" then
+    elseif type == ConstDef.TREASUREBOX_TYPE.UR then
         local fontSprite = display.newSprite("res/home/general/second_open_confirm_popup/title_box_legend.png")
         return fontSprite
     else
-        return nil
+        Log.e("param type is a unknown type")
     end
 end
 
 --[[--
     @description: 根据宝箱的数据创建宝箱奖励面板
-    @param 宝箱奖励数据
+    @param 宝箱可能的奖励数据
     @return type:Layout, 奖励的面板
 ]]
 function Factory:createChestRewardPane(chestRewardData)
@@ -269,7 +257,7 @@ function Factory:createChestRewardPane(chestRewardData)
     coinSprite:addTo(baseCoinContainer)
 
     local coinNumTTF = display.newTTFLabel({
-        text = tostring(chestRewardData.coinNum),
+        text = tostring(chestRewardData[5][1]),
         font = "res/font/fzbiaozjw.ttf",
         size = 24,
         color = cc.c3b(165, 237, 255)
@@ -279,14 +267,14 @@ function Factory:createChestRewardPane(chestRewardData)
     coinNumTTF:addTo(baseCoinContainer)
 
     local pSize = { width = size.width * .3, height = size.height * .4 }
-    local layoutR = self:createChestRewardItem(pSize, chestRewardData.RNumberFloor,
-        chestRewardData.RNumberUpper, "ordinary")
-    local layoutSR = self:createChestRewardItem(pSize, chestRewardData.SRNumberFloor,
-        chestRewardData.SRNumberUpper, "rare")
-    local layoutSSR = self:createChestRewardItem(pSize, chestRewardData.SSRNumberFloor,
-        chestRewardData.SSRNumberUpper, "epic")
-    local layoutUR = self:createChestRewardItem(pSize, chestRewardData.URNumberFloor,
-        chestRewardData.URNumberUpper, "legend")
+    local layoutR = self:createChestRewardItem(pSize, chestRewardData[1][1],
+        chestRewardData[1][2], "R")
+    local layoutSR = self:createChestRewardItem(pSize, chestRewardData[2][1],
+        chestRewardData[2][2], "SR")
+    local layoutSSR = self:createChestRewardItem(pSize, chestRewardData[3][1],
+        chestRewardData[3][2], "SSR")
+    local layoutUR = self:createChestRewardItem(pSize, chestRewardData[4][1],
+        chestRewardData[4][2], "UR")
     layoutR:setPosition(size.width * .45, size.height * .65)
     layoutSR:setPosition(size.width * .85, size.height * .65)
     layoutSSR:setPosition(size.width * .45, size.height * .2)
@@ -316,7 +304,7 @@ function Factory:createChestRewardItem(size, numFloor, numUpper, rarity)
     local displayRarityFont = nil
     local FontColor = nil
     local displayRewordNumStr = nil
-    if rarity == "ordinary" then
+    if rarity == "R" then
         textureLocation = "res/home/general/second_open_confirm_popup/icon_normal.png"
         displayRarityFont = "普通"
         FontColor = {
@@ -324,7 +312,7 @@ function Factory:createChestRewardItem(size, numFloor, numUpper, rarity)
             g = 214,
             b = 231
         }
-    elseif rarity == "rare" then
+    elseif rarity == "SR" then
         textureLocation = "res/home/general/second_open_confirm_popup/icon_rare.png"
         displayRarityFont = "稀有"
         FontColor = {
@@ -332,7 +320,7 @@ function Factory:createChestRewardItem(size, numFloor, numUpper, rarity)
             g = 187,
             b = 245
         }
-    elseif rarity == "epic" then
+    elseif rarity == "SSR" then
         textureLocation = "res/home/general/second_open_confirm_popup/icon_epic.png"
         displayRarityFont = "史诗"
         FontColor = {
@@ -340,7 +328,7 @@ function Factory:createChestRewardItem(size, numFloor, numUpper, rarity)
             g = 102,
             b = 249
         }
-    elseif rarity == "legend" then
+    elseif rarity == "UR" then
         textureLocation = "res/home/general/second_open_confirm_popup/icon_legend.png"
         displayRarityFont = "传说"
         FontColor = {
@@ -349,13 +337,7 @@ function Factory:createChestRewardItem(size, numFloor, numUpper, rarity)
             b = 17
         }
     else
-        textureLocation = "res/home/general/second_open_confirm_popup/icon_legend.png"
-        displayRarityFont = "传说"
-        FontColor = {
-            r = 250,
-            g = 198,
-            b = 17
-        }
+        Log.e("the rarity is unknown")
     end
     if numFloor == numUpper then
         displayRewordNumStr = "x " .. numUpper
