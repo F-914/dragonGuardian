@@ -139,7 +139,10 @@ local ConstDef = {
         UR = 4
     },
     TREASUREBOX_TYPE = {
-
+        R = 1,
+        SR = 2,
+        SSR = 3,
+        UR = 4,
     },
     CURRENCY_TYPE = {
         COIN = "COIN",
