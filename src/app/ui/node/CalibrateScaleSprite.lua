@@ -44,7 +44,6 @@ end
 ]]
 function CalibrateScaleSprite:init()
     ---数据源
-
     self.trophyAmount_ = OutGameData
             :getUserInfo()
             :getTrophyAmount()
@@ -52,6 +51,7 @@ function CalibrateScaleSprite:init()
             :getUserInfo()
             :getUserInfoLadder()
             :getLadderList()
+    Log.i("TrophyAmount_: " .. tostring(self.trophyAmount_))
 
     self:setScale(3, 1)
 

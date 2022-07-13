@@ -26,20 +26,21 @@ end
 ]]
 function LineupLayer:init(lineupList)
     local list = {}
-    local test = display.newSprite(ConstDef.ICON_LINEUP_LIST[ lineupList[1] ])
+    local test = display.newSprite(ConstDef.ICON_LINEUP_LIST[lineupList[1]])
     local layout = ccui.Layout:create()
     layout:setAnchorPoint(0, 0)
     layout:setContentSize(test:getContentSize().width * 5, test:getContentSize().height)
     self:add(layout)
     for i = 1, #(lineupList) do
-        local button = ccui.Button:create(ConstDef.ICON_LINEUP_LIST[ lineupList[i] ],
-            ConstDef.ICON_LINEUP_LIST[ lineupList[i] ])
+        local button = ccui.Button:create(ConstDef.ICON_LINEUP_LIST[lineupList[i]],
+                ConstDef.ICON_LINEUP_LIST[lineupList[i]])
         layout:add(button)
         button:setAnchorPoint(0, 0)
         button:setPosition(10 + layout:getContentSize().width * 0.2 * (i - 1), 0)
         button:setPressedActionEnabled(true)
         button:setTouchEnabled(false)
-        button:addTouchEventListener(function(sender, eventType) --注册塔的点击事件，用于替换阵容中的塔，在其他情况下设置为不可点击
+        button:addTouchEventListener(function(sender, eventType)
+            --注册塔的点击事件，用于替换阵容中的塔，在其他情况下设置为不可点击
             if eventType == 2 then
                 button:loadTextureNormal(ConstDef.ICON_LINEUP_LIST[self.order], 0)
                 button:loadTexturePressed(ConstDef.ICON_LINEUP_LIST[self.order], 0)
