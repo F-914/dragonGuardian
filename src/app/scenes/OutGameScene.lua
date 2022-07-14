@@ -16,25 +16,22 @@ local MenuView = require("app.ui.MenuView")
 local ShopView = require("app.ui.ShopView")
 local Log = require("app.utils.Log")
 local MenuConfig = require("app.test.MenuConfig")
-local UserInfo = require("app.data.UserInfo")
+local OutGameData = require("app.data.OutGameData")
 --
 local pageView
 local loadView
-local _userInfo
 --
 
 function OutGameScene:ctor()
-
-
     loadView = LoadView.new()
     loadView:addTo(self, 3)
     --test
     GameData:init()
-    _userInfo = UserInfo:getInstance()
+    OutGameData:init()
     --
     self.mainUIBattleView_ = MainUIBattleView.new()
-    self.atlasView = AtlasView.new()
-    self.shopView = ShopView.new()
+    self.atlasView_ = AtlasView.new()
+    self.shopView_ = ShopView.new()
 
     MenuView.new(self, 1)
     self:sliderView()
@@ -60,7 +57,7 @@ end
 
 function OutGameScene:update(dt)
     GameData:update(dt)
-    _userInfo:update(dt)
+    OutGameData:update(dt)
     self.mainUIBattleView_:update(dt)
 end
 
@@ -71,8 +68,10 @@ end
     描述：删除加载界面
 ]]
 function OutGameScene:quitLoading()
-    Log.i("loadingView", loadView)
-    loadView:removeFromParent()
+    if loadView ~= nil then
+        Log.i("loadingView", loadView)
+        loadView:removeFromParent()
+    end
 end
 
 --[[--
@@ -100,9 +99,9 @@ function OutGameScene:sliderView()
 
     -- 这里创建page
     local layerTable = {
-        self.shopView,
+        self.shopView_,
         self.mainUIBattleView_,
-        self.atlasView,
+        self.atlasView_,
     }
     for i = 1, 3 do
         -- 以层作为载体传入pageview
