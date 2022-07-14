@@ -44,12 +44,12 @@ function CalibrateScaleSprite:init()
     ---数据源
 
     self.trophyAmount_ = OutGameData
-            :getUserInfo()
-            :getTrophyAmount()
+        :getUserInfo()
+        :getTrophyAmount()
     self.rewordNodeData_ = OutGameData
-            :getUserInfo()
-            :getUserInfoLadder()
-            :getLadderList()
+        :getUserInfo()
+        :getUserInfoLadder()
+        :getLadderList()
 
 
     self:setScale(3, 1)
@@ -57,13 +57,13 @@ function CalibrateScaleSprite:init()
     local yellowScale = display.newSprite(StringDef.PATH_HIGH_LADDER_CALIBRATED_SCALE_CUTOFF)
     yellowScale:setAnchorPoint(1, 0)
     yellowScale:setScale(3, .8)
-    yellowScale:setPosition(26.5 + (self.trophyAmount_/50 - 1) * 40.1, 9)
+    yellowScale:setPosition(26.5 + (self.trophyAmount_ / 50 - 1) * 40.1, 9)
     yellowScale:addTo(self)
 
     local spriteDecorate = display.newSprite(StringDef.PATH_HIGH_LADDER_DECORATE_BAR)
     spriteDecorate:setAnchorPoint(1, 0)
     spriteDecorate:setScale(.5, .8)
-    spriteDecorate:setPosition(28.5 + (self.trophyAmount_/50 - 1) * 40.1, 7)
+    spriteDecorate:setPosition(28.5 + (self.trophyAmount_ / 50 - 1) * 40.1, 7)
     spriteDecorate:addTo(self)
 
     ---获取进度条的指针，用于后续的刷新
@@ -104,8 +104,8 @@ function CalibrateScaleSprite:update(dt)
     --监听到用户的钥匙数量发生变化
     if not self.trophyAmount_ ~= GameData.trophyAmount_ then
         self.trophyAmount_ = GameData.trophyAmount_
-        self.decorateBar_:setPosition(28.5 + (self.trophyAmount_/50 - 1) * 40.1, 7)
-        self.yellowScale_:setPosition(26.5 + (self.trophyAmount_/50 - 1) * 40.1, 9)
+        self.decorateBar_:setPosition(28.5 + (self.trophyAmount_ / 50 - 1) * 40.1, 7)
+        self.yellowScale_:setPosition(26.5 + (self.trophyAmount_ / 50 - 1) * 40.1, 9)
     end
 end
 
