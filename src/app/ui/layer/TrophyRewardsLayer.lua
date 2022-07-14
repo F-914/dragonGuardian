@@ -97,8 +97,8 @@ function TrophyRewardsLayer:init()
         node:setPosition(spSize.width * .4 + 2.5, spSize.height * .4 + 10)
         node:setScale(0.66)
         ---pair遍历时没有顺序,我觉得reward加一个表示顺序的属性吧
-        Log.i(data.order)
-        local itemLayer = itemLayers[data.order]
+        Log.i(data.location)
+        local itemLayer = itemLayers[data.location]
         node.button_:addTouchEventListener(function(sender, eventType)
             if eventType == 2 then
                 local rewardName = data.rewardName
@@ -113,10 +113,11 @@ function TrophyRewardsLayer:init()
                     ]]
                 elseif rewardType == ConstDef.REWARD_TYPE.RANDOM then
                     --[[--
-                        同理
+                        这是什么玩意儿我也不知道
                     ]]
                 elseif rewardType == ConstDef.REWARD_TYPE.CURRENCY then
                     --[[--
+
                     ]]
                 end
             end
