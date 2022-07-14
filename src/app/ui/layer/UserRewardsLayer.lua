@@ -6,7 +6,7 @@
 
 --[[--
     显示用户奖励进度以及奖励领取信息的层
-    UserRewardsLayer.lua
+    UserRewardsLayer
 ]]
 local UserRewardsLayer = class("UserRewardsLayer", function()
     return display.newLayer()
@@ -14,9 +14,10 @@ end)
 
 --local
 local GameData = require("app.test.GameData")
-local CreateSpriteUtil = require("src/app/test/CreateSpriteUtil.lua")
-local CalibrateScaleSprite = require("src/app/ui/node/CalibrateScaleSprite.lua")
+local CreateSpriteUtil = require("app.test.CreateSpriteUtil")
+local CalibrateScaleSprite = require("app.ui.node.CalibrateScaleSprite")
 local Log = require("app.utils.Log")
+local StringDef = require("app.def.StringDef")
 --
 --[[--
     @description: 构造方法
@@ -37,20 +38,20 @@ end
     @return none
 ]]
 function UserRewardsLayer:init()
-    local spriteBG = display.newSprite("res/home/battle/high_ladder/background.png")
+    local spriteBG = display.newSprite(StringDef.PATH_HIGH_LADDER_BACKGROUND)
     spriteBG:setPosition(display.width * .46, display.height * 0.75)
     spriteBG:setScale(0.9, 0.7)
     spriteBG:setContentSize(display.width - 20, display.height * .20)
     spriteBG:addTo(self)
 
-    local leftButton = ccui.Button:create("res/home/battle/high_ladder/icon_slide_left.png")
+    local leftButton = ccui.Button:create(StringDef.PATH_HIGH_LADDER_ICON_SLIDE_LEFT)
     leftButton:setPosition(30, display.height * .8)
     leftButton:addTouchEventListener(function(sender, eventType)
         print("test left button")
     end)
     leftButton:addTo(self)
 
-    local rightButton = ccui.Button:create("res/home/battle/high_ladder/icon_slide_right.png")
+    local rightButton = ccui.Button:create(StringDef.PATH_HIGH_LADDER_ICON_SLIDE_RIGHT)
     rightButton:setPosition(display.width - 30, display.height * .8)
     rightButton:addTouchEventListener(function(sender, eventType)
         print("test right button")
@@ -68,7 +69,7 @@ function UserRewardsLayer:init()
     highLadderView:setDirection(2)
     highLadderView:addTo(self)
     --构建进度条
-    local calibrateScale = CalibrateScaleSprite.new("res/home/battle/high_ladder/calibrated scale/calibrated_scale.png",
+    local calibrateScale = CalibrateScaleSprite.new(PATH_HIGH_LADDER_CALIBRATED_SCALE,
         GameData.userKeyQuantity_)
     Log.i(" userKeyQuantity_ is " .. tostring(GameData.userKeyQuantity_))
     calibrateScale:setAnchorPoint(0, 0)
@@ -93,7 +94,7 @@ function UserRewardsLayer:init()
         count = count + 1
     end
     --构建钥匙
-    local keySprite = display.newSprite("res/home/battle/high_ladder/calibrated scale/key.png")
+    local keySprite = display.newSprite(StringDef.PATH_HIGH_LADDER_CALIBRATED_SCALE_KEY)
     keySprite:setPosition(18, 35)
     keySprite:addTo(highLadderView)
 end

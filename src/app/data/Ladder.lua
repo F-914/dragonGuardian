@@ -3,17 +3,20 @@
     天梯奖励
 ]]
 local Ladder = class("Ladder", require("app.data.base.BaseModel"))
-local Log    = require("app.utils.Log")
+local Log = require("app.utils.Log")
 
 -- local
 local ConstDef = require("app.def.ConstDef")
+local EventDef = require("app.def.EventDef")
+local EventManager = require("app.manager.EventManager")
 --
 
 ---Ladder.ctor 构造函数
 ---@param ladderList table 天梯奖励列表，里面是各种奖励
----@return  Type Description
+---@return  nil Description
 function Ladder:ctor(ladderList)
     self:setLadder(ladderList)
+    EventManager:doEvent(EventDef.ID.CREATE_LADDER, self)
 end
 
 function Ladder:setLadder(ladderList)
