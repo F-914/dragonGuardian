@@ -1,12 +1,12 @@
 --[[--
     工厂模式的工厂实现
     之所以创建这个工具类，是因为能够避免大量重复代码的编写
+    这个类中一般不推荐require非常量定义或者简单工具部分
     Factory.lua
 ]]
 local Factory = {}
 --local
 local TypeConvert = require("app.utils.TypeConvert")
-local OutGameData = require("app.data.OutGameData")
 local ConstDef = require("app.def.ConstDef")
 local Log = require("app.utils.Log")
 local StringDef = require("app.def.StringDef")
