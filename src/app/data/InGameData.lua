@@ -4,6 +4,7 @@
 ]]
 local InGameData = {}
 local Log = require("app.utils.Log")
+local Card = require("app.data.Card")
 local Bullet = require("app.data.Bullet")
 local Enemy = require("app.data.Enemy")
 local ConstDef = require("app.def.ConstDef")
@@ -18,8 +19,8 @@ local schedule = cc.Director:getInstance():getScheduler() --计时器路径
 local timeCreateEnemySchdule = nil -- 敌人生成计时器
 local littleEnemyNum = 5 -- 每五只小怪一只精英怪
 
-
-local SHOOT_INTERVAL = 0.2 -- 类型：number，射击间隔
+local ENEMY_INTERVAL = 1    --敌人生成间隔
+local SHOOT_INTERVAL = 0.2  -- 类型：number，射击间隔
 
 --[[--
     初始化数据
@@ -38,7 +39,6 @@ function InGameData:init()
 
     -- 类型：number，游戏状态
     self.gameState_ = ConstDef.GAME_STATE.INIT
-
 end
 
 --[[--
@@ -142,58 +142,54 @@ function InGameData:update(dt)
         return
     end
 
+    --刷新判断是否还有敌人
+    if enemies_[1] == nil then
+        self.isHasEnemy_ = false
+    else
+        self.isHasEnemy_ = true
+    end
+
     local destoryEnemys = {}
+    local destoryBullets = {}
 
     for i = 1, #enemies_ do
         enemies_[i]:update(dt)
         if not enemies_[i]:isDeath() then
-            --self:checkCollider(enemies_[i], bullets_, allies_)
+            self:checkCollider(enemies_[i], bullets_)
         else
             destoryEnemys[#destoryEnemys + 1] = enemies_[i]
         end
     end
 
-    --self:shoot(dt)
-
-    local destoryBullets = {}
     for i = 1, #bullets_ do
         local bullet = bullets_[i]
         bullet:update(dt)
-        -- if bullet:isDeath() then
-        --     destoryBullets[#destoryBullets + 1] = bullet
-        -- end
+        if bullet:isDeath() then
+            destoryBullets[#destoryBullets + 1] = bullet
+        end
     end
-
-    -- for i = 1, #enemies_ do
-    --     enemies_[i]:update(dt)
-    --     if not enemies_[i]:isDeath() then
-    --         self:checkCollider(enemies_[i], bullets_, allies_)
-    --     else
-    --         destoryPlanes[#destoryPlanes + 1] = enemies_[i]
-    --     end
-    -- end
 
     -- for i = 1, #allies_ do
     --     allies_[i]:update(dt)
     -- end
 
-    -- -- 清理失效子弹
-    -- for i = #destoryBullets, 1, -1 do
-    --     for j = #bullets_, 1, -1 do
-    --         if bullets_[j] == destoryBullets[i] then
-    --             table.remove(bullets_, j)
-    --         end
-    --     end
-    -- end
+    -- 清理失效子弹
+    for i = #destoryBullets, 1, -1 do
+        for j = #bullets_, 1, -1 do
+            if bullets_[j] == destoryBullets[i] then
+                table.remove(bullets_, j)
+            end
+        end
+    end
 
-    -- -- 清理失效敌机
-    -- for i = #destoryPlanes, 1, -1 do
-    --     for j = #enemies_, 1, -1 do
-    --         if enemies_[j] == destoryPlanes[i] then
-    --             table.remove(enemies_, j)
-    --         end
-    --     end
-    -- end
+    -- 清理失效敌机
+    for i = #destoryEnemys, 1, -1 do
+        for j = #enemies_, 1, -1 do
+            if enemies_[j] == destoryEnemys[i] then
+                table.remove(enemies_, j)
+            end
+        end
+    end
 
     -- -- 生命值小于0，结算
     -- if self.life_ <= 0 then
@@ -204,25 +200,61 @@ end
 --[[--
     命中敌人
 
-    @param plane 类型：EnemyPlane，敌机
+    @param enemy 类型：Enemy
     @param bullet 类型：Bullet，子弹
 
     @return none
 ]]
 function InGameData:hitEnemy(enemy, bullet)
+    print("碰撞2")
     -- self.score_ = self.score_ + plane:getScore()
     -- if self.score_ > self.history_ then
     --     self.history_ = self.score_
     -- end
     -- bullet:bomb()
-    -- bullet:destory()
+    enemy:setDeHp(50)
+    if enemy:getHp() <= 0 then
+        enemy:destory()
+    end
+    bullet:destory()
     -- plane:destory()
+end
+
+--[[--
+    碰撞检测
+
+    @param enemy 类型：Enemy, 敌人
+    @param bullet 类型：Bullet数组
+
+    @return none
+]]
+function InGameData:checkCollider(enemy, bullets)
+    for i = 1, #bullets do
+        local bullet = bullets[i]
+        if not bullet:isDeath() then
+            if enemy:isCollider(bullet) then
+                self:hitEnemy(enemy, bullet)
+                break
+            end
+        end
+    end
+end
+
+--[[--
+    创建卡牌（信息）
+    new包含参数：(cardId, name, rarity, type, level, atk, atkTarget, atkUpgrade,
+     atkEnhance, fireCd, fireCdEnhance,fireCdUpgrade,
+     skills, extraDamage, fatalityRate, location)
+]]
+function InGameData:createCard()
+    local card = Card.new()
+    cards_[#cards_+1] = card
 end
 
 --[[--
     开炮
 
-    @param dt 类型：number，时间间隔，单位秒
+    @param number,子弹种类及生成位置(后续可添加参数控制子弹效果)
 
     @return none
 ]]
@@ -247,11 +279,58 @@ function InGameData:shoot(type, x, y)
     -- end
     local timeCreateBulletSchdule = schedule:scheduleScriptFunc(function(dt)
         if self:getGameState() == ConstDef.GAME_STATE.PLAY then
-             -- 产生子弹
-            local bullet = Bullet.new(type, x, y)
-            bullets_[#bullets_ + 1] = bullet
+            if self.isHasEnemy_ then
+                -- 产生子弹
+                local bullet = Bullet.new(type, x, y)
+                bullet:setDirection(self:getClosestEnemy(bullet))
+                bullets_[#bullets_ + 1] = bullet
+            end
         end
-    end, 0.2, false)
+    end, SHOOT_INTERVAL, false)
+end
+
+--[[--
+    获取距离当前子弹最近的敌人的方向
+    (用于初始化子弹方向，子弹射出后不改变方向)
+
+    @param table：子弹对象
+
+    @return num, num: 最近敌人的方向
+]]
+function InGameData:getClosestEnemy(bullet)
+    local bX = bullet:getMyX()
+    local bY = bullet:getMyY()
+    local eX, eY
+    local minDistance = display.width
+    local xCos, ySin
+    -- for i,e in pairs(enemies_) do   --遍历当前存在的敌人
+    --     --计算距离
+    --     eX = e:getMyX()
+    --     eY = e:getMyY()
+    --     local distance = ((eX-bX)^2 + (eY-bY)^2)^0.5
+    --     if distance < minDistance then
+    --         minDistance = distance
+    --         xCos = (eX-bX)/distance
+    --         ySin = (eY-bY)/distance
+    --     else
+    --         return xCos, ySin
+    --     end
+    -- end
+
+    --对着第一个打
+    --计算距离
+    for i,e in pairs(enemies_) do   --遍历当前存在的敌人
+        if e ~= nil then
+            eX = e:getMyX()
+            eY = e:getMyY()
+            local distance = ((eX-bX)^2 + (eY-bY)^2)^0.5
+            xCos = (eX-bX)/distance
+            ySin = (eY-bY)/distance
+            return xCos, ySin
+        end
+    end
+
+    return xCos, ySin
 end
 
 --[[--
@@ -293,7 +372,7 @@ function InGameData:createEnemyInterval()
             --     self:enemyMovePlayer(enemy)
             -- end
         end
-    end, 0.5, false)
+    end, ENEMY_INTERVAL, false)
 end
 
 --[[--

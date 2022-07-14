@@ -52,23 +52,19 @@ function InGameDownLayer:onEnter()
     end)
 
     EventManager:regListener(EventDef.ID.CREATE_BULLET, self, function(bullet, type, x, y)
-        print("bullet",bullet)
-        print("type",type)
+        --print(vardump(bullet))  --查看bullet内容(bullet存放Bullet类名以及它的函数)
         local bulletNode = InGameBulletSprite.new("battle_in_game/battle_view/bullet/"..type..".png", bullet)
-        bulletNode:setPosition(display.cx, display.cy)
         self:addChild(bulletNode)
         self.bulletMap_[bullet] = bulletNode
-
-        -- audio.playEffect("sounds/fireEffect.ogg", false)
-        Log.i("CREATE_BULLET ")
     end)
 
-    -- EventManager:regListener(EventDef.ID.DESTORY_BULLET, self, function(bullet)
-    --     -- local node = self.bulletMap_[bullet]
-    --     -- node:removeFromParent()
-    --     -- self.bulletMap_[bullet] = nil
-    --     Log.i("DESTORY_BULLET")
-    -- end)
+    EventManager:regListener(EventDef.ID.DESTORY_BULLET, self, function(bullet)
+        local node = self.bulletMap_[bullet]
+        node:scale(8)
+        node:removeFromParent()
+        self.bulletMap_[bullet] = nil
+        Log.i("DESTORY_BULLET")
+    end)
 
     EventManager:regListener(EventDef.ID.CREATE_ENEMY, self, function(enemy)
         --在Enemy.lua构造时调用，Enemy在InGameData中创造并利用计时器如update调用

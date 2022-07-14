@@ -26,6 +26,7 @@ EventDef.ID = {
     CREATE_BULLET = 18,
     CREATE_IN_GAME_CARD = 19,
     DESTORY_ENEMY = 20,
+    DESTORY_BULLET = 21
 }
 
 return EventDef

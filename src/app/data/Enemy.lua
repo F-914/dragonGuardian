@@ -10,11 +10,11 @@ local ConstDef = require("app.def.ConstDef")
 local EventDef = require("app.def.EventDef")
 local EventManager = require("app.manager.EventManager")
 
-local DELTA = 5
-local X_LEFT = 0
-local X_RIGHT = display.width * 17 / 20 - display.cx / 22
-local Y_DOWN_PLAYER = 0
-local Y_UP_PLAYER = display.cy * 14 / 20
+local SPEED = 1
+local X_LEFT = display.cx/6
+local X_RIGHT = display.width * 17 / 20 - display.cx / 22 + display.cx/6
+local Y_DOWN_PLAYER = display.cy/4
+local Y_UP_PLAYER = display.cy * 14 / 20 + display.cy/4
 --
 
 ---Enemy.ctor 构造函数
@@ -26,8 +26,10 @@ local Y_UP_PLAYER = display.cy * 14 / 20
 ---@return  Type Description
 
 function Enemy:ctor(name, type, hp, skills, description)
-    self.x_ = 0
-    self.y_ = 0
+    Enemy.super:ctor(display.cx/6, display.cy/4, ConstDef.ENEMY_PLANE_SIZE[type].WIDTH, ConstDef.ENEMY_PLANE_SIZE[type].HEIGHT)
+
+    self.x_ = display.cx/6
+    self.y_ = display.cy/4
     self.step_ = 1 --运动步骤（1-3）
     self:setEnemy(name, type, hp, skills, desc)
     EventManager:doEvent(EventDef.ID.CREATE_ENEMY, self)
@@ -84,7 +86,7 @@ end
     @return none
 ]]
 function Enemy:destory()
-    Log.i("destory")
+    --Log.i("destory")
     self.isDeath_ = true
     EventManager:doEvent(EventDef.ID.DESTORY_ENEMY, self)
 end
@@ -97,22 +99,19 @@ end
     @return none
 ]]
 function Enemy:update(dt)
-    --血量更新测试，还需修改
-    --self:setDeHp(50)
-
     if not self.isDeath_ then
         if self.step_ == 1 then
             -- 左下到左上
-            if self.y_ + DELTA < Y_UP_PLAYER then
-                self.y_ = self.y_ + DELTA
+            if self.y_ + SPEED < Y_UP_PLAYER then
+                self.y_ = self.y_ + SPEED
             else
                 self.y_ = Y_UP_PLAYER
                 self.step_ = 2
             end
         elseif self.step_ == 2 then
             -- 左上到右上
-            if self.x_ + DELTA < X_RIGHT then
-                self.x_ = self.x_ + DELTA
+            if self.x_ + SPEED < X_RIGHT then
+                self.x_ = self.x_ + SPEED
             else
                 self.x_ = X_RIGHT
                 self.step_ = 3
@@ -120,7 +119,7 @@ function Enemy:update(dt)
         elseif self.step_ == 3 then
             -- 右上到右下
             if self.y_ > Y_DOWN_PLAYER then
-                self.y_ = self.y_ - DELTA
+                self.y_ = self.y_ - SPEED
             else
                 self:destory()
             end

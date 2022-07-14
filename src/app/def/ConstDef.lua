@@ -194,5 +194,21 @@ local ConstDef = {
     },
     BUTTON_CLICK = {}, --用于实现部分功能的全局变量，希望后期能重写
     POPUP = {}, --用于实现弹窗部分功能的全局变量，希望后期能重写
+    BULLET_SIZE = {
+        WIDTH = 10,     --子弹宽度
+        HEIGHT = 10     --子弹高度
+    },
+    ENEMY_PLANE_SIZE = {
+        --种类1，小怪（后续有时间可整体修改标识）
+        {
+            WIDTH = 43,     --宽度
+            HEIGHT = 44     --高度
+        },
+        --种类2，精英怪
+        {
+            WIDTH = 72,     --宽度
+            HEIGHT = 74     --高度
+        }
+    }
 }
 return ConstDef

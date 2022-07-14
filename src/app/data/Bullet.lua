@@ -15,8 +15,12 @@ local EventManager = require("app.manager.EventManager")
     @return none
 ]]
 function Bullet:ctor(type, x, y)
+    Bullet.super:ctor(x, y, ConstDef.BULLET_SIZE.WIDTH, ConstDef.BULLET_SIZE.HEIGHT)
     self.x_ = x
     self.y_ = y
+    self.xCos_ = 0  --默认子弹向正上方发射
+    self.ySin_ = 1
+    self.speed_ = 200
     EventManager:doEvent(EventDef.ID.CREATE_BULLET, self, type)
 end
 
@@ -26,6 +30,22 @@ end
 
 function Bullet:getMyY()
     return self.y_
+end
+
+function Bullet:setSpeed(speed)
+    self.speed_ = speed
+end
+
+--[[--
+    设置发射方向
+
+    @param num, num :目标方向对应xy比例
+
+    @return none
+]]
+function Bullet:setDirection(xCos, ySin)
+    self.xCos_ = xCos
+    self.ySin_ = ySin
 end
 
 --[[--
@@ -48,13 +68,23 @@ end
     @return none
 ]]
 function Bullet:update(dt)
-    self.y_ = self.y_ + 100 * dt
+    if self.xCos_ == nil then
+        self.xCos_ = 0  --默认子弹向正上方发射
+    end
+    if self.ySin_ == nil then
+        self.ySin_ = 1
+    end
 
-    -- if not self.isDeath_ then
-    --     if self.y_ > display.height then
-    --         self:destory()
-    --     end
-    -- end
+    self.x_ = self.x_ + self.xCos_ * self.speed_ * dt
+    self.y_ = self.y_ + self.ySin_ * self.speed_ * dt
+
+    if not self.isDeath_ then
+        if self.y_ > display.cy or self.y_ < display.cy/5 then
+            self:destory()
+        elseif self.x_ < display.cx/8 or self.x_ > display.cx*15/8 then
+            self:destory()
+        end
+    end
 end
 
 return Bullet
