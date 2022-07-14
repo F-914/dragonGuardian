@@ -22,13 +22,14 @@ function Commodity:ctor(name, type, price, priceUnit, amount, commodity)
     EventManager:doEvent(EventDef.ID.CREATE_COMMODITY, self)
 end
 
-function Commodity:setCommodity(commodityName, commodityType, commodityPrice, commodityPriceUnit, commodityAmount, commodity)
+function Commodity:setCommodity(commodityName, commodityType, commodityPrice, commodityPriceUnit, commodityAmount,
+                                commodity)
     self.commodityName_ = commodityName
     self.commodityType_ = commodityType
     self.commodityPrice_ = commodityPrice
     self.commodityPriceUnit_ = commodityPriceUnit
     self.commodityAmount_ = commodityAmount
-    self.commodity_ = commodity
+    self.commodityCommodity_ = commodity
 end
 
 function Commodity:getCommodityName()
@@ -51,8 +52,9 @@ function Commodity:getCommodityAmount()
     return self.commodityAmount_
 end
 
-function Commodity:getCommodity()
-    return self.commodity_
+--- 这个名字可能很傻逼 但是为了防止命名撞了不得已只能这样 QAQ
+function Commodity:getCommodityCommodity()
+    return self.commodityCommodity_
 end
 
 return Commodity

@@ -49,6 +49,7 @@ function BattleTeam:getTeamSize()
     end
     return #(self.team_)
 end
+
 --[[--
     @description: 获取当前出战的队伍
 ]]

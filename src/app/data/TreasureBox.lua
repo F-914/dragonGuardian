@@ -12,9 +12,9 @@ local EventManager = require("app.manager.EventManager")
 
 ---TreasureBox.ctor 构造函数
 ---@param name string 宝箱名
----@param type string 宝箱类型
+---@param type number 宝箱类型
 ---@param desc string 宝箱描述
----@return  Type Description
+---@return  nil Description
 function TreasureBox:ctor(name, type, desc)
     self:setTreasureBox(name, type, desc)
     EventManager:doEvent(EventDef.ID.CREATE_TREASUREBOX, self)
