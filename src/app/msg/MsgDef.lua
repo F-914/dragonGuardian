@@ -6,7 +6,7 @@
 local MsgDef = {}
 
 -- 请求消息
-MsgDef.MSG_TYPE_REQ = {--请求类型，是客户端发往服务器的
+MsgDef.REQTYPE = {--请求类型，是客户端发往服务器的
     STARTGAME   =    1,--开始游戏
 	REFRESHHP   =    2,--刷新hp
 	UPLOADSCORE =    3,--上传分数
@@ -27,7 +27,7 @@ MsgDef.MSG_TYPE_REQ = {--请求类型，是客户端发往服务器的
 }
 
 -- 响应消息
-MsgDef.MSG_TYPE_ACK = {--响应类型，是服务器发往客户端的
+MsgDef.ACKTYPE = {--响应类型，是服务器发往客户端的
 
 }
 
