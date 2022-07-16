@@ -113,9 +113,28 @@ function processLobbyMsg()
 		cardAttributeChange(msg)
 	elseif (msg["type"] == MsgDef.REQTYPE.LOBBY.ASSERT_CHANGE) then
 		assetsChange(msg)
-		
 	elseif (msg["type"] == MsgDef.REQTYPE.LOBBY.CARD_COLLECT) then
-        collectCard(msg)
+        	collectCard(msg)
+	elseif (msg["type"] == MsgDef.REQTYPE.LOBBY.USERINFO_DS) then
+		userInfoDS(msg)
+	elseif (msg["type"] == MsgDef.REQTYPE.LOBBY.COINSHOP_DS)then
+		coinShopDS(msg)
+	elseif (msg["type"] == MsgDef.REQTYPE.LOBBY.DIAMONDSHOP_DS) then
+		diamondShopDS(msg)
+	elseif (msg["type"] == MsgDef.REQTYPE.LOBBY.DIAMONDSHOP_INIT) then
+		initUserInfo(msg)
+	elseif (msg["type"] == MsgDef.REQTYPE.LOBBY.COINSHOP_INIT) then
+		initCoinShop(msg)
+	elseif (msg["type"] == MsgDef.REQTYPE.LOBBY.USERINFO_INIT) then
+		initDiamondShop(msg)
+	elseif (msg["type"] == MsgDef.REQTYPE.LOBBY.PURCHASE_COMMODITY) then
+		purChaseCommodity(msg)
+	elseif (msg["type"] == MsgDef.REQTYPE.LOBBY.TROPHY_CHANGE) then
+		trophyChange(msg)
+	elseif (msg["type"] == MsgDef.REQTYPE.LOBBY.MODIFY_BATTLETEAM) then
+		modifyBattleTeam(msg)
+	elseif (msg["type"] == MsgDef.REQTYPE.LOBBY.RECEIVE_REWARD)then
+		receiveReward(msg)	
 	end
 end
 
@@ -236,5 +255,210 @@ function cardAttributeChange(msg)
 	local backMsg=cjson.encode(back)
     sendMsg2ClientByPid(id, backMsg)
 end
+--[[--
+	@description: 购买商品的同步数据部分
+	@param msg  类型:table 由json字符串转化出来的字符串
+	@return none
+]]
+function purChaseCommodity(msg)
+	local id, data_str = requestPlayerDBData(msg["loginName"])
 
+	if (data_str == nil or data_str == '') then
+		__G__TRACKBACK__("PLAYER NOT EXIST")
+		return
+	end
+
+	local data=cjson.decode(data_str)
+	local userInfo = data["userInfo"]
+	userInfo.coinAmount = msg.userInfo.coinAmount
+	userInfo.diamondAmount = msg.userInfo.diamondAmount
+	local clientCardList = data.userInfo.cardList
+	local msgCardList = msg.userInfo.cardList
+	for i = 1, #msgCardList do
+		local isExist = false
+		for j = 1, #clientCardList do
+			if msgCardList[i].cardId == clientCardList[j].cardId then
+				isExist = true
+				clientCardList[j].cardAmount = clientCardList[j].cardAmount +
+						msgCardList[i].cardAmount
+				break
+			end
+		end
+		if not isExist then
+			table.insert(clientCardList, msgCardList[i])
+		end
+	end
+	local saveData = cjson.encode(data)
+	savePlayerDBData(id,saveData)
+	msg["type"] = MsgDef.ACKTYPE.LOBBY.PURCHASE_COMMODITY
+	local backMsg = cjson.encode(msg)
+	sendMsg2ClientByPid(id, backMsg)
+end
+--[[--
+	@description: 修改队伍信息
+	@param msg type:table, 网络消息
+	@return none
+]]
+function modifyBattleTeam(msg)
+	local id, data_str = requestPlayerDBData(msg["loginName"])
+
+	if (data_str == nil or data_str == '') then
+		__G__TRACKBACK__("PLAYER NOT EXIST")
+		return
+	end
+	local data = cjson.decode(data_str)
+	data.userInfo.battleTeam = msg.userInfo.battleTeam
+	savePlayerDBData(id, cjson.encode(data))
+	msg["type"] = MsgDef.ACKTYPE.LOBBY.MODIFY_BATTLETEAM
+	sendMsg2ClientByPid(id, cjson.encode(msg))
+end
+--[[--
+	@description: 接受天梯奖励
+	@param msg type:table, 网络消息
+	@return none
+]]
+function receiveReward(msg)
+	local id, data_str = requestPlayerDBData(msg["loginName"])
+	if (data_str == nil or data_str == '') then
+		__G__TRACKBACK__("PLAYER NOT EXIST")
+		return
+	end
+	local data = cjson.decode(data_str)
+	local userInfo = data["userInfo"]
+	userInfo.coinAmount = msg.userInfo.coinAmount
+	userInfo.diamondAmount = msg.userInfo.diamondAmount
+	local clientCardList = data.userInfo.cardList
+	local msgCardList = msg.userInfo.cardList
+	for i = 1, #msgCardList do
+		local isExist = false
+		for j = 1, #clientCardList do
+			if msgCardList[i].cardId == clientCardList[j].cardId then
+				isExist = true
+				clientCardList[j].cardAmount = clientCardList[j].cardAmount +
+						msgCardList[i].cardAmount
+				break
+			end
+		end
+		if not isExist then
+			table.insert(clientCardList, msgCardList[i])
+		end
+	end
+	local clientLadderList = data.userInfo.ladder.ladderList
+	local msgLadderList = data.userInfo.ladder.ladderList
+	for i = 1, #msgLadderList do
+		for j = 1, #clientLadderList do
+			if msgLadderList[i].trophyCondition
+					== clientLadderList[j].trophyCondition then
+				clientLadderList[j].received = true
+				break
+			end
+		end
+	end
+	savePlayerDBData(id, cjson.encode(data))
+	msg["type"] = MsgDef.ACKTYPE.LOBBY.RECEIVE_REWARD
+	sendMsg2ClientByPid(id, msg)
+end
+--[[--
+	@description: 奖杯数量改变
+	@param msg type:table, 网络消息
+	@return none
+]]
+function trophyChange(msg)
+	local id, data_str = requestPlayerDBData(msg["loginName"])
+	if (data_str == nil or data_str == '') then
+		__G__TRACKBACK__("PLAYER NOT EXIST")
+		return
+	end
+	local data = cjson.decode(data_str)
+	local clientLadderList = data.userInfo.ladder.ladderList
+	local trophyAmount = msg.userInfo.trophyAmount
+	data.userInfo.trophyAmount = trophyAmount
+	for i = 1, #clientLadderList do
+		if clientLadderList[i].trophyCondition > trophyAmount then
+			clientLadderList[i].locked = true
+		end
+	end
+	savePlayerDBData(id, cjson.encode(data))
+	msg["type"] = MsgDef.ACKTYPE.LOBBY.TROPHY_CHANGE
+	sendMsg2ClientByPid(id, msg)
+end
+--[[--
+	@description: 初始化用户信息
+	以下三个初始化信息因为商店绑定用户的性质，其实可以合并
+	三个同步消息同理，但是需要修改outGameData部分
+	@param msg type:table, 网络消息
+	@return none
+]]
+function initUserInfo(msg)
+	local id, data_str = requestPlayerDBData(msg["loginName"])
+	if (data_str == nil or data_str == '') then
+		__G__TRACKBACK__("PLAYER NOT EXIST")
+		return
+	end
+	local data = cjson.decode(data_str)
+	local back = {}
+	back["type"] = MsgDef.ACKTYPE.LOBBY.USERINFO_INIT
+	back["userInfo"] = data.userInfo
+	sendMsg2ClientByPid(id, cjson.encode(back))
+end
+function initCoinShop(msg)
+	local id, data_str = requestPlayerDBData(msg["loginName"])
+	if (data_str == nil or data_str == '') then
+		__G__TRACKBACK__("PLAYER NOT EXIST")
+		return
+	end
+	local data = cjson.decode(data_str)
+	local back = {}
+	back["type"] = MsgDef.ACKTYPE.LOBBY.COINSHOP_INIT
+	back["coinShop"] = data.coinShop
+	sendMsg2ClientByPid(id, cjson.encode(back))
+end
+function initDiamondShop(msg)
+	local id, data_str = requestPlayerDBData(msg["loginName"])
+	if (data_str == nil or data_str == '') then
+		__G__TRACKBACK__("PLAYER NOT EXIST")
+		return
+	end
+	local data = cjson.decode(data_str)
+	local back = {}
+	back["type"] = MsgDef.ACKTYPE.LOBBY.DIAMONDSHOP_INIT
+	back["diamondShop"] = data.diamondShop
+	sendMsg2ClientByPid(id, cjson.encode(back))
+end
+function userInfoDS(msg)
+	local id, data_str = requestPlayerDBData(msg["loginName"])
+	if (data_str == nil or data_str == '') then
+		__G__TRACKBACK__("PLAYER NOT EXIST")
+		return
+	end
+	local data = cjson.decode(data_str)
+	local back = {}
+	back["type"] = MsgDef.ACKTYPE.LOBBY.USERINFO_DS
+	back["userInfo"] = data.userInfo
+	sendMsg2ClientByPid(id, cjson.encode(back))
+end
+function coinShopDS(msg)
+	local id, data_str = requestPlayerDBData(msg["loginName"])
+	if (data_str == nil or data_str == '') then
+		__G__TRACKBACK__("PLAYER NOT EXIST")
+		return
+	end
+	local data = cjson.decode(data_str)
+	local back = {}
+	back["type"] = MsgDef.ACKTYPE.LOBBY.COINSHOP_DS
+	back["coinShop"] = data.coinShop
+	sendMsg2ClientByPid(id, cjson.encode(back))
+end
+function diamondShopDS(msg)
+	local id, data_str = requestPlayerDBData(msg["loginName"])
+	if (data_str == nil or data_str == '') then
+		__G__TRACKBACK__("PLAYER NOT EXIST")
+		return
+	end
+	local data = cjson.decode(data_str)
+	local back = {}
+	back["type"] = MsgDef.ACKTYPE.LOBBY.DIAMONDSHOP_DS
+	back["diamondShop"] = data.diamondShop
+	sendMsg2ClientByPid(id, cjson.encode(back))
+end
 xpcall(main, __G__TRACKBACK__)
