@@ -68,7 +68,7 @@ function TrophyRewardsLayer:init()
     highLadderView:addTo(self)
     --构建进度条
     local calibrateScale = CalibrateScaleSprite.new(StringDef.lPATH_HIGH_LADDER_CALIBRATED_SCALE,
-            GameData.userKeyQuantity_)
+        GameData.userKeyQuantity_)
 
     calibrateScale:setAnchorPoint(0, 0)
     calibrateScale:setPosition(12, 15)
@@ -111,10 +111,11 @@ function TrophyRewardsLayer:init()
                     ]]
                 elseif rewardType == ConstDef.REWARD_TYPE.RANDOM then
                     --[[--
-                        同理
+                        这是什么玩意儿我也不知道
                     ]]
                 elseif rewardType == ConstDef.REWARD_TYPE.CURRENCY then
                     --[[--
+
                     ]]
                 end
             end

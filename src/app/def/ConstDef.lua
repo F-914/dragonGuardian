@@ -191,6 +191,7 @@ local ConstDef = {
         lineupTwo = { 2, 2, 2, 2, 2 },
         lineupThree = { 3, 3, 3, 3, 3 }
     },
+    ---这个应该是个变量，对每个用户而言都是不同的，不应该放在常量的这个位置
     COLLECTED = {}, --已收集的塔，通过塔的序号1-20保存
     UNCOLLECTED = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 }, --未收集的塔，通过塔的序号1-20保存
     TOWER_ATK_TARGET = {
@@ -213,7 +214,7 @@ local ConstDef = {
         SSR = 3,
         UR = 4,
     },
-    TREASUREBOX_TYPE = {
+    TREASUREBOX_REWARD = {
         R = 1,
         SR = 2,
         SSR = 3,
@@ -242,6 +243,12 @@ local ConstDef = {
         TREASUREBOX = 3,
         UR = 4
         -- 这是个啥……我也不知道这是啥了
+    },
+    TREASUREBOX_TYPE = {
+        R = 1,
+        SR = 2,
+        SSR = 3,
+        UR = 4,
     },
     TOWER_TYPE = {
         ATTACK = 1, -- 攻击类别

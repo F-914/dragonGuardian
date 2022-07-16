@@ -70,16 +70,19 @@ local EventManager = require("app.manager.EventManager")
 ---@param extraDamage   number 每次攻击带来的额外伤害
 ---@param fatalityRate  number 单次攻击的致命率
 ---@return  nil Description
-function Card:ctor(cardId, name, rarity, type, level, cardAmount, atk, atkTarget, atkUpgrade, atkEnhance, fireCd, fireCdEnhance,
+function Card:ctor(cardId, name, rarity, type, level, cardAmount, atk, atkTarget, atkUpgrade, atkEnhance, fireCd,
+                   fireCdEnhance,
                    fireCdUpgrade,
                    skills, extraDamage, fatalityRate, location)
-    self:setCard(cardId, name, rarity, type, level, cardAmount, atk, atkTarget, atkUpgrade, atkEnhance, fireCd, fireCdEnhance,
-            fireCdUpgrade, skills
-    , extraDamage, fatalityRate, location)
+    self:setCard(cardId, name, rarity, type, level, cardAmount, atk, atkTarget, atkUpgrade, atkEnhance, fireCd,
+        fireCdEnhance,
+        fireCdUpgrade, skills
+        , extraDamage, fatalityRate, location)
     EventManager:doEvent(EventDef.ID.CREATE_CARD, self)
 end
 
-function Card:setCard(cardId, name, rarity, type, level, cardAmount, atk, atkTarget, atkUpgrade, atkEnhance, fireCd, fireCdEnhance,
+function Card:setCard(cardId, name, rarity, type, level, cardAmount, atk, atkTarget, atkUpgrade, atkEnhance, fireCd,
+                      fireCdEnhance,
                       fireCdUpgrade,
                       skills, extraDamage, fatalityRate, location)
     self.cardId_ = cardId
@@ -174,6 +177,11 @@ end
 --- 致死率
 function Card:getCardFatalityRate()
     return self.cardFatalityRate_
+end
+
+---用于增加数量
+function Card:addCardAmount(number)
+    self.cardAmount_ = self.cardAmount_ + number
 end
 
 return Card
