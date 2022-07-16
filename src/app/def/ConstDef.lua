@@ -177,17 +177,21 @@ local ConstDef = {
         StringDef.PATH_COIN_SHOP_COIN,
         StringDef.PATH_COIN_SHOP_DIAMOND,
     },
+<<<<<<< HEAD
     ICON_SUBINSTANCE_TOWER_LIST_TYPE = {
         StringDef.PATH_SUBINTERFACE_TOWER_TYPE_ATTACK,
         StringDef.PATH_SUBINTERFACE_TOWER_TYPE_DISTURB,
         StringDef.PATH_SUBINTERFACE_TOWER_TYPE_AUX,
         StringDef.PATH_SUBINTERFACE_TOWER_TYPE_CONTROL
     },
+=======
+>>>>>>> origin/dev_xz
     LINEUP_LIST = { --图鉴界面中的三个阵容
         lineupOne = { 1, 1, 1, 1, 1 },
         lineupTwo = { 2, 2, 2, 2, 2 },
         lineupThree = { 3, 3, 3, 3, 3 }
     },
+    ---这个应该是个变量，对每个用户而言都是不同的，不应该放在常量的这个位置
     COLLECTED = {}, --已收集的塔，通过塔的序号1-20保存
     UNCOLLECTED = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 }, --未收集的塔，通过塔的序号1-20保存
     TOWER_ATK_TARGET = {
@@ -210,7 +214,7 @@ local ConstDef = {
         SSR = 3,
         UR = 4,
     },
-    TREASUREBOX_TYPE = {
+    TREASUREBOX_REWARD = {
         R = 1,
         SR = 2,
         SSR = 3,
@@ -239,6 +243,15 @@ local ConstDef = {
         TREASUREBOX = 3,
         UR = 4
         -- 这是个啥……我也不知道这是啥了
+<<<<<<< HEAD
+=======
+    },
+    TREASUREBOX_TYPE = {
+        R = 1,
+        SR = 2,
+        SSR = 3,
+        UR = 4,
+>>>>>>> origin/dev_xz
     },
     TOWER_TYPE = {
         ATTACK = 1, -- 攻击类别

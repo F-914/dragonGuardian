@@ -69,13 +69,13 @@ function OpenTreasureChest2nd:init()
                 这里应该调用outGameData的随机生成奖励的函数，用于生成奖励
                 同时想服务器发送消息，然后将数据传输给另一个显示宝箱开出的奖励的而日记界面
             ]]
-            local newView = ChestRewardGet2nd.new(TestDataFactory:getOpenChestItemData())
+            local newView = ChestRewardGet2nd.new(OutGameData:openTreasureBox(self.data_.type))
             newView:addTo(self:getParent())
             self:removeSelf()
         end
     end)
     openButton:addTo(backSprite)
-    --接下来部分暂时没有数据，所以随便填写数据
+
     local chestInforPane = Factory:createChestRewardPane(OutGameData
             :getTreasureBoxRewardWinningRate()[self.data_.type])
     chestInforPane:setPosition(display.width * .5, display.height * .5)
