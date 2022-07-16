@@ -38,6 +38,9 @@ local PATH_ICON_19, PATH_ICON_LINEUP_19, PATH_ICON_UNCOLLECTED_19 = "res/collect
     "res/uncollected/19.png"
 local PATH_ICON_20, PATH_ICON_LINEUP_20, PATH_ICON_UNCOLLECTED_20 = "res/collected/20.png", "res/icon_lineup/20.png",
     "res/uncollected/20.png"
+--loca
+local StringDef = require("app.def.StringDef")
+
 local ConstDef = {
     scale_ = 0.7,
     ICON_LIST = { PATH_ICON_01, PATH_ICON_02,
