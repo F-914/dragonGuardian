@@ -52,15 +52,18 @@ end
     @return type:map key = towerData value = TowerSprite 精灵构成的列表
 ]]
 function Factory:createTeamSprite(teamData)
-    local mapSprites = {}
+    local sprites = {}
     for i = 1, #teamData do
         local cardData = teamData[i]
         ---这里后面可能需要路径
         local towerSprite = require("src/app/ui/node/TowerSprite.lua").new("res/home/general/icon_tower/" ..
-            cardData.cardId .. ".png", cardData)
-        mapSprites[cardData] = towerSprite
+            string.format("%02d", cardData.cardId_) .. ".png", cardData)
+        sprites[i] = {
+            [1] = cardData,
+            [2] = towerSprite
+        }
     end
-    return mapSprites
+    return sprites
 end
 
 --[[--
@@ -70,7 +73,13 @@ end
 ]]
 function Factory:createTowerType(type)
     ---路径问题暂时这样简单的解决,
-    local sprite = display.newSprite("res/home/guide/subinterface_tower_list/type_" .. type .. ".png")
+    local map = {
+        [1] = "attack",
+        [2] = "disturb",
+        [3] = "assist",
+        [4] = "control"
+    }
+    local sprite = display.newSprite("res/home/guide/subinterface_tower_list/type_" .. map[type] .. ".png")
     return sprite
 end
 
