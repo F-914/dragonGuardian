@@ -11,6 +11,7 @@ local StringDef = require("app.def.StringDef")
 local TestDataFactory = require("app.test.TestDataFactory")
 local BattleTeam = require("app.data.BattleTeam")
 local Card = require("app.data.Card")
+local Ladder = require("src/app/data/Ladder.lua")
 --
 
 function UserInfo:ctor(account, avatar, nickname, coinAmount, diamondAmount, trophyAmount, battleTeam, ladderList,
@@ -38,34 +39,9 @@ function UserInfo:testData()
     self.coinAmount_ = 123456
     self.diamondAmount_ = 789999
     self.trophyAmount_ = 101
-    self.battleTeam_ = {
-        BattleTeam.new(
-            {
-                {
-                    Card.new(),
-                    Card.new(),
-                    Card.new(),
-                    Card.new(),
-                    Card.new(),
-                },
-                {
-                    Card.new(),
-                    Card.new(),
-                    Card.new(),
-                    Card.new(),
-                    Card.new(),
-                },
-                { Card.new(),
-                    Card.new(),
-                    Card.new(),
-                    Card.new(),
-                    Card.new(), }
-            },
-            1
-        )
-    }
-    self.ladder_ = {}
-    self.cardList_ = {}
+    self.battleTeam_ = TestDataFactory:getTeamDataTest()
+    self.ladder_ = TestDataFactory:getLadderTest()
+    self.cardList_ = TestDataFactory:getCardListTest()
 end
 
 function UserInfo:setUserInfo(account, avatar, nickname, coinAmount, diamondAmount, trophyAmount, battleTeam, ladder,

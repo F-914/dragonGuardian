@@ -27,23 +27,23 @@ local _treasureBoxRewardWinningRate
 local _isAlive
 --
 ---测试时用这个
---function OutGameData:init()
---    --暂时先用这里的假数据，后面改成发送消息的方式初始化数据
---    self:initUserInfo()
---    self:initCoinShop()
---    self:initDiamondShop()
---    self:initTreasureBoxRewardWinningRate()
---end
-
 function OutGameData:init()
-    OutGameMsgController:init("127.0.0.0", 33333, 2)
-    OutGameMsgController:connect()
-    self:register()
-    _userInfo = UserInfo:getInstance()
-
-    --_coinShop = Shop.new()
-    --_diamondShop = Shop.new()
+    --暂时先用这里的假数据，后面改成发送消息的方式初始化数据
+    self:initUserInfo()
+    self:initCoinShop()
+    self:initDiamondShop()
+    self:initTreasureBoxRewardWinningRate()
 end
+
+--function OutGameData:init()
+--    OutGameMsgController:init("127.0.0.0", 33333, 2)
+--    OutGameMsgController:connect()
+--    self:register()
+--    _userInfo = UserInfo:getInstance()
+--
+--    --_coinShop = Shop.new()
+--    --_diamondShop = Shop.new()
+--end
 
 -- 调用 OutGameData:getTreasureBoxRewardWinningRate()[ConstDef.TREASUREBOX_RARITY.R][ConstDef.TREASUREBOX_REWARD.R]
 function OutGameData:getTreasureBoxRewardWinningRate()
@@ -89,17 +89,18 @@ function OutGameData:initTreasureBoxRewardWinningRate()
 end
 
 ---测试的时候就用下面这三个函数
---function OutGameData:initDiamondShop()
---    _diamondShop = TestDataFactory:getTestDiamondShop()
---end
---
---function OutGameData:initCoinShop()
---    _coinShop = TestDataFactory:getTestCoinShop()
---end
---
---function OutGameData:initUserInfo()
---    _userInfo = UserInfo:getInstance()
---end
+function OutGameData:initDiamondShop()
+    _diamondShop = TestDataFactory:getTestDiamondShop()
+end
+
+function OutGameData:initCoinShop()
+    _coinShop = TestDataFactory:getTestCoinShop()
+end
+
+function OutGameData:initUserInfo()
+    _userInfo = UserInfo:getInstance()
+    _userInfo:testData()
+end
 
 function OutGameData:register()
     ---这一部分是同步和初始化函数
@@ -115,13 +116,23 @@ function OutGameData:register()
             handler(self, self.diamondShopDS))
     OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.COINSHOP_DS,
             handler(self, self.coinShopDS))
-
+    ---这一部分是代表事件的函数
     OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.CARD_COLLECT,
             handler(self, self.addCard))
     OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.CARD_ATTRIBUTE_CHANGE,
         handler(self, self.changeCardAttribute))
     OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.ASSERT_CHANGE,
             handler(self, self.assertChange))
+
+    OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.PURCHASE_COMMODITY,
+            handler(self, self.purchaseCommodity))
+    OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.TROPHY_CHANGE,
+            handler(self, self.trophyChange))
+    OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.MODIFY_BATTLETEAM,
+            handler(self, self.modifyBattleTeam))
+    OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.RECEIVE_REWARD,
+            handler(self, self.receiveReward))
+
 
 end
 
@@ -156,17 +167,17 @@ function OutGameData:update(dt)
     ---同时隔一段事件发送心跳消息，确认在线
 end
 
-function OutGameData:initDiamondShop(msg)
-    _diamondShop = TableUtil:toShop(msg.diamondShop)
-end
-
-function OutGameData:initCoinShop(msg)
-    _coinShop = TableUtil:toShop(msg.coinShop)
-end
-
-function OutGameData:initUserInfo(msg)
-    TableUtil:toUserInfo(msg.userInfo)
-end
+--function OutGameData:initDiamondShop(msg)
+--    _diamondShop = TableUtil:toShop(msg.diamondShop)
+--end
+--
+--function OutGameData:initCoinShop(msg)
+--    _coinShop = TableUtil:toShop(msg.coinShop)
+--end
+--
+--function OutGameData:initUserInfo(msg)
+--    TableUtil:toUserInfo(msg.userInfo)
+--end
 
 --[[--
     @description 接受来自服务器的消息，确定新增的卡片,并将数据同步至本地数据
@@ -306,7 +317,7 @@ function OutGameData:trophyChange(msg)
     local ladderList = _userInfo:getUserInfoLadder():getLadderList()
     for i = 1, #ladderList do
         if amount > ladderList[i].trophyCondition_ then
-            ladderList[i]:setLocked(true)
+            ladderList[i]:setLocked(false)
         end
     end
 end
@@ -343,7 +354,8 @@ function OutGameData:receiveReward(msg)
         for j = 1, #ladderList do
             if ladderList[j].trophyCondition_ ==
                     ladderTable[i].trophyCondition then
-                ladderList[j].trophyCondition_ = true
+                ladderList[j].received_ = true
+                break
             end
         end
     end
@@ -395,7 +407,6 @@ end
 
     之所以只有这么点属性，是因为这些属性足够表示出一个刚从宝箱开出来的卡片，
     同时将这样的消息传递给服务器时，传递的消息也比较少
-
 ]]
 function OutGameData:openTreasureBox(rewardType)
     ---算法暂时先这样，后面再再根据更具体的要求完善
