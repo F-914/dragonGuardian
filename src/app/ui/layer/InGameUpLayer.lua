@@ -13,14 +13,28 @@ local Log = require("app.utils.Log")
 local TowerArrayDef = require("app.def.TowerArrayDef")
 local EventDef = require("app.def.EventDef")
 local EventManager = require("app.manager.EventManager")
-local InGameDownLayer = require("app.ui.layer.InGameDownLayer")
 local BossMessage2nd = require("app.ui.inGameSecondaryui.BossMessage2nd")
-local GiveUp2nd = require("app.ui.inGameSecondaryui.GiveUp2nd")
 local EnemyTowerInfo2nd = require("app.ui.inGameSecondaryui.EnemyTowerInfo2nd")
+local spBuildTTF    --生成所需能量
+local spNumTTF      --当前拥有能量
 --
 
 function InGameUpLayer:ctor()
+    self.playerLive_ = {}
+    self.enemyLife_ = {}
     self:init()
+    self:onEnter()
+
+    --测试敌方塔生成
+    local testButton = ccui.Button:create("battle_in_game/battle_view/elite_enemy.png")
+    testButton:setAnchorPoint(0.5, 0.5)
+    testButton:setPosition(display.cx/4, display.cy*16/15)
+    testButton:addTouchEventListener(function(sender, eventType)
+        if 2 == eventType then
+            InGameData:createEnemyCard(1)   --默认生成一级塔
+        end
+    end)
+    self:addChild(testButton, 5)
 end
 
 function InGameUpLayer:init()
@@ -35,17 +49,21 @@ function InGameUpLayer:init()
     buildButton:setPosition(display.cx, display.cy/4 + display.cy/20)
     buildButton:addTouchEventListener(function(sender, eventType)
         if 2 == eventType then
-            print("生成塔")
-            -- local tower = InGameTowerButton.new(1)
-            -- tower:addTo(self)
-            InGameData:createCard()
-            --EventManager:doEvent(EventDef.ID.CREATE_CARD, self)
+            local sp = InGameData:getSp()
+            local spCost = InGameData:getSpCreateTower()
+            if sp >= spCost then
+                InGameData:createCard(1)    --默认生成等级为1的塔--更新sp
+                local changeSp = InGameData:getSpCreateTower()
+                InGameData:changeSp(-changeSp)
+                InGameData:changeSpCreateTower(10)
+                self:refreshSp()
+            end
         end
     end)
     buildButton:addTo(self)
 
-    local spBuildTTF = display.newTTFLabel({
-        text = "40",
+    spBuildTTF = display.newTTFLabel({
+        text = InGameData:getSpCreateTower(),
         font = "font/fzhzgbjw.ttf",
         size = 24
     })
@@ -60,8 +78,8 @@ function InGameUpLayer:init()
     spBase:setPosition(display.width/4, display.cy/4 + display.cy/20)
     spBase:addTo(self)
 
-    local spNumTTF = display.newTTFLabel({
-        text = "310",
+    spNumTTF = display.newTTFLabel({
+        text = InGameData:getSp(),
         font = "font/fzbiaozjw.ttf",
         size = 24
     })
@@ -103,38 +121,63 @@ function InGameUpLayer:init()
     tagPlayerTTF:addTo(self)
 
     -- 我方生命
-    local playerLifeOne = cc.Sprite:create("battle_in_game/battle_view/hp_full.png")
-    playerLifeOne:setAnchorPoint(0.5, 0.5)
-    playerLifeOne:setPosition(display.width*16/17, display.cy + display.cy/19)
-    playerLifeOne:addTo(self)
+    local playerLifeLeft = cc.Sprite:create("battle_in_game/battle_view/hp_full.png")
+    playerLifeLeft:setAnchorPoint(0.5, 0.5)
+    playerLifeLeft:setPosition(display.width*14/17, display.cy + display.cy/19)
+    playerLifeLeft:addTo(self)
+    self.playerLive_[#self.playerLive_+1] = {
+        SPRITE = playerLifeLeft,
+        IS_VISIABLE = true
+    }
 
-    local playerLifeTwo = cc.Sprite:create("battle_in_game/battle_view/hp_full.png")
-    playerLifeTwo:setAnchorPoint(0.5, 0.5)
-    playerLifeTwo:setPosition(display.width*15/17, display.cy + display.cy/19)
-    playerLifeTwo:addTo(self)
+    local playerLifeMid = cc.Sprite:create("battle_in_game/battle_view/hp_full.png")
+    playerLifeMid:setAnchorPoint(0.5, 0.5)
+    playerLifeMid:setPosition(display.width*15/17, display.cy + display.cy/19)
+    playerLifeMid:addTo(self)
+    self.playerLive_[#self.playerLive_+1] = {
+        SPRITE = playerLifeMid,
+        IS_VISIABLE = true
+    }
 
-    local playerLifeThree = cc.Sprite:create("battle_in_game/battle_view/hp_full.png")
-    playerLifeThree:setAnchorPoint(0.5, 0.5)
-    playerLifeThree:setPosition(display.width*14/17, display.cy + display.cy/19)
-    playerLifeThree:addTo(self)
+    local playerLifeRight = cc.Sprite:create("battle_in_game/battle_view/hp_full.png")
+    playerLifeRight:setAnchorPoint(0.5, 0.5)
+    playerLifeRight:setPosition(display.width*16/17, display.cy + display.cy/19)
+    playerLifeRight:addTo(self)
+    self.playerLive_[#self.playerLive_+1] = {
+        SPRITE = playerLifeRight,
+        IS_VISIABLE = true
+    }
 
     -- 敌方生命
-    local enemyLifeOne = cc.Sprite:create("battle_in_game/battle_view/hp_full.png")
-    enemyLifeOne:setAnchorPoint(0.5, 0.5)
-    enemyLifeOne:setPosition(display.width*1/17, display.cy + display.cy*2/13)
-    enemyLifeOne:addTo(self)
+    local enemyLifeRight = cc.Sprite:create("battle_in_game/battle_view/hp_full.png")
+    enemyLifeRight:setAnchorPoint(0.5, 0.5)
+    enemyLifeRight:setPosition(display.width*3/17, display.cy + display.cy*2/13)
+    enemyLifeRight:addTo(self)
+    self.enemyLife_[#self.enemyLife_+1] = {
+        SPRITE = enemyLifeRight,
+        IS_VISIABLE = true
+    }
 
-    local enemyLifeTwo = cc.Sprite:create("battle_in_game/battle_view/hp_full.png")
-    enemyLifeTwo:setAnchorPoint(0.5, 0.5)
-    enemyLifeTwo:setPosition(display.width*2/17, display.cy + display.cy*2/13)
-    enemyLifeTwo:addTo(self)
+    local enemyLifeMid = cc.Sprite:create("battle_in_game/battle_view/hp_full.png")
+    enemyLifeMid:setAnchorPoint(0.5, 0.5)
+    enemyLifeMid:setPosition(display.width*2/17, display.cy + display.cy*2/13)
+    enemyLifeMid:addTo(self)
+    self.enemyLife_[#self.enemyLife_+1] = {
+        SPRITE = enemyLifeMid,
+        IS_VISIABLE = true
+    }
 
-    local enemyLifeThree = cc.Sprite:create("battle_in_game/battle_view/hp_full.png")
-    enemyLifeThree:setAnchorPoint(0.5, 0.5)
-    enemyLifeThree:setPosition(display.width*3/17, display.cy + display.cy*2/13)
-    enemyLifeThree:addTo(self)
+    local enemyLifeLeft = cc.Sprite:create("battle_in_game/battle_view/hp_full.png")
+    enemyLifeLeft:setAnchorPoint(0.5, 0.5)
+    enemyLifeLeft:setPosition(display.width*1/17, display.cy + display.cy*2/13)
+    enemyLifeLeft:addTo(self)
+    self.enemyLife_[#self.enemyLife_+1] = {
+        SPRITE = enemyLifeLeft,
+        IS_VISIABLE = true
+    }
 
     -- 认输按钮
+    -- 测试阶段点击暂停，实际上是不会暂停的
     local giveUpButton = ccui.Button:create("battle_in_game/battle_view/button_give_up.png")
     giveUpButton:setAnchorPoint(0.5, 0.5)
     giveUpButton:setPosition(display.width*17/20, display.cy + display.cy/8)
@@ -189,12 +232,12 @@ function InGameUpLayer:playerArray()
     --listView:setBackGroundColor(cc.c3b(200,200,255))
     --listView:setBackGroundColorType(1)
     listView:addTo(self)
-    for i = 1,5 do
+    for j = 1,5 do
         local layer = ccui.Layout:create()
         layer:setContentSize(itemWidth, itemHeight)
         layer:addTo(listView)
 
-        local towerButton = ccui.Button:create("battle_in_game/battle_view/tower/tower_"..TowerArrayDef[i].ID..".png")
+        local towerButton = ccui.Button:create("battle_in_game/battle_view/tower/tower_"..TowerArrayDef[j].ID..".png")
         towerButton:setAnchorPoint(0.5, 1)
         towerButton:setPosition(itemWidth/2, itemHeight*19/20)
         local sizeTowerButton = towerButton:getContentSize()
@@ -223,7 +266,7 @@ function InGameUpLayer:playerArray()
         spBase:addTo(layer)
 
         local spTTF = display.newTTFLabel({
-            text = TowerArrayDef[i].SP,
+            text = TowerArrayDef[j].SP,
             font = "font/fzbiaozjw.ttf",
             size = 20
         })
@@ -248,19 +291,19 @@ function InGameUpLayer:enemyArray()
     --listView:setBackGroundColor(cc.c3b(200,200,255))
     --listView:setBackGroundColorType(1)
     listView:addTo(self)
-    for i = 1,5 do
+    for j = 1,5 do
         local layer = ccui.Layout:create()
         layer:setContentSize(itemWidth, itemHeight)
         layer:addTo(listView)
 
-        local towerButton = ccui.Button:create("battle_in_game/battle_view/tower/tower_"..(i+3)..".png")
+        local towerButton = ccui.Button:create("battle_in_game/battle_view/tower/tower_"..(j+3)..".png")
         towerButton:setAnchorPoint(0.5, 1)
         towerButton:setPosition(itemWidth/2, itemHeight*19/20)
         towerButton:scale(0.6)
         local sizeTowerButton = towerButton:getContentSize()
         towerButton:addTouchEventListener(function(sender, eventType)
             if 2 == eventType then
-                local enemyTowerInfo = EnemyTowerInfo2nd.new(i)
+                local enemyTowerInfo = EnemyTowerInfo2nd.new(j)
                 enemyTowerInfo:addTo(self)
             end
         end)
@@ -279,6 +322,69 @@ function InGameUpLayer:enemyArray()
         towerTypeSprite:addTo(layer)
 
     end
+end
+
+--[[--
+    更新sp数值显示
+]]
+function InGameUpLayer:refreshSp()
+    spBuildTTF:setString(InGameData:getSpCreateTower())
+    spNumTTF:setString(InGameData:getSp())
+end
+
+--[[--
+    节点进入
+
+    @param none
+
+    @return none
+]]
+function InGameUpLayer:onEnter()
+    EventManager:regListener(EventDef.ID.HURT_PLAYER, self, function(hurt)
+        print("hurt", hurt)
+        for i = 1, hurt do
+            for j = 1,3 do
+                if self.playerLive_[j].IS_VISIABLE then
+                    self.playerLive_[j].SPRITE:setVisible(false)
+                    self.playerLive_[j].IS_VISIABLE = false
+                    if j==3 then
+                        print("游戏结束1")
+                        InGameData:setGameState(ConstDef.GAME_STATE.RESULT)
+                    end
+                    break
+                end
+            end
+        end
+    end)
+
+    EventManager:regListener(EventDef.ID.HURT_ENEMY, self, function(hurt)
+        print("hurt", hurt)
+        for i = 1, hurt do
+            for j = 1,3 do
+                if self.enemyLife_[j].IS_VISIABLE then
+                    self.enemyLife_[j].SPRITE:setVisible(false)
+                    self.enemyLife_[j].IS_VISIABLE = false
+                    if j==3 then
+                        print("游戏结束1")
+                        InGameData:setGameState(ConstDef.GAME_STATE.RESULT)
+                    end
+                    break
+                end
+            end
+        end
+    end)
+end
+
+--[[--
+    节点退出
+
+    @param none
+
+    @return none
+]]
+function InGameUpLayer:onExit()
+    EventManager:unRegListener(EventDef.ID.HURT_PLAYER, self)
+    EventManager:unRegListener(EventDef.ID.HURT_ENEMY, self)
 end
 
 return InGameUpLayer

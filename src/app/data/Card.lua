@@ -52,7 +52,17 @@ local EventManager = require("app.manager.EventManager")
 --## OutGame
 --cardAtkLevel -- 卡片的等级
 
+-- --回调函数，返回塔图标位置数据
+-- local setCardPosision = function (x, y)
+--     print("x,y Card", x, y)
+--     Card:setMyX(x)
+--     Card:setMyY(y)
+-- end
+
 ---Card.ctor 构造函数
+---@param camp          number 阵营，我方/敌方
+---@param xLocate       number 所处表格行位置
+---@param yLocate       number 所处表格列位置
 ---@param cardId        number 防御塔 ID
 ---@param name          string 防御塔的名字
 ---@param rarity        string 稀有度
@@ -68,19 +78,26 @@ local EventManager = require("app.manager.EventManager")
 ---@param extraDamage   number 每次攻击带来的额外伤害
 ---@param fatalityRate  number 单次攻击的致命率
 ---@return  nil Description
-function Card:ctor(cardId, name, rarity, type, level, atk, atkTarget, atkUpgrade, atkEnhance, fireCd, fireCdEnhance,
+function Card:ctor(camp, x, y, xLocate, yLocate, cardId, name, rarity, type, level, atk, atkTarget, atkUpgrade, atkEnhance, fireCd, fireCdEnhance,
                    fireCdUpgrade,
                    skills, extraDamage, fatalityRate, location)
-    self:setCard(cardId, name, rarity, type, level, atk, atkTarget, atkUpgrade, atkEnhance, fireCd, fireCdEnhance,
+    Card.super.ctor(self, x, y, ConstDef.CARD_BUTTON_SIZE.WIDTH, ConstDef.CARD_BUTTON_SIZE.HEIGHT)
+    self:setCard(cardId, xLocate, yLocate, name, rarity, type, level, atk, atkTarget, atkUpgrade, atkEnhance, fireCd, fireCdEnhance,
         fireCdUpgrade, skills
         , extraDamage, fatalityRate, location)
-    EventManager:doEvent(EventDef.ID.CREATE_CARD, self)
+    if camp == 1 then
+        EventManager:doEvent(EventDef.ID.CREATE_CARD, self, cardId)
+    elseif camp == 2 then
+        EventManager:doEvent(EventDef.ID.CREATE_ENEMY_CARD, self, cardId)
+    end
 end
 
-function Card:setCard(cardId, name, rarity, type, level, atk, atkTarget, atkUpgrade, atkEnhance, fireCd, fireCdEnhance,
+function Card:setCard(cardId, xLocate, yLocate, name, rarity, type, level, atk, atkTarget, atkUpgrade, atkEnhance, fireCd, fireCdEnhance,
                       fireCdUpgrade,
                       skills, extraDamage, fatalityRate, location)
     self.cardId_ = cardId
+    self.xLocate_ = xLocate
+    self.yLocate_ = yLocate
     self.cardName_ = name
     self.cardRarity_ = rarity
     self.cardType_ = type
@@ -102,6 +119,34 @@ function Card:setCard(cardId, name, rarity, type, level, atk, atkTarget, atkUpgr
     self.cardLocation_ = location
 end
 
+--[[--
+    销毁
+
+    @param none
+
+    @return none
+]]
+function Card:destory()
+    --Log.i("destory")
+    self.isDeath_ = true
+    EventManager:doEvent(EventDef.ID.DESTORY_CARD, self)
+end
+
+---设置塔等级
+function Card:setCardLevel(level)
+    self.cardLevel_ = level
+end
+
+--- 塔表格位置
+function Card:getXLocate()
+    return self.xLocate_
+end
+
+function Card:getYLocate()
+    return self.yLocate_
+end
+
+--- 塔编号
 function Card:getCardId()
     return self.cardId_
 end
@@ -116,6 +161,12 @@ end
 ---@return number
 function Card:getCardType()
     return self.cardType_
+end
+
+--- 等级
+---@return number
+function Card:getCardLevel()
+    return self.cardLevel_
 end
 
 -- 攻击目标

@@ -71,6 +71,27 @@ function InGameEnemySprite:entireEnemy()
 end
 
 --[[--
+	敌人受伤提示
+
+	@param number：受伤血量
+]]
+function InGameEnemySprite:hitEnemyTips(num)
+	self.hurtTipsTTF_ = display.newTTFLabel({
+        text = num,
+        font = "font/fzbiaozjw.ttf",
+        size = 20
+    })
+    self.hurtTipsTTF_:align(display.CENTER, self.enemySprite_:getPositionX(), self.enemySprite_:getPositionY() + 10)
+    self.hurtTipsTTF_:setColor(cc.c3b(255,255,255))
+	self.hurtTipsTTF_:enableOutline(cc.c4b(0,0,0,255), 1)
+    self.hurtTipsTTF_:addTo(self)
+	self.hurtTipsTTF_:runAction(cc.Sequence:create(
+		cc.MoveBy:create(0.8, cc.p(0, 50)),
+		cc.RemoveSelf:create())
+	)
+end
+
+--[[--
     帧刷新
 
     @param dt 类型：number，帧间隔，单位秒

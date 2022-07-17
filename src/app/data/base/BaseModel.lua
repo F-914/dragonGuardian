@@ -29,6 +29,14 @@ function BaseModel:setId(id)
     self.id_ = id
 end
 
+function BaseModel:setMyX(x)
+    self.x_ = x
+end
+
+function BaseModel:setMyY(y)
+    self.y_ = y
+end
+
 function BaseModel:getId()
     return self.id_
 end

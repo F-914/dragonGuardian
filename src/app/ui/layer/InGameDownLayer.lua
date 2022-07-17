@@ -12,16 +12,10 @@ local ConstDef = require("app.def.ConstDef")
 local InGameData = require("app.data.InGameData")
 local EventDef = require("app.def.EventDef")
 local EventManager = require("app.manager.EventManager")
+local InGameUpLayer = require("app.ui.layer.InGameUpLayer")
 local InGameEnemySprite = require("app.ui.node.InGameEnemySprite")
 local InGameTowerButton = require("app.ui.node.InGameTowerButton")
 local InGameBulletSprite = require("app.ui.node.InGameBulletSprite")
-local X_LEFT = 0
-local X_RIGHT = display.width*17/20 - display.cx/22
-local Y_DOWN_PLAYER = 0
-local Y_UP_PLAYER = display.cy*14/20
-local schedule = cc.Director:getInstance():getScheduler()	--计时器路径
-local timeCreateEnemySchdule = nil  -- 敌人生成计时器
-local littleEnemyNum = 5    -- 每五只小怪一只精英怪
 --
 
 function InGameDownLayer:ctor()
@@ -42,13 +36,26 @@ end
     @return none
 ]]
 function InGameDownLayer:onEnter()
-    EventManager:regListener(EventDef.ID.CREATE_CARD, self, function(card)
+    --cardId是卡牌编号
+    EventManager:regListener(EventDef.ID.CREATE_CARD, self, function(card, cardId)
         --card是InGameData中的Card数据（参考下方init中参数来源），用于传递统一管理的数据
-        local tower = InGameTowerButton.new(1,card)     -- 1指的是在我方生成
-        tower:addTo(self)
+        local tower = InGameTowerButton.new(1,card,cardId)     -- 1指的是在我方生成
+        self:addChild(tower, 3)
         self.cardMap_[card] = tower
-        InGameData:shoot(tower:getNum(1), tower:getPositionX(), tower:getPositionY())
-        --EventManager:doEvent(EventDef.ID.CREATE_BULLET, self, 1, tower:getPositionX(), tower:getPositionY())
+        InGameData:shoot(1, tower:getCardId(1), tower:getPositionX(), tower:getPositionY(), card:getCardLevel())
+    end)
+
+    EventManager:regListener(EventDef.ID.CREATE_ENEMY_CARD, self, function(card, cardId)
+        local tower = InGameTowerButton.new(2,card,cardId)     -- 2指的是在敌方生成
+        self:addChild(tower, 3)
+        self.cardMap_[card] = tower
+        InGameData:shoot(2, tower:getCardId(2), tower:getPositionX(), tower:getPositionY(), card:getCardLevel())
+    end)
+
+    EventManager:regListener(EventDef.ID.DESTORY_CARD, self, function(card)
+        local node = self.cardMap_[card]
+        node:removeFromParent()
+        self.cardMap_[card] = nil
     end)
 
     EventManager:regListener(EventDef.ID.CREATE_BULLET, self, function(bullet, type, x, y)
@@ -60,10 +67,8 @@ function InGameDownLayer:onEnter()
 
     EventManager:regListener(EventDef.ID.DESTORY_BULLET, self, function(bullet)
         local node = self.bulletMap_[bullet]
-        node:scale(8)
         node:removeFromParent()
         self.bulletMap_[bullet] = nil
-        Log.i("DESTORY_BULLET")
     end)
 
     EventManager:regListener(EventDef.ID.CREATE_ENEMY, self, function(enemy)
@@ -80,6 +85,18 @@ function InGameDownLayer:onEnter()
         local node = self.enemyMap_[enemy]
         node:removeFromParent()
         self.enemyMap_[enemy] = nil
+        InGameUpLayer:refreshSp()
+    end)
+
+    EventManager:regListener(EventDef.ID.CARD_MERGE, self, function(card)
+        local node = self.cardMap_[card]
+        node:removeFromParent()
+    end)
+
+    EventManager:regListener(EventDef.ID.HIT_ENEMY, self, function(enemy, damage)
+        local node = self.enemyMap_[enemy]
+        node:hitEnemyTips(damage)
+        
     end)
 
 end
@@ -93,10 +110,13 @@ end
 ]]
 function InGameDownLayer:onExit()
     EventManager:unRegListener(EventDef.ID.CREATE_CARD, self)
+    EventManager:unRegListener(EventDef.ID.DESTORY_CARD, self)
     EventManager:unRegListener(EventDef.ID.CREATE_BULLET, self)
     EventManager:unRegListener(EventDef.ID.DESTORY_BULLET, self)
     EventManager:unRegListener(EventDef.ID.CREATE_ENEMY, self)
     EventManager:unRegListener(EventDef.ID.DESTORY_ENEMY, self)
+    EventManager:unRegListener(EventDef.ID.CARD_MERGE, self)
+    EventManager:unRegListener(EventDef.ID.HIT_ENEMY, self)
 end
 
 
@@ -105,7 +125,6 @@ function InGameDownLayer:init()
     basemapDown:setAnchorPoint(0.5, 0.5)
     basemapDown:setPosition(display.cx, display.cy)
     basemapDown:addTo(self)
-    --self:createEnemy()
 
     local enemies = InGameData:getEnemies()
     for i = 1, #enemies do
@@ -113,80 +132,6 @@ function InGameDownLayer:init()
         self:addChild(enemy)
         self.enemyMap_[enemies[i]] = enemy
     end
-end
-
---[[--
-    描述：计时器连续生成敌人
-]]
-function InGameDownLayer:createEnemy()
-    -- 连续生成敌人
-    local num = 0
-    timeCreateEnemySchdule = schedule:scheduleScriptFunc(function (dt)
-        if InGameData:getGameState() == ConstDef.GAME_STATE.PLAY then
-            if num < littleEnemyNum then
-                num = num + 1
-                local enemy = InGameEnemySprite.new(1)
-                self:addChild(enemy)
-                self:enemyMovePlayer(enemy)
-            elseif num == littleEnemyNum then
-                num = 0
-                local enemy = InGameEnemySprite.new(2)
-                self:addChild(enemy)
-                self:enemyMovePlayer(enemy)
-            end
-        end
-    end, 0.5, false)
-end
-
---[[--
-    描述：停止敌人生成计时器
-]]
-function InGameDownLayer:stopCreateEnemy()
-    schedule:unscheduleScriptEntry(timeCreateEnemySchdule)
-end
-
---[[--
-	描述：敌人运动路径(我方)
-]]
-function InGameDownLayer:enemyMovePlayer(enemy)
-	local timeSchedule = nil
-	local step = 1	--运动步骤（1-3）
-    local curX, curY    --敌人当前位置
-    local deltaX = 10
-    local deltaY = 10
-
-	timeSchedule = schedule:scheduleScriptFunc(function (dt)
-        if InGameData:getGameState() == ConstDef.GAME_STATE.PLAY then
-            curX = enemy:getPositionX()
-            curY = enemy:getPositionY()
-
-            if step == 1 then
-                -- 左下到左上
-                if curY + deltaY < Y_UP_PLAYER then
-                    enemy:setPosition(curX, curY + deltaY)
-                else
-                    enemy:setPosition(curX, Y_UP_PLAYER)
-                    step = 2
-                end
-            elseif step == 2 then
-                -- 左上到右上
-                if curX + deltaX < X_RIGHT then
-                    enemy:setPosition(curX + deltaX, curY)
-                else
-                    enemy:setPosition(X_RIGHT, curY)
-                    step = 3
-                end
-            elseif step == 3 then
-                -- 右上到右下
-                if curY > Y_DOWN_PLAYER then
-                    enemy:setPosition(curX, curY - deltaY)
-                else
-                    schedule:unscheduleScriptEntry(timeSchedule)
-                    enemy:removeFromParent()
-                end
-            end
-		end
-	end, 0.05, false)
 end
 
 --[[--

@@ -55,7 +55,7 @@ function InGameBattleView:onEnter()
         elseif state == ConstDef.GAME_STATE.RESULT then
             --游戏结束才删除生成敌人的计时器
             --self.inGameDownLayer_:stopCreateEnemy()
-
+            print("游戏结束，弹出结算页面")
         end
     end)
 end

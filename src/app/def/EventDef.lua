@@ -26,7 +26,13 @@ EventDef.ID = {
     CREATE_BULLET = 18,
     CREATE_IN_GAME_CARD = 19,
     DESTORY_ENEMY = 20,
-    DESTORY_BULLET = 21
+    DESTORY_BULLET = 21,
+    DESTORY_CARD = 22,
+    HURT_PLAYER = 23,
+    HURT_ENEMY = 24,
+    CARD_MERGE = 25,
+    CREATE_ENEMY_CARD = 26,
+    HIT_ENEMY = 27  --怪物受到攻击
 }
 
 return EventDef

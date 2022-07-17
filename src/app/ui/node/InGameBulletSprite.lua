@@ -17,8 +17,6 @@ end)
 ]]
 function InGameBulletSprite:ctor(res, data)
     self.data_ = data -- 类型：Bullet，子弹数据
-
-    self:setPosition(display.cx, display.cy)
     self:setAnchorPoint(0.5, 0.5)
 end
 
