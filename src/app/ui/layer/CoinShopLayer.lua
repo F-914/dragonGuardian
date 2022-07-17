@@ -28,8 +28,8 @@ function CoinShopLayer:initView()
     -- TODO 这块能不能来个EventManager
     local refreshText = display.newTTFLabel({
         text = OutGameData
-                :getCoinShop()
-                :getCoinShopRefreshTime(),
+            :getCoinShop()
+            :getCoinShopRefreshTime(),
         font = StringDef.PATH_FONT_FZBIAOZJW,
         size = 30,
     })

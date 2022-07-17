@@ -5,11 +5,11 @@
     Factory.lua
 ]]
 local Factory = {}
---local
-local TypeConvert = require("app.utils.TypeConvert")
-local ConstDef = require("app.def.ConstDef")
-local Log = require("app.utils.Log")
+
+local ConstDef = require("src/app/def/ConstDef.lua")
+local Log = require("src/app/utils/Log.lua")
 local StringDef = require("app.def.StringDef")
+local TypeConvert = require("app.utils.TypeConvert")
 --[[--
     @description: 创建用于宝箱奖励的贴图
     @data type:table, 奖励的数据
@@ -19,7 +19,8 @@ function Factory:createChestRewardTower(data)
     local arr = {}
     local count = 1
     for _, ele in ipairs(data) do
-        local sprite = display.newSprite("res/home/general/second_open_treasure_popup/icon_tower/" .. ele.name .. ".png")
+        local sprite = display.newSprite("res/home/general/second_open_treasure_popup/icon_tower/" ..
+            ele.cardId .. ".png")
         local spSize = sprite:getContentSize()
         local rarityTTF = display.newTTFLabel({
             text = ele.rarity,
@@ -56,10 +57,10 @@ function Factory:createTeamSprite(teamData)
     local mapSprites = {}
     for i = 1, #teamData do
         local cardId = teamData[i]
-        local cardData = OutGameData:getUserInfo():getCardList()[cardId]
+        local cardData = require("app.data.OutGameData"):getUserInfo():getCardList()[cardId]
         --解决循环嵌套
         local towerSprite = require("src/app/ui/node/TowerSprite.lua").new("res/home/general/icon_tower/" ..
-                TypeConvert.Integer2StringLeadingZero(cardId, 2) .. ".png", cardData)
+            TypeConvert.Integer2StringLeadingZero(cardId, 2) .. ".png", cardData)
         mapSprites[cardData] = towerSprite
     end
     return mapSprites
@@ -70,8 +71,11 @@ end
     @param type:string 塔类型的名称
     @return type:Sprite, 代表塔类型的精灵
 ]]
-function Factory:createTowerType(name)
-    local sprite = display.newSprite(ConstDef.ICON_SUBINSTANCE_TOWER_LIST_TYPE[name])
+-- function Factory:createTowerType(type)
+---路径问题暂时这样简单的解决,
+-- local sprite = display.newSprite("res/home/guide/subinterface_tower_list/type_" .. type .. ".png")
+function Factory:createTowerType(type)
+    local sprite = display.newSprite(ConstDef.ICON_SUBINSTANCE_TOWER_LIST_TYPE[type])
     return sprite
 end
 
@@ -81,6 +85,7 @@ end
     @return type:Sprite 表示塔等级的精灵
 ]]
 function Factory:createTowerLevel(level)
+    ---路径问题暂时这样简单的解决,
     local sprite = display.newSprite("res/home/guide/subinterface_tower_list/level/Lv." .. level .. ".png")
     return sprite
 end
@@ -94,16 +99,16 @@ function Factory:createBorder(rewardData)
     if not rewardData.isUnlock then
         --解决循环嵌套，下同
         local border = require("src/app/ui/node/RewardSprite.lua").new("res/home/battle/high_ladder/locked_blue_border.png"
-        , rewardData)
+            , rewardData)
         return border
     else
         if not rewardData.isGet then
             local border = require("src/app/ui/node/RewardSprite.lua").new("res/home/battle/high_ladder/unlocked_unreceived_yellow_border.png"
-            , rewardData)
+                , rewardData)
             return border
         else
             local border = require("src/app/ui/node/RewardSprite.lua").new("res/home/battle/high_ladder/can_receive.png"
-            , rewardData)
+                , rewardData)
             return border
         end
     end
@@ -193,43 +198,6 @@ function Factory:createRewardButton(rewardData)
         Log.e("Erroe rewardDataType in Factory:createRewardButton(rewardData)")
     end
     return button
-    --if rewardName == "coin" then
-    --    local button = ccui.Button:create("res/home/battle/high_ladder/coin.png")
-    --    return button
-    --elseif rewardName == "diamond" then
-    --    local button = ccui.Button:create("res/home/battle/high_ladder/diamond.png")
-    --    return button
-    --elseif rewardName == "box_normal" then
-    --    local button = ccui.Button:create("res/home/general/second_open_confirm_popup/icon_box_normal.png")
-    --    button:setScale(0.5)
-    --    return button
-    --elseif rewardName == "box_rare" then
-    --    local button = ccui.Button:create("res/home/general/second_open_confirm_popup/icon_box_rare.png")
-    --    button:setScale(0.5)
-    --    return button
-    --elseif rewardName == "box_epic" then
-    --    local button = ccui.Button:create("res/home/general/second_open_confirm_popup/icon_box_epic.png")
-    --    button:setScale(0.5)
-    --    return button
-    --elseif rewardName == "box_legend" then
-    --    local button = ccui.Button:create("res/home/general/second_open_confirm_popup/icon_box_legend.png")
-    --    button:setScale(0.5)
-    --    return button
-    --elseif rewardName == "normal" then
-    --    local button = ccui.Button:create("res/home/general/second_open_confirm_popup/icon_normal.png")
-    --    return button
-    --elseif rewardName == "rare" then
-    --    local button = ccui.Button:create("res/home/general/second_open_confirm_popup/icon_rare.png")
-    --    return button
-    --elseif rewardName == "epic" then
-    --    local button = ccui.Button:create("res/home/general/second_open_confirm_popup/icon_epic.png")
-    --    return button
-    --elseif rewardName == "legend" then
-    --    local button = ccui.Button:create("res/home/general/second_open_confirm_popup/icon_legend.png")
-    --    return button
-    --else
-    --    Log.e("Error rewardName in Factory:createRewardButton(rewardName, rewardType)")
-    --end
 end
 
 --[[--
@@ -316,13 +284,13 @@ function Factory:createChestRewardPane(chestRewardData)
 
     local pSize = { width = size.width * .3, height = size.height * .4 }
     local layoutR = self:createChestRewardItem(pSize, chestRewardData[1][1],
-            chestRewardData[1][2], "R")
+        chestRewardData[1][2], "R")
     local layoutSR = self:createChestRewardItem(pSize, chestRewardData[2][1],
-            chestRewardData[2][2], "SR")
+        chestRewardData[2][2], "SR")
     local layoutSSR = self:createChestRewardItem(pSize, chestRewardData[3][1],
-            chestRewardData[3][2], "SSR")
+        chestRewardData[3][2], "SSR")
     local layoutUR = self:createChestRewardItem(pSize, chestRewardData[4][1],
-            chestRewardData[4][2], "UR")
+        chestRewardData[4][2], "UR")
     layoutR:setPosition(size.width * .45, size.height * .65)
     layoutSR:setPosition(size.width * .85, size.height * .65)
     layoutSSR:setPosition(size.width * .45, size.height * .2)
@@ -425,6 +393,20 @@ function Factory:createChestRewardItem(size, numFloor, numUpper, rarity)
     numberTTF:enableOutline(cc.c4b(0, 0, 0, 255), 1)
     numberTTF:addTo(layout)
     return layout
+end
+
+function Factory:getChestRewardModel()
+    return {
+        coinNum = 0,
+        { cardId = 0, number = 0, rarity = "R" },
+        { cardId = 0, number = 0, rarity = "R" },
+        { cardId = 0, number = 0, rarity = "R" },
+        { cardId = 0, number = 0, rarity = "R" },
+        { cardId = 0, number = 0, rarity = "SR" },
+        { cardId = 0, number = 0, rarity = "SR" },
+        { cardId = 0, number = 0, rarity = "SSR" },
+        { cardId = 0, number = 0, rarity = "UR" },
+    }
 end
 
 return Factory
