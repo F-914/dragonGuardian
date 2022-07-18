@@ -40,10 +40,32 @@ MsgDef.REQTYPE = {
         --使用或增加金币/钻石
         TROPHY_CHANGE = 6,
         --使用或增加金币/钻石
-        CARD_COLLECT = 7,
+        CARD_COLLECT = 17,
         --收集塔
-        CARD_ATTRIBUTE_CHANGE = 8
+        CARD_ATTRIBUTE_CHANGE = 18,
         --游戏改变塔的属性，比如攻击力等，用于升级
+        --[[--以下部分来自幸周]]
+        ---以下部分均是同步和初始化消息,由调度器定时发送或者来自初始化时发送
+        USERINFO_DS = 7,
+        --用户信息同步
+        DIAMONDSHOP_DS = 8,
+        --钻石商店信息同步
+        COINSHOP_DS = 9,
+        --金币商店信息同步
+        USERINFO_INIT = 10,
+        --用户信息初始化
+        DIAMONDSHOP_INIT = 11,
+        --钻石商店信息初始化
+        COINSHOP_INIT = 12,
+        --金币商店初始化
+        ---以下是事件消息
+        PURCHASE_COMMODITY = 13,
+        --购买商品
+        TROPHY_CHANGE = 14,
+        --奖杯数改变
+        MODIFY_BATTLETEAM = 15,
+        --修改战斗队伍信息
+        RECEIVE_REWARD = 16,
     }
 }
 
@@ -57,11 +79,44 @@ MsgDef.ACKTYPE = {
     },
     LOBBY = {
         LOGIN = 0x80000 + 5,
+
         COIN_CHANGE = 0x80000 + 6,--使用或增加金币
         DIAMOND_CHANGE=0x80000 + 7,--使用或增加钻石
         TROPHY_CHANGE=0x80000 + 8,--修改奖杯数量
         CARD_COLLECT = 0x80000 + 9,
-        CARD_ATTRIBUTE_CHANGE = 0x80000 + 10
+        CARD_ATTRIBUTE_CHANGE = 0x80000 + 10,
+
+        ASSERT_CHANGE = 0x80000 + 6,
+        CARD_COLLECT = 0x80000 + 7,
+        CARD_ATTRIBUTE_CHANGE = 0x80000 + 8,
+        
+        --[[--以下部分来自幸周
+            虽然和发送类型的名字一样，但使用情况不同，
+            这几个类型主要是客户端同步数据和修改数据函数的注册的类型
+            基于不同的类型调用不同的回调函数
+        ]]
+        ---以下部分均是同步和初始化消息
+        USERINFO_DS = 0x80000 + 9,
+        --用户信息同步
+        DIAMONDSHOP_DS = 0x80000 + 10,
+        --钻石商店信息同步
+        COINSHOP_DS = 0x80000 + 11,
+        --金币商店信息同步
+        USERINFO_INIT = 0x80000 + 12,
+        --用户信息初始化
+        DIAMONDSHOP_INIT = 0x80000 + 13,
+        --钻石商店信息初始化
+        COINSHOP_INIT = 0x80000 + 14,
+        --金币商店初始化
+        PURCHASE_COMMODITY = 0x80000 + 15,
+        --购买商品
+        TROPHY_CHANGE = 0x80000 + 16,
+        --奖杯数改变
+        MODIFY_BATTLETEAM = 0x80000 + 17,
+        --修改战斗队伍信息
+        RECEIVE_REWARD = 0x80000 + 18,
+        --领取奖品
+
     }
 }
 
