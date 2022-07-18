@@ -167,6 +167,27 @@ local StringDef = {
     PATH_SUBINTERFACE_TOWER_LEVEL_18 = "res/home/guide/subinterface_tower_list/level/Lv.18.png",
     PATH_SUBINTERFACE_TOWER_LEVEL_19 = "res/home/guide/subinterface_tower_list/level/Lv.19.png",
     PATH_SUBINTERFACE_TOWER_LEVEL_20 = "res/home/guide/subinterface_tower_list/level/Lv.20.png",
+    -- lineup level
+    PATH_SUBINTERFACE_TOWER_LINE_UP_01 = "res/home/guide/subinterface_current_lineup/level/Lv.1.png",
+    PATH_SUBINTERFACE_TOWER_LINE_UP_02 = "res/home/guide/subinterface_current_lineup/level/Lv.2.png",
+    PATH_SUBINTERFACE_TOWER_LINE_UP_03 = "res/home/guide/subinterface_current_lineup/level/Lv.3.png",
+    PATH_SUBINTERFACE_TOWER_LINE_UP_04 = "res/home/guide/subinterface_current_lineup/level/Lv.4.png",
+    PATH_SUBINTERFACE_TOWER_LINE_UP_05 = "res/home/guide/subinterface_current_lineup/level/Lv.5.png",
+    PATH_SUBINTERFACE_TOWER_LINE_UP_06 = "res/home/guide/subinterface_current_lineup/level/Lv.6.png",
+    PATH_SUBINTERFACE_TOWER_LINE_UP_07 = "res/home/guide/subinterface_current_lineup/level/Lv.7.png",
+    PATH_SUBINTERFACE_TOWER_LINE_UP_08 = "res/home/guide/subinterface_current_lineup/level/Lv.8.png",
+    PATH_SUBINTERFACE_TOWER_LINE_UP_09 = "res/home/guide/subinterface_current_lineup/level/Lv.9.png",
+    PATH_SUBINTERFACE_TOWER_LINE_UP_10 = "res/home/guide/subinterface_current_lineup/level/Lv.10.png",
+    PATH_SUBINTERFACE_TOWER_LINE_UP_11 = "res/home/guide/subinterface_current_lineup/level/Lv.11.png",
+    PATH_SUBINTERFACE_TOWER_LINE_UP_12 = "res/home/guide/subinterface_current_lineup/level/Lv.12.png",
+    PATH_SUBINTERFACE_TOWER_LINE_UP_13 = "res/home/guide/subinterface_current_lineup/level/Lv.13.png",
+    PATH_SUBINTERFACE_TOWER_LINE_UP_14 = "res/home/guide/subinterface_current_lineup/level/Lv.14.png",
+    PATH_SUBINTERFACE_TOWER_LINE_UP_15 = "res/home/guide/subinterface_current_lineup/level/Lv.15.png",
+    PATH_SUBINTERFACE_TOWER_LINE_UP_16 = "res/home/guide/subinterface_current_lineup/level/Lv.16.png",
+    PATH_SUBINTERFACE_TOWER_LINE_UP_17 = "res/home/guide/subinterface_current_lineup/level/Lv.17.png",
+    PATH_SUBINTERFACE_TOWER_LINE_UP_18 = "res/home/guide/subinterface_current_lineup/level/Lv.18.png",
+    PATH_SUBINTERFACE_TOWER_LINE_UP_19 = "res/home/guide/subinterface_current_lineup/level/Lv.19.png",
+    PATH_SUBINTERFACE_TOWER_LINE_UP_20 = "res/home/guide/subinterface_current_lineup/level/Lv.20.png",
     --音乐音效
     PATH_LOBBY_BGM_120BPM = "sound_ogg/lobby_bgm_120bpm.ogg",
     PATH_GET_FREE_ITEM = "sound_ogg/get_free_item.ogg",
@@ -215,6 +236,9 @@ local StringDef = {
     PATH_SUBINTERFACE_TOWER_TYPE_DISTURB = "home/guide/subinterface_tower_list/type_disturb.png",
     PATH_SUBINTERFACE_TOWER_TYPE_AUX = "home/guide/subinterface_tower_list/type_assist.png",
     PATH_SUBINTERFACE_TOWER_TYPE_CONTROL = "home/guide/subinterface_tower_list/type_control.png",
+
+    PATH_SUBINTERFACE_TOWER_PROGRESS = "res/home/guide/subinterface_tower_list/progress_progress_fragments_number.png",
+    PATH_SUBINTERFACE_TOWER_PROGRESS_BASE = "res/home/guide/subinterface_tower_list/progress_base_fragments_number.png",
 
     PATH_ICON_PROPERTY_TYPE = "res/home/guide/second_tower_infor_popup/icon_property/type.png",
     PATH_ICON_PROPERTY_ATK = "res/home/guide/second_tower_infor_popup/icon_property/atk.png",
@@ -314,8 +338,8 @@ local StringDef = {
     -- TTF
     PATH_FONT_FZBIAOZJW = "res/font/fzbiaozjw.ttf",
     PATH_FONT_FZZCHJW = "font/fzzchjw.ttf",
-    PATH_TTF_HZGBJW = "res/front/fzhzgbjw.ttf",
-    PATH_TTF_BIAOZJW = "res/front/fzbiaozjw.ttf",
+    PATH_TTF_HZGBJW = "res/font/fzhzgbjw.ttf",
+    PATH_TTF_BIAOZJW = "res/font/fzbiaozjw.ttf",
     --
     PATH_POSTFIX_PNG = ".png",
 }

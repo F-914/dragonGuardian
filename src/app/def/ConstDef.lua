@@ -126,6 +126,28 @@ local ConstDef = {
         StringDef.PATH_COIN_SHOP_TOWER_FRAGMENT_19,
         StringDef.PATH_COIN_SHOP_TOWER_FRAGMENT_20,
     },
+    ICON_SUBINTERFACE_TOWER_LINE_UP = {
+        StringDef.PATH_SUBINTERFACE_TOWER_LINE_UP_01,
+        StringDef.PATH_SUBINTERFACE_TOWER_LINE_UP_02,
+        StringDef.PATH_SUBINTERFACE_TOWER_LINE_UP_03,
+        StringDef.PATH_SUBINTERFACE_TOWER_LINE_UP_04,
+        StringDef.PATH_SUBINTERFACE_TOWER_LINE_UP_05,
+        StringDef.PATH_SUBINTERFACE_TOWER_LINE_UP_06,
+        StringDef.PATH_SUBINTERFACE_TOWER_LINE_UP_07,
+        StringDef.PATH_SUBINTERFACE_TOWER_LINE_UP_08,
+        StringDef.PATH_SUBINTERFACE_TOWER_LINE_UP_09,
+        StringDef.PATH_SUBINTERFACE_TOWER_LINE_UP_10,
+        StringDef.PATH_SUBINTERFACE_TOWER_LINE_UP_11,
+        StringDef.PATH_SUBINTERFACE_TOWER_LINE_UP_12,
+        StringDef.PATH_SUBINTERFACE_TOWER_LINE_UP_13,
+        StringDef.PATH_SUBINTERFACE_TOWER_LINE_UP_14,
+        StringDef.PATH_SUBINTERFACE_TOWER_LINE_UP_15,
+        StringDef.PATH_SUBINTERFACE_TOWER_LINE_UP_16,
+        StringDef.PATH_SUBINTERFACE_TOWER_LINE_UP_17,
+        StringDef.PATH_SUBINTERFACE_TOWER_LINE_UP_18,
+        StringDef.PATH_SUBINTERFACE_TOWER_LINE_UP_19,
+        StringDef.PATH_SUBINTERFACE_TOWER_LINE_UP_20,
+    },
     ICON_CURRENCY_TYPE = {
         StringDef.PATH_COIN_SHOP_COIN,
         StringDef.PATH_COIN_SHOP_DIAMOND,
@@ -141,9 +163,6 @@ local ConstDef = {
         lineupTwo = { 2, 2, 2, 2, 2 },
         lineupThree = { 3, 3, 3, 3, 3 }
     },
-    ---这个应该是个变量，对每个用户而言都是不同的，不应该放在常量的这个位置
-    COLLECTED = {}, --已收集的塔，通过塔的序号1-20保存
-    UNCOLLECTED = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 }, --未收集的塔，通过塔的序号1-20保存
     TOWER_ATK_TARGET = {
         FRONT = 1, -- 前方
         BACK = 2, -- 后方
@@ -226,8 +245,73 @@ local ConstDef = {
         lineupThree = { 3, 3, 3, 3, 3 }
     },
     BUTTON_CLICK = {},
-    COLLECTED = {},
     POPUP = {},
-    UNCOLLECTED = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 }
+    CARD_UPDATE_CONDITION = {
+        CARD_CONDITION = {
+            -- 这个里面是或者的关系
+            {
+                R = 2
+            },
+            {
+                R = 4
+            },
+            {
+                R = 10,
+                SR = 2,
+            },
+            {
+                R = 20,
+                SR = 4,
+            },
+            { R = 50,
+              SR = 10,
+              SSR = 2 },
+            { R = 100,
+              SR = 20,
+              SSR = 4 },
+            {
+                R = 200,
+                SR = 50,
+                SSR = 10
+            },
+            { R = 400,
+              SR = 100,
+              SSR = 20 },
+            {
+                R = 800,
+                SR = 200,
+                SSR = 50,
+                UR = 2
+            },
+            { R = 1000,
+              SR = 400,
+              SSR = 100,
+              UR = 4 },
+            {
+                R = 2000,
+                SR = 800,
+                SSR = 200,
+                UR = 10
+            },
+            { R = 5000,
+              SR = 1000,
+              SSR = 400,
+              UR = 20 },
+        },
+        COIN_CONDITION = {
+            5,
+            20,
+            50,
+            150,
+            400,
+            1000,
+            2000,
+            4000,
+            8000,
+            20000,
+            50000,
+            100000
+        }
+    }
 }
 return ConstDef

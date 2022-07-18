@@ -281,6 +281,7 @@ function AtlasView:createBag()
             tipBackground:getContentSize().height * 0.75)
 
     local heightUncollect, heightCollect --计算已收集和未收集分别需要多少行
+    -- 已收集
     local collected = OutGameData:getUserInfo():getCollectedList()
     if #(collected) == 0 then
         heightCollect = 1
@@ -289,7 +290,7 @@ function AtlasView:createBag()
     elseif #(collected) % 4 ~= 0 then
         heightCollect = math.floor(#(collected) / 4) + 1
     end
-
+    -- 未收集
     local uncollected = OutGameData:getUserInfo():getUnCollectedList()
     if #(uncollected) == 0 then
         heightUncollect = 1
@@ -298,9 +299,9 @@ function AtlasView:createBag()
     elseif #(uncollected) % 4 ~= 0 then
         heightUncollect = math.floor(#(uncollected) / 4) + 1
     end
-
+    -- 已收集列表
     local splitLineCollected = display.newSprite(StringDef.PATH_SPLITLINE_COLLECTED) --已收集的分割线
-    collected_ = BagLayer.new(ConstDef.COLLECTED, "collected")
+    collected_ = BagLayer.new(collected, "collected")
     BagList_ = collected_.list
     local layoutCollect = ccui.Layout:create() --将已收集分割线和已收集的塔放在一个layout
     layoutCollect:setPosition(display.cx, display.cy)
@@ -315,11 +316,11 @@ function AtlasView:createBag()
     layoutCollect:add(collected_)
     collected_:setPosition(layoutCollect:getContentSize().width * 0.5, layoutCollect:getContentSize().height)
     --collected:setContentSize(collected:getContentSize().width,layoutCollect:getContentSize().height)
-
+    -- 未收集列表
     layoutCollect:add(splitLineCollected)
     local layoutUncollect = ccui.Layout:create()
     local splitLineUncollected = display.newSprite(StringDef.PATH_SPLITLINE_UNCOLLECTED) --未收集的分割线
-    uncollected_ = BagLayer.new(ConstDef.UNCOLLECTED, "uncollected") --将未收集分割线和未收集的塔放在一个layout
+    uncollected_ = BagLayer.new(uncollected, "uncollected") --将未收集分割线和未收集的塔放在一个layout
     layoutUncollect:setAnchorPoint(0.5, 1)
     layoutUncollect:setContentSize(display.cx * 2,
             splitLineUncollected:getContentSize().height * (display.cx * 2 / splitLineUncollected:getContentSize().width) +

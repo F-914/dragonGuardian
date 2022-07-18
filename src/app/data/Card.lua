@@ -187,4 +187,8 @@ function Card:addCardAmount(number)
     self.cardAmount_ = self.cardAmount_ + number
 end
 
+function Card:getCardAmount()
+    return self.cardAmount_
+end
+
 return Card

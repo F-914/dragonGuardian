@@ -66,13 +66,13 @@ function UserInfo:testData()
             ) }
     )
     self.userInfoCardList_ = {
-        Card.new(
+        [1] = Card.new(
                 1,
                 "平平无奇防御塔",
                 ConstDef.TOWER_RARITY.R,
                 ConstDef.TOWER_TYPE.ATTACK,
                 math.random(10),
-                0,
+                3,
                 math.random(100),
                 ConstDef.TOWER_ATK_TARGET.BACK,
                 math.random(100),
@@ -88,17 +88,17 @@ function UserInfo:testData()
         )
     }
 
-    local collected = self:getCollectedList()
-    Log.i("Collected: " .. tostring(#(collected)))
-    for i = 1, #(collected) do
-        Log.i("" .. tostring(collected[i]))
-    end
-    --
-    local uncollected = self:getUnCollectedList()
-    Log.i("Uncollected")
-    for i = 1, #(uncollected) do
-        Log.i("" .. tostring(uncollected[i]))
-    end
+    --local collected = self:getCollectedList()
+    --Log.i("Collected: " .. tostring(#(collected)))
+    --for i = 1, #(collected) do
+    --    Log.i("" .. tostring(collected[i]))
+    --end
+    ----
+    --local uncollected = self:getUnCollectedList()
+    --Log.i("Uncollected")
+    --for i = 1, #(uncollected) do
+    --    Log.i("" .. tostring(uncollected[i]))
+    --end
 end
 
 function UserInfo:setUserInfo(account, avatar, nickname, coinAmount, diamondAmount, trophyAmount, battleTeam, ladder,
