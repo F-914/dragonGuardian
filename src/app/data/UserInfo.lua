@@ -23,10 +23,8 @@ function UserInfo:ctor(account, avatar, nickname, coinAmount, diamondAmount, tro
 end
 
 function UserInfo:getInstance()
-    Log.i("UserInfo:getInstance: " .. tostring(self.instance_ == nil))
     if self.instance_ == nil then
         self.instance_ = UserInfo.new()
-        Log.i("getInstance: " .. tostring(self.instance_ == nil))
         self.instance_:initData()
     end
     return self.instance_
@@ -68,8 +66,7 @@ function UserInfo:testData()
             ) }
     )
     self.userInfoCardList_ = {
-        -- [cardId] = Card.new(cardId)
-        [1] = Card.new(
+        Card.new(
                 1,
                 "平平无奇防御塔",
                 ConstDef.TOWER_RARITY.R,
@@ -90,6 +87,18 @@ function UserInfo:testData()
                 1
         )
     }
+
+    local collected = self:getCollectedList()
+    Log.i("Collected: " .. tostring(#(collected)))
+    for i = 1, #(collected) do
+        Log.i("" .. tostring(collected[i]))
+    end
+    --
+    local uncollected = self:getUnCollectedList()
+    Log.i("Uncollected")
+    for i = 1, #(uncollected) do
+        Log.i("" .. tostring(uncollected[i]))
+    end
 end
 
 function UserInfo:setUserInfo(account, avatar, nickname, coinAmount, diamondAmount, trophyAmount, battleTeam, ladder,
@@ -142,7 +151,6 @@ function UserInfo:getDiamondAmount()
 end
 
 function UserInfo:getBattleTeam()
-    Log.i("getBattleTeam: battleTeam is nil ? " .. tostring(self.battleTeam_ == nil))
     return self.userInfoBattleTeam_
 end
 
@@ -186,13 +194,14 @@ function UserInfo:setUserInfoBattleTeam(battleTeam)
 end
 
 function UserInfo:getCollectedList()
+    local cardList = self:getCardList()
     local list = {}
     local set = {}
-    if self.cardList_ == nil then
+    if cardList == nil then
         return list
     end
-    for card in self.cardList_ do
-        local id = card.cardId
+    for i = 1, #(cardList) do
+        local id = cardList[i]:getCardId()
         if set[id] then
             -- nothing
         else
@@ -204,19 +213,20 @@ function UserInfo:getCollectedList()
 end
 
 function UserInfo:getUnCollectedList()
+    local cardList = self:getCardList()
     local list = {}
     local set = {}
     for id = 1, 20 do
         set[id] = true
     end
-    if self.cardList_ == nil then
+    if cardList == nil then
         for id = 1, 20 do
             table.insert(list, id)
         end
         return list
     end
-    for card in self.cardList_ do
-        local id = card.cardId
+    for i = 1, #(cardList) do
+        local id = cardList[i]:getCardId()
         if set[id] then
             set[id] = false
         end
