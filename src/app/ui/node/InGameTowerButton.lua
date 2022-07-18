@@ -82,6 +82,8 @@ function InGameTowerButton:buildPlayerTower(num)
     --towerTypeSprite:scale(0.6)
     towerTypeSprite:setPosition(sizeTowerButton.width*0.85, sizeTowerButton.height*0.85)
 
+    print("self.data_:getMyX(), self.data_:getMyY()",self.data_:getMyX(), self.data_:getMyY())
+    
     self:setLocate(towerButton, self.data_:getMyX(), self.data_:getMyY())
 
 end
@@ -104,33 +106,34 @@ function InGameTowerButton:setLocate(node, x, y)
 end
 
 --------------------------------------------------------------------------------------------
---[[--
-    描述：初始化创建敌人塔
-    好像随机生成放到InGameData里这里生成没有区别了，确定不需要后可删
-    ]]
-function InGameTowerButton:buildEnemyTower(num)
-    local towerButton = ccui.Button:create(TowerArrayDef[num].ICON_PATH)
-    towerButton:setAnchorPoint(0, 0)
-    towerButton:setPosition(0, 0)
-    towerButton:scale(0.85)
-    sizeTowerButton = towerButton:getContentSize()
-    towerButton:addTouchEventListener(function(sender, eventType)
-        if 2 == eventType then
-        end
-    end)
-    towerButton:setSwallowTouches(false)    --不吞噬下层触摸事件
-    towerButton:setTouchEnabled(false)      --敌方塔不可交互
+-- --[[--
+--     描述：初始化创建敌人塔
+--     好像随机生成放到InGameData里这里生成没有区别了，确定不需要后可删
+--     ]]
+-- function InGameTowerButton:buildEnemyTower(num)
+--     local towerButton = ccui.Button:create(TowerArrayDef[num].ICON_PATH)
+--     towerButton:setAnchorPoint(0, 0)
+--     towerButton:setPosition(0, 0)
+--     towerButton:scale(0.85)
+--     sizeTowerButton = towerButton:getContentSize()
+--     towerButton:addTouchEventListener(function(sender, eventType)
+--         if 2 == eventType then
+--         end
+--     end)
+--     towerButton:setSwallowTouches(false)    --不吞噬下层触摸事件
+--     towerButton:setTouchEnabled(false)      --敌方塔不可交互
 
-    self:setAnchorPoint(0.5, 0.5)
-    self:setContentSize(sizeTowerButton.width*0.85, sizeTowerButton.height*0.85)
+--     self:setAnchorPoint(0.5, 0.5)
+--     self:setContentSize(sizeTowerButton.width*0.85, sizeTowerButton.height*0.85)
 
-    towerTypeSprite = cc.Sprite:create("battle_in_game/battle_view/subscript_level/1.png")
-    towerTypeSprite:setAnchorPoint(1,1)
-    towerTypeSprite:setPosition(sizeTowerButton.width*0.85, sizeTowerButton.height*0.85)
+--     towerTypeSprite = cc.Sprite:create("battle_in_game/battle_view/subscript_level/1.png")
+--     towerTypeSprite:setAnchorPoint(1,1)
+--     towerTypeSprite:setPosition(sizeTowerButton.width*0.85, sizeTowerButton.height*0.85)
 
-    self:setLocate(towerButton, self.data_:getMyX(), self.data_:getMyY())
+--     print("self.data_:getMyX(), self.data_:getMyY()",self.data_:getMyX(), self.data_:getMyY())
+--     self:setLocate(towerButton, self.data_:getMyX(), self.data_:getMyY())
 
-end
+-- end
 
 ------------------------------------------------------------------------------------------------
 --[[--

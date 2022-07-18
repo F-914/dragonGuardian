@@ -31,7 +31,9 @@ function InGameUpLayer:ctor()
     testButton:setPosition(display.cx/4, display.cy*16/15)
     testButton:addTouchEventListener(function(sender, eventType)
         if 2 == eventType then
-            InGameData:createEnemyCard(1)   --默认生成一级塔
+            if not InGameData:enemyMerge() then
+                InGameData:createEnemyCard(1)   --默认生成一级塔
+            end
         end
     end)
     self:addChild(testButton, 5)
@@ -243,7 +245,7 @@ function InGameUpLayer:playerArray()
         local sizeTowerButton = towerButton:getContentSize()
         towerButton:addTouchEventListener(function(sender, eventType)
             if 2 == eventType then
-                
+                --塔强化
             end
         end)
         towerButton:addTo(layer)
