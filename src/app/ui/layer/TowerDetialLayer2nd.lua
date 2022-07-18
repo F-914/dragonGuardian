@@ -46,9 +46,10 @@ function TowerDetialLayer2nd:init(cardId, bag)
     popup:setAnchorPoint(0.5, 0.5)
     popup:setPosition(mask:getContentSize().width * 0.5, mask:getContentSize().height * 0.4)
 
-    local icon_ = self:createIcon(cardId, popup)
-    icon_:setAnchorPoint(0.5, 0.5)
-    icon_:setPosition(popup:getContentSize().width * 0.65, popup:getContentSize().height * 1.47)
+    local icon=self:createIcon(card,popup)--左上角大图
+    icon:setAnchorPoint(0.5,0.5)
+    icon:setPosition(popup:getContentSize().width*0.65,popup:getContentSize().height*1.55)
+   
 
     local baseSkillIntroducion = display.newSprite(StringDef.PATH_BASE_SKILL_INTRODUCTION)
     popup:add(baseSkillIntroducion)
@@ -301,7 +302,7 @@ function TowerDetialLayer2nd:createIcon(cardId, parents)
     parents:add(icon)
     icon:setAnchorPoint(0.5, 0.5)
     --icon:setPosition(parents:getContentSize().width*0.65,parents:getContentSize().height*1.42)
-    icon:setPosition(0, 0)
+    icon:setPosition(100,10)
     return icon
 end
 
