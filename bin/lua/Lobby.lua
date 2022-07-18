@@ -111,9 +111,12 @@ function processLobbyMsg()
 		playerLogin(msg)
 	elseif (msg["type"] == MsgDef.REQTYPE.LOBBY.CARD_ATTRIBUTE_CHANGE) then
 		cardAttributeChange(msg)
-	elseif (msg["type"] == MsgDef.REQTYPE.LOBBY.ASSERT_CHANGE) then
-		assetsChange(msg)
-		
+	elseif (msg["type"] == MsgDef.REQTYPE.LOBBY.COIN_CHANGE) then
+		coinChange(msg)
+	elseif (msg["type"] == MsgDef.REQTYPE.LOBBY.DIAMOND_CHANGE) then
+		diamondChange(msg)
+	elseif (msg["type"] == MsgDef.REQTYPE.LOBBY.TROPHY_CHANGE) then
+		trophyChange(msg)
 	elseif (msg["type"] == MsgDef.REQTYPE.LOBBY.CARD_COLLECT) then
         collectCard(msg)
 	end
@@ -137,31 +140,96 @@ function main()
 	end
 end
 --[[
-    @description: 修改用户的金币/钻石
-    @param msg 类型:json 要求msg必须含有loginName，assert，change，其中assert是钻石或者金币，update是变动后的数值，该函数
+    @description: 修改用户的金币
+    @param msg 类型:json 要求msg必须含有loginName，userInfo，
 	                     会回传一个确认消息permission，修改成功或者失败
     @return none
 ]]
-function assetsChange(msg)
+function coinChange(msg)
     local id, data_str = requestPlayerDBData(msg["loginName"])
 
 	if (data_str == nil or data_str == '') then
-		__G__TRACKBACK__("该玩家不存在")
+		__G__TRACKBACK__("PLAYER NOT EXIST")
 		return
 	end
 	local data=cjson.decode(data_str)
-	if data[msg["assert"]]==nil then
-		__G__TRACKBACK__("属性名称错误")
+	if msg["userInfo"]==nil then
+		__G__TRACKBACK__("USERINFO NOT EXIST")
 		return
 	end
-    local assert=data[msg["assert"]]
-    data[msg["asset"]]=msg["update"]
+    local coinamount=msg["userInfo"]["coinAmount"]
+    data["userInfo"]["coinAmount"]=coinamount
 	local saveData=cjson.encode(data)
 	savePlayerDBData(id,saveData)
 
     local back={}
 	back["permission"]="yes"
-    back["type"]=MsgDef.ACKTYPE.LOBBY.ASSERT_CHANGE
+    back["type"]=MsgDef.ACKTYPE.LOBBY.COIN_CHANGE
+	back["coinAmount"]= data["userInfo"]["coinAmount"]
+	back["pid"]=id
+	local backMsg=cjson.encode(back)
+    sendMsg2ClientByPid(id, backMsg)
+	
+end
+--[[
+    @description: 修改用户的钻石
+    @param msg 类型:json 要求msg必须含有loginName，userInfo，
+	                     会回传一个确认消息permission，修改成功或者失败
+    @return none
+]]
+function diamondChange(msg)
+    local id, data_str = requestPlayerDBData(msg["loginName"])
+
+	if (data_str == nil or data_str == '') then
+		__G__TRACKBACK__("PLAYER NOT EXIST")
+		return
+	end
+	local data=cjson.decode(data_str)
+	if msg["userInfo"]==nil then
+		__G__TRACKBACK__("USERINFO NOT EXIST")
+		return
+	end
+    local diamondamount=msg["userInfo"]["diamondAmount"]
+    data["userInfo"]["diamondAmount"]=diamondamount
+	local saveData=cjson.encode(data)
+	savePlayerDBData(id,saveData)
+
+    local back={}
+	back["permission"]="yes"
+    back["type"]=MsgDef.ACKTYPE.LOBBY.COIN_CHANGE
+	back["diamondAmount"]= data["userInfo"]["diamondAmount"]
+	back["pid"]=id
+	local backMsg=cjson.encode(back)
+    sendMsg2ClientByPid(id, backMsg)
+	
+end
+--[[
+    @description: 修改用户的奖杯
+    @param msg 类型:json 要求msg必须含有loginName，userInfo，
+	                     会回传一个确认消息permission，修改成功或者失败
+    @return none
+]]
+function trophyChange(msg)
+    local id, data_str = requestPlayerDBData(msg["loginName"])
+
+	if (data_str == nil or data_str == '') then
+		__G__TRACKBACK__("PLAYER NOT EXIST")
+		return
+	end
+	local data=cjson.decode(data_str)
+	if msg["userInfo"]==nil then
+		__G__TRACKBACK__("USERINFO NOT EXIST")
+		return
+	end
+    local trophyamount=msg["userInfo"]["trophyAmount"]
+    data["userInfo"]["trophyAmount"]=trophyamount
+	local saveData=cjson.encode(data)
+	savePlayerDBData(id,saveData)
+
+    local back={}
+	back["permission"]="yes"
+    back["type"]=MsgDef.ACKTYPE.LOBBY.COIN_CHANGE
+	back["trophyAmount"]= data["userInfo"]["trophyAmount"]
 	back["pid"]=id
 	local backMsg=cjson.encode(back)
     sendMsg2ClientByPid(id, backMsg)
@@ -182,25 +250,25 @@ function collectCard(msg)
 	end
 
 	local data=cjson.decode(data_str)
-	if(msg["card"]==nil) then
+	if(msg["userInfo"]["card"]==nil) then
 		__G__TRACKBACK__("CARD NOT EXIST")
 		return
     end
-    table.insert(data["COLLECTED"],msg["card"])--此处可根据数据结构修改
+    table.insert(data["userInfo"]["collectedCardList"],msg["userInfo"]["card"])--此处可根据数据结构修改
 	local saveData=cjson.encode(data)
     savePlayerDBData(id,saveData)
     
 	local back={}
 	back["type"]=MsgDef.ACKTYPE.LOBBY.CARD_COLLECT
     back["confirm"]="suc"
-	back["collect"]=data["COLLECTED"]
-	back["pid"]=id
+	back["collectedCardList"]=data["userInfo"]["collectedCardList"]
+	
 	local backMsg=cjson.encode(back)
 	sendMsg2ClientByPid(id,backMsg)
 end
 --[[
     @description: 改变卡牌的属性
-    @param msg 类型:json 要求msg必须含有三个成员loginName，order，attribute，change其中order是对应的卡牌序列，
+    @param msg 类型:json 要求msg必须含有三个成员loginName，order，attribute，update其中order是对应的卡牌序列，
 	                attribute是需要修改的属性,update是变化后的值
     @return none
 ]]
@@ -211,29 +279,35 @@ function cardAttributeChange(msg)
 		__G__TRACKBACK__("PLAYER NOT EXIST")
 		return
 	end
-
+    if msg["userInfo"]==nil then
+		__G__TRACKBACK__("USERINFO NOT EXIST")
+		return
+	end
 	local data=cjson.decode(data_str)
-	local order=msg["order"]
-	local attribute=msg["attribute"]
-	if(data["COLLECTED"][order]==nil) then
+	local order=msg["userInfo"]["order"]
+	local attribute=msg["userInfo"]["attribute"]
+	if(data["collectedCardList"][order]==nil) then
 		__G__TRACKBACK__("CARD UNCOLLECTED")
 		return
-	elseif (data["COLLECTED"][order][attribute]==nil) then
+	elseif (data["collectedCardList"][order][attribute]==nil) then
 		__G__TRACKBACK__("ATTRIBUTE NOT EXIST")
 		return
 	end
-	data["COLLECTED"][order][attribute]=msg["update"]
+	data["collectedCardList"][order][attribute]=msg["userInfo"]["update"]
 
     local saveData=cjson.encode(data)
 	savePlayerDBData(id,saveData)
     
 	local back={}
-	back["pid"]=id
-	back["type"]=MsgDef.ACKTYPE.LOBBY.CARD_ATTRIBUTE_CHANGE
-	back["order"]=msg["order"]
-	back["attribute"]=msg["attribute"]
-	back["confirm"]=msg["suc"]
+	local userInfo={}
+	userInfo["pid"]=id
+	userInfo["type"]=MsgDef.ACKTYPE.LOBBY.CARD_ATTRIBUTE_CHANGE
+	userInfo["order"]=msg["order"]
+	userInfo["attribute"]=msg["attribute"]
+	userInfo["confirm"]=msg["suc"]
+	back["userInfo"]=userInfo
 	local backMsg=cjson.encode(back)
+
     sendMsg2ClientByPid(id, backMsg)
 end
 

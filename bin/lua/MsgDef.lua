@@ -34,11 +34,15 @@ MsgDef.REQTYPE = {
         --心跳(检测网络连接状态)
         LOGIN = 3,
         --登录
-        ASSERT_CHANGE = 4,
+        COIN_CHANGE = 4,
         --使用或增加金币/钻石
-        CARD_COLLECT = 5,
+        DIAMOND_CHANGE = 5,
+        --使用或增加金币/钻石
+        TROPHY_CHANGE = 6,
+        --使用或增加金币/钻石
+        CARD_COLLECT = 7,
         --收集塔
-        CARD_ATTRIBUTE_CHANGE = 6
+        CARD_ATTRIBUTE_CHANGE = 8
         --游戏改变塔的属性，比如攻击力等，用于升级
     }
 }
@@ -53,9 +57,11 @@ MsgDef.ACKTYPE = {
     },
     LOBBY = {
         LOGIN = 0x80000 + 5,
-        ASSERT_CHANGE = 0x80000 + 6,
-        CARD_COLLECT = 0x80000 + 7,
-        CARD_ATTRIBUTE_CHANGE = 0x80000 + 8
+        COIN_CHANGE = 0x80000 + 6,--使用或增加金币
+        DIAMOND_CHANGE=0x80000 + 7,--使用或增加钻石
+        TROPHY_CHANGE=0x80000 + 8,--修改奖杯数量
+        CARD_COLLECT = 0x80000 + 9,
+        CARD_ATTRIBUTE_CHANGE = 0x80000 + 10
     }
 }
 
