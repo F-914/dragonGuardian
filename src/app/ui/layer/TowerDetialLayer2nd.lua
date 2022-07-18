@@ -296,7 +296,6 @@ end
     @return icon
 ]]
 function TowerDetialLayer2nd:createIcon(cardId, parents)
-    Log.i("TowerDetialLayer2nd:createIcon cardId: " .. tostring(cardId))
     local icon = TowerButtonLayer2nd.new(cardId)
     parents:add(icon)
     icon:setAnchorPoint(0.5, 0.5)
