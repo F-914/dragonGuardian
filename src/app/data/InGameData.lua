@@ -37,6 +37,8 @@ local SHOOT_INTERVAL = 0.5  -- 类型：number，射击间隔
 function InGameData:init()
     self.sp_ = 100  -- 类型：number，当前玩家拥有的能量
     self.spCreateTower_ = 10    --类型：number，生成塔需要的能量(每生成一次+10)
+    self.spEnemy_ = 100  -- 类型：number，当前玩家拥有的能量
+    self.spCreateEnemyTower_ = 10    --类型：number，生成塔需要的能量(每生成一次+10)
     self.life_ = 100 -- 类型：number，生命值
     self.score_ = 0 -- 类型：number，得分
 
@@ -47,7 +49,6 @@ function InGameData:init()
 end
 
 function InGameData:getSp()
-    print("sp", self.sp_)
     return self.sp_
 end
 
@@ -63,7 +64,6 @@ function InGameData:changeSp(change)
 end
 
 function InGameData:getSpCreateTower()
-    print("self.spCreateTower_", self.spCreateTower_)
     return self.spCreateTower_
 end
 
@@ -73,6 +73,34 @@ end
 function InGameData:changeSpCreateTower(change)
     self.spCreateTower_ = self.spCreateTower_ + change
 end
+
+----------------------------------------------------------------------
+function InGameData:getSpEnemy()
+    return self.spEnemy_
+end
+
+function InGameData:setSpEnemy(sp)
+    self.spEnemy_ = sp
+end
+
+--[[--
+    当前能量值快速加/减操作
+]]
+function InGameData:changeSpEnemy(change)
+    self.spEnemy_ = self.spEnemy_ + change
+end
+
+function InGameData:getSpCreateEnemyTower()
+    return self.spCreateEnemyTower_
+end
+
+--[[--
+    当前生成塔消耗的能量值快速加/减操作
+]]
+function InGameData:changeSpCreateEnemyTower(change)
+    self.spCreateEnemyTower_ = self.spCreateEnemyTower_ + change
+end
+-------------------------------------------------------------------------
 
 --[[--
     获取生命值
@@ -163,6 +191,7 @@ function InGameData:getEnemies()
     return enemies_
 end
 
+--------------------------------------------------------------------------------------
 --[[--
     创建卡牌（信息）
 
@@ -176,11 +205,15 @@ function InGameData:createCard(level,x,y)
     local card
     if x ~= nil and y ~= nil then
         local xPos = GirdLocation.PLAYER[x][y].X
-        local yPos =  GirdLocation.PLAYER[x][y].y
+        local yPos =  GirdLocation.PLAYER[x][y].Y
+        GirdLocation.PLAYER[x][y].IS_USED = true
         card = Card.new(1, xPos, yPos, x, y, id,_,_,_,level)
     else
         local cx, cy, xLocate, yLocate= self:setCardRandomPosision(1)
-        card = Card.new(1, cx, cy, xLocate, yLocate, id,_,_,_,level)
+        if cx == nil or cy == nil or xLocate == nil or yLocate == nil then
+        else
+            card = Card.new(1, cx, cy, xLocate, yLocate, id,_,_,_,level)
+        end
     end
     cards_[#cards_+1] = card
     --print(vardump(cards_))
@@ -199,11 +232,18 @@ function InGameData:createEnemyCard(level,x,y)
     local card
     if x ~= nil and y ~= nil then
         local xPos = GirdLocation.ENEMY[x][y].X
-        local yPos =  GirdLocation.ENEMY[x][y].y
+        local yPos = GirdLocation.ENEMY[x][y].Y
+        GirdLocation.ENEMY[x][y].IS_USED = true
+        print("\nInGameData:createEnemyCard  x,y ",x ,y)
+        print("\nInGameData:createEnemyCard  GirdLocation.ENEMY[x][y].y ",GirdLocation.ENEMY[x][y].y)
+        print("InGameData:createEnemyCard  xPos, yPos",xPos, yPos)
         card = Card.new(2, xPos, yPos, x, y, id,_,_,_,level)
     else
         local cx, cy ,xLocate , yLocate= self:setCardRandomPosision(2)
-        card = Card.new(2, cx, cy, xLocate, yLocate, id,_,_,_,level)
+        if cx == nil or cy == nil or xLocate == nil or yLocate == nil then
+        else
+            card = Card.new(2, cx, cy, xLocate, yLocate, id,_,_,_,level)
+        end
     end
     enemyCards_[#enemyCards_+1] = card
     --print(vardump(cards_))
@@ -263,6 +303,7 @@ function InGameData:setCardRandomPosision(type)
         end
         if isFull then
             Log.i("Tower gird is full")
+            return
         end
     end
     return cx, cy, x, y
@@ -310,6 +351,9 @@ function InGameData:isMergeCard(card,curX,curY)
         local newLevel = targetCard.c:getCardLevel()
         self:createCard(newLevel + 1, targetCard.c:getXLocate(), targetCard.c:getYLocate())
 
+        --当前位置暂用状态修改
+        GirdLocation.PLAYER[card:getXLocate()][card:getYLocate()].IS_USED = false
+
         --当前塔销毁
         targetCard.c:destory()
         card:destory()
@@ -321,6 +365,46 @@ function InGameData:isMergeCard(card,curX,curY)
     end
 
     return false
+end
+
+--[[--
+    敌方自动判断塔合并
+
+    @return bool：是否存在合并
+]]
+function InGameData:enemyMerge()
+    for i = 1, #enemyCards_ do
+        for j = i+1,#enemyCards_ do
+            --两塔相同类型、等级
+            if enemyCards_[i]:getCardId() == enemyCards_[j]:getCardId()
+                    and enemyCards_[i]:getCardLevel() == enemyCards_[j]:getCardLevel() then
+                --目标塔位置生成新塔
+                local newLevel = enemyCards_[i]:getCardLevel()
+                print("enemyCards_[i]:getXLocate() enemyCards_[i]:getYLocate()",enemyCards_[i]:getXLocate(),enemyCards_[i]:getYLocate())
+                self:createEnemyCard(newLevel + 1, enemyCards_[i]:getXLocate(), enemyCards_[i]:getYLocate())
+
+                --当前位置暂用状态修改
+                GirdLocation.ENEMY[enemyCards_[j]:getXLocate()][enemyCards_[j]:getYLocate()].IS_USED = false
+
+                --当前塔销毁
+                enemyCards_[i]:destory()
+                enemyCards_[j]:destory()
+
+                --停止子弹定时器
+                self:stopCreateBullet(2, i)
+                self:stopCreateBullet(2, j)
+                return true
+            end
+        end
+    end
+    return false
+end
+
+--[[--
+    塔强化
+]]
+function InGameData:cardEnhance()
+    
 end
 -----------------------------------------------------------------------
 --[[--
@@ -335,12 +419,13 @@ function InGameData:hitEnemy(enemy, bullet)
     enemy:setDeHp(bullet:getDamage())
     EventManager:doEvent(EventDef.ID.HIT_ENEMY, enemy, bullet:getDamage())
     if enemy:getHp() <= 0 then
-        self.sp_ = self.sp_ + 10 * self.nextBoss_
         enemy:destory()
         if enemy:getCamp() == 1 then
+            self.sp_ = self.sp_ + 10 * self.nextBoss_
             --消灭己方怪，对方生成怪
             self:createEnemy(2, enemy:getType())
         else
+            self.spEnemy_ = self.spEnemy_ + 10 * self.nextBoss_
             --对方消灭怪，己方生成怪
             self:createEnemy(1, enemy:getType())
         end
@@ -381,32 +466,33 @@ end
     @return none
 ]]
 function InGameData:shoot(camp, type, x, y, level)
-    local bulletsMap, cardsMap, scheduleBullet
-    if camp == 1 then
-        bulletsMap = bullets_
-        cardsMap = cards_
-        scheduleBullet = scheduleBullet_
-    else
-        bulletsMap = enemyBullets_
-        cardsMap = enemyCards_
-        scheduleBullet = scheduleEnemyBullet_
-    end
     local timeCreateBulletSchdule = schedule:scheduleScriptFunc(function(dt)
         if self:getGameState() == ConstDef.GAME_STATE.PLAY then
             if self.isHasEnemy_ then
                 -- 产生子弹
                 local bullet = Bullet.new(camp, type, x, y)
                 bullet:setDirection(self:getClosestEnemy(camp, bullet))
-                bulletsMap[#bulletsMap + 1] = bullet
+                if camp == 1 then
+                    bullets_[#bullets_ + 1] = bullet
+                else
+                    enemyBullets_[#enemyBullets_ + 1] = bullet
+                end
             end
         end
     end, SHOOT_INTERVAL/level, false)
 
     --创建塔紧跟着创建定时器，将定时器存至最新塔下即可对应
-    scheduleBullet[#cardsMap + 1] = {
-        schedule = timeCreateBulletSchdule,
-        isDeath = false
-    }
+    if camp == 1 then
+        scheduleBullet_[#cards_ + 1] = {
+            schedule = timeCreateBulletSchdule,
+            isDeath = false
+        }
+    else
+        scheduleEnemyBullet_[#enemyCards_ + 1] = {
+            schedule = timeCreateBulletSchdule,
+            isDeath = false
+        }
+    end
 end
 
 --[[--
@@ -415,15 +501,13 @@ end
     @param number 要停止的子弹定时器对应塔在表格中的序号
 ]]
 function InGameData:stopCreateBullet(camp, num)
-    local scheduleBullet
     if camp == 1 then
-        scheduleBullet = scheduleBullet_
+        scheduleBullet_[num].isDeath = true
+        schedule:unscheduleScriptEntry(scheduleBullet_[num].schedule)
     else
-        scheduleBullet = scheduleEnemyBullet_
+        scheduleEnemyBullet_[num].isDeath = true
+        schedule:unscheduleScriptEntry(scheduleEnemyBullet_[num].schedule)
     end
-    scheduleBullet[num].isDeath = true
-    schedule:unscheduleScriptEntry(scheduleBullet[num].schedule)
-    print(vardump(scheduleBullet))
 end
 
 --[[--
@@ -546,6 +630,7 @@ function InGameData:update(dt)
     local destoryEnemyEnemies = {}
     local destoryEnemyBullets = {}
     local destorySchedule = {}
+    local destoryEnemySchedule = {}
 
     for i = 1, #enemies_ do
         enemies_[i]:update(dt)
@@ -605,9 +690,11 @@ function InGameData:update(dt)
         end
     end
 
-    -- for i = 1, #allies_ do
-    --     allies_[i]:update(dt)
-    -- end
+    for i = 1, #scheduleEnemyBullet_ do
+        if scheduleEnemyBullet_[i].isDeath then
+            destoryEnemySchedule[#destoryEnemySchedule + 1] = scheduleEnemyBullet_[i]
+        end
+    end
 
     -- 清理失效子弹
     for i = #destoryBullets, 1, -1 do
@@ -668,6 +755,15 @@ function InGameData:update(dt)
         for j = #scheduleBullet_, 1, -1 do
             if scheduleBullet_[j] == destorySchedule[i] then
                 table.remove(scheduleBullet_, j)
+            end
+        end
+    end
+
+    -- 清理失效敌人子弹计时器
+    for i = #destoryEnemyBullets, 1, -1 do
+        for j = #scheduleEnemyBullet_, 1, -1 do
+            if scheduleEnemyBullet_[j] == destoryEnemyBullets[i] then
+                table.remove(scheduleEnemyBullet_, j)
             end
         end
     end

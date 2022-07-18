@@ -96,7 +96,6 @@ function InGameDownLayer:onEnter()
     EventManager:regListener(EventDef.ID.HIT_ENEMY, self, function(enemy, damage)
         local node = self.enemyMap_[enemy]
         node:hitEnemyTips(damage)
-        
     end)
 
 end

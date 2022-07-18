@@ -36,6 +36,7 @@ function InGameBattleView:init()
     self.giveup2nd_:setVisible(false)
 
     self:onEnter()
+    InGameUpLayer:autoEnemyTower()
 end
 
 --[[--
@@ -53,8 +54,8 @@ function InGameBattleView:onEnter()
         elseif state == ConstDef.GAME_STATE.PAUSE then
             self.giveup2nd_:setVisible(true)
         elseif state == ConstDef.GAME_STATE.RESULT then
-            --游戏结束才删除生成敌人的计时器
-            --self.inGameDownLayer_:stopCreateEnemy()
+            --游戏结束才删除自动生成敌人塔的计时器
+            InGameUpLayer:stopAutoEnemyTower()
             print("游戏结束，弹出结算页面")
         end
     end)
