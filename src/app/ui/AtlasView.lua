@@ -3,26 +3,11 @@
     AtlasView
 ]]
 local AtlasView = class(
-    "AtlasView",
-    function()
-        return display.newColorLayer(cc.c4b(0, 0, 0, 0))
-    end
+        "AtlasView",
+        function()
+            return display.newColorLayer(cc.c4b(0, 0, 0, 0))
+        end
 )
---
-local PATH_BASEMAP_TITLE = "res/home/guide/subinterface_current_lineup/base_title.png"
-local PATH_BASEMAP_AREA = "res/home/guide/subinterface_current_lineup/base_area.png"
-local PATH_NUMBER_1 = "res/home/guide/subinterface_current_lineup/one.png"
-local PATH_NUMBER_2 = "res/home/guide/subinterface_current_lineup/two.png"
-local PATH_NUMBER_3 = "res/home/guide/subinterface_current_lineup/three.png"
-local PATH_TEXTURE_NOWLINEUP = "res/home/guide/subinterface_current_lineup/text_current_lineup.png"
-local PATH_BASEMAP_CONNECTION = "res/home/guide/subinterface_current_lineup/base_lineup.png"
-local PATH_ICON_CHOOSE = "res/home/guide/subinterface_current_lineup/icon_selected.png"
-local PATH_ICON_UNCHOOSE = "res/home/guide/subinterface_current_lineup/icon_unselected.png"
-local PATH_BASEMAP_TIP = "res/home/guide/subinterface_tips/base_tips.png"
-local PATH_TEXTURE_LONG = "res/home/guide/subinterface_tips/text_tips.png"
-local PATH_TEXTURE_SHORT = "res/home/guide/subinterface_tips/text_total_critical_strike_damage.png"
-local PATH_SPLITLINE_COLLECTED = "res/home/guide/subinterface_tower_list/split_collected.png"
-local PATH_SPLITLINE_UNCOLLECTED = "res/home/guide/subinterface_tower_list/split_not_collected.png"
 --
 local ConstDef = require("app.def.ConstDef")
 local EventDef = require("app.def.EventDef")
@@ -33,6 +18,7 @@ local BackgroundLayer = require("app.ui.layer.BackgroundLayer")
 local LineupLayer = require("app.ui.layer.LineupLayer")
 local BagLayer = require("app.ui.layer.BagLayer")
 local PopupLayer = require("app.ui.layer.PopupLayer2nd")
+local StringDef = require("app.def.StringDef")
 --
 local BagList_ = nil --以下6个都是为了实现类的交互而设置的文件内局部变量
 local collected_
@@ -49,18 +35,18 @@ local lineup3_ --
     @return none
 ]]
 local function createCheckbox(parents, number)
-    local checkbox = ccui.CheckBox:create(PATH_ICON_UNCHOOSE, PATH_ICON_CHOOSE, PATH_ICON_CHOOSE, PATH_ICON_UNCHOOSE,
-        PATH_ICON_UNCHOOSE)
+    local checkbox = ccui.CheckBox:create(StringDef.PATH_ICON_UNCHOOSE, StringDef.PATH_ICON_CHOOSE, StringDef.PATH_ICON_CHOOSE, StringDef.PATH_ICON_UNCHOOSE,
+            StringDef.PATH_ICON_UNCHOOSE)
     parents:add(checkbox)
     checkbox:setTouchEnabled(true)
     checkbox:setAnchorPoint(0.5, 0.5)
     local path
     if number == 1 then
-        path = PATH_NUMBER_1
+        path = StringDef.PATH_NUMBER_1
     elseif number == 2 then
-        path = PATH_NUMBER_2
+        path = StringDef.PATH_NUMBER_2
     elseif number == 3 then
-        path = PATH_NUMBER_3
+        path = StringDef.PATH_NUMBER_3
     end
 
     local spriteNumber = display.newSprite(path)
@@ -142,13 +128,13 @@ function AtlasView:ctor()
 
     self:initView()
     self:registerScriptHandler(
-        function(event)
-            if event == "enter" then
-                self:onEnter()
-            elseif event == "exit" then
-                self:onExit()
+            function(event)
+                if event == "enter" then
+                    self:onEnter()
+                elseif event == "exit" then
+                    self:onExit()
+                end
             end
-        end
     )
     EventManager:regListener(EventDef.ID.RESUME_BAG_BUTTON, self, function()
         --注册恢复图鉴中的塔为可点击
@@ -180,21 +166,21 @@ end
     @return none
 ]]
 function AtlasView:createLineupList()
-    local lineupLayout = display.newSprite(PATH_BASEMAP_AREA) --创造存放整个板块的layout
+    local lineupLayout = display.newSprite(StringDef.PATH_BASEMAP_AREA) --创造存放整个板块的layout
     self:add(lineupLayout)
     lineupLayout:setScale(0.8)
     lineupLayout:setAnchorPoint(0.5, 0.5)
     lineupLayout:setPosition(display.cx, display.cy * 1.6)
-    local basemapTitle = display.newSprite(PATH_BASEMAP_TITLE)
+    local basemapTitle = display.newSprite(StringDef.PATH_BASEMAP_TITLE)
     lineupLayout:add(basemapTitle)
     basemapTitle:setAnchorPoint(0.5, 0.5)
     basemapTitle:setScale(lineupLayout:getContentSize().width / basemapTitle:getContentSize().width)
     basemapTitle:setPosition(lineupLayout:getContentSize().width * 0.5, lineupLayout:getContentSize().height)
-    local basemapNowLineup = display.newSprite(PATH_TEXTURE_NOWLINEUP)
+    local basemapNowLineup = display.newSprite(StringDef.PATH_TEXTURE_NOWLINEUP)
     basemapTitle:add(basemapNowLineup)
     basemapNowLineup:setAnchorPoint(0.5, 0.5)
     basemapNowLineup:setPosition(basemapTitle:getContentSize().width * 0.3, basemapTitle:getContentSize().height * 0.5)
-    local basemapConnection = display.newSprite(PATH_BASEMAP_CONNECTION)
+    local basemapConnection = display.newSprite(StringDef.PATH_BASEMAP_CONNECTION)
     basemapTitle:add(basemapConnection)
     basemapConnection:setAnchorPoint(0.5, 0.5)
     basemapConnection:setPosition(basemapTitle:getContentSize().width * 0.65, basemapTitle:getContentSize().height * 0.5) --
@@ -273,7 +259,7 @@ end
 ]]
 function AtlasView:createBag()
     local test = display.newSprite(ConstDef.ICON_LIST[1]) --获取单个塔图标，便于获取大小
-    local tipBackground = display.newSprite(PATH_BASEMAP_TIP)
+    local tipBackground = display.newSprite(StringDef.PATH_BASEMAP_TIP)
     tipBackground:setScale(0.8)
     local layoutTexture = ccui.Layout:create()
     layoutTexture:setContentSize(tipBackground:getContentSize().width, tipBackground:getContentSize().height)
@@ -282,16 +268,16 @@ function AtlasView:createBag()
     --layoutTexture:setContentSize(listView:getContentSize().width,tipBackground:getContentSize().height*0.8+splitLineCollected:getContentSize().height*(display.cx*2/splitLineCollected:getContentSize().width))
     tipBackground:setAnchorPoint(0.5, 1)
     tipBackground:setPosition(layoutTexture:getContentSize().width * 0.5, layoutTexture:getContentSize().height)
-    local textureLong = display.newSprite(PATH_TEXTURE_LONG)
+    local textureLong = display.newSprite(StringDef.PATH_TEXTURE_LONG)
     tipBackground:add(textureLong)
     textureLong:setAnchorPoint(0.5, 0.5)
     textureLong:setPosition(tipBackground:getContentSize().width * 0.5,
-        tipBackground:getContentSize().height * 0.25)
-    local textureShort = display.newSprite(PATH_TEXTURE_SHORT)
+            tipBackground:getContentSize().height * 0.25)
+    local textureShort = display.newSprite(StringDef.PATH_TEXTURE_SHORT)
     tipBackground:add(textureShort)
     textureShort:setAnchorPoint(0.5, 0.5)
     textureShort:setPosition(tipBackground:getContentSize().width * 0.4,
-        tipBackground:getContentSize().height * 0.75)
+            tipBackground:getContentSize().height * 0.75)
 
     local heightUncollect, heightCollect --计算已收集和未收集分别需要多少行
     if #(ConstDef.COLLECTED) == 0 then
@@ -310,16 +296,16 @@ function AtlasView:createBag()
         heightUncollect = math.floor(#(ConstDef.UNCOLLECTED) / 4) + 1
     end
 
-    local splitLineCollected = display.newSprite(PATH_SPLITLINE_COLLECTED) --已收集的分割线
+    local splitLineCollected = display.newSprite(StringDef.PATH_SPLITLINE_COLLECTED) --已收集的分割线
     collected_ = BagLayer.new(ConstDef.COLLECTED, "collected")
     BagList_ = collected_.list
     local layoutCollect = ccui.Layout:create() --将已收集分割线和已收集的塔放在一个layout
     layoutCollect:setPosition(display.cx, display.cy)
     layoutCollect:setAnchorPoint(0.5, 1)
     layoutCollect:setContentSize(display.cx * 2,
-        heightCollect * test:getContentSize().height * ConstDef.scale_ +
-        heightCollect * test:getContentSize().height * 0.2 * ConstDef.scale_ +
-        splitLineCollected:getContentSize().height * (display.cx * 2 / splitLineCollected:getContentSize().width))
+            heightCollect * test:getContentSize().height * ConstDef.scale_ +
+                    heightCollect * test:getContentSize().height * 0.2 * ConstDef.scale_ +
+                    splitLineCollected:getContentSize().height * (display.cx * 2 / splitLineCollected:getContentSize().width))
     splitLineCollected:setScale(display.cx * 2 / splitLineCollected:getContentSize().width)
     splitLineCollected:setAnchorPoint(0, 1)
     splitLineCollected:setPosition(0, layoutCollect:getContentSize().height)
@@ -329,14 +315,14 @@ function AtlasView:createBag()
 
     layoutCollect:add(splitLineCollected)
     local layoutUncollect = ccui.Layout:create()
-    local splitLineUncollected = display.newSprite(PATH_SPLITLINE_UNCOLLECTED) --未收集的分割线
+    local splitLineUncollected = display.newSprite(StringDef.PATH_SPLITLINE_UNCOLLECTED) --未收集的分割线
     uncollected_ = BagLayer.new(ConstDef.UNCOLLECTED, "uncollected") --将未收集分割线和未收集的塔放在一个layout
     layoutUncollect:setAnchorPoint(0.5, 1)
     layoutUncollect:setContentSize(display.cx * 2,
-        splitLineUncollected:getContentSize().height * (display.cx * 2 / splitLineUncollected:getContentSize().width) +
-        heightUncollect * test:getContentSize().height * 0.1 * ConstDef.scale_ +
-        splitLineUncollected:getContentSize().height * (display.cx * 2 / splitLineUncollected:getContentSize().width)
-        + heightUncollect * test:getContentSize().height * ConstDef.scale_)
+            splitLineUncollected:getContentSize().height * (display.cx * 2 / splitLineUncollected:getContentSize().width) +
+                    heightUncollect * test:getContentSize().height * 0.1 * ConstDef.scale_ +
+                    splitLineUncollected:getContentSize().height * (display.cx * 2 / splitLineUncollected:getContentSize().width)
+                    + heightUncollect * test:getContentSize().height * ConstDef.scale_)
     layoutUncollect:add(splitLineUncollected)
     splitLineUncollected:setScale(display.cx * 2 / splitLineUncollected:getContentSize().width)
     splitLineUncollected:setAnchorPoint(0, 1)

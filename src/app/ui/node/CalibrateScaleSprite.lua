@@ -45,12 +45,12 @@ end
 function CalibrateScaleSprite:init()
     ---数据源
     self.trophyAmount_ = OutGameData
-        :getUserInfo()
-        :getTrophyAmount()
+            :getUserInfo()
+            :getTrophyAmount()
     self.rewordNodeData_ = OutGameData
-        :getUserInfo()
-        :getUserInfoLadder()
-        :getLadderList()
+            :getUserInfo()
+            :getUserInfoLadder()
+            :getLadderList()
     Log.i("TrophyAmount_: " .. tostring(self.trophyAmount_))
 
     self:setScale(3, 1)
@@ -103,8 +103,11 @@ end
 ]]
 function CalibrateScaleSprite:update(dt)
     --监听到用户的钥匙数量发生变化
-    if not self.trophyAmount_ ~= GameData.trophyAmount_ then
-        self.trophyAmount_ = GameData.trophyAmount_
+    if self.trophyAmount_ == nil then
+        self.trophyAmount_ = OutGameData.getUserInfo():getTrophyAmount()
+    end
+    if not self.trophyAmount_ ~= OutGameData.getUserInfo():getTrophyAmount() then
+        self.trophyAmount_ = OutGameData.getUserInfo():getTrophyAmount()
         self.decorateBar_:setPosition(28.5 + (self.trophyAmount_ / 50 - 1) * 40.1, 7)
         self.yellowScale_:setPosition(26.5 + (self.trophyAmount_ / 50 - 1) * 40.1, 9)
     end

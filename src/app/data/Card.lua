@@ -10,7 +10,6 @@ local EventDef = require("app.def.EventDef")
 local EventManager = require("app.manager.EventManager")
 --
 
-
 --# card
 --## Now
 --cardId
@@ -132,6 +131,10 @@ end
 -- 防御塔名称
 function Card:getCardName()
     return self.cardName_
+end
+
+function Card:getCardLevel()
+    return self.cardLevel_
 end
 
 -- 攻击力
