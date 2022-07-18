@@ -12,49 +12,20 @@ local AtlasView = class(
 local ConstDef = require("app.def.ConstDef")
 local EventDef = require("app.def.EventDef")
 local EventManager = require("app.manager.EventManager")
---local AnimationLayer=require("src/app/ui/layer/AnimationLayer")
 local TowerDetialLayer = require("app.ui.layer.TowerDetialLayer2nd")
 local BackgroundLayer = require("app.ui.layer.BackgroundLayer")
 local LineupLayer = require("app.ui.layer.LineupLayer")
 local BagLayer = require("app.ui.layer.BagLayer")
 local PopupLayer = require("app.ui.layer.PopupLayer2nd")
 local StringDef = require("app.def.StringDef")
+local OutGameData = require("app.data.OutGameData")
 --
 local BagList_ = nil --以下6个都是为了实现类的交互而设置的文件内局部变量
 local collected_
 local uncollected_
 local lineup1_
 local lineup2_
-local lineup3_ --
---[[--
-    封装创造checkbox的函数
-
-    @param parents 类型：Any，父节点
-    @param number 类型：Any，获取图片的路径
-
-    @return none
-]]
-local function createCheckbox(parents, number)
-    local checkbox = ccui.CheckBox:create(StringDef.PATH_ICON_UNCHOOSE, StringDef.PATH_ICON_CHOOSE, StringDef.PATH_ICON_CHOOSE, StringDef.PATH_ICON_UNCHOOSE,
-            StringDef.PATH_ICON_UNCHOOSE)
-    parents:add(checkbox)
-    checkbox:setTouchEnabled(true)
-    checkbox:setAnchorPoint(0.5, 0.5)
-    local path
-    if number == 1 then
-        path = StringDef.PATH_NUMBER_1
-    elseif number == 2 then
-        path = StringDef.PATH_NUMBER_2
-    elseif number == 3 then
-        path = StringDef.PATH_NUMBER_3
-    end
-
-    local spriteNumber = display.newSprite(path)
-    checkbox:add(spriteNumber)
-    spriteNumber:setAnchorPoint(0.5, 0.5)
-    spriteNumber:setPosition(checkbox:getContentSize().width * 0.5, checkbox:getContentSize().height * 0.5)
-    return checkbox
-end
+local lineup3_
 
 --[[--
     @description:构造方法
@@ -69,10 +40,10 @@ function AtlasView:ctor()
             return
         else
             local card = nil
-            for v, k in ipairs(collectedList) do
-                --此处collectedList不能直接使用，需要换为用户拥有的已收集列表
+            for v, k in ipairs(OutGameData:getUserInfo():getCardList()) do
+                --此处OutGameData:getUserInfo():getCardList()不能直接使用，需要换为用户拥有的已收集列表
                 if k.order == order then
-                    card = collectedList[v]
+                    card = OutGameData:getUserInfo():getCardList()[v]
                 end
             end
 
@@ -159,6 +130,36 @@ function AtlasView:initView()
     self.backgourndLayer_ = BackgroundLayer.new()
     self:add(self.backgourndLayer_)
     self.containerForLineup_ = nil
+end
+
+--[[--
+    封装创造checkbox的函数
+
+    @param parents 类型：Any，父节点
+    @param number 类型：Any，获取图片的路径
+
+    @return none
+]]
+local function createCheckbox(parents, number)
+    local checkbox = ccui.CheckBox:create(StringDef.PATH_ICON_UNCHOOSE, StringDef.PATH_ICON_CHOOSE, StringDef.PATH_ICON_CHOOSE, StringDef.PATH_ICON_UNCHOOSE,
+            StringDef.PATH_ICON_UNCHOOSE)
+    parents:add(checkbox)
+    checkbox:setTouchEnabled(true)
+    checkbox:setAnchorPoint(0.5, 0.5)
+    local path
+    if number == 1 then
+        path = StringDef.PATH_NUMBER_1
+    elseif number == 2 then
+        path = StringDef.PATH_NUMBER_2
+    elseif number == 3 then
+        path = StringDef.PATH_NUMBER_3
+    end
+
+    local spriteNumber = display.newSprite(path)
+    checkbox:add(spriteNumber)
+    spriteNumber:setAnchorPoint(0.5, 0.5)
+    spriteNumber:setPosition(checkbox:getContentSize().width * 0.5, checkbox:getContentSize().height * 0.5)
+    return checkbox
 end
 
 --[[--
@@ -280,20 +281,22 @@ function AtlasView:createBag()
             tipBackground:getContentSize().height * 0.75)
 
     local heightUncollect, heightCollect --计算已收集和未收集分别需要多少行
-    if #(ConstDef.COLLECTED) == 0 then
+    local collected = OutGameData:getUserInfo():getCollectedList()
+    if #(collected) == 0 then
         heightCollect = 1
-    elseif #(ConstDef.COLLECTED) % 4 == 0 then
-        heightCollect = #(ConstDef.COLLECTED) / 4
-    elseif #(ConstDef.COLLECTED) % 4 ~= 0 then
-        heightCollect = math.floor(#(ConstDef.COLLECTED) / 4) + 1
+    elseif #(collected) % 4 == 0 then
+        heightCollect = #(collected) / 4
+    elseif #(collected) % 4 ~= 0 then
+        heightCollect = math.floor(#(collected) / 4) + 1
     end
 
-    if #(ConstDef.UNCOLLECTED) == 0 then
+    local uncollected = OutGameData:getUserInfo():getUnCollectedList()
+    if #(uncollected) == 0 then
         heightUncollect = 1
-    elseif #(ConstDef.UNCOLLECTED) % 4 == 0 then
-        heightUncollect = #(ConstDef.UNCOLLECTED) / 4
-    elseif #(ConstDef.UNCOLLECTED) % 4 ~= 0 then
-        heightUncollect = math.floor(#(ConstDef.UNCOLLECTED) / 4) + 1
+    elseif #(uncollected) % 4 == 0 then
+        heightUncollect = #(uncollected) / 4
+    elseif #(uncollected) % 4 ~= 0 then
+        heightUncollect = math.floor(#(uncollected) / 4) + 1
     end
 
     local splitLineCollected = display.newSprite(StringDef.PATH_SPLITLINE_COLLECTED) --已收集的分割线

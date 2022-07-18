@@ -314,6 +314,8 @@ local StringDef = {
     -- TTF
     PATH_FONT_FZBIAOZJW = "res/font/fzbiaozjw.ttf",
     PATH_FONT_FZZCHJW = "font/fzzchjw.ttf",
+    PATH_TTF_HZGBJW = "res/front/fzhzgbjw.ttf",
+    PATH_TTF_BIAOZJW = "res/front/fzbiaozjw.ttf",
     --
     PATH_POSTFIX_PNG = ".png",
 }
