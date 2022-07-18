@@ -17,6 +17,8 @@ local BossMessage2nd = require("app.ui.inGameSecondaryui.BossMessage2nd")
 local EnemyTowerInfo2nd = require("app.ui.inGameSecondaryui.EnemyTowerInfo2nd")
 local spBuildTTF    --生成所需能量
 local spNumTTF      --当前拥有能量
+local scheduler = cc.Director:getInstance():getScheduler() --路径
+local timeSchedule = nil
 --
 
 function InGameUpLayer:ctor()
@@ -32,13 +34,50 @@ function InGameUpLayer:ctor()
     testButton:addTouchEventListener(function(sender, eventType)
         if 2 == eventType then
             if not InGameData:enemyMerge() then
-                InGameData:createEnemyCard(1)   --默认生成一级塔
+                local sp = InGameData:getSpEnemy()
+                local spCost = InGameData:getSpCreateEnemyTower()
+                if sp >= spCost then
+                    InGameData:createEnemyCard(1)   --默认生成一级塔
+                    local changeSp = InGameData:getSpCreateEnemyTower()
+                    InGameData:changeSpEnemy(-changeSp)
+                    InGameData:changeSpCreateEnemyTower(10)
+                end
             end
         end
     end)
     self:addChild(testButton, 5)
 end
 
+--[[--
+    定时器敌人塔自动操作
+]]
+function InGameUpLayer:autoEnemyTower()
+    timeSchedule = scheduler:scheduleScriptFunc(function(dt)
+        if InGameData:getGameState() == ConstDef.GAME_STATE.PLAY then
+            if not InGameData:enemyMerge() then
+                local sp = InGameData:getSpEnemy()
+                local spCost = InGameData:getSpCreateEnemyTower()
+                if sp >= spCost then
+                    InGameData:createEnemyCard(1)   --默认生成一级塔
+                    local changeSp = InGameData:getSpCreateEnemyTower()
+                    InGameData:changeSpEnemy(-changeSp)
+                    InGameData:changeSpCreateEnemyTower(10)
+                end
+            end
+        end
+    end, 2, false)
+end
+
+--[[--
+    停止定时器敌人塔自动操作
+]]
+function InGameUpLayer:stopAutoEnemyTower()
+    scheduler:unscheduleScriptEntry(timeSchedule)
+end
+
+--[[--
+    初始化
+]]
 function InGameUpLayer:init()
     local basemapUp = cc.Sprite:create("battle_in_game/battle_view/basemap_up.png")
     basemapUp:setAnchorPoint(0.5, 0.5)

@@ -37,6 +37,8 @@ local SHOOT_INTERVAL = 0.5  -- 类型：number，射击间隔
 function InGameData:init()
     self.sp_ = 100  -- 类型：number，当前玩家拥有的能量
     self.spCreateTower_ = 10    --类型：number，生成塔需要的能量(每生成一次+10)
+    self.spEnemy_ = 100  -- 类型：number，当前玩家拥有的能量
+    self.spCreateEnemyTower_ = 10    --类型：number，生成塔需要的能量(每生成一次+10)
     self.life_ = 100 -- 类型：number，生命值
     self.score_ = 0 -- 类型：number，得分
 
@@ -47,7 +49,6 @@ function InGameData:init()
 end
 
 function InGameData:getSp()
-    print("sp", self.sp_)
     return self.sp_
 end
 
@@ -63,7 +64,6 @@ function InGameData:changeSp(change)
 end
 
 function InGameData:getSpCreateTower()
-    print("self.spCreateTower_", self.spCreateTower_)
     return self.spCreateTower_
 end
 
@@ -73,6 +73,34 @@ end
 function InGameData:changeSpCreateTower(change)
     self.spCreateTower_ = self.spCreateTower_ + change
 end
+
+----------------------------------------------------------------------
+function InGameData:getSpEnemy()
+    return self.spEnemy_
+end
+
+function InGameData:setSpEnemy(sp)
+    self.spEnemy_ = sp
+end
+
+--[[--
+    当前能量值快速加/减操作
+]]
+function InGameData:changeSpEnemy(change)
+    self.spEnemy_ = self.spEnemy_ + change
+end
+
+function InGameData:getSpCreateEnemyTower()
+    return self.spCreateEnemyTower_
+end
+
+--[[--
+    当前生成塔消耗的能量值快速加/减操作
+]]
+function InGameData:changeSpCreateEnemyTower(change)
+    self.spCreateEnemyTower_ = self.spCreateEnemyTower_ + change
+end
+-------------------------------------------------------------------------
 
 --[[--
     获取生命值
@@ -391,12 +419,13 @@ function InGameData:hitEnemy(enemy, bullet)
     enemy:setDeHp(bullet:getDamage())
     EventManager:doEvent(EventDef.ID.HIT_ENEMY, enemy, bullet:getDamage())
     if enemy:getHp() <= 0 then
-        self.sp_ = self.sp_ + 10 * self.nextBoss_
         enemy:destory()
         if enemy:getCamp() == 1 then
+            self.sp_ = self.sp_ + 10 * self.nextBoss_
             --消灭己方怪，对方生成怪
             self:createEnemy(2, enemy:getType())
         else
+            self.spEnemy_ = self.spEnemy_ + 10 * self.nextBoss_
             --对方消灭怪，己方生成怪
             self:createEnemy(1, enemy:getType())
         end
