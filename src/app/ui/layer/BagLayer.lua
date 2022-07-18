@@ -62,10 +62,11 @@ function BagLayer:init(lineupList, types)
                             - math.floor(i / 4) * test:getContentSize().height * 0.1 * ConstDef.scale_
             )
             for j = 0, 3 do
-                if lineupList[i + j] == nil then
+                local cardId = i + j
+                if lineupList[cardId] == nil then
                     break
                 end
-                local sprite = display.newSprite(ConstDef.ICON_UNCOLLECTED_LIST[lineupList[j + i]])
+                local sprite = display.newSprite(ConstDef.ICON_UNCOLLECTED_LIST[lineupList[cardId]])
                 layout:add(sprite)
                 sprite:setScale(ConstDef.scale_)
                 sprite:setAnchorPoint(0, 1)

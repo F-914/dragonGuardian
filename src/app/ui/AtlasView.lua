@@ -1,6 +1,7 @@
 --[[--
     创建图鉴界面
     AtlasView
+    -- TODO 这个页面的滑动 滑到最下面的时候看不到最后一行 需要修一下 @txf
 ]]
 local AtlasView = class(
         "AtlasView",
@@ -12,13 +13,14 @@ local AtlasView = class(
 local ConstDef = require("app.def.ConstDef")
 local EventDef = require("app.def.EventDef")
 local EventManager = require("app.manager.EventManager")
-local TowerDetialLayer = require("app.ui.layer.TowerDetialLayer2nd")
+local TowerDetailLayer = require("app.ui.layer.TowerDetialLayer2nd")
 local BackgroundLayer = require("app.ui.layer.BackgroundLayer")
 local LineupLayer = require("app.ui.layer.LineupLayer")
 local BagLayer = require("app.ui.layer.BagLayer")
 local PopupLayer = require("app.ui.layer.PopupLayer2nd")
 local StringDef = require("app.def.StringDef")
 local OutGameData = require("app.data.OutGameData")
+local Log = require("app.utils.Log")
 --
 local BagList_ = nil --以下6个都是为了实现类的交互而设置的文件内局部变量
 local collected_
@@ -39,15 +41,9 @@ function AtlasView:ctor()
         if #(ConstDef.BUTTON_CLICK) == 0 then
             return
         else
-            local card = nil
-            for v, k in ipairs(OutGameData:getUserInfo():getCardList()) do
-                --此处OutGameData:getUserInfo():getCardList()不能直接使用，需要换为用户拥有的已收集列表
-                if k.order == order then
-                    card = OutGameData:getUserInfo():getCardList()[v]
-                end
-            end
-
-            local tower = TowerDetialLayer.new(card, collected_)
+            -- 这块好像是 通过 id 拿 card？直接拿应该也行吧？
+            local cardId = order
+            local tower = TowerDetailLayer.new(cardId, collected_)
             self:add(tower)
             tower.use:addTouchEventListener(function(sender, eventType)
                 --注册塔的详情中，“使用”按钮的点击事件
@@ -201,19 +197,23 @@ function AtlasView:createLineupList()
     pageView:setPosition(lineupLayout:getContentSize().width * 0.025, lineupLayout:getContentSize().height * 0.05)
 
     local layout1 = ccui.Layout:create() --创造pageview的三个页面
-    local lineup1 = LineupLayer.new(ConstDef.LINEUP_LIST.lineupOne)
+    -- battleTeam
+    local battleTeam = OutGameData:getUserInfo():getBattleTeam()
+    --
+    -- TODO 这块可以优化一下代码
+    local lineup1 = LineupLayer.new(battleTeam:getIndexTeam(1))
     lineup1_ = lineup1
     layout1:add(lineup1)
     layout1:setContentSize(lineupLayout:getContentSize().width, lineupLayout:getContentSize().height)
     pageView:addPage(layout1)
     local layout2 = ccui.Layout:create()
-    local lineup2 = LineupLayer.new(ConstDef.LINEUP_LIST.lineupTwo)
+    local lineup2 = LineupLayer.new(battleTeam:getIndexTeam(2))
     lineup2_ = lineup2
     layout2:add(lineup2)
     layout2:setContentSize(lineupLayout:getContentSize().width, lineupLayout:getContentSize().height)
     pageView:addPage(layout2)
     local layout3 = ccui.Layout:create()
-    local lineup3 = LineupLayer.new(ConstDef.LINEUP_LIST.lineupThree)
+    local lineup3 = LineupLayer.new(battleTeam:getIndexTeam(3))
     lineup3_ = lineup3
     layout3:add(lineup3)
     layout3:setContentSize(lineupLayout:getContentSize().width, lineupLayout:getContentSize().height)

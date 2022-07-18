@@ -332,7 +332,6 @@ local StringDef = {
     PATH_SECOND_CONFIRM_RANDOM_CARD_LEGEND = "res/home/general/second_open_confirm_popup/icon_legend.png",
     --
     PATH_DIAMOND_SHOP_BASE_PRE = "home/shop/diamond_shop/base_",
-    -- "home/shop/coins_shop/commodity_icon_tower_fragment/",
     --
     PATH_DEFAULT_AVATAR = "home/top_player_info/default_avatar.png",
     -- TTF
@@ -342,5 +341,25 @@ local StringDef = {
     PATH_TTF_BIAOZJW = "res/font/fzbiaozjw.ttf",
     --
     PATH_POSTFIX_PNG = ".png",
+
+
+    -- string
+    STR_TYPE_ATTACK = "攻击",
+    STR_TYPE_DISTURB = "干扰",
+    STR_TYPE_AUX = "辅助",
+    STR_TYPE_CONTROL = "控制",
+    --
+    STR_RARITY_R = "普通",
+    STR_RARITY_SR = "稀有",
+    STR_RARITY_SSR = "史诗",
+    STR_RARITY_UR = "传奇",
+    --
+    STR_ATK_TARGET_FRONT = "前方",
+    STR_ATK_TARGET_BACK = "后方",
+    STR_ATK_TARGET_LEFT = "左方",
+    STR_ATK_TARGET_RIGHT = "右方",
+    STR_ATK_TARGET_RANDOM = "随机",
+    STR_ATK_TARGET_HP_FIRST = "优先血量最高",
+
 }
 return StringDef

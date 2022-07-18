@@ -158,10 +158,25 @@ local ConstDef = {
         StringDef.PATH_SUBINTERFACE_TOWER_TYPE_AUX,
         StringDef.PATH_SUBINTERFACE_TOWER_TYPE_CONTROL
     },
-    LINEUP_LIST = { --图鉴界面中的三个阵容
-        lineupOne = { 1, 1, 1, 1, 1 },
-        lineupTwo = { 2, 2, 2, 2, 2 },
-        lineupThree = { 3, 3, 3, 3, 3 }
+    STR_TOWER_TYPE = {
+        StringDef.STR_TYPE_ATTACK,
+        StringDef.STR_TYPE_DISTURB,
+        StringDef.STR_TYPE_AUX,
+        StringDef.STR_TYPE_CONTROL,
+    },
+    STR_TOWER_RARITY = {
+        StringDef.STR_RARITY_R,
+        StringDef.STR_RARITY_SR,
+        StringDef.STR_RARITY_SSR,
+        StringDef.STR_RARITY_UR,
+    },
+    STR_TOWER_ATK_TARGET = {
+        StringDef.STR_ATK_TARGET_FRONT,
+        StringDef.STR_ATK_TARGET_BACK,
+        StringDef.STR_ATK_TARGET_LEFT,
+        StringDef.STR_ATK_TARGET_RIGHT,
+        StringDef.STR_ATK_TARGET_RANDOM,
+        StringDef.STR_ATK_TARGET_HP_FIRST,
     },
     TOWER_ATK_TARGET = {
         FRONT = 1, -- 前方
@@ -239,13 +254,6 @@ local ConstDef = {
     },
     BUTTON_CLICK = {}, --用于实现部分功能的全局变量，希望后期能重写
     POPUP = {}, --用于实现弹窗部分功能的全局变量，希望后期能重写
-    LINEUP_LIST = {
-        lineupOne = { 1, 1, 1, 1, 1 },
-        lineupTwo = { 2, 2, 2, 2, 2 },
-        lineupThree = { 3, 3, 3, 3, 3 }
-    },
-    BUTTON_CLICK = {},
-    POPUP = {},
     CARD_UPDATE_CONDITION = {
         CARD_CONDITION = {
             -- 这个里面是或者的关系
