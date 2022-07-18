@@ -45,49 +45,49 @@ function UserInfo:testData()
     self.userInfoDiamondAmount_ = 789999
     self.userInfoTrophyAmount_ = 101
     self.userInfoBattleTeam_ = BattleTeam.new(
-        {
-            { 1, 1, 1, 1, 1 },
-            { 1, 1, 1, 1, 1 },
-            { 1, 1, 1, 1, 1 }
-        },
-        1
+            {
+                { 1, 1, 1, 1, 1 },
+                { 1, 1, 1, 1, 1 },
+                { 1, 1, 1, 1, 1 }
+            },
+            1
     )
     self.userInfoLadder_ = Ladder.new(
-        { Reward.new(
-            "随便什么名字",
-            ConstDef.REWARD_TYPE.CURRENCY,
-            1,
-            true,
-            false,
-            500,
-            1000,
-            Currency.new(
-                ConstDef.CURRENCY_TYPE.COIN,
-                0
-            )
-        ) }
+            { Reward.new(
+                    "随便什么名字",
+                    ConstDef.REWARD_TYPE.CURRENCY,
+                    1,
+                    true,
+                    false,
+                    500,
+                    1000,
+                    Currency.new(
+                            ConstDef.CURRENCY_TYPE.COIN,
+                            0
+                    )
+            ) }
     )
     self.userInfoCardList_ = {
         -- [cardId] = Card.new(cardId)
         [1] = Card.new(
-            1,
-            "平平无奇防御塔",
-            ConstDef.TOWER_RARITY.R,
-            ConstDef.TOWER_TYPE.ATTACK,
-            math.random(10),
-            0,
-            math.random(100),
-            ConstDef.TOWER_ATK_TARGET.BACK,
-            math.random(100),
-            math.random(100),
-            math.random(100),
-            math.random(100),
-            math.random(100),
-            {},
-            math.random(100),
-            0.00,
-            2,
-            1
+                1,
+                "平平无奇防御塔",
+                ConstDef.TOWER_RARITY.R,
+                ConstDef.TOWER_TYPE.ATTACK,
+                math.random(10),
+                0,
+                math.random(100),
+                ConstDef.TOWER_ATK_TARGET.BACK,
+                math.random(100),
+                math.random(100),
+                math.random(100),
+                math.random(100),
+                math.random(100),
+                {},
+                math.random(100),
+                0.00,
+                2,
+                1
         )
     }
 end
@@ -183,6 +183,50 @@ end
 
 function UserInfo:setUserInfoBattleTeam(battleTeam)
     self.battleTeam_ = battleTeam
+end
+
+function UserInfo:getCollectedList()
+    local list = {}
+    local set = {}
+    if self.cardList_ == nil then
+        return list
+    end
+    for card in self.cardList_ do
+        local id = card.cardId
+        if set[id] then
+            -- nothing
+        else
+            set[id] = true
+            table.insert(list, id)
+        end
+    end
+    return list
+end
+
+function UserInfo:getUnCollectedList()
+    local list = {}
+    local set = {}
+    for id = 1, 20 do
+        set[id] = true
+    end
+    if self.cardList_ == nil then
+        for id = 1, 20 do
+            table.insert(list, id)
+        end
+        return list
+    end
+    for card in self.cardList_ do
+        local id = card.cardId
+        if set[id] then
+            set[id] = false
+        end
+    end
+    for k, v in pairs(set) do
+        if v == true then
+            table.insert(list, k)
+        end
+    end
+    return list
 end
 
 return UserInfo

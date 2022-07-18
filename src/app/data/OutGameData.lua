@@ -375,20 +375,16 @@ end
 
 -- 不太确定函数返回的是引用还是复制的值，所以调用的时候还是先调用这个再用别的
 function OutGameData:getUserInfo()
-    Log.i("getUserInfo: " .. tostring(_userInfo == nil))
     if _userInfo == nil then
         self:initUserInfo()
     end
-    Log.i("userInfo is nil ? " .. tostring(_userInfo == nil))
     return _userInfo
 end
 
 function OutGameData:getCoinShop()
-    Log.i("_coinShop is nullptr ? " .. (tostring(_coinShop == nil)))
     if _coinShop == nil then
         self:initCoinShop()
     end
-    Log.i("After init: _coinShop is nullptr ? " .. (tostring(_coinShop == nil)))
     return _coinShop
 end
 
