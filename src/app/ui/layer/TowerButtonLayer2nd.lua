@@ -23,7 +23,6 @@ function TowerButtonLayer2nd:init(cardId)
     --button:setAnchorPoint(0.5,0.5)
     --button:setPosition(display.cx,display.cy)
     --get card
-    Log.i("TowerButtonLayer2nd:init cardId: " .. tostring(cardId))
     local card = OutGameData:getUserInfo():getCardList()[cardId]
     --
     local level = display.newSprite(ConstDef.ICON_SUBINTERFACE_TOWER_LINE_UP[card:getCardLevel()])
@@ -50,7 +49,6 @@ function TowerButtonLayer2nd:init(cardId)
     progressNumber:setPosition(progressBg:getContentSize().width * 0.5, progressBg:getContentSize().height * 0.5)
     -- 升级需要的卡牌
     -- TODO 同样是升级的问题
-    Log.i("Card Level: " .. tostring(card:getCardLevel()))
     local upgradeNumber = ConstDef.CARD_UPDATE_CONDITION.CARD_CONDITION[card:getCardLevel()].R
     --升级需要的卡片数量
     local ownedNumber = card:getCardAmount()
