@@ -17,9 +17,13 @@ local ShopView = require("app.ui.ShopView")
 local Log = require("app.utils.Log")
 local MenuConfig = require("app.test.MenuConfig")
 local OutGameData = require("app.data.OutGameData")
+local EventManager = require("app.manager.EventManager")
+local EventManager = require("app.def.EventDef")
+local UserInfo=require("app.data.UserInfo")
 --
 local pageView
 local loadView
+local userInfo_
 --
 
 function OutGameScene:ctor()
@@ -52,7 +56,14 @@ function OutGameScene:onEnter()
             audio.playBGM(StringDef.PATH_LOBBY_BGM_120BPM, true)
         end)
     end
-
+    userInfo_=UserInfo:getInstance()
+    EventManager:regListener(EventDef.ID.SEND_LINEUP, self, function()
+        local msg={
+            loginName=userInfo_:getNickname(),
+            battleTeam=userInfo_:getBattleTeam():getCurrentBattleTeam()
+            
+        }
+    end)
 end
 
 function OutGameScene:update(dt)

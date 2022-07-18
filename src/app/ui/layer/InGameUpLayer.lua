@@ -8,6 +8,7 @@ end)
 
 --local
 local ConstDef = require("app.def.ConstDef")
+local MsgController=require("app.msg.MsgController")
 local InGameData = require("app.data.InGameData")
 local Log = require("app.utils.Log")
 local TowerArrayDef = require("app.def.TowerArrayDef")
@@ -214,6 +215,7 @@ function InGameUpLayer:init()
         end
     end)
     bossButton:addTo(self)
+    
 
     self:playerArray()
     self:enemyArray()
@@ -296,7 +298,7 @@ function InGameUpLayer:enemyArray()
         layer:setContentSize(itemWidth, itemHeight)
         layer:addTo(listView)
 
-        local towerButton = ccui.Button:create("battle_in_game/battle_view/tower/tower_"..(j+3)..".png")
+        local towerButton = ccui.Button:create("battle_in_game/battle_view/tower/tower_"..EnemyLineUp_[j].order..".png")
         towerButton:setAnchorPoint(0.5, 1)
         towerButton:setPosition(itemWidth/2, itemHeight*19/20)
         towerButton:scale(0.6)

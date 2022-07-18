@@ -32,7 +32,8 @@ EventDef.ID = {
     HURT_ENEMY = 24,
     CARD_MERGE = 25,
     CREATE_ENEMY_CARD = 26,
-    HIT_ENEMY = 27  --怪物受到攻击
+    HIT_ENEMY = 27,  --怪物受到攻击
+    SEND_LINEUP=28
 }
 
 return EventDef

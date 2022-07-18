@@ -6,6 +6,7 @@
 local MsgController = {}
 local ByteArray = require("app.msg.ByteArray")
 local Log = require("app.util.Log")
+local MsgDef=require("app.def.MsgDef")
 
 local SimpleTCP = require("framework.SimpleTCP")
 local scheduler = require("framework.scheduler")
@@ -178,10 +179,13 @@ function _handleMsg(event, data)
             local len = ba:readInt()
             local msg = json.decode(ba:readStringBytes(len))
 
-            Log.i(TAG, "_handleMsg() msg=", vardump(msg))
+            --Log.i(TAG, "_handleMsg() msg=", vardump(msg))
 
             for _, listener in pairs(listenerMap_) do
                 listener(msg)
+            end
+            if msg["type"]==MsgDef.ACKTYPE.GAME.TOWER_LINEUP then
+                  EnemyLineUp_=msg["towerLineup"]
             end
         end
     else
