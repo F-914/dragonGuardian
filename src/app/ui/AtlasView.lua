@@ -42,6 +42,7 @@ function AtlasView:ctor()
             return
         else
             -- 这块好像是 通过 id 拿 card？直接拿应该也行吧？
+            table.remove(ConstDef.BUTTON_CLICK, 1)
             local cardId = order
             local tower = TowerDetailLayer.new(cardId, collected_)
             self:add(tower)
