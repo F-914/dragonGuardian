@@ -1,6 +1,7 @@
 --[[--
     工厂模式的工厂实现
     之所以创建这个工具类，是因为能够避免大量重复代码的编写
+    这个类中一般不推荐require非常量定义或者简单工具部分
     Factory.lua
 ]]
 local Factory = {}
@@ -18,7 +19,8 @@ function Factory:createChestRewardTower(data)
     local arr = {}
     local count = 1
     for _, ele in ipairs(data) do
-        local sprite = display.newSprite("res/home/general/second_open_treasure_popup/icon_tower/" .. ele.cardId .. ".png")
+        local sprite = display.newSprite("res/home/general/second_open_treasure_popup/icon_tower/" ..
+            ele.cardId .. ".png")
         local spSize = sprite:getContentSize()
         local rarityTTF = display.newTTFLabel({
             text = ele.rarity,
@@ -52,18 +54,21 @@ end
     @return type:map key = towerData value = TowerSprite 精灵构成的列表
 ]]
 function Factory:createTeamSprite(teamData)
-    local sprites = {}
+    local mapSprites = {}
     for i = 1, #teamData do
-        local cardData = teamData[i]
-        ---这里后面可能需要路径
+        local cardId = teamData[i]
+        local cardData = require("app.data.OutGameData"):getUserInfo():getCardList()[cardId]
+        --解决循环嵌套
         local towerSprite = require("src/app/ui/node/TowerSprite.lua").new("res/home/general/icon_tower/" ..
-            string.format("%02d", cardData.cardId_) .. ".png", cardData)
-        sprites[i] = {
+            TypeConvert.Integer2StringLeadingZero(cardId, 2) .. ".png", cardData)
+        --mapSprites[cardData] = towerSprite
+        mapSprites[i] = {
             [1] = cardData,
-            [2] = towerSprite
+            [2] = towerSprite,
         }
     end
-    return sprites
+
+    return mapSprites
 end
 
 --[[--
@@ -71,15 +76,11 @@ end
     @param type:string 塔类型的名称
     @return type:Sprite, 代表塔类型的精灵
 ]]
+-- function Factory:createTowerType(type)
+---路径问题暂时这样简单的解决,
+-- local sprite = display.newSprite("res/home/guide/subinterface_tower_list/type_" .. type .. ".png")
 function Factory:createTowerType(type)
-    ---路径问题暂时这样简单的解决,
-    local map = {
-        [1] = "attack",
-        [2] = "disturb",
-        [3] = "assist",
-        [4] = "control"
-    }
-    local sprite = display.newSprite("res/home/guide/subinterface_tower_list/type_" .. map[type] .. ".png")
+    local sprite = display.newSprite(ConstDef.ICON_SUBINSTANCE_TOWER_LIST_TYPE[type])
     return sprite
 end
 
@@ -100,13 +101,13 @@ end
     @return none
 ]]
 function Factory:createBorder(rewardData)
-    if not rewardData.isUnlock then
+    if rewardData.locked_ then
         --解决循环嵌套，下同
         local border = require("src/app/ui/node/RewardSprite.lua").new("res/home/battle/high_ladder/locked_blue_border.png"
             , rewardData)
         return border
     else
-        if not rewardData.isGet then
+        if not rewardData.received_ then
             local border = require("src/app/ui/node/RewardSprite.lua").new("res/home/battle/high_ladder/unlocked_unreceived_yellow_border.png"
                 , rewardData)
             return border
@@ -159,6 +160,7 @@ end
     @param rewardData type:table 奖励的信息
     @return type: Button 返回一个按钮
 ]]
+-- 本来想改成通过table来直接拿res的样子，但是改起来的话要动的东西有点多，就这样吧
 function Factory:createRewardButton(rewardData)
     local button
     local rewardType = rewardData:getRewardType()
@@ -226,7 +228,7 @@ function Factory:createRewardSprite(type)
         sprite:setScale(0.5)
         return sprite
     else
-        Log.e("param type is a unknown type")
+        Log.e("param type is a unknown type:")
     end
 end
 
@@ -397,17 +399,19 @@ function Factory:createChestRewardItem(size, numFloor, numUpper, rarity)
     numberTTF:addTo(layout)
     return layout
 end
+
 function Factory:getChestRewardModel()
     return {
         coinNum = 0,
-        {cardId = 0, number = 0, rarity = "R"},
-        {cardId = 0, number = 0, rarity = "R"},
-        {cardId = 0, number = 0, rarity = "R"},
-        {cardId = 0, number = 0, rarity = "R"},
-        {cardId = 0, number = 0, rarity = "SR"},
-        {cardId = 0, number = 0, rarity = "SR"},
-        {cardId = 0, number = 0, rarity = "SSR"},
-        {cardId = 0, number = 0, rarity = "UR"},
+        { cardId = 0, number = 0, rarity = "R" },
+        { cardId = 0, number = 0, rarity = "R" },
+        { cardId = 0, number = 0, rarity = "R" },
+        { cardId = 0, number = 0, rarity = "R" },
+        { cardId = 0, number = 0, rarity = "SR" },
+        { cardId = 0, number = 0, rarity = "SR" },
+        { cardId = 0, number = 0, rarity = "SSR" },
+        { cardId = 0, number = 0, rarity = "UR" },
     }
 end
+
 return Factory
