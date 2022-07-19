@@ -25,6 +25,9 @@ EventDef.ID = {
     CREATE_TREASUREBOXREWARD = 17,
     CREATE_IN_GAME_CARD = 18,
     DESTORY_ENEMY = 19,
+    CARD_USE=20,
+    CARD_INTENSIFY=21,
+    CARD_UPGRADE=22,
 }
 
 return EventDef

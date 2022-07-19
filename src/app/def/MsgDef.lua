@@ -58,6 +58,12 @@ local MsgDef = {
         --钻石商店信息初始化
         COINSHOP_INIT = 12,
         --金币商店初始化
+        CARD_USE=13,
+        --卡牌使用
+        CARD_INTENSIFY=14,
+        --卡牌强化
+        CARD_UPGRADE=15,
+        --卡牌升级
     }
 }
 

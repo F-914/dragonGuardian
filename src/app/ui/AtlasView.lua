@@ -26,7 +26,11 @@ local PATH_SPLITLINE_UNCOLLECTED = "res/home/guide/subinterface_tower_list/split
 --
 local ConstDef = require("app.def.ConstDef")
 local EventDef = require("app.def.EventDef")
+local MsgController=require("src/app/msg/MsgController.lua")
 local EventManager = require("app.manager.EventManager")
+local OutGameData = require("app.data.OutGameData")
+local MsgDef=require("src/app/def/MsgDef.lua")
+
 --local AnimationLayer=require("src/app/ui/layer/AnimationLayer")
 local TowerDetialLayer = require("app.ui.layer.TowerDetialLayer2nd")
 local BackgroundLayer = require("app.ui.layer.BackgroundLayer")
@@ -373,10 +377,32 @@ end
     @return none
 ]]
 function AtlasView:onEnter()
-    --print(ConstDef.ICON_LIST[1]:getContentSize())
-    --for i=1,20 do
-    --    CardLayer.new(i)
-    --end
+    EventManager:regListener(EventDef.ID.CARD_USE,self,function(index)
+        
+        local msg={
+        loginName=OutGameData:getUserInfo():getNickname(),
+        teamIndex=index,
+        team=OutGameData:getUserInfo():getBattleTeam():getIndexTeam(index),
+        type=MsgDef.REQTYPE.LOBBY.CARD_USE
+       }
+       MsgController:sendMsg(msg)
+    end)
+    EventManager:regListener(EventDef.ID.CARD_INTENSIFY,self,function (cardId)
+        local msg={
+            loginName=OutGameData:getUserInfo():getNickname(),
+            card=OutGameData:getUserInfo():getCardList()[cardId],
+            type=MsgDef.REQTYPE.LOBBY.CARD_ATTRIBUTE_CHANGE
+           }
+           MsgController:sendMsg(msg)
+    end)
+    EventManager:regListener(EventDef.ID.CARD_UPGRADE,self,function (cardId)
+        local msg={
+            loginName=OutGameData:getUserInfo():getNickname(),
+            card=OutGameData:getUserInfo():getCardList()[cardId],
+            type=MsgDef.REQTYPE.LOBBY.CARD_ATTRIBUTE_CHANGE
+           }
+           MsgController:sendMsg(msg)
+    end)
 
     self:createLineupList()
     self:createBag()
@@ -389,6 +415,10 @@ end
 ]]
 function AtlasView:onExit()
     --退出时注销注册的事件
+    
+    EventManager:unRegListener(EventDef.ID.CARD_USE, self)
+    EventManager:unRegListener(EventDef.ID.CARD_INTENSIFY, self)
+    EventManager:unRegListener(EventDef.ID.CARD_UPGRADE, self)
 
     EventManager:unRegListener(EventDef.ID.SHOW_BAG, self)
     EventManager:unRegListener(EventDef.ID.HIDE_BAG, self)

@@ -33,10 +33,17 @@ local PATH_BASE_ATTRIBUTE_DEFAULT = "res/home/guide/second_tower_infor_popup/bas
 --local PATH_BASE_ATTRIBUTE_ENHANCED="res/home/guide/second_tower_infor_popup/base_attribute_enhanced.png"
 local PATH_TTF_HZGBJW = "res/front/fzhzgbjw.ttf"
 local PATH_TTF_BIAOZJW = "res/front/fzbiaozjw.ttf"
+
+local MsgController=require("src/app/msg/MsgController.lua")
+local EventDef=require("src/app/def/EventDef.lua")
+local MsgDef=require("src/app/def/MsgDef.lua")
+local EventManager=require("src/app/manager/EventManager.lua")
+local OutGameData = require("app.data.OutGameData")
+
 local TowerButtonLayer2nd = require("src/app/ui/layer/TowerButtonLayer2nd.lua")
-local TowerDetialLayer2nd = class("TowerDetialLayer2nd", function()
-    return display.newLayer()
-end)
+local TowerDetialLayer2nd = class("TowerDetialLayer2nd", require("app.ui.layer.BaseLayer"))
+
+
 --[[--
     @description: 构造方法
     @param none
@@ -45,6 +52,8 @@ end)
 function TowerDetialLayer2nd:ctor(card, bag)
 
     self.use = nil
+    self.upgrade=nil
+    self.intensify=nil
     self.order = card.order
     self:init(card, bag)
 end
@@ -252,14 +261,27 @@ function TowerDetialLayer2nd:init(card, bag)
 
         if eventType == 2 then
             enhanceAtk:setVisible(true)
+            --OutGameData:getUserInfo():getBattleTeam():setIndexTeamCard()
+            EventManager:doEvent(EventDef.ID.CARD_INTENSIFY)
         end
     end)
+    self.intensify=buttonIntensify
 
     local buttonLevelup = ccui.Button:create(PATH_BUTTON_LEVELUP, PATH_BUTTON_LEVELUP)
     popup:add(buttonLevelup)
     buttonLevelup:setAnchorPoint(0.5, 0.5)
     buttonLevelup:setPosition(popup:getContentSize().width * 0.5, popup:getContentSize().height * 0.15)
     buttonLevelup:setPressedActionEnabled(true)
+    --[[buttonLevelup:addTouchEventListener(function(sender, eventType)
+
+        if eventType == 2 then
+            --enhanceAtk:setVisible(true)
+            --OutGameData:getUserInfo():getBattleTeam():setIndexTeamCard()
+            OutGameData:getUserInfo():getBattleTeam():getCardList()[]
+            EventManager:doEvent(EventDef.ID.CARD_UPGRADE)
+        end
+    end)]]
+
     local coin = display.newSprite(PATH_ICON_COIN)
     buttonLevelup:add(coin)
     coin:setAnchorPoint(0, 0.5)
@@ -270,7 +292,7 @@ function TowerDetialLayer2nd:init(card, bag)
     ttfLevelup:setAnchorPoint(0.5, 0.5)
     ttfLevelup:setPosition(buttonLevelup:getContentSize().width * 0.5, buttonLevelup:getContentSize().height * 0.35)
     ttfLevelup:setString("test")
-
+    self.upgrade=buttonLevelup
 
     local buttonUse = ccui.Button:create(PATH_BUTTON_USE, PATH_BUTTON_USE)
     popup:add(buttonUse)
@@ -278,6 +300,15 @@ function TowerDetialLayer2nd:init(card, bag)
     buttonUse:setPosition(popup:getContentSize().width * 0.8, popup:getContentSize().height * 0.15)
     buttonUse:setPressedActionEnabled(true)
     self.use = buttonUse
+    --[[buttonUse:addTouchEventListener(function(sender, eventType)
+
+        if eventType == 2 then
+            enhanceAtk:setVisible(true)
+            --OutGameData:getUserInfo():getBattleTeam():setIndexTeamCard()
+            
+            EventManager:doEvent(EventDef.ID.CARD_USE)
+        end
+    end)]]
 
     local buttonCLose = ccui.Button:create(PATH_BUTTON_CLOSE, PATH_BUTTON_CLOSE)
     popup:add(buttonCLose)
@@ -353,5 +384,10 @@ function TowerDetialLayer2nd:createLayout(parents, base, icon, texture, label)
     ttf_:setPosition(defaultLayout:getContentSize().width * 0.3, defaultLayout:getContentSize().height * 0.35)
     ttf_:setString(label)
 end
-
+function TowerDetialLayer2nd:onEnter()
+    
+end
+function TowerDetialLayer2nd:onExit()
+    
+end
 return TowerDetialLayer2nd

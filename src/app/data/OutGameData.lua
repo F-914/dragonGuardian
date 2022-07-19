@@ -65,7 +65,7 @@ function OutGameData:getTreasureBoxRewardWinningRate()
     return _treasureBoxRewardWinningRate
 end
 
-<<<<<<< HEAD
+
 -- function OutGameData:init()
 --     _userInfo = UserInfo:getInstance()
 --     self:initCoinShop()
@@ -87,26 +87,25 @@ function OutGameData:getTreasureBoxRewardWinningRate()
     return _treasureBoxRewardWinningRate
 end
 
-=======
->>>>>>> origin/dev_xz
+
 function OutGameData:initTreasureBoxRewardWinningRate()
     -- TODO 感觉这个数据可能很少会发生变动，但是也不排除后续更新的可能
     _treasureBoxRewardWinningRate = {
         {
             -- 普通宝箱的没有找到
-<<<<<<< HEAD
+
             { {}, {} },
             { {}, {} },
             { {}, {} },
             { {}, {} },
-            { {}, {} }
-=======
+            { {}, {} },
+
             { {0}, {0} },
             { {0}, {0} },
             { {0}, {0} },
             { {0}, {0} },
             { {0}, {0} }
->>>>>>> origin/dev_xz
+
         },
         {
             { { 130 }, { 130 } },
@@ -130,7 +129,6 @@ function OutGameData:initTreasureBoxRewardWinningRate()
             { { 3040 }, { 3040 } }
         }
     }
-<<<<<<< HEAD
 end
 
 function OutGameData:initDiamondShop()
@@ -161,8 +159,8 @@ function OutGameData:register()
     OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.ASSERT_CHANGE, handler(self, self.assertChange))
 end
 
-=======
-end
+
+
 
 ---测试的时候就用下面这三个函数
 --function OutGameData:initDiamondShop()
@@ -201,7 +199,7 @@ function OutGameData:register()
 
 end
 
->>>>>>> origin/dev_xz
+
 --[[--
     @description 本地同步来自服务器userinfo的数据
     @param msg type:table, 由服务器发送的消息
@@ -426,8 +424,6 @@ function OutGameData:receiveReward(msg)
     end
 end
 
-<<<<<<< HEAD
-=======
 --[[--
     @description: 同步队伍数据
     玩家修改队伍信息后同步
@@ -437,7 +433,7 @@ function OutGameData:modifyBattleTeam(msg)
             :toBattleTeam(msg.userInfo.battleTeam))
 
 end
->>>>>>> origin/dev_xz
+
 -- 不太确定函数返回的是引用还是复制的值，所以调用的时候还是先调用这个再用别的
 function OutGameData:getUserInfo()
     Log.i("getUserInfo: " .. tostring(_userInfo == nil))

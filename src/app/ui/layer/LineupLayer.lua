@@ -4,10 +4,12 @@
 ]]
 local ConstDef = require("app.def.ConstDef")
 local EventDef = require("app.def.EventDef")
-local EventManger = require("app.manager.EventManager")
-local LineupLayer = class("LineupLayer", function()
-    return display.newLayer()
-end)
+local EventManager = require("app.manager.EventManager")
+local OutGameData=require("app.data.OutGameData")
+local MsgController=require("app.msg.MsgController")
+local MsgDef=require("app.def.MsgDef")
+
+local LineupLayer = class("LineupLayer", require("app.ui.layer.BaseLayer"))
 --[[--
     @description:构造方法
     @param lineupList 类型:表，用于保存阵容队列中有哪些塔，存储塔的下标
@@ -45,16 +47,19 @@ function LineupLayer:init(lineupList)
                 button:loadTextureNormal(ConstDef.ICON_LINEUP_LIST[self.order], 0)
                 button:loadTexturePressed(ConstDef.ICON_LINEUP_LIST[self.order], 0)
                 if self.lineupOrder == 1 then
-                    ConstDef.LINEUP_LIST.lineupOne[i] = order
+                    ConstDef.LINEUP_LIST.lineupOne[i] = self.order
+                    OutGameData:getUserInfo():getBattleTeam():setIndexTeamCard(1,i,self.order)
                 elseif self.lineupOrder == 2 then
-                    ConstDef.LINEUP_LIST.lineupTwo[i] = order
+                    ConstDef.LINEUP_LIST.lineupTwo[i] = self.order
+                    OutGameData:getUserInfo():getBattleTeam():setIndexTeamCard(2,i,self.order)
                 elseif self.lineupOrder == 3 then
-                    ConstDef.LINEUP_LIST.lineupThree[i] = order
+                    ConstDef.LINEUP_LIST.lineupThree[i] = self.order
+                    OutGameData:getUserInfo():getBattleTeam():setIndexTeamCard(3,i,self.order)
                 end
                 self.popup:setVisible(false)
                 self.popup:removeFromParent()
-                EventManger:doEvent(EventDef.ID.RESUME_BAG_BUTTON)
-                EventManger:doEvent(EventDef.ID.SHOW_BAG)
+                EventManager:doEvent(EventDef.ID.RESUME_BAG_BUTTON)
+                EventManager:doEvent(EventDef.ID.SHOW_BAG)
             end
         end)
         table.insert(list, button)
@@ -73,5 +78,10 @@ end
 function LineupLayer:setLineupOrder(lineupOrder)
     self.lineupOrder = lineupOrder
 end
-
+function LineupLayer:onEnter()
+   
+end
+function  LineupLayer:onExit()
+    
+end
 return LineupLayer
