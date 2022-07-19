@@ -16,12 +16,13 @@ local OutGameData = require("src/app/data/OutGameData.lua")
     @param treasureData type:table, 宝箱中的数据
     @return none
 ]]
-function OpenTreasureChest2nd:ctor(treasureBox, node)
+function OpenTreasureChest2nd:ctor(treasureBox, coinChange, diamondChange)
 
     self.data_ = treasureBox --表示奖励宝箱
-    ---这个没啥用，注释掉
-    --self.node_ = node
+    self.diamondChange_ = diamondChange
+    self.coinChange_ = coinChange
     self:init()
+
 end
 
 --[[--
@@ -43,12 +44,12 @@ function OpenTreasureChest2nd:init()
     backSprite:setScale(.9)
     local size = backSprite:getContentSize()
 
-    local chestSprite = Factory:createRewardSprite(self.data_.type)
+    local chestSprite = Factory:createRewardSprite(self.data_.treasureBoxType_)
     chestSprite:setPosition(size.width * .5, size.height * 1.2)
     chestSprite:setScale(.9)
     chestSprite:addTo(backSprite)
 
-    local fontSprite = Factory:createChestFontSprite(self.data_.type)
+    local fontSprite = Factory:createChestFontSprite(self.data_.treasureBoxType_)
     fontSprite:setPosition(size.width * .5, size.height * .9)
     fontSprite:addTo(backSprite)
 
@@ -69,15 +70,17 @@ function OpenTreasureChest2nd:init()
                 这里应该调用outGameData的随机生成奖励的函数，用于生成奖励
                 同时想服务器发送消息，然后将数据传输给另一个显示宝箱开出的奖励的而日记界面
             ]]
-            local newView = ChestRewardGet2nd.new(OutGameData:openTreasureBox(self.data_.type))
+            --这个暂时搞不定,因为没有tower的属性，这里的数据只有id和amount
+            local newView = ChestRewardGet2nd.new(OutGameData:openTreasureBox(self.data_.treasureBoxType_))
             newView:addTo(self:getParent())
+
             self:removeSelf()
         end
     end)
     openButton:addTo(backSprite)
 
     local chestInforPane = Factory:createChestRewardPane(OutGameData
-            :getTreasureBoxRewardWinningRate()[self.data_.type])
+            :getTreasureBoxRewardWinningRate()[self.data_.treasureBoxType_])
     chestInforPane:setPosition(display.width * .5, display.height * .5)
     chestInforPane:addTo(self)
 

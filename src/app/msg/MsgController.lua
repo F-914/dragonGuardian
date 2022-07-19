@@ -179,7 +179,7 @@ function _handleMsg(event, data)
             local len = ba:readInt()
             local msg = json.decode(ba:readStringBytes(len))
 
-            --Log.i(TAG, "_handleMsg() msg=", vardump(msg))
+            Log.i(TAG, "_handleMsg() msg=", vardump(msg))
 
             for _, listener in pairs(listenerMap_) do
                 listener(msg)

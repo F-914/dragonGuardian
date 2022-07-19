@@ -10,7 +10,10 @@ end)
 --local
 local ConstDef = require("app.def.ConstDef")
 local EventDef = require("app.def.EventDef")
+<<<<<<< HEAD
 local InGameData = require("app.data.InGameData")
+=======
+>>>>>>> dev_xz
 local EventManager = require("app.manager.EventManager")
 local InGameDownLayer = require("app.ui.layer.InGameDownLayer")
 local InGameUpLayer = require("app.ui.layer.InGameUpLayer")
@@ -25,16 +28,23 @@ function InGameBattleView:ctor()
 end
 
 function InGameBattleView:init()
+<<<<<<< HEAD
     local boss = math.random(1, 4)
     print("随机boss：",boss)
     InGameData:setCurBoss(boss)
 
+=======
+>>>>>>> dev_xz
     self.inGameDownLayer_ = InGameDownLayer.new()
     self:addChild(self.inGameDownLayer_, 0)
     self.inGameUpLayer_ = InGameUpLayer.new()
     self:addChild(self.inGameUpLayer_, 1)
+<<<<<<< HEAD
 
     self.bossSelect2nd_ = BossSelect2nd.new(boss)
+=======
+    self.bossSelect2nd_ = BossSelect2nd.new()
+>>>>>>> dev_xz
     self:addChild(self.bossSelect2nd_, 2)
 
     self.giveup2nd_ = GiveUp2nd.new()
@@ -42,7 +52,10 @@ function InGameBattleView:init()
     self.giveup2nd_:setVisible(false)
 
     self:onEnter()
+<<<<<<< HEAD
     InGameUpLayer:autoEnemyTower()
+=======
+>>>>>>> dev_xz
 end
 
 --[[--
@@ -60,9 +73,15 @@ function InGameBattleView:onEnter()
         elseif state == ConstDef.GAME_STATE.PAUSE then
             self.giveup2nd_:setVisible(true)
         elseif state == ConstDef.GAME_STATE.RESULT then
+<<<<<<< HEAD
             --游戏结束才删除自动生成敌人塔的计时器
             InGameUpLayer:stopAutoEnemyTower()
             print("游戏结束，弹出结算页面")
+=======
+            --游戏结束才删除生成敌人的计时器
+            --self.inGameDownLayer_:stopCreateEnemy()
+
+>>>>>>> dev_xz
         end
     end)
 end

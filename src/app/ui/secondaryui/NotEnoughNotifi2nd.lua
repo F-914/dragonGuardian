@@ -42,7 +42,7 @@ function NotEnoughNotifi2nd:init()
     inforSprite:addTo(self)
 
     local confirmBtn = ccui.Button:create("res/home/general/second_general_popup/button_confirm.png")
-    confirmBtn:setPosition(display.width * .5, display.height * .4)
+    confirmBtn:setPosition(display.width * .5, display.height * .37)
     confirmBtn:addTouchEventListener(function(sender, eventType)
         if eventType == 2 then
             self:removeSelf()
@@ -51,8 +51,8 @@ function NotEnoughNotifi2nd:init()
     confirmBtn:addTo(self)
 
     self:addNodeEventListener(cc.NODE_TOUCH_EVENT, function(event)
-        if event.name == "end" then
-            self:removeSelf()
+        if event.name == "began" then
+            return true
         end
     end)
     self:setTouchEnabled(true)

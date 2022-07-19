@@ -15,8 +15,11 @@ end)
 -- local
 local StringDef = require("app.def.StringDef")
 local GameData = require("app.test.GameData")
+<<<<<<< HEAD
 -- require的方式不一样好像会导致OutGameData被引入的不一样 比如下面这种被注释的情况就会导致OutGameData没有初始化过
 --local OutGameData = require("src.app.data.OutGameData")
+=======
+>>>>>>> dev_xz
 local OutGameData = require("app.data.OutGameData")
 local Log = require("app.utils.Log")
 --
@@ -51,7 +54,10 @@ function CalibrateScaleSprite:init()
             :getUserInfo()
             :getUserInfoLadder()
             :getLadderList()
+<<<<<<< HEAD
     Log.i("TrophyAmount_: " .. tostring(self.trophyAmount_))
+=======
+>>>>>>> dev_xz
 
     self:setScale(3, 1)
 

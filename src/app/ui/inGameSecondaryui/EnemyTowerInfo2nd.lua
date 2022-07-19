@@ -7,9 +7,12 @@ local EnemyTowerInfo2nd = class("EnemyTowerInfo2nd", function()
     return display.newLayer()
 end)
 
+<<<<<<< HEAD
 --local
 local EnemyTowerArrayDef = require("app.def.EnemyTowerArrayDef")
 
+=======
+>>>>>>> dev_xz
 --[[--
     描述：构造函数
 
@@ -43,13 +46,21 @@ function EnemyTowerInfo2nd:init()
     baseSprite:setAnchorPoint(0.5, 0.5)
     baseSprite:setPosition(display.cx, display.height*41/50)
     baseSprite:addTo(self)
+<<<<<<< HEAD
     self.baseSize_ = baseSprite:getContentSize()
+=======
+    local sizeBase = baseSprite:getContentSize()
+>>>>>>> dev_xz
 
     --触摸遮挡层
     local interceptLayer = ccui.Layout:create()
     interceptLayer:setAnchorPoint(0.5, 0.5)
     interceptLayer:setPosition(display.cx, display.height*41/50)
+<<<<<<< HEAD
     interceptLayer:setContentSize(self.baseSize_.width, self.baseSize_.height)
+=======
+    interceptLayer:setContentSize(sizeBase.width, sizeBase.height)
+>>>>>>> dev_xz
     interceptLayer:setTouchEnabled(true)
     interceptLayer:addTo(self)
 end
@@ -62,6 +73,7 @@ end
     @return none
 ]]
 function EnemyTowerInfo2nd:towerInfo(num)
+<<<<<<< HEAD
     local towerSprite = cc.Sprite:create("battle_in_game/battle_view/tower/tower_"..EnemyTowerArrayDef[num].ID..".png")
     towerSprite:setAnchorPoint(0.5, 1)
     towerSprite:setPosition(display.cx/2, display.height*43/50)
@@ -113,6 +125,9 @@ function EnemyTowerInfo2nd:towerInfo(num)
     skillIntro:setColor(cc.c3b(255,255,255))
     skillIntro:enableOutline(cc.c4b(12, 6, 24, 255), 1)
     skillIntro:addTo(self)
+=======
+    
+>>>>>>> dev_xz
 end
 
 return EnemyTowerInfo2nd

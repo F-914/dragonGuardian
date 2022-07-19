@@ -36,13 +36,23 @@ function OutGameData:init()
 end
 
 --function OutGameData:init()
---    OutGameMsgController:init("127.0.0.0", 33333, 2)
---    OutGameMsgController:connect()
---    self:register()
---    _userInfo = UserInfo:getInstance()
+--    --连接到服务器
+--    -- OutGameMsgController:connect()
+--    -- self:register()
+--    --_userInfo = self:initUserInfo()
+--    Log.i("OutGameData:init: " .. tostring(_userInfo == nil))
+--    self:initUserInfo()
+--    --_coinShop = TestDataFactory:getTestCoinShop()
+--    --self:initCoinShop()
+--    Log.i("OutGameData:init: " .. tostring(_coinShop == nil))
+--    _diamondShop = TestDataFactory:getTestDiamondShop()
+--    --self:initDiamondShop()
+--    Log.i("OutGameData:init: " .. tostring(_diamondShop == nil))
+--    self:initTreasureBoxRewardWinningRate()
 --
---    --_coinShop = Shop.new()
---    --_diamondShop = Shop.new()
+--    -- OutGameMsgController:init("127.0.0.0", 33333, 2)
+--    -- OutGameMsgController:connect()
+--    -- self:register()
 --end
 
 -- 调用 OutGameData:getTreasureBoxRewardWinningRate()[ConstDef.TREASUREBOX_RARITY.R][ConstDef.TREASUREBOX_REWARD.R]
@@ -58,37 +68,37 @@ function OutGameData:initTreasureBoxRewardWinningRate()
     _treasureBoxRewardWinningRate = {
         {
             -- 普通宝箱的没有找到
-            { { 0 }, { 0 } },
-            { { 0 }, { 0 } },
-            { { 0 }, { 0 } },
-            { { 0 }, { 0 } },
-            { { 0 }, { 0 } }
+            { 0, 0 },
+            { 0, 0 },
+            { 0, 0 },
+            { 0, 0 },
+            { 0, 0 }
         },
         {
-            { { 130 }, { 130 } },
-            { { 40 }, { 40 } },
-            { { 7 }, { 7 } },
-            { { 0 }, { 1 } },
-            { { 1230 }, { 1230 } }
+            { 130, 130 },
+            { 40, 40 },
+            { 7, 7 },
+            { 0, 1 },
+            { 1230, 1230 }
         },
         {
-            { { 139 }, { 139 } },
-            { { 36 }, { 36 } },
-            { { 7 }, { 7 } },
-            { { 0 }, { 1 } },
-            { { 1280 }, { 1280 } }
+            { 139, 139 },
+            { 36, 6 },
+            { 7, 7 },
+            { 0, 1 },
+            { 1280, 1280 }
         },
         {
-            { { 187 }, { 187 } },
-            { { 51 }, { 51 } },
-            { { 21 }, { 21 } },
-            { { 1 }, { 1 } },
-            { { 3040 }, { 3040 } }
+            { 187, 187 },
+            { 51, 51 },
+            { 21, 21 },
+            { 1, 1 },
+            { 3040, 3040 }
         }
     }
 end
 
----测试的时候就用下面这三个函数
+-- -测试的时候就用下面这三个函数
 function OutGameData:initDiamondShop()
     _diamondShop = TestDataFactory:getTestDiamondShop()
 end
@@ -99,40 +109,37 @@ end
 
 function OutGameData:initUserInfo()
     _userInfo = UserInfo:getInstance()
-    _userInfo:testData()
 end
 
 function OutGameData:register()
     ---这一部分是同步和初始化函数
     OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.USERINFO_INIT,
-            handler(self, self.initUserInfo))
+        handler(self, self.initUserInfo))
     OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.DIAMONDSHOP_INIT,
-            handler(self, self.initDiamondShop))
+        handler(self, self.initDiamondShop))
     OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.COINSHOP_INIT,
-            handler(self, self.initCoinShop))
+        handler(self, self.initCoinShop))
     OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.USERINFO_DS,
-            handler(self, self.userInfoDS))
+        handler(self, self.userInfoDS))
     OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.DIAMONDSHOP_DS,
-            handler(self, self.diamondShopDS))
+        handler(self, self.diamondShopDS))
     OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.COINSHOP_DS,
-            handler(self, self.coinShopDS))
+        handler(self, self.coinShopDS))
+
     ---这一部分是代表事件的函数
     OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.CARD_COLLECT,
-            handler(self, self.addCard))
+        handler(self, self.addCard))
     OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.CARD_ATTRIBUTE_CHANGE,
-            handler(self, self.changeCardAttribute))
+        handler(self, self.changeCardAttribute))
     OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.ASSERT_CHANGE,
-            handler(self, self.assertChange))
+        handler(self, self.assertChange))
 
-    OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.PURCHASE_COMMODITY,
-            handler(self, self.purchaseCommodity))
-    OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.TROPHY_CHANGE,
-            handler(self, self.trophyChange))
-    OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.MODIFY_BATTLETEAM,
-            handler(self, self.modifyBattleTeam))
-    OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.RECEIVE_REWARD,
-            handler(self, self.receiveReward))
-
+    OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.CARD_COLLECT,
+        handler(self, self.addCard))
+    OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.CARD_ATTRIBUTE_CHANGE,
+        handler(self, self.changeCardAttribute))
+    OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.ASSERT_CHANGE,
+        handler(self, self.assertChange))
 
 end
 
@@ -318,7 +325,7 @@ function OutGameData:trophyChange(msg)
     local ladderList = _userInfo:getUserInfoLadder():getLadderList()
     for i = 1, #ladderList do
         if amount > ladderList[i].trophyCondition_ then
-            ladderList[i]:setLocked(false)
+            ladderList[i]:setLocked(true)
         end
     end
 end
@@ -355,9 +362,8 @@ function OutGameData:receiveReward(msg)
     for i = 1, #ladderTable do
         for j = 1, #ladderList do
             if ladderList[j].trophyCondition_ ==
-                    ladderTable[i].trophyCondition then
-                ladderList[j].received_ = true
-                break
+                ladderTable[i].trophyCondition then
+                ladderList[j].trophyCondition_ = true
             end
         end
     end
@@ -369,7 +375,7 @@ end
 ]]
 function OutGameData:modifyBattleTeam(msg)
     _userInfo:setUserInfoBattleTeam(TableUtil
-            :toBattleTeam(msg.userInfo.battleTeam))
+        :toBattleTeam(msg.userInfo.battleTeam))
 
 end
 
@@ -410,6 +416,7 @@ end
 
     之所以只有这么点属性，是因为这些属性足够表示出一个刚从宝箱开出来的卡片，
     同时将这样的消息传递给服务器时，传递的消息也比较少
+
 ]]
 function OutGameData:openTreasureBox(rewardType)
     ---算法暂时先这样，后面再再根据更具体的要求完善
@@ -420,11 +427,6 @@ function OutGameData:openTreasureBox(rewardType)
     local srArray = TableUtil:clone(TowerDef.TOWER_SR_IDLIST)
     local ssrArray = TableUtil:clone(TowerDef.TOWER_SSR_IDLIST)
     local urArray = TableUtil:clone(TowerDef.TOWER_UR_IDLIST)
-    --local rMin, rMax, rTypeAmount = rewardData[1][1], rewardData[1][2], 4
-    --local srMin, srMax, srTypeAmount = rewardData[2][1], rewardData[2][2], 2
-    --local ssrMin, ssrMax, ssrTypeAmount = rewardData[3][1], rewardData[3][2], 1
-    --local urMin, urMax, urTypeAmount = rewardData[4][1], rewardData[4][2], 1
-    --local coinMin, coinMax = rewardData[5][1], rewardData[5][2]
     for i = 1, 8 do
         if res[i].rarity == "R" then
             local removeIndex = math.random(1, #rArray)
@@ -448,6 +450,7 @@ function OutGameData:openTreasureBox(rewardType)
             res[i].number = math.random(0, 1)
         end
     end
+    res.coinNum = 2333
     return res
 end
 

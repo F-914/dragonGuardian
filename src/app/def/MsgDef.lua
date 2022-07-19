@@ -58,14 +58,6 @@ local MsgDef = {
         --钻石商店信息初始化
         COINSHOP_INIT = 12,
         --金币商店初始化
-        ---以下是事件消息
-        PURCHASE_COMMODITY = 13,
-        --购买商品
-        TROPHY_CHANGE = 14,
-        --奖杯数改变
-        MODIFY_BATTLETEAM = 15,
-        --修改战斗队伍信息
-        RECEIVE_REWARD = 16,
     }
 }
 
@@ -104,13 +96,7 @@ MsgDef.ACKTYPE = {
 
         MATCH_SUC=0x80000 + 15,
         --金币商店初始化
-        PURCHASE_COMMODITY = 0x80000 + 15,
-        --购买商品
-        TROPHY_CHANGE = 0x80000 + 16,
-        --奖杯数改变
-        MODIFY_BATTLETEAM = 0x80000 + 17,
-        --修改战斗队伍信息
-        RECEIVE_REWARD = 0x80000 + 18,
+
 
     }
 }

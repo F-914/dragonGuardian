@@ -64,10 +64,11 @@ local EventManager = require("app.manager.EventManager")
 ---@param yLocate       number 所处表格列位置
 ---@param cardId        number 防御塔 ID
 ---@param name          string 防御塔的名字
----@param rarity        number 稀有度
----@param type          number 类型，四种类型中的某一种
+---@param rarity        string 稀有度
+---@param type          string 类型，四种类型中的某一种
 ---@param level         number 卡牌等级
----@param cardAmount    number 该种卡牌的数量 当卡牌作为商品时 购买所得到的卡牌数量以Commodity中的Amount为准
+---@param cardAmount    number 该种卡牌的数量 当卡牌作为商品时
+---                             购买所得到的卡牌数量以Commodity中的Amount为准
 ---@param atk           number 攻击力
 ---@param atkTarget     string 攻击目标，前方/随机/血量最高
 ---@param atkUpgrade    number 升级后攻击力变化
@@ -107,13 +108,11 @@ end
 --     end
 -- end
 
-function Card:setCard(cardId, xLocate, yLocate, name, rarity, type, level, atk, atkTarget, atkUpgrade, atkEnhance, fireCd
-                      , fireCdEnhance,
-                      fireCdUpgrade,
-                      skills, extraDamage, fatalityRate, location)
+function Card:setCard(cardId, name, rarity, type, level, cardAmount, atk, atkTarget, atkUpgrade, atkEnhance, fireCd
+                      , fireCdEnhance, fireCdUpgrade, skills, extraDamage, fatalityRate, location)
     self.cardId_ = cardId
-    self.xLocate_ = xLocate
-    self.yLocate_ = yLocate
+    -- self.xLocate_ = xLocate
+    -- self.yLocate_ = yLocate
     self.cardName_ = name
     self.cardRarity_ = rarity
     self.cardType_ = type

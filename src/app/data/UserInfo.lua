@@ -23,8 +23,10 @@ function UserInfo:ctor(account, avatar, nickname, coinAmount, diamondAmount, tro
 end
 
 function UserInfo:getInstance()
+    Log.i("UserInfo:getInstance: " .. tostring(self.instance_ == nil))
     if self.instance_ == nil then
         self.instance_ = UserInfo.new()
+        Log.i("getInstance: " .. tostring(self.instance_ == nil))
         self.instance_:initData()
     end
     return self.instance_
@@ -36,15 +38,15 @@ end
 
 --test
 function UserInfo:testData()
-    self.account_ = "123456"
-    self.avatar_ = StringDef.PATH_DEFAULT_AVATAR
-    self.nickname_ = "黑山老妖12138"
-    self.coinAmount_ = 123456
-    self.diamondAmount_ = 789999
-    self.trophyAmount_ = 101
-    self.battleTeam_ = TestDataFactory:getTeamDataTest()
-    self.ladder_ = TestDataFactory:getLadderTest()
-    self.cardList_ = TestDataFactory:getCardListTest()
+    self.userInfoAccount_ = "123456"
+    self.userInfoAvatar_ = StringDef.PATH_DEFAULT_AVATAR
+    self.userInfoNickname_ = "黑山老妖12138"
+    self.userInfoCoinAmount_ = 123456
+    self.userInfoDiamondAmount_ = 789999
+    self.userInfoTrophyAmount_ = 200
+    self.userInfoBattleTeam_ = TestDataFactory:getTeamDataTest()
+    self.userInfoLadder_ = TestDataFactory:getLadderTest()
+    self.userInfoCardList_ = TestDataFactory:getCardListTest()
 end
 
 function UserInfo:setUserInfo(account, avatar, nickname, coinAmount, diamondAmount, trophyAmount, battleTeam, ladder,
@@ -146,8 +148,8 @@ function UserInfo:getCollectedList()
     if cardList == nil then
         return list
     end
-    for i = 1, #(cardList) do
-        local id = cardList[i]:getCardId()
+    for card in cardList do
+        local id = card:getCardId()
         if set[id] then
             -- nothing
         else
@@ -171,8 +173,8 @@ function UserInfo:getUnCollectedList()
         end
         return list
     end
-    for i = 1, #(cardList) do
-        local id = cardList[i]:getCardId()
+    for card in self.cardList_ do
+        local id = card:getCardId()
         if set[id] then
             set[id] = false
         end

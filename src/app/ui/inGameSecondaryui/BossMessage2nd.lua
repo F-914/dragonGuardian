@@ -7,12 +7,16 @@ local BossMessage2nd = class("BossMessage2nd", function()
     return display.newLayer()
 end)
 
+<<<<<<< HEAD
 --local
 local BossDef = require("app.def.BossDef")
 local InGameData = require("app.data.InGameData")
 
 function BossMessage2nd:ctor()
     self.bossId_ = InGameData:getCurBoss()
+=======
+function BossMessage2nd:ctor()
+>>>>>>> dev_xz
     self:BossInfo()
 end
 
@@ -47,13 +51,21 @@ function BossMessage2nd:BossInfo()
     interceptLayer:setTouchEnabled(true)
     interceptLayer:addTo(self)
 
+<<<<<<< HEAD
     local bossSprite = cc.Sprite:create(BossDef[self.bossId_].ICON_PATH)
+=======
+    local bossSprite = cc.Sprite:create("battle_in_game/secondary_boss_info/boss-1.png")
+>>>>>>> dev_xz
     bossSprite:setAnchorPoint(0.5, 0.5)
     bossSprite:setPosition(display.cx - sizeBase.width*29/100, display.cy*59/40)
     bossSprite:addTo(self)
 
     local bossName = display.newTTFLabel({
+<<<<<<< HEAD
         text = BossDef[self.bossId_].NAME,
+=======
+        text = "Boss 1",
+>>>>>>> dev_xz
         font = "font/fzzdhjw.ttf",
         size = 34
     })
@@ -64,7 +76,11 @@ function BossMessage2nd:BossInfo()
     bossName:addTo(self)
 
     local skillInfo = display.newTTFLabel({
+<<<<<<< HEAD
         text = BossDef[self.bossId_].SKILL_INTRODUCE,
+=======
+        text = "技能介绍文本",
+>>>>>>> dev_xz
         font = "font/fzlthjw.ttf",
         size = 22
     })

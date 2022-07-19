@@ -8,9 +8,13 @@ end)
 --local
 local ConstDef = require("app.def.ConstDef")
 local StringDef = require("app.def.StringDef")
+<<<<<<< HEAD
 local TowerButtonLayer2nd = require("app.ui.layer.TowerButtonLayer2nd")
 local Log = require("app.utils.Log")
 local OutGameData = require("app.data.OutGameData")
+=======
+local TowerButtonLayer2nd = require("src/app/ui/layer/TowerButtonLayer2nd.lua")
+>>>>>>> dev_xz
 --
 --[[--
     @description: 构造方法
@@ -28,8 +32,12 @@ end
     @param bag 类型:对应的已收集或者未收集的塔图鉴
     @return none
 ]]
+<<<<<<< HEAD
 function TowerDetialLayer2nd:init(cardId, bag)
     --print("has been used")
+=======
+function TowerDetialLayer2nd:init(card, bag)
+>>>>>>> dev_xz
     local ttf = {}
     ttf.fontFilePath = StringDef.PATH_TTF_BIAOZJW
     ttf.fontSize = 30
@@ -38,9 +46,13 @@ function TowerDetialLayer2nd:init(cardId, bag)
     self:add(mask)
     mask:setAnchorPoint(0.5, 0.5)
     mask:setPosition(display.cx, display.cy)
+<<<<<<< HEAD
     -- get card
     local card = OutGameData:getUserInfo():getCardList()[cardId]
     --
+=======
+
+>>>>>>> dev_xz
     local popup = display.newSprite(StringDef.PATH_POPUP)
     mask:add(popup)
     popup:setScale(mask:getContentSize().width / popup:getContentSize().width * 0.8)
@@ -76,7 +88,11 @@ function TowerDetialLayer2nd:init(cardId, bag)
     baseSkillIntroducion:add(typesLabel)
     typesLabel:setAnchorPoint(0, 1)
     typesLabel:setPosition(0, baseSkillIntroducion:getContentSize().height * 1.55)
+<<<<<<< HEAD
     typesLabel:setString(ConstDef.STR_TOWER_TYPE[card:getCardType()])
+=======
+    typesLabel:setString(card.type)
+>>>>>>> dev_xz
     local ratity = display.newSprite(StringDef.PATH_RATITY)
     baseSkillIntroducion:add(ratity)
     ratity:setAnchorPoint(0, 1)
@@ -87,7 +103,11 @@ function TowerDetialLayer2nd:init(cardId, bag)
     ratityLabel:setAnchorPoint(0, 1)
     ratityLabel:setPosition(baseSkillIntroducion:getContentSize().width * 0.6,
             baseSkillIntroducion:getContentSize().height * 1.55)
+<<<<<<< HEAD
     ratityLabel:setString(ConstDef.STR_TOWER_RARITY[card:getCardRarity()])
+=======
+    ratityLabel:setString(card.ratity)
+>>>>>>> dev_xz
     ttf.fontSize = 30
 
     local defaultLayoutType = display.newSprite(StringDef.PATH_BASE_ATTRIBUTE_DEFAULT)
@@ -145,7 +165,11 @@ function TowerDetialLayer2nd:init(cardId, bag)
     ttfAtkSpeed:setAnchorPoint(0, 0.5)
     ttfAtkSpeed:setPosition(defaultLayoutAtkSpeed:getContentSize().width * 0.3,
             defaultLayoutAtkSpeed:getContentSize().height * 0.35)
+<<<<<<< HEAD
     ttfAtkSpeed:setString(tostring(card:getCardFireCd()) .. "s")
+=======
+    ttfAtkSpeed:setString(card.fireCd .. "s")
+>>>>>>> dev_xz
 
     local defaultLayoutTarget = display.newSprite(StringDef.PATH_BASE_ATTRIBUTE_DEFAULT)
     popup:add(defaultLayoutTarget)
@@ -166,7 +190,11 @@ function TowerDetialLayer2nd:init(cardId, bag)
     ttfTarget:setAnchorPoint(0, 0.5)
     ttfTarget:setPosition(defaultLayoutTarget:getContentSize().width * 0.3,
             defaultLayoutTarget:getContentSize().height * 0.35)
+<<<<<<< HEAD
     ttfTarget:setString(ConstDef.STR_TOWER_ATK_TARGET[card:getCardTarget()])
+=======
+    ttfTarget:setString(card.atkTarget)
+>>>>>>> dev_xz
 
     local defaultLayoutSkillSlow = display.newSprite(StringDef.PATH_BASE_ATTRIBUTE_DEFAULT)
     popup:add(defaultLayoutSkillSlow)

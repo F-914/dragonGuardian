@@ -463,18 +463,5 @@ local TowerDef = {
     TOWER_UR_IDLIST = {
         5, 6, 10, 13, 19
     },
-    TOWER_R_IDLIST = {
-        1, 4, 7, 9, 18, 20,
-    },
-    TOWER_SR_IDLIST = {
-        3, 14, 15,
-    },
-    TOWER_SSR_IDLIST = {
-        2, 8, 11, 12, 16, 17
-    },
-    TOWER_UR_IDLIST = {
-        5, 6, 10, 13, 19
-    },
 }
-
 return TowerDef

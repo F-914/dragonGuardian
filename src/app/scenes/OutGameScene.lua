@@ -10,6 +10,7 @@ end)
 local LoadView = require("app.ui.LoadView")
 local StringDef = require("app.def.StringDef")
 local AtlasView = require("app.ui.AtlasView")
+--local GameData = require("app.test.GameData")
 local MainUIBattleView = require("app.ui.MainUIBattleView")
 local MenuView = require("app.ui.MenuView")
 local ShopView = require("app.ui.ShopView")
@@ -26,16 +27,18 @@ local pageView
 local loadView
 local userInfo_
 --
-
+---GameData我这里至少是没用了
 function OutGameScene:ctor()
     loadView = LoadView.new()
     loadView:addTo(self, 3)
     --test
+    --GameData:init()
     OutGameData:init()
     --
     self.mainUIBattleView_ = MainUIBattleView.new()
     self.atlasView_ = AtlasView.new()
     self.shopView_ = ShopView.new()
+
     MenuView.new(self, 1)
     self:sliderView()
 
@@ -46,6 +49,7 @@ function OutGameScene:ctor()
 end
 
 function OutGameScene:onEnter()
+
     -- 主界面默认音乐播放
     if MenuConfig.IS_PLAY_BGM then
         Log.i("主界面音乐播放")

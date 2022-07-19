@@ -37,7 +37,7 @@ function RewardSprite:ctor(res, data)
     local button = Factory:createRewardButton(self.data_)
     self.button_ = button
 
-    local lockSp = Factory:createBorderStateSprite(self.data_.locked, self.data_.received)
+    local lockSp = Factory:createBorderStateSprite(self.data_.locked_, self.data_.received_)
     if lockSp then
         lockSp:setPosition(self.size_.width * .5, 3)
         lockSp:addTo(self)
@@ -45,7 +45,7 @@ function RewardSprite:ctor(res, data)
 
     local quantityTTF = nil
     ---这里改成这样,更符合数据模型
-    if self.data_.type == ConstDef.REWARD_TYPE.CURRENCY then
+    if self.data_.rewardType_ == ConstDef.REWARD_TYPE.CURRENCY then
         quantityTTF = display.newTTFLabel({
             text = tostring(self.data_.reward_.currencyAmount_),
             font = StringDef.PATH_FONT_FZBIAOZJW,
