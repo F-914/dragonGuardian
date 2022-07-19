@@ -339,8 +339,8 @@ function InGameUpLayer:enemyArray()
         layer:setContentSize(itemWidth, itemHeight)
         layer:addTo(listView)
 
-        local towerButton = ccui.Button:create("battle_in_game/battle_view/tower/tower_"..EnemyLineUp_[j].order..".png")
-        towerButton:setAnchorPoint(0.5, 1)
+        local towerButton = ccui.Button:create("battle_in_game/battle_view/tower/tower_"..EnemyBattleTeam_[j].order..".png")
+        towerButton:setAnchorPoint(0.5, 1)                                            --EnemyBattleTeam_作为全局变量定义在myapp中，存储敌方的battleTeam
         towerButton:setPosition(itemWidth/2, itemHeight*19/20)
         towerButton:scale(0.6)
         local sizeTowerButton = towerButton:getContentSize()

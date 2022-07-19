@@ -11,6 +11,8 @@ local Matching_2nd = require("app.ui.secondaryui.Matching2nd")
 local Factory = require("app.utils.Factory")
 local StringDef = require("app.def.StringDef")
 local OutGameData = require("app.data.OutGameData")
+local EventManager=require("app.manager.EventManager")
+local EventDef=require("app.msg.MsgDef")
 --
 --[[--
     @description: 构造方法
@@ -53,6 +55,8 @@ function OutGameBattleLayer:init()
             local matchingView = Matching_2nd.new(self)
             self.twoLevelUi_ = matchingView
             matchingView:addTo(display.getRunningScene(), 2)
+
+            EventManager:doEvent(EventDef.ID.SEND_LINEUP, self) 
         end
     end)
 
