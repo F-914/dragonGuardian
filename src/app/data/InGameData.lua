@@ -10,6 +10,7 @@ local Enemy = require("app.data.Enemy")
 local ConstDef = require("app.def.ConstDef")
 local EventDef = require("app.def.EventDef")
 local TowerArrayDef = require("app.def.TowerArrayDef")
+local EnemyTowerArrayDef = require("app.def.EnemyTowerArrayDef")
 local GirdLocation = require("app.def.GirdLocation")
 local EventManager = require("app.manager.EventManager")
 
@@ -42,10 +43,24 @@ function InGameData:init()
     self.life_ = 100 -- 类型：number，生命值
     self.score_ = 0 -- 类型：number，得分
 
+    self.boss_ = 0      --类型：number，当前Boss类型
     self.nextBoss_ = 1  --类型：number，即将出现第几个boss
 
     -- 类型：number，游戏状态
     self.gameState_ = ConstDef.GAME_STATE.INIT
+end
+
+--[[--
+    设置当前Boss
+
+    @param number：Boss的编号
+]]
+function InGameData:setCurBoss(boss)
+    self.boss_ = boss
+end
+
+function InGameData:getCurBoss()
+    return self.boss_
 end
 
 function InGameData:getSp()
@@ -228,7 +243,7 @@ end
 ]]
 function InGameData:createEnemyCard(level,x,y)
     local num = math.random(1, 5)
-    local id = TowerArrayDef[num].ID
+    local id = EnemyTowerArrayDef[num].ID
     local card
     if x ~= nil and y ~= nil then
         local xPos = GirdLocation.ENEMY[x][y].X
@@ -760,9 +775,9 @@ function InGameData:update(dt)
     end
 
     -- 清理失效敌人子弹计时器
-    for i = #destoryEnemyBullets, 1, -1 do
+    for i = #destoryEnemySchedule, 1, -1 do
         for j = #scheduleEnemyBullet_, 1, -1 do
-            if scheduleEnemyBullet_[j] == destoryEnemyBullets[i] then
+            if scheduleEnemyBullet_[j] == destoryEnemySchedule[i] then
                 table.remove(scheduleEnemyBullet_, j)
             end
         end

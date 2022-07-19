@@ -12,29 +12,58 @@ local TowerArrayDef = {
     {
         ID = 12,
         ICON_PATH = StringDef.PATH_TOWER_12,
+        TYPE = TowerDef[4].TYPE,
         SP = 102
     },
     {
         ID = 5,
         ICON_PATH = StringDef.PATH_TOWER_05,
+        TYPE = TowerDef[5].TYPE,
         SP = 100
     },
     {
         ID = 6,
         ICON_PATH = StringDef.PATH_TOWER_06,
+        TYPE = TowerDef[6].TYPE,
         SP = 101
     },
     {
         ID = 7,
         ICON_PATH = StringDef.PATH_TOWER_07,
+        TYPE = TowerDef[7].TYPE,
         SP = 100
     },
     {
         ID = 8,
         ICON_PATH = StringDef.PATH_TOWER_08,
+        TYPE = TowerDef[8].TYPE,
         SP = 100
     },
 }
+
+--[[--
+    获取塔种类对应名称
+
+    @param number：塔内编号
+
+    @return string：塔种类名称
+]]
+function TowerArrayDef:getTypeString(num)
+    local towerType
+    if TowerArrayDef[num].TYPE == 1 then
+        towerType = "atk"
+    elseif TowerArrayDef[num].TYPE == 2 then
+        towerType = "auxiliary"
+    elseif TowerArrayDef[num].TYPE == 3 then
+        towerType = "control"
+    elseif TowerArrayDef[num].TYPE == 4 then
+        towerType = "interfere"
+    elseif TowerArrayDef[num].TYPE == 5 then
+        towerType = "summon"
+    end
+
+    return towerType
+end
 
 --[[--
     描述：设定编队信息

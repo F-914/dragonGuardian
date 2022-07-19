@@ -10,6 +10,7 @@ end)
 --local
 local ConstDef = require("app.def.ConstDef")
 local EventDef = require("app.def.EventDef")
+local InGameData = require("app.data.InGameData")
 local EventManager = require("app.manager.EventManager")
 local InGameDownLayer = require("app.ui.layer.InGameDownLayer")
 local InGameUpLayer = require("app.ui.layer.InGameUpLayer")
@@ -24,11 +25,16 @@ function InGameBattleView:ctor()
 end
 
 function InGameBattleView:init()
+    local boss = math.random(1, 4)
+    print("随机boss：",boss)
+    InGameData:setCurBoss(boss)
+
     self.inGameDownLayer_ = InGameDownLayer.new()
     self:addChild(self.inGameDownLayer_, 0)
     self.inGameUpLayer_ = InGameUpLayer.new()
     self:addChild(self.inGameUpLayer_, 1)
-    self.bossSelect2nd_ = BossSelect2nd.new()
+
+    self.bossSelect2nd_ = BossSelect2nd.new(boss)
     self:addChild(self.bossSelect2nd_, 2)
 
     self.giveup2nd_ = GiveUp2nd.new()

@@ -14,19 +14,21 @@ end)
 --local
 local InGameData = require("app.data.InGameData")
 local TowerArrayDef = require("app.def.TowerArrayDef")
+local EnemyTowerArrayDef = require("app.def.EnemyTowerArrayDef")
 local GirdLocation = require("app.def.GirdLocation")
 local Log = require("app.utils.Log")
 local towerTypeSprite
 local sizeTowerButton
 
 function InGameTowerButton:ctor(type, data, cardId)   -- 塔属于我方type=1，还是对方type=2
+    self.type_ = type
     self.data_ = data   --联系InGameData中的数据（还未使用）
     self.data_.cardId_ = cardId
 
     self:initNum(cardId)   -- 生成第几个塔(队内序号)
     self:buildPlayerTower(self.num_)
 
-    if type == 1 then
+    if self.type_ == 1 then
         self:touchMove()    -- 我方塔可移动，敌方塔不可移动
     end
 end
@@ -49,8 +51,14 @@ end
 ]]
 function InGameTowerButton:initNum(id)
     for i = 1,5 do
-        if TowerArrayDef[i].ID == id then
-            self.num_ = i
+        if self.type_ == 1 then
+            if TowerArrayDef[i].ID == id then
+                self.num_ = i
+            end
+        else
+            if EnemyTowerArrayDef[i].ID == id then
+                self.num_ = i
+            end
         end
     end
 end
@@ -63,7 +71,12 @@ end
     @return none
 ]]
 function InGameTowerButton:buildPlayerTower(num)
-    local towerButton = ccui.Button:create(TowerArrayDef[num].ICON_PATH)
+    local towerButton
+    if self.type_ == 1 then
+        towerButton = ccui.Button:create(TowerArrayDef[num].ICON_PATH)
+    else
+        towerButton = ccui.Button:create(EnemyTowerArrayDef[num].ICON_PATH)
+    end
     towerButton:setAnchorPoint(0, 0)
     towerButton:setPosition(0, 0)
     towerButton:scale(0.85)
