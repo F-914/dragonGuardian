@@ -68,15 +68,16 @@ local EventManager = require("app.manager.EventManager")
 ---@param skills        table 拥有的技能
 ---@param extraDamage   number 每次攻击带来的额外伤害
 ---@param fatalityRate  number 单次攻击的致命率
+---@param location      number 原本用来表示在队伍中的序号，现在废弃，根据team中的位置来确定序号
 ---@return  nil Description
 function Card:ctor(cardId, name, rarity, type, level, cardAmount, atk, atkTarget, atkUpgrade, atkEnhance, fireCd,
                    fireCdEnhance,
                    fireCdUpgrade,
                    skills, extraDamage, fatalityRate, location)
     self:setCard(cardId, name, rarity, type, level, cardAmount, atk, atkTarget, atkUpgrade, atkEnhance, fireCd,
-        fireCdEnhance,
-        fireCdUpgrade, skills
-        , extraDamage, fatalityRate, location)
+            fireCdEnhance,
+            fireCdUpgrade, skills
+    , extraDamage, fatalityRate, location)
     EventManager:doEvent(EventDef.ID.CREATE_CARD, self)
 end
 
