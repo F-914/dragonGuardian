@@ -8,6 +8,7 @@ end)
 --local
 local Log = require("app.utils.Log")
 require("socket")
+--
 local _layer
 --
 
@@ -87,9 +88,9 @@ function LoadView:initView()
     local progress = 0 -- 进度
     local timeSchedule = nil -- 刷新计时器(每0.1秒刷新)
     timeSchedule = scheduler:scheduleScriptFunc(function(dt)
-        Log.i("loading……")
+        --Log.i("loading……")
         progress = progress + display.width / 100
-        Log.i(progress .. "")
+        --Log.i(progress .. "")
         barSprite:setContentSize(progress, 15)
         sizeCurBar = barSprite:getContentSize()
         headBarSprite:setPosition(sizeCurBar.width, 0)

@@ -15,7 +15,7 @@ end)
 -- local
 local StringDef = require("app.def.StringDef")
 local GameData = require("app.test.GameData")
-local OutGameData = require("src.app.data.OutGameData")
+local OutGameData = require("app.data.OutGameData")
 local Log = require("app.utils.Log")
 --
 
@@ -42,15 +42,13 @@ end
 ]]
 function CalibrateScaleSprite:init()
     ---数据源
-
     self.trophyAmount_ = OutGameData
-        :getUserInfo()
-        :getTrophyAmount()
+            :getUserInfo()
+            :getTrophyAmount()
     self.rewordNodeData_ = OutGameData
-        :getUserInfo()
-        :getUserInfoLadder()
-        :getLadderList()
-
+            :getUserInfo()
+            :getUserInfoLadder()
+            :getLadderList()
 
     self:setScale(3, 1)
 
@@ -71,7 +69,7 @@ function CalibrateScaleSprite:init()
     self.decorateBar_ = spriteDecorate
 
     for i = 1, #self.rewordNodeData_ do
-        local num = self.rewordNodeData_[i].trophyCondition
+        local num = self.rewordNodeData_[i].trophyCondition_
         local quantityTTF = display.newTTFLabel({
             text = tostring(num),
             font = StringDef.PATH_FONT_FZBIAOZJW,
@@ -102,8 +100,11 @@ end
 ]]
 function CalibrateScaleSprite:update(dt)
     --监听到用户的钥匙数量发生变化
-    if not self.trophyAmount_ ~= GameData.trophyAmount_ then
-        self.trophyAmount_ = GameData.trophyAmount_
+    if self.trophyAmount_ == nil then
+        self.trophyAmount_ = OutGameData.getUserInfo():getTrophyAmount()
+    end
+    if not self.trophyAmount_ ~= OutGameData.getUserInfo():getTrophyAmount() then
+        self.trophyAmount_ = OutGameData.getUserInfo():getTrophyAmount()
         self.decorateBar_:setPosition(28.5 + (self.trophyAmount_ / 50 - 1) * 40.1, 7)
         self.yellowScale_:setPosition(26.5 + (self.trophyAmount_ / 50 - 1) * 40.1, 9)
     end

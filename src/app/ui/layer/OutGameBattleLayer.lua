@@ -25,7 +25,16 @@ end
     @description: 初始化方法
 ]]
 function OutGameBattleLayer:init()
+    --local cardList = OutGameData:getUserInfo():getUserInfoCardList()
     local teamData = OutGameData:getUserInfo():getBattleTeam():getCurrentBattleTeam()
+    --local teamData = {}
+    --for i = 1, #teamDataIds do
+    --    for j = 1, #cardList do
+    --        if cardList[j].cardId_ == teamDataIds[i] then
+    --            table.insert(teamData, i, cardList[j])
+    --        end
+    --    end
+    --end
     self.teamMap_ = Factory:createTeamSprite(teamData)
 
     local teamLayer = display.newLayer()
@@ -38,8 +47,9 @@ function OutGameBattleLayer:init()
     selectTeamSprite:setPosition(display.width * .5, display.height * .08)
     selectTeamSprite:addTo(teamLayer)
 
-    for data, node in pairs(self.teamMap_) do
-        node:setPosition(-70 + display.width * 0.2 * data.location, display.height * .075)
+    for i = 1, #self.teamMap_ do
+        local node = self.teamMap_[i][2]
+        node:setPosition(-70 + display.width * 0.2 * i, display.height * .075)
         node:setScale(0.8)
         teamLayer:addChild(node)
     end
@@ -78,8 +88,8 @@ end
     @return none
 ]]
 function OutGameBattleLayer:update(dt)
-    for _, node in pairs(self.teamMap_) do
-        node:update(dt)
+    for i = 1, #self.teamMap_ do
+        self.teamMap_[i][2]:update()
     end
     if self.twoLevelUi_ then
         self.twoLevelUi_:update(dt)

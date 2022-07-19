@@ -12,8 +12,10 @@ local ConstDef = require("app.def.ConstDef")
 local StringDef = require("app.def.StringDef")
 local Commodity = require("app.data.Commodity")
 local OutGameData = require("app.data.OutGameData")
+local OpenTreasure2nd = require("src/app/ui/secondaryui/OpenTreasure2nd.lua")
+local NotEnoughNotifi2nd = require("src/app/ui/secondaryui/NotEnoughNotifi2nd.lua")
 --
---
+
 function TreasureBoxCommodityNode:ctor(commodity)
     self.commodity_ = commodity
     --
@@ -24,7 +26,7 @@ function TreasureBoxCommodityNode:initView()
     local commodityLayer = cc.CSLoader:getInstance():createNodeWithFlatBuffersFile("TreasureBoxLayer.csb")
     commodityLayer:addTo(self)
     -- boxButton
-    local boxButton = tolua.cast(ccui.Helper:seekWidgetByName(commodityLayer, "commodityLayer"), "ccui.Button")
+    local boxButton = tolua.cast(ccui.Helper:seekWidgetByName(commodityLayer, "commodityButton"), "ccui.Button")
     -- bg
     local bgImage = tolua.cast(ccui.Helper:seekWidgetByName(commodityLayer, "bgLayer"), "ccui.Layout")
     bgImage:setBackGroundImage(ConstDef.SHOP_BOX_TYPE_BASE_PATH[
@@ -55,6 +57,15 @@ function TreasureBoxCommodityNode:initView()
             --boxButton:setTouchEnabled(false)
             audio.playEffect(StringDef.PATH_OPEN_BOX)
             boxLayer:scale(1)
+            if self.commodity_.commodityPrice_ >
+                    OutGameData:getUserInfo().userInfoCoinAmount_ then
+                local notifiUi = NotEnoughNotifi2nd.new(1)
+                notifiUi:addTo(display.getRunningScene(), 2)
+            else
+                local openTreasure2nd = OpenTreasure2nd.new(self.commodity_.commodityCommodity_,
+                        0, 0 - self.commodity_.commodityPrice_)
+                openTreasure2nd:addTo(display.getRunningScene(), 2)
+            end
         end
     end)
 end

@@ -10,9 +10,11 @@
 local TowerSprite = class("towerSprite", function(res)
     return display.newSprite(res)
 end)
-
+--local
 local StringDef = require("app.def.StringDef")
 local Factory = require("app.utils.Factory")
+local ConstDef = require("app.def.ConstDef")
+--
 
 --[[--
     @description: 构造函数
@@ -42,8 +44,7 @@ end
     @return none
 ]]
 function TowerSprite:update(dt)
-    self.levelSprite_:setTexture(StringDef.PATH_PREFIX_SUBINTERFACE_TOWER_LEVEL ..
-        self.data_.star .. ".png")
+    self.levelSprite_:setTexture(ConstDef.ICON_TOWER_LEVEL_LIST[self.data_:getCardLevel()])
 end
 
 return TowerSprite
