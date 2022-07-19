@@ -7,11 +7,13 @@ local InGameUpLayer = class("InGameUpLayer", function()
 end)
 
 --local
+local BossDef = require("app.def.BossDef")
 local ConstDef = require("app.def.ConstDef")
 local MsgController=require("app.msg.MsgController")
 local InGameData = require("app.data.InGameData")
 local Log = require("app.utils.Log")
 local TowerArrayDef = require("app.def.TowerArrayDef")
+local EnemyTowerArrayDef = require("app.def.EnemyTowerArrayDef")
 local EventDef = require("app.def.EventDef")
 local EventManager = require("app.manager.EventManager")
 local BossMessage2nd = require("app.ui.inGameSecondaryui.BossMessage2nd")
@@ -35,14 +37,10 @@ function InGameUpLayer:ctor()
     testButton:addTouchEventListener(function(sender, eventType)
         if 2 == eventType then
             if not InGameData:enemyMerge() then
-                local sp = InGameData:getSpEnemy()
-                local spCost = InGameData:getSpCreateEnemyTower()
-                if sp >= spCost then
                     InGameData:createEnemyCard(1)   --默认生成一级塔
                     local changeSp = InGameData:getSpCreateEnemyTower()
                     InGameData:changeSpEnemy(-changeSp)
                     InGameData:changeSpCreateEnemyTower(10)
-                end
             end
         end
     end)
@@ -245,7 +243,8 @@ function InGameUpLayer:init()
     timeCountDownTTF:addTo(self)
 
     -- Boss图标按钮（点击显示boss介绍）
-    local bossButton = ccui.Button:create("battle_in_game/battle_view/button-boss/boss-4.png")
+    local bossId = InGameData:getCurBoss()
+    local bossButton = ccui.Button:create(BossDef[bossId].SMALL_ICON_PATH)
     bossButton:setAnchorPoint(0.5, 0.5)
     bossButton:setPosition(display.cx*5/8, display.cy + display.cy*2/15)
     bossButton:addTouchEventListener(function(sender, eventType)
@@ -296,7 +295,8 @@ function InGameUpLayer:playerArray()
         levelSprite:setPosition(itemWidth/2, 0)
         levelSprite:addTo(layer)
 
-        local towerTypeSprite = cc.Sprite:create("battle_in_game/battle_view/subscript_tower_type/atk.png")
+        local towerType = EnemyTowerArrayDef:getTypeString(j)
+        local towerTypeSprite = cc.Sprite:create("battle_in_game/battle_view/subscript_tower_type/"..towerType..".png")
         towerTypeSprite:setAnchorPoint(1,1)
         towerTypeSprite:setPosition(itemWidth/2 + sizeTowerButton.width/2, itemHeight*19/20)
         towerTypeSprite:addTo(layer)
@@ -339,8 +339,8 @@ function InGameUpLayer:enemyArray()
         layer:setContentSize(itemWidth, itemHeight)
         layer:addTo(listView)
 
-        local towerButton = ccui.Button:create("battle_in_game/battle_view/tower/tower_"..EnemyBattleTeam_[j].order..".png")
-        towerButton:setAnchorPoint(0.5, 1)                                            --EnemyBattleTeam_作为全局变量定义在myapp中，存储敌方的battleTeam
+        local towerButton = ccui.Button:create("battle_in_game/battle_view/tower/tower_"..EnemyTowerArrayDef[j].ID..".png")
+        towerButton:setAnchorPoint(0.5, 1)
         towerButton:setPosition(itemWidth/2, itemHeight*19/20)
         towerButton:scale(0.6)
         local sizeTowerButton = towerButton:getContentSize()
@@ -358,7 +358,8 @@ function InGameUpLayer:enemyArray()
         levelSprite:scale(0.8)
         levelSprite:addTo(layer)
 
-        local towerTypeSprite = cc.Sprite:create("battle_in_game/battle_view/subscript_tower_type/atk.png")
+        local towerType = EnemyTowerArrayDef:getTypeString(j)
+        local towerTypeSprite = cc.Sprite:create("battle_in_game/battle_view/subscript_tower_type/"..towerType..".png")
         towerTypeSprite:setAnchorPoint(1,1)
         towerTypeSprite:setPosition(itemWidth/2 + sizeTowerButton.width/2*0.6, itemHeight*19/20)
         towerTypeSprite:scale(0.6)

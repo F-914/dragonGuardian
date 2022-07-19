@@ -30,10 +30,10 @@ local isRun = false    --用于存储boss图标动画是否已执行
 --     return handle
 -- end
 
-function BossSelect2nd:ctor()
+function BossSelect2nd:ctor(boss)
     self:init()
     self.homing_ = false
-    self.boss_ = math.random(1, 4)  --选择的boss
+    self.boss_ = boss               --选择的boss
     self.delta_ = display.cx/2      --图标之间间隔
     self.line_ = self.delta_*8      --图标总长度
     self:randomBoss(-self.delta_ *4, 1)
@@ -51,6 +51,7 @@ function BossSelect2nd:ctor()
         self.delta_*2,
         self.delta_
     }
+    print("随机boss 2：",self.boss_)
 end
 
 function BossSelect2nd:init()
