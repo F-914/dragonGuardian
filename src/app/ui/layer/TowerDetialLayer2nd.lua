@@ -29,6 +29,7 @@ end
     @return none
 ]]
 function TowerDetialLayer2nd:init(cardId, bag)
+    --print("has been used")
     local ttf = {}
     ttf.fontFilePath = StringDef.PATH_TTF_BIAOZJW
     ttf.fontSize = 30
@@ -262,11 +263,12 @@ function TowerDetialLayer2nd:init(cardId, bag)
     buttonCLose:addTouchEventListener(function(sender, eventType)
 
         if eventType == 2 then
-
+            
             mask:setVisible(false)
             mask:removeFromParent()
+            
             local list_ = bag.list
-            --print(table.getn(list_))
+           
             for i = 1, table.getn(list_) do
                 list_[i]:setTouchEnabled(true)
             end
