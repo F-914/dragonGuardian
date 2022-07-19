@@ -11,6 +11,7 @@ local Matching_2nd = require("app.ui.secondaryui.Matching2nd")
 local Factory = require("app.utils.Factory")
 local StringDef = require("app.def.StringDef")
 local OutGameData = require("app.data.OutGameData")
+local Log = require("app.utils.Log")
 --
 --[[--
     @description: 构造方法
@@ -26,6 +27,7 @@ end
 ]]
 function OutGameBattleLayer:init()
     local teamData = OutGameData:getUserInfo():getBattleTeam():getCurrentBattleTeam()
+    Log.i("OutGameBattleLayer:init() size: " .. tostring(#(teamData)))
     self.teamMap_ = Factory:createTeamSprite(teamData)
 
     local teamLayer = display.newLayer()
@@ -38,8 +40,10 @@ function OutGameBattleLayer:init()
     selectTeamSprite:setPosition(display.width * .5, display.height * .08)
     selectTeamSprite:addTo(teamLayer)
 
-    for data, node in pairs(self.teamMap_) do
-        node:setPosition(-70 + display.width * 0.2 * data.cardLocation_, display.height * .075)
+    local cardList = OutGameData:getUserInfo():getCardList()
+    for i = 1, #(teamData) do
+        local node = self.teamMap_[cardList[teamData[i]]]
+        node:setPosition(-70 + display.width * 0.2 * i, display.height * .075)
         node:setScale(0.8)
         teamLayer:addChild(node)
     end

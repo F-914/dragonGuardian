@@ -55,7 +55,7 @@ end
 ]]
 function Factory:createTeamSprite(teamData)
     local mapSprites = {}
-    for i = 1, #teamData do
+    for i = 1, #(teamData) do
         local cardId = teamData[i]
         local cardData = require("app.data.OutGameData"):getUserInfo():getCardList()[cardId]
         --解决循环嵌套
