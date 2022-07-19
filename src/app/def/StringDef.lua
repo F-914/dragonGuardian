@@ -234,8 +234,10 @@ local StringDef = {
     --
     PATH_SECOND_CONFIRM_BOX_NORMAL = "res/home/general/second_open_confirm_popup/icon_box_normal.png",
     PATH_SECOND_CONFIRM_BOX_RARE = "res/home/general/second_open_confirm_popup/icon_box_rare.png",
-    PATH_SECOND_CONFIRM_BOX_RARE = "res/home/general/second_open_confirm_popup/icon_box_epic.png",
-    PATH_SECOND_CONFIRM_BOX_RARE = "res/home/general/second_open_confirm_popup/icon_box_legend.png",
+
+    PATH_SECOND_CONFIRM_BOX_EPIC = "res/home/general/second_open_confirm_popup/icon_box_epic.png",
+    PATH_SECOND_CONFIRM_BOX_LEGEND = "res/home/general/second_open_confirm_popup/icon_box_legend.png",
+
     --
     PATH_DIAMOND_SHOP_BOX_NORMAL = "home/shop/diamond_shop/box_normal.png",
     PATH_DIAMOND_SHOP_BOX_RARE = "home/shop/diamond_shop/box_rare.png",

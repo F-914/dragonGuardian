@@ -11,10 +11,9 @@ local RewardSprite = class("RewardSprite", function(res)
     return display.newSprite(res)
 end)
 --local
-local CreateSpriteUtil = require("app.test.CreateSpriteUtil")
 local Factory = require("app.utils.Factory")
 local StringDef = require("app.def.StringDef")
-
+local ConstDef = require("src/app/def/ConstDef.lua")
 --[[--
     @description: 构造方法
     @param res type:string, 精灵纹理
@@ -45,13 +44,18 @@ function RewardSprite:ctor(res, data)
     end
 
     local quantityTTF = nil
-    if self.data_.amount ~= 1 then
+    ---这里改成这样,更符合数据模型
+    if self.data_.type == ConstDef.REWARD_TYPE.CURRENCY then
         quantityTTF = display.newTTFLabel({
+<<<<<<< HEAD
             -- 这个quanity和amount不知道是哪个对，两个都保留了然后注释了一个
             -- text = tostring(self.data_.quantity),
             -- 这个只对数量不是一的东西生效，比如金币和钻石，所以应该是
             -- amount就行
             text = tostring(self.data_.amount),
+=======
+            text = tostring(self.data_.reward_.currencyAmount_),
+>>>>>>> origin/dev_xz
             font = StringDef.PATH_FONT_FZBIAOZJW,
             size = 18,
             color = cc.c3b(168, 176, 225)
@@ -97,7 +101,7 @@ function RewardSprite:receive()
     --调用
 
     --加上领取标志
-    local lockSp = CreateSpriteUtil:getBorderStateSprite(true, true)
+    local lockSp = Factory:createBorderStateSprite(true, true)
     lockSp:setPosition(self.size_.width * .5, 0)
     lockSp:addTo(self)
 

@@ -16,6 +16,8 @@ local Shop = require("src/app/data/Shop.lua")
 local Skill = require("src/app/data/Skill.lua")
 local TreasureBox = require("src/app/data/TreasureBox.lua")
 local UserInfo = require("src/app/data/UserInfo.lua")
+local ConstDef = require("src/app/def/ConstDef.lua")
+local Log = require("src/app/utils/Log.lua")
 --[[--
     @将表格转化为战斗队伍对象，表格需要有目标对象属性的字段，
     字段不包括后缀_(也可以包括，但得统一)，不进行错误检查
@@ -39,15 +41,13 @@ end
 ]]
 function TableUtil:toCard(msg)
     local skills = {}
-    ---skills属性是skill对象构成的表格吗？？？？
     for i = 1, #msg.skills do
         skills[i] = self:toSkill(msg.skills[i])
     end
     return Card.new(msg.cardId, msg.name, msg.rarity,
-    msg.type, msg.atk, msg.atkTarget, msg.atkUpgrade,
+    msg.type, msg.level, msg.cardAmount ,msg.atk, msg.atkTarget, msg.atkUpgrade,
     msg.atkEnhance, msg.fireCd, msg.fireCdEnhance,
-    msg.fireCdUpgrade, skills, msg.extraDamage, msg.fatalityRate,
-    msg.star, msg.location)
+    msg.fireCdUpgrade, skills, msg.extraDamage, msg.fatalityRate, msg.location)
 end
 --[[--
     @将表格转化为commodity对象，表格需要有目标对象属性的字段
@@ -56,8 +56,22 @@ end
     @param type:table, 表格数据
 ]]
 function TableUtil:toCommodity(msg)
+    local obj = nil
+    if msg.type == ConstDef.REWARD_TYPE.CURRENCY then
+        obj = self:toCurrency(msg.reward)
+    elseif msg.type == ConstDef.REWARD_TYPE.TOWER then
+        obj = self:toCard(msg.reward)
+    elseif msg.type == ConstDef.REWARD_TYPE.TREASUREBOX then
+        obj = self:toTreasureBox(msg.reward)
+    elseif msg.type == ConstDef.REWARD_TYPE.UR then
+        --鬼知道这玩意儿是啥
+        obj = nil
+    else
+        Log.e("uncatch this commodity type:", msg.type)
+    end
+
     return Commodity.new(msg.name, msg.type, msg.price,
-            msg.priceUnit, msg.amount)
+            msg.priceUnit, msg.amount, obj)
 end
 --[[--
     @将表格转化为currency对象，表格需要有目标对象属性的字段
@@ -65,7 +79,7 @@ end
     @param type:table, 表格数据
 ]]
 function TableUtil:toCurrency(msg)
-    return nil
+    return Currency.new(msg.type, msg.amount)
 end
 --[[--
     @将表格转化为enemy对象，表格需要有目标对象属性的字段
@@ -74,7 +88,7 @@ end
 ]]
 function TableUtil:toEnemy(msg)
     local skills = {}
-    ---skills属性是skill对象构成的表格吗？？？？
+
     for i = 1, #msg.skills do
         skills[i] = self:toSkill(msg.skills[i])
     end
@@ -89,7 +103,7 @@ end
 function TableUtil:toLadder(msg)
     local ladderList = {}
     for i = 1, #msg.ladderList do
-        ladderList[i] = Reward.new(msg.ladderList[i])
+        ladderList[i] = self:toReward(msg.ladderList[i])
     end
     return Ladder.new(ladderList)
 end
@@ -100,9 +114,22 @@ end
 ]]
 function TableUtil:toReward(msg)
     ---这个reward不知道是啥
+    local obj = nil
+    if msg.type == ConstDef.REWARD_TYPE.CURRENCY then
+        obj = self:toCurrency(msg.reward)
+    elseif msg.type == ConstDef.REWARD_TYPE.CARD then
+        obj = self:toCard(msg.reward)
+    elseif msg.type == ConstDef.REWARD_TYPE.TREASUREBOX then
+        obj = self:toTreasureBox(msg.reward)
+    elseif msg.type == ConstDef.REWARD_TYPE.RANDOM then
+        --我也不知道
+        obj = nil
+    else
+        Log.e("uncatch this commodity type:", msg.type)
+    end
     return Reward.new(msg.rewardName, msg.rewardType, msg.location,
     self:toBoolean(msg.locked), self:toBoolean(msg.received),
-            msg.trophyCondition, msg.amount, nil)
+            msg.trophyCondition, msg.amount, obj)
 end
 --[[--
     @将表格转化为shop对象，表格需要有目标对象属性的字段
@@ -123,8 +150,9 @@ end
     @param type:table, 表格数据
 ]]
 function TableUtil:toSkill(msg)
-    return Skill.new(msg.skillName, msg.skillVariable, msg.skillValue,
-    msg.skillValueUpgrade, msg.skillValueEnhance)
+    ---这里暂时有一些问题，留待后续完善
+    return Skill.new(msg.skillName, nil)
+
 end
 --[[--
     @将表格转化为treasureBox对象，表格需要有目标对象属性的字段
@@ -132,8 +160,7 @@ end
     @param type:table, 表格数据
 ]]
 function TableUtil:toTreasureBox(msg)
-    ---接收到党的消息也有有、type字段，区分所以用type_
-    return TreasureBox.new(msg.name, msg.type_, msg.desc)
+    return TreasureBox.new(msg.name, msg.type, msg.desc)
 end
 --[[--
     @将表格转化为enemy对象，表格需要有目标对象属性的字段
@@ -197,6 +224,21 @@ function TableUtil:encapsulateAsMsg(type, data, index, ...)
     msg.type = type
     msg[index] = data
     return msg
+end
+--[[--
+    @description: 浅层次克隆一个表格,遇见表格直接放弃
+    @param table type：table 源表格
+    @return type:table 克隆出来的表格
+]]
+function TableUtil:clone(table)
+    local res = {}
+    for key, value in pairs(table) do
+        if type(key) ~= "table"
+                and type(value) ~= "table" then
+            res[key] = value
+        end
+    end
+    return res
 end
 
 return TableUtil
