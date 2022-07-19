@@ -109,6 +109,7 @@ end
 
 function OutGameData:initUserInfo()
     _userInfo = UserInfo:getInstance()
+    _userInfo:testData()
 end
 
 function OutGameData:register()

@@ -148,8 +148,8 @@ function UserInfo:getCollectedList()
     if cardList == nil then
         return list
     end
-    for card in cardList do
-        local id = card:getCardId()
+    for i = 1, #cardList do
+        local id = cardList[i]:getCardId()
         if set[id] then
             -- nothing
         else
@@ -173,8 +173,8 @@ function UserInfo:getUnCollectedList()
         end
         return list
     end
-    for card in self.cardList_ do
-        local id = card:getCardId()
+    for i = 1, #cardList do
+        local id = cardList[i]:getCardId()
         if set[id] then
             set[id] = false
         end

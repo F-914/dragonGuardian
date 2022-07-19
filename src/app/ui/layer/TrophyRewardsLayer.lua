@@ -15,14 +15,11 @@ local TestDataFactory = require("app.test.TestDataFactory")
 local OpenTreasureChest2nd = require("app.ui.secondaryui.OpenTreasure2nd")
 local OutGameData = require("app.data.OutGameData")
 local ConstDef = require("app.def.ConstDef")
-<<<<<<< HEAD
-=======
 local NotEnoughNotifi2nd = require("src/app/ui/secondaryui/NotEnoughNotifi2nd.lua")
 --
 local MsgDef = require("src/app/def/MsgDef.lua")
 local TableUtil = require("src/app/utils/TableUtil.lua")
 local OutMsgController = require("src/app/network/OutGameMsgController.lua")
->>>>>>> dev_xz
 --
 --[[--
     @description: 构造方法
@@ -44,14 +41,10 @@ function TrophyRewardsLayer:init()
 
     --各项属性初始化，暂时保持这样，后面可能会因为需求变化
     --self.rewardsMap_ = Factory:createRewardList(GameData.rewards_)
-<<<<<<< HEAD
-    self.rewardsMap_ = Factory:createRewardList(OutGameData:getUserInfo():getUserInfoLadder():getLadderList())
-=======
     self.rewardsMap_ = Factory:createRewardList(OutGameData
-            :getUserInfo()
-            :getUserInfoLadder()
-            :getLadderList())
->>>>>>> dev_xz
+        :getUserInfo()
+        :getUserInfoLadder()
+        :getLadderList())
 
     local spriteBG = display.newSprite(StringDef.PATH_HIGH_LADDER_BACKGROUND)
     --给的资源就不对称
@@ -107,38 +100,12 @@ function TrophyRewardsLayer:init()
     local itemLayer = ccui.Layout:create()
     itemLayer:setBackGroundColorType(3)
     itemLayer:setAnchorPoint(.5, .5)
-    itemLayer:setContentSize(120 , 120)
+    itemLayer:setContentSize(120, 120)
     itemLayer:addTo(highLadderView)
 
     for data, node in pairs(self.rewardsMap_) do
         node:setPosition(spSize.width * .5, spSize.height * .5)
         node:setScale(0.66)
-<<<<<<< HEAD
-        ---pair遍历时没有顺序,我觉得reward加一个表示顺序的属性吧
-        Log.i("data.order: " .. tostring(data:getRewardLocation()))
-        local itemLayer = itemLayers[data:getRewardLocation()]
-        node.button_:addTouchEventListener(function(sender, eventType)
-            if eventType == 2 then
-                local rewardName = data.rewardName
-                local rewardType = data.rewardType
-                if rewardType == ConstDef.REWARD_TYPE.TREASUREBOX then
-                    ---将reward类里面的实际奖励传递给二级界面
-                    local twoLevelUi = OpenTreasureChest2nd.new(data.reward, node)
-                    Log.i("twoLevelUi:addTo: self:getParent() is nullptr ? ")
-                    twoLevelUi:addTo(self:getParent())
-                elseif rewardType == ConstDef.REWARD_TYPE.CARD then
-                    --[[--
-                        这里直接发消息到服务器，确定玩家领取到一张卡片
-                    ]]
-                elseif rewardType == ConstDef.REWARD_TYPE.RANDOM then
-                    --[[--
-                        这是什么玩意儿我也不知道
-                    ]]
-                elseif rewardType == ConstDef.REWARD_TYPE.CURRENCY then
-                    --[[--
-
-                    ]]
-=======
         local itemLayer = itemLayers[data:getRewardLocation()]
         node.button_:addTouchEventListener(function(sender, eventType)
             if eventType == 2 then
@@ -150,7 +117,7 @@ function TrophyRewardsLayer:init()
                     local rewardType = data.rewardType_
                     if rewardType == ConstDef.REWARD_TYPE.TREASUREBOX then
                         ---将reward类里面的实际奖励传递给二级界面
-                        local twoLevelUi = OpenTreasureChest2nd.new(data.reward_,0,0)
+                        local twoLevelUi = OpenTreasureChest2nd.new(data.reward_, 0, 0)
                         twoLevelUi:addTo(display.getRunningScene(), 2)
                     elseif rewardType == ConstDef.REWARD_TYPE.CARD then
                         local msgUserInfo = {}
@@ -160,12 +127,13 @@ function TrophyRewardsLayer:init()
                         msgUserInfo.cardList = {}
                         table.insert(msgUserInfo.cardList, TableUtil:removeTableFunction(data.reward_))
                         local msg = TableUtil:encapsulateAsMsg(MsgDef.REQTYPE
-                                                                     .LOBBY.RECEIVE_REWARD, userInfo.account_,
-                                "userInfo", msgUserInfo)
+                            .LOBBY.RECEIVE_REWARD, userInfo.account_,
+                            "userInfo", msgUserInfo)
                         OutMsgController:sendMsg(msg)
                     elseif rewardType == ConstDef.REWARD_TYPE.RANDOM then
                         --[[--
                             这是什么玩意儿我也不知道
+                            随机奖励 不过看来用不到了 乐
                         ]]
                     elseif rewardType == ConstDef.REWARD_TYPE.CURRENCY then
                         local msgUserInfo = {}
@@ -183,11 +151,10 @@ function TrophyRewardsLayer:init()
                         end
                         msgUserInfo.cardList = {}
                         local msg = TableUtil:encapsulateAsMsg(MsgDef.REQTYPE
-                                                                     .LOBBY.RECEIVE_REWARD, userInfo.account_,
-                                "userInfo", msgUserInfo)
+                            .LOBBY.RECEIVE_REWARD, userInfo.account_,
+                            "userInfo", msgUserInfo)
                         OutMsgController:sendMsg(msg)
                     end
->>>>>>> dev_xz
                 end
             end
         end)
