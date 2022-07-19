@@ -54,8 +54,8 @@ local EventManager = require("app.manager.EventManager")
 ---Card.ctor 构造函数
 ---@param cardId        number 防御塔 ID
 ---@param name          string 防御塔的名字
----@param rarity        string 稀有度
----@param type          string 类型，四种类型中的某一种
+---@param rarity        number 稀有度
+---@param type          number 类型，四种类型中的某一种
 ---@param level         number 卡牌等级
 ---@param cardAmount    number 该种卡牌的数量 当卡牌作为商品时 购买所得到的卡牌数量以Commodity中的Amount为准
 ---@param atk           number 攻击力

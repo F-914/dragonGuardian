@@ -62,7 +62,18 @@ function Factory:createTeamSprite(teamData)
         local towerSprite = require("src/app/ui/node/TowerSprite.lua").new("res/home/general/icon_tower/" ..
             TypeConvert.Integer2StringLeadingZero(cardId, 2) .. ".png", cardData)
         mapSprites[cardData] = towerSprite
+        -- local sprites = {}
+        -- for i = 1, #teamData do
+        --     local cardData = teamData[i]
+        --     ---这里后面可能需要路径
+        --     local towerSprite = require("src/app/ui/node/TowerSprite.lua").new("res/home/general/icon_tower/" ..
+        --         string.format("%02d", cardData.cardId_) .. ".png", cardData)
+        --     sprites[i] = {
+        --         [1] = cardData,
+        --         [2] = towerSprite
+        --     }
     end
+    -- return sprites
     return mapSprites
 end
 
