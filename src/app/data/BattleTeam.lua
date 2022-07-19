@@ -8,10 +8,12 @@ local BattleTeam = class("BattleTeam", require("app.data.base.BaseModel"))
 local ConstDef = require("app.def.ConstDef")
 local EventDef = require("app.def.EventDef")
 local EventManager = require("app.manager.EventManager")
+local Log = require("app.utils.Log")
 --
 
 ---BattleTeam.ctor 构造函数
----@param myTeam table 队伍情况
+---@param myTeam table 队伍情况 注意：table格式为 {{id1, id2, id3, id4, id5}, {}, {}}
+---table 中只记录卡牌的id，之后通过UserInfo的cardList找到对应id的卡牌，避免复制带来的重复信息
 function BattleTeam:ctor(myTeam, StandbyTeam)
     self:setBattleTeam(myTeam, StandbyTeam)
     EventManager:doEvent(EventDef.ID.CREATE_BATTLETEAM, self)

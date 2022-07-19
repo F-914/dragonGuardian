@@ -10,7 +10,6 @@ local EventDef = require("app.def.EventDef")
 local EventManager = require("app.manager.EventManager")
 --
 
-
 --# card
 --## Now
 --cardId
@@ -55,10 +54,11 @@ local EventManager = require("app.manager.EventManager")
 ---Card.ctor 构造函数
 ---@param cardId        number 防御塔 ID
 ---@param name          string 防御塔的名字
----@param rarity        number 稀有度
----@param type          number 类型，四种类型中的某一种
+---@param rarity        string 稀有度
+---@param type          string 类型，四种类型中的某一种
 ---@param level         number 卡牌等级
----@param cardAmount    number 该种卡牌的数量 当卡牌作为商品时 购买所得到的卡牌数量以Commodity中的Amount为准
+---@param cardAmount    number 该种卡牌的数量 当卡牌作为商品时
+---                             购买所得到的卡牌数量以Commodity中的Amount为准
 ---@param atk           number 攻击力
 ---@param atkTarget     string 攻击目标，前方/随机/血量最高
 ---@param atkUpgrade    number 升级后攻击力变化
@@ -70,18 +70,21 @@ local EventManager = require("app.manager.EventManager")
 ---@param extraDamage   number 每次攻击带来的额外伤害
 ---@param fatalityRate  number 单次攻击的致命率
 ---@return  nil Description
-function Card:ctor(cardId, name, rarity, type, level, cardAmount, atk, atkTarget, atkUpgrade, atkEnhance, fireCd, fireCdEnhance,
-                   fireCdUpgrade,
-                   skills, extraDamage, fatalityRate, location)
-    self:setCard(cardId, name, rarity, type, level, cardAmount, atk, atkTarget, atkUpgrade, atkEnhance, fireCd, fireCdEnhance,
-            fireCdUpgrade, skills
-    , extraDamage, fatalityRate, location)
+function Card:ctor(cardId, name, rarity, type, level, cardAmount, atk,
+                   atkTarget, atkUpgrade, atkEnhance, fireCd,
+                   fireCdEnhance, fireCdUpgrade, skills,
+                   extraDamage, fatalityRate, location)
+    self:setCard(cardId, name, rarity, type, level, cardAmount, atk,
+            atkTarget, atkUpgrade, atkEnhance, fireCd,
+            fireCdEnhance, fireCdUpgrade, skills,
+            extraDamage, fatalityRate, location)
     EventManager:doEvent(EventDef.ID.CREATE_CARD, self)
 end
 
-function Card:setCard(cardId, name, rarity, type, level, cardAmount, atk, atkTarget, atkUpgrade, atkEnhance, fireCd, fireCdEnhance,
-                      fireCdUpgrade,
-                      skills, extraDamage, fatalityRate, location)
+function Card:setCard(cardId, name, rarity, type, level, cardAmount, atk,
+                      atkTarget, atkUpgrade, atkEnhance, fireCd,
+                      fireCdEnhance, fireCdUpgrade, skills,
+                      extraDamage, fatalityRate, location)
     self.cardId_ = cardId
     self.cardName_ = name
     self.cardRarity_ = rarity
@@ -131,6 +134,10 @@ function Card:getCardName()
     return self.cardName_
 end
 
+function Card:getCardLevel()
+    return self.cardLevel_
+end
+
 -- 攻击力
 function Card:getCardAtk()
     return self.cardAtk_
@@ -175,8 +182,10 @@ end
 function Card:getCardFatalityRate()
     return self.cardFatalityRate_
 end
+
 ---用于增加数量
 function Card:addCardAmount(number)
     self.cardAmount_ = self.cardAmount_ + number
 end
+
 return Card
