@@ -6,6 +6,7 @@
 local MsgController = {}
 local ByteArray = require("app.msg.ByteArray")
 local Log = require("app.util.Log")
+local MsgDef = require("app.def.MsgDef")
 
 local SimpleTCP = require("framework.SimpleTCP")
 local scheduler = require("framework.scheduler")
@@ -20,7 +21,7 @@ local HEART_BEAT_INTERVAL = 5 -- 心跳间隔，单位：秒
 -------------------------------------------------------------
 -- 本地变量定义
 -------------------------------------------------------------
-local socket_ -- 类型：SimpleTCP，已封装的tcp对象
+local socket_  -- 类型：SimpleTCP，已封装的tcp对象
 local isConnect_ = false -- 类型：boolean，是否连接服务
 local listenerMap_ = {} -- 类型：table，监听数据，key为唯一标识，value为function
 
@@ -178,10 +179,19 @@ function _handleMsg(event, data)
             local len = ba:readInt()
             local msg = json.decode(ba:readStringBytes(len))
 
-            Log.i(TAG, "_handleMsg() msg=", vardump(msg))
+            --Log.i(TAG, "_handleMsg() msg=", vardump(msg))
 
             for _, listener in pairs(listenerMap_) do
                 listener(msg)
+            end
+            if msg["type"] == MsgDef.ACKTYPE.GAME.SEND_BATTLETEAM then
+                EnemyBattleTeam_ = msg["battleTeam"]
+            elseif msg["type"] == MsgDef.ACKTYPE.GAME.REFRESHHP then
+                -- body
+            elseif msg["type"] == MsgDef.ACKTYPE.GAME.GAMEOVER then
+                -- body
+            elseif msg["type"] == MsgDef.ACKTYPE.LOBBY.LOGIN then
+                Pid_ = msg["pid"]
             end
         end
     else

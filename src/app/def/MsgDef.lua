@@ -75,7 +75,8 @@ MsgDef.ACKTYPE = {
     HEARTBEAT = 0x80000 + 4,
     GAME = {
         STARTGAME = 0x80000 + 1,
-        GAMEOVER = 0x80000 + 2
+        GAMEOVER = 0x80000 + 2,
+        REFRESHHP= 0x80000 + 3,
     },
     LOBBY = {
         LOGIN = 0x80000 + 5,
@@ -100,6 +101,8 @@ MsgDef.ACKTYPE = {
         DIAMONDSHOP_INIT = 0x80000 + 13,
         --钻石商店信息初始化
         COINSHOP_INIT = 0x80000 + 14,
+
+        MATCH_SUC=0x80000 + 15,
         --金币商店初始化
         PURCHASE_COMMODITY = 0x80000 + 15,
         --购买商品

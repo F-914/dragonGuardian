@@ -3,6 +3,8 @@
     数据对象基类
 ]]
 local BaseModel = class("BaseModel")
+local rect1_ = cc.rect(0, 0, 0, 0)
+local rect2_ = cc.rect(0, 0, 0, 0)
 
 ---构造函数
 ---@param x number
@@ -25,6 +27,14 @@ end
 
 function BaseModel:setId(id)
     self.id_ = id
+end
+
+function BaseModel:setMyX(x)
+    self.x_ = x
+end
+
+function BaseModel:setMyY(y)
+    self.y_ = y
 end
 
 function BaseModel:getId()
@@ -65,6 +75,27 @@ end
 ---@param dt any
 function BaseModel:update(dt)
     -- body
+end
+
+--[[--
+    碰撞判定
+
+    @param obj 类型：Object，待判定对象
+
+    @return boolean
+]]
+function BaseModel:isCollider(obj)
+    rect1_.x = self.x_ - self.width_ * 0.5
+    rect1_.y = self.y_ - self.height_ * 0.5
+    rect1_.width = self.width_
+    rect1_.height = self.height_
+
+    rect2_.x = obj.x_ - obj.width_ * 0.5
+    rect2_.y = obj.y_ - obj.height_ * 0.5
+    rect2_.width = obj.width_
+    rect2_.height = obj.height_
+
+    return cc.rectIntersectsRect(rect1_, rect2_)    --判断两个四边形是否相交
 end
 
 return BaseModel
