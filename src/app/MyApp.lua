@@ -11,7 +11,8 @@ end
 
 function MyApp:run()
     cc.FileUtils:getInstance():addSearchPath("res/")
-    self:enterScene("OutGameScene")
+    self:enterScene("InGameScene")
+    -- 随便该点东西来测试git
 end
 
 return MyApp
