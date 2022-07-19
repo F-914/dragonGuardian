@@ -10,7 +10,6 @@ local EventDef = require("app.def.EventDef")
 local EventManager = require("app.manager.EventManager")
 --
 
-
 --# card
 --## Now
 --cardId
@@ -69,15 +68,18 @@ local EventManager = require("app.manager.EventManager")
 ---@param skills        table 拥有的技能
 ---@param extraDamage   number 每次攻击带来的额外伤害
 ---@param fatalityRate  number 单次攻击的致命率
+---@param location      number 原本用来表示在队伍中的序号，现在废弃，根据team中的位置来确定序号
 ---@return  nil Description
 function Card:ctor(cardId, name, rarity, type, level, cardAmount, atk, atkTarget, atkUpgrade, atkEnhance, fireCd,
                    fireCdEnhance,
                    fireCdUpgrade,
                    skills, extraDamage, fatalityRate, location)
     self:setCard(cardId, name, rarity, type, level, cardAmount, atk, atkTarget, atkUpgrade, atkEnhance, fireCd,
-        fireCdEnhance,
-        fireCdUpgrade, skills
-        , extraDamage, fatalityRate, location)
+
+            fireCdEnhance,
+            fireCdUpgrade, skills
+    , extraDamage, fatalityRate, location)
+
     EventManager:doEvent(EventDef.ID.CREATE_CARD, self)
 end
 
@@ -134,6 +136,10 @@ function Card:getCardName()
     return self.cardName_
 end
 
+function Card:getCardLevel()
+    return self.cardLevel_
+end
+
 -- 攻击力
 function Card:getCardAtk()
     return self.cardAtk_
@@ -182,6 +188,11 @@ end
 ---用于增加数量
 function Card:addCardAmount(number)
     self.cardAmount_ = self.cardAmount_ + number
+end
+
+
+function Card:getCardAmount()
+    return self.cardAmount_
 end
 
 return Card

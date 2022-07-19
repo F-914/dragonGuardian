@@ -23,10 +23,8 @@ function UserInfo:ctor(account, avatar, nickname, coinAmount, diamondAmount, tro
 end
 
 function UserInfo:getInstance()
-    Log.i("UserInfo:getInstance: " .. tostring(self.instance_ == nil))
     if self.instance_ == nil then
         self.instance_ = UserInfo.new()
-        Log.i("getInstance: " .. tostring(self.instance_ == nil))
         self.instance_:initData()
     end
     return self.instance_
@@ -45,12 +43,13 @@ function UserInfo:testData()
     self.userInfoDiamondAmount_ = 789999
     self.userInfoTrophyAmount_ = 101
     self.userInfoBattleTeam_ = BattleTeam.new(
-        {
-            { 1, 1, 1, 1, 1 },
-            { 1, 1, 1, 1, 1 },
-            { 1, 1, 1, 1, 1 }
-        },
-        1
+
+            {
+                { 1, 2, 3, 4, 5 },
+                { 6, 7, 8, 9, 10 },
+                { 1, 3, 5, 7, 9 }
+            },
+            1
     )
     self.userInfoLadder_ = Ladder.new(
         { Reward.new(
@@ -68,28 +67,221 @@ function UserInfo:testData()
         ) }
     )
     self.userInfoCardList_ = {
-        -- [cardId] = Card.new(cardId)
         [1] = Card.new(
-            1,
-            "平平无奇防御塔",
-            ConstDef.TOWER_RARITY.R,
-            ConstDef.TOWER_TYPE.ATTACK,
-            math.random(10),
-            0,
-            math.random(100),
-            ConstDef.TOWER_ATK_TARGET.BACK,
-            math.random(100),
-            math.random(100),
-            math.random(100),
-            math.random(100),
-            math.random(100),
-            {},
-            math.random(100),
-            0.00,
-            2,
-            1
-        )
+
+                1,
+                "平平无奇防御塔",
+                ConstDef.TOWER_RARITY.R,
+                ConstDef.TOWER_TYPE.ATTACK,
+                math.random(10),
+                3,
+                math.random(100),
+                ConstDef.TOWER_ATK_TARGET.BACK,
+                math.random(100),
+                math.random(100),
+                math.random(100),
+                math.random(100),
+                math.random(100),
+                {},
+                math.random(100),
+                0.00,
+                2,
+                1
+        ),
+        [2] = Card.new(
+                2,
+                "平平无奇防御塔",
+                ConstDef.TOWER_RARITY.R,
+                ConstDef.TOWER_TYPE.ATTACK,
+                math.random(10),
+                3,
+                math.random(100),
+                ConstDef.TOWER_ATK_TARGET.BACK,
+                math.random(100),
+                math.random(100),
+                math.random(100),
+                math.random(100),
+                math.random(100),
+                {},
+                math.random(100),
+                0.00,
+                2,
+                1
+        ),
+        [3] = Card.new(
+                3,
+                "平平无奇防御塔",
+                ConstDef.TOWER_RARITY.R,
+                ConstDef.TOWER_TYPE.ATTACK,
+                math.random(10),
+                99,
+                math.random(100),
+                ConstDef.TOWER_ATK_TARGET.BACK,
+                math.random(100),
+                math.random(100),
+                math.random(100),
+                math.random(100),
+                math.random(100),
+                {},
+                math.random(100),
+                0.00,
+                2,
+                1
+        ),
+        [4] = Card.new(
+                4,
+                "平平无奇防御塔",
+                ConstDef.TOWER_RARITY.UR,
+                ConstDef.TOWER_TYPE.ATTACK,
+                math.random(10),
+                45,
+                math.random(100),
+                ConstDef.TOWER_ATK_TARGET.BACK,
+                math.random(100),
+                math.random(100),
+                math.random(100),
+                math.random(100),
+                math.random(100),
+                {},
+                math.random(100),
+                0.00,
+                2,
+                1
+        ),
+        [5] = Card.new(
+                5,
+                "平平无奇防御塔",
+                ConstDef.TOWER_RARITY.SSR,
+                ConstDef.TOWER_TYPE.ATTACK,
+                math.random(10),
+                56,
+                math.random(100),
+                ConstDef.TOWER_ATK_TARGET.BACK,
+                math.random(100),
+                math.random(100),
+                math.random(100),
+                math.random(100),
+                math.random(100),
+                {},
+                math.random(100),
+                0.00,
+                2,
+                1
+        ),
+        [6] = Card.new(
+                6,
+                "平平无奇防御塔",
+                ConstDef.TOWER_RARITY.SR,
+                ConstDef.TOWER_TYPE.ATTACK,
+                math.random(10),
+                123,
+                math.random(100),
+                ConstDef.TOWER_ATK_TARGET.BACK,
+                math.random(100),
+                math.random(100),
+                math.random(100),
+                math.random(100),
+                math.random(100),
+                {},
+                math.random(100),
+                0.00,
+                2,
+                1
+        ),
+        [7] = Card.new(
+                7,
+                "平平无奇防御塔",
+                ConstDef.TOWER_RARITY.R,
+                ConstDef.TOWER_TYPE.ATTACK,
+                math.random(10),
+                500,
+                math.random(100),
+                ConstDef.TOWER_ATK_TARGET.BACK,
+                math.random(100),
+                math.random(100),
+                math.random(100),
+                math.random(100),
+                math.random(100),
+                {},
+                math.random(100),
+                0.00,
+                2,
+                1
+        ),
+        [8] = Card.new(
+                8,
+                "平平无奇防御塔",
+                ConstDef.TOWER_RARITY.SSR,
+                ConstDef.TOWER_TYPE.ATTACK,
+                math.random(10),
+                90,
+                math.random(100),
+                ConstDef.TOWER_ATK_TARGET.BACK,
+                math.random(100),
+                math.random(100),
+                math.random(100),
+                math.random(100),
+                math.random(100),
+                {},
+                math.random(100),
+                0.00,
+                2,
+                1
+        ),
+        [9] = Card.new(
+                9,
+                "平平无奇防御塔",
+                ConstDef.TOWER_RARITY.UR,
+                ConstDef.TOWER_TYPE.ATTACK,
+                math.random(10),
+                1,
+                math.random(100),
+                ConstDef.TOWER_ATK_TARGET.BACK,
+                math.random(100),
+                math.random(100),
+                math.random(100),
+                math.random(100),
+                math.random(100),
+                {},
+                math.random(100),
+                0.00,
+                2,
+                1
+        ),
+        [10] = Card.new(
+                10,
+                "平平无奇防御塔",
+                ConstDef.TOWER_RARITY.SR,
+                ConstDef.TOWER_TYPE.ATTACK,
+                math.random(10),
+                32,
+                math.random(100),
+                ConstDef.TOWER_ATK_TARGET.BACK,
+                math.random(100),
+                math.random(100),
+                math.random(100),
+                math.random(100),
+                math.random(100),
+                {},
+                math.random(100),
+                0.00,
+                2,
+                1
+        ),
     }
+
+    --local collected = self:getCollectedList()
+    --Log.i("Collected: " .. tostring(#(collected)))
+    --for i = 1, #(collected) do
+    --    Log.i("" .. tostring(collected[i]))
+    --end
+    ----
+    --local uncollected = self:getUnCollectedList()
+    --Log.i("Uncollected")
+    --for i = 1, #(uncollected) do
+    --    Log.i("" .. tostring(uncollected[i]))
+    --end
+
 end
 
 function UserInfo:setUserInfo(account, avatar, nickname, coinAmount, diamondAmount, trophyAmount, battleTeam, ladder,
@@ -142,7 +334,6 @@ function UserInfo:getDiamondAmount()
 end
 
 function UserInfo:getBattleTeam()
-    Log.i("getBattleTeam: battleTeam is nil ? " .. tostring(self.battleTeam_ == nil))
     return self.userInfoBattleTeam_
 end
 
@@ -171,7 +362,7 @@ function UserInfo:setUserInfoTrophyAmount(trophyAmount)
 end
 
 function UserInfo:getUserInfoCardList()
-    return self.userInfoCardList_
+    return self:getCardList()
 end
 
 function UserInfo:getCardList()
@@ -183,6 +374,53 @@ end
 
 function UserInfo:setUserInfoBattleTeam(battleTeam)
     self.battleTeam_ = battleTeam
+end
+
+
+function UserInfo:getCollectedList()
+    local cardList = self:getCardList()
+    local list = {}
+    local set = {}
+    if cardList == nil then
+        return list
+    end
+    for i = 1, #(cardList) do
+        local id = cardList[i]:getCardId()
+        if set[id] then
+            -- nothing
+        else
+            set[id] = true
+            table.insert(list, id)
+        end
+    end
+    return list
+end
+
+function UserInfo:getUnCollectedList()
+    local cardList = self:getCardList()
+    local list = {}
+    local set = {}
+    for id = 1, 20 do
+        set[id] = true
+    end
+    if cardList == nil then
+        for id = 1, 20 do
+            table.insert(list, id)
+        end
+        return list
+    end
+    for i = 1, #(cardList) do
+        local id = cardList[i]:getCardId()
+        if set[id] then
+            set[id] = false
+        end
+    end
+    for k, v in pairs(set) do
+        if v == true then
+            table.insert(list, k)
+        end
+    end
+    return list
 end
 
 return UserInfo

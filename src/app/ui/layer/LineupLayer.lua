@@ -2,14 +2,18 @@
     根据ConstDef中的已收集表COLLECTED创建出五个一行的阵容行列
     LineupLayer.lua
 ]]
+
+local LineupLayer = class("LineupLayer", function()
+    return display.newLayer()
+end)
+--local
 local ConstDef = require("app.def.ConstDef")
 local EventDef = require("app.def.EventDef")
-local EventManager = require("app.manager.EventManager")
-local OutGameData=require("app.data.OutGameData")
-local MsgController=require("app.msg.MsgController")
-local MsgDef=require("app.def.MsgDef")
+local EventManger = require("app.manager.EventManager")
+local OutGameData = require("app.data.OutGameData")
+local Log = require("app.utils.Log")
+--
 
-local LineupLayer = class("LineupLayer", require("app.ui.layer.BaseLayer"))
 --[[--
     @description:构造方法
     @param lineupList 类型:表，用于保存阵容队列中有哪些塔，存储塔的下标
@@ -44,22 +48,26 @@ function LineupLayer:init(lineupList)
         button:addTouchEventListener(function(sender, eventType)
             --注册塔的点击事件，用于替换阵容中的塔，在其他情况下设置为不可点击
             if eventType == 2 then
-                button:loadTextureNormal(ConstDef.ICON_LINEUP_LIST[self.order], 0)
-                button:loadTexturePressed(ConstDef.ICON_LINEUP_LIST[self.order], 0)
-                if self.lineupOrder == 1 then
-                    ConstDef.LINEUP_LIST.lineupOne[i] = self.order
-                    OutGameData:getUserInfo():getBattleTeam():setIndexTeamCard(1,i,self.order)
-                elseif self.lineupOrder == 2 then
-                    ConstDef.LINEUP_LIST.lineupTwo[i] = self.order
-                    OutGameData:getUserInfo():getBattleTeam():setIndexTeamCard(2,i,self.order)
-                elseif self.lineupOrder == 3 then
-                    ConstDef.LINEUP_LIST.lineupThree[i] = self.order
-                    OutGameData:getUserInfo():getBattleTeam():setIndexTeamCard(3,i,self.order)
+
+                -- 先判断一下队伍中是否已经有这个卡牌了
+                local team = OutGameData:getUserInfo():getBattleTeam():getIndexTeam(self.lineupOrder)
+                local flag = true
+                for _, v in pairs(team) do
+                    if v == self.order then
+                        flag = false
+                        break
+                    end
                 end
-                self.popup:setVisible(false)
-                self.popup:removeFromParent()
-                EventManager:doEvent(EventDef.ID.RESUME_BAG_BUTTON)
-                EventManager:doEvent(EventDef.ID.SHOW_BAG)
+                if flag then
+                    button:loadTextureNormal(ConstDef.ICON_LINEUP_LIST[self.order], 0)
+                    button:loadTexturePressed(ConstDef.ICON_LINEUP_LIST[self.order], 0)
+                    team[i] = self.order
+                    self.popup:setVisible(false)
+                    self.popup:removeFromParent()
+                    EventManger:doEvent(EventDef.ID.RESUME_BAG_BUTTON)
+                    EventManger:doEvent(EventDef.ID.SHOW_BAG)
+                end
+
             end
         end)
         table.insert(list, button)

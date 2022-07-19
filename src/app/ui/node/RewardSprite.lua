@@ -47,15 +47,11 @@ function RewardSprite:ctor(res, data)
     ---这里改成这样,更符合数据模型
     if self.data_.type == ConstDef.REWARD_TYPE.CURRENCY then
         quantityTTF = display.newTTFLabel({
-<<<<<<< HEAD
-            -- 这个quanity和amount不知道是哪个对，两个都保留了然后注释了一个
-            -- text = tostring(self.data_.quantity),
-            -- 这个只对数量不是一的东西生效，比如金币和钻石，所以应该是
-            -- amount就行
-            text = tostring(self.data_.amount),
-=======
+
+
             text = tostring(self.data_.reward_.currencyAmount_),
->>>>>>> origin/dev_xz
+  text = tostring(self.data_.reward_.currencyAmount_),
+
             font = StringDef.PATH_FONT_FZBIAOZJW,
             size = 18,
             color = cc.c3b(168, 176, 225)
@@ -117,7 +113,7 @@ end
 ]]
 function RewardSprite:update(dt)
     if self.received_ ~= self.data_.received_
-            or self.locked_ ~= self.data_.locked_ then
+        or self.locked_ ~= self.data_.locked_ then
         self.received_ = self.data_.received_
         self.locked_ = self.data_.locked_
         if self.locked_ == false and self.received_ == false then

@@ -1,78 +1,37 @@
 --[[--
     创建图鉴界面
     AtlasView
+    -- TODO 这个页面的滑动 滑到最下面的时候看不到最后一行 需要修一下 @txf
 ]]
 local AtlasView = class(
-    "AtlasView",
-    function()
-        return display.newColorLayer(cc.c4b(0, 0, 0, 0))
-    end
+        "AtlasView",
+        function()
+            return display.newColorLayer(cc.c4b(0, 0, 0, 0))
+        end
 )
---
-local PATH_BASEMAP_TITLE = "res/home/guide/subinterface_current_lineup/base_title.png"
-local PATH_BASEMAP_AREA = "res/home/guide/subinterface_current_lineup/base_area.png"
-local PATH_NUMBER_1 = "res/home/guide/subinterface_current_lineup/one.png"
-local PATH_NUMBER_2 = "res/home/guide/subinterface_current_lineup/two.png"
-local PATH_NUMBER_3 = "res/home/guide/subinterface_current_lineup/three.png"
-local PATH_TEXTURE_NOWLINEUP = "res/home/guide/subinterface_current_lineup/text_current_lineup.png"
-local PATH_BASEMAP_CONNECTION = "res/home/guide/subinterface_current_lineup/base_lineup.png"
-local PATH_ICON_CHOOSE = "res/home/guide/subinterface_current_lineup/icon_selected.png"
-local PATH_ICON_UNCHOOSE = "res/home/guide/subinterface_current_lineup/icon_unselected.png"
-local PATH_BASEMAP_TIP = "res/home/guide/subinterface_tips/base_tips.png"
-local PATH_TEXTURE_LONG = "res/home/guide/subinterface_tips/text_tips.png"
-local PATH_TEXTURE_SHORT = "res/home/guide/subinterface_tips/text_total_critical_strike_damage.png"
-local PATH_SPLITLINE_COLLECTED = "res/home/guide/subinterface_tower_list/split_collected.png"
-local PATH_SPLITLINE_UNCOLLECTED = "res/home/guide/subinterface_tower_list/split_not_collected.png"
 --
 local ConstDef = require("app.def.ConstDef")
 local EventDef = require("app.def.EventDef")
 local MsgController=require("src/app/msg/MsgController.lua")
 local EventManager = require("app.manager.EventManager")
-local OutGameData = require("app.data.OutGameData")
-local MsgDef=require("src/app/def/MsgDef.lua")
 
---local AnimationLayer=require("src/app/ui/layer/AnimationLayer")
-local TowerDetialLayer = require("app.ui.layer.TowerDetialLayer2nd")
+
+local TowerDetailLayer = require("app.ui.layer.TowerDetialLayer2nd")
+
 local BackgroundLayer = require("app.ui.layer.BackgroundLayer")
 local LineupLayer = require("app.ui.layer.LineupLayer")
 local BagLayer = require("app.ui.layer.BagLayer")
 local PopupLayer = require("app.ui.layer.PopupLayer2nd")
+local StringDef = require("app.def.StringDef")
+local OutGameData = require("app.data.OutGameData")
+local Log = require("app.utils.Log")
 --
 local BagList_ = nil --以下6个都是为了实现类的交互而设置的文件内局部变量
 local collected_
 local uncollected_
 local lineup1_
 local lineup2_
-local lineup3_ --
---[[--
-    封装创造checkbox的函数
-
-    @param parents 类型：Any，父节点
-    @param number 类型：Any，获取图片的路径
-
-    @return none
-]]
-local function createCheckbox(parents, number)
-    local checkbox = ccui.CheckBox:create(PATH_ICON_UNCHOOSE, PATH_ICON_CHOOSE, PATH_ICON_CHOOSE, PATH_ICON_UNCHOOSE,
-        PATH_ICON_UNCHOOSE)
-    parents:add(checkbox)
-    checkbox:setTouchEnabled(true)
-    checkbox:setAnchorPoint(0.5, 0.5)
-    local path
-    if number == 1 then
-        path = PATH_NUMBER_1
-    elseif number == 2 then
-        path = PATH_NUMBER_2
-    elseif number == 3 then
-        path = PATH_NUMBER_3
-    end
-
-    local spriteNumber = display.newSprite(path)
-    checkbox:add(spriteNumber)
-    spriteNumber:setAnchorPoint(0.5, 0.5)
-    spriteNumber:setPosition(checkbox:getContentSize().width * 0.5, checkbox:getContentSize().height * 0.5)
-    return checkbox
-end
+local lineup3_
 
 --[[--
     @description:构造方法
@@ -86,15 +45,10 @@ function AtlasView:ctor()
         if #(ConstDef.BUTTON_CLICK) == 0 then
             return
         else
-            local card = nil
-            for v, k in ipairs(collectedList) do
-                --此处collectedList不能直接使用，需要换为用户拥有的已收集列表
-                if k.order == order then
-                    card = collectedList[v]
-                end
-            end
-
-            local tower = TowerDetialLayer.new(card, collected_)
+            -- 这块好像是 通过 id 拿 card？直接拿应该也行吧？
+            table.remove(ConstDef.BUTTON_CLICK, 1)
+            local cardId = order
+            local tower = TowerDetailLayer.new(cardId, collected_)
             self:add(tower)
             tower.use:addTouchEventListener(function(sender, eventType)
                 --注册塔的详情中，“使用”按钮的点击事件
@@ -146,13 +100,13 @@ function AtlasView:ctor()
 
     self:initView()
     self:registerScriptHandler(
-        function(event)
-            if event == "enter" then
-                self:onEnter()
-            elseif event == "exit" then
-                self:onExit()
+            function(event)
+                if event == "enter" then
+                    self:onEnter()
+                elseif event == "exit" then
+                    self:onExit()
+                end
             end
-        end
     )
     EventManager:regListener(EventDef.ID.RESUME_BAG_BUTTON, self, function()
         --注册恢复图鉴中的塔为可点击
@@ -180,25 +134,55 @@ function AtlasView:initView()
 end
 
 --[[--
+    封装创造checkbox的函数
+
+    @param parents 类型：Any，父节点
+    @param number 类型：Any，获取图片的路径
+
+    @return none
+]]
+local function createCheckbox(parents, number)
+    local checkbox = ccui.CheckBox:create(StringDef.PATH_ICON_UNCHOOSE, StringDef.PATH_ICON_CHOOSE, StringDef.PATH_ICON_CHOOSE, StringDef.PATH_ICON_UNCHOOSE,
+            StringDef.PATH_ICON_UNCHOOSE)
+    parents:add(checkbox)
+    checkbox:setTouchEnabled(true)
+    checkbox:setAnchorPoint(0.5, 0.5)
+    local path
+    if number == 1 then
+        path = StringDef.PATH_NUMBER_1
+    elseif number == 2 then
+        path = StringDef.PATH_NUMBER_2
+    elseif number == 3 then
+        path = StringDef.PATH_NUMBER_3
+    end
+
+    local spriteNumber = display.newSprite(path)
+    checkbox:add(spriteNumber)
+    spriteNumber:setAnchorPoint(0.5, 0.5)
+    spriteNumber:setPosition(checkbox:getContentSize().width * 0.5, checkbox:getContentSize().height * 0.5)
+    return checkbox
+end
+
+--[[--
     创造位于图鉴界面上方的可切换阵容队列的函数
     @return none
 ]]
 function AtlasView:createLineupList()
-    local lineupLayout = display.newSprite(PATH_BASEMAP_AREA) --创造存放整个板块的layout
+    local lineupLayout = display.newSprite(StringDef.PATH_BASEMAP_AREA) --创造存放整个板块的layout
     self:add(lineupLayout)
     lineupLayout:setScale(0.8)
     lineupLayout:setAnchorPoint(0.5, 0.5)
     lineupLayout:setPosition(display.cx, display.cy * 1.6)
-    local basemapTitle = display.newSprite(PATH_BASEMAP_TITLE)
+    local basemapTitle = display.newSprite(StringDef.PATH_BASEMAP_TITLE)
     lineupLayout:add(basemapTitle)
     basemapTitle:setAnchorPoint(0.5, 0.5)
     basemapTitle:setScale(lineupLayout:getContentSize().width / basemapTitle:getContentSize().width)
     basemapTitle:setPosition(lineupLayout:getContentSize().width * 0.5, lineupLayout:getContentSize().height)
-    local basemapNowLineup = display.newSprite(PATH_TEXTURE_NOWLINEUP)
+    local basemapNowLineup = display.newSprite(StringDef.PATH_TEXTURE_NOWLINEUP)
     basemapTitle:add(basemapNowLineup)
     basemapNowLineup:setAnchorPoint(0.5, 0.5)
     basemapNowLineup:setPosition(basemapTitle:getContentSize().width * 0.3, basemapTitle:getContentSize().height * 0.5)
-    local basemapConnection = display.newSprite(PATH_BASEMAP_CONNECTION)
+    local basemapConnection = display.newSprite(StringDef.PATH_BASEMAP_CONNECTION)
     basemapTitle:add(basemapConnection)
     basemapConnection:setAnchorPoint(0.5, 0.5)
     basemapConnection:setPosition(basemapTitle:getContentSize().width * 0.65, basemapTitle:getContentSize().height * 0.5) --
@@ -218,19 +202,23 @@ function AtlasView:createLineupList()
     pageView:setPosition(lineupLayout:getContentSize().width * 0.025, lineupLayout:getContentSize().height * 0.05)
 
     local layout1 = ccui.Layout:create() --创造pageview的三个页面
-    local lineup1 = LineupLayer.new(ConstDef.LINEUP_LIST.lineupOne)
+    -- battleTeam
+    local battleTeam = OutGameData:getUserInfo():getBattleTeam()
+    --
+    -- TODO 这块可以优化一下代码
+    local lineup1 = LineupLayer.new(battleTeam:getIndexTeam(1))
     lineup1_ = lineup1
     layout1:add(lineup1)
     layout1:setContentSize(lineupLayout:getContentSize().width, lineupLayout:getContentSize().height)
     pageView:addPage(layout1)
     local layout2 = ccui.Layout:create()
-    local lineup2 = LineupLayer.new(ConstDef.LINEUP_LIST.lineupTwo)
+    local lineup2 = LineupLayer.new(battleTeam:getIndexTeam(2))
     lineup2_ = lineup2
     layout2:add(lineup2)
     layout2:setContentSize(lineupLayout:getContentSize().width, lineupLayout:getContentSize().height)
     pageView:addPage(layout2)
     local layout3 = ccui.Layout:create()
-    local lineup3 = LineupLayer.new(ConstDef.LINEUP_LIST.lineupThree)
+    local lineup3 = LineupLayer.new(battleTeam:getIndexTeam(3))
     lineup3_ = lineup3
     layout3:add(lineup3)
     layout3:setContentSize(lineupLayout:getContentSize().width, lineupLayout:getContentSize().height)
@@ -277,7 +265,7 @@ end
 ]]
 function AtlasView:createBag()
     local test = display.newSprite(ConstDef.ICON_LIST[1]) --获取单个塔图标，便于获取大小
-    local tipBackground = display.newSprite(PATH_BASEMAP_TIP)
+    local tipBackground = display.newSprite(StringDef.PATH_BASEMAP_TIP)
     tipBackground:setScale(0.8)
     local layoutTexture = ccui.Layout:create()
     layoutTexture:setContentSize(tipBackground:getContentSize().width, tipBackground:getContentSize().height)
@@ -286,61 +274,64 @@ function AtlasView:createBag()
     --layoutTexture:setContentSize(listView:getContentSize().width,tipBackground:getContentSize().height*0.8+splitLineCollected:getContentSize().height*(display.cx*2/splitLineCollected:getContentSize().width))
     tipBackground:setAnchorPoint(0.5, 1)
     tipBackground:setPosition(layoutTexture:getContentSize().width * 0.5, layoutTexture:getContentSize().height)
-    local textureLong = display.newSprite(PATH_TEXTURE_LONG)
+    local textureLong = display.newSprite(StringDef.PATH_TEXTURE_LONG)
     tipBackground:add(textureLong)
     textureLong:setAnchorPoint(0.5, 0.5)
     textureLong:setPosition(tipBackground:getContentSize().width * 0.5,
-        tipBackground:getContentSize().height * 0.25)
-    local textureShort = display.newSprite(PATH_TEXTURE_SHORT)
+            tipBackground:getContentSize().height * 0.25)
+    local textureShort = display.newSprite(StringDef.PATH_TEXTURE_SHORT)
     tipBackground:add(textureShort)
     textureShort:setAnchorPoint(0.5, 0.5)
     textureShort:setPosition(tipBackground:getContentSize().width * 0.4,
-        tipBackground:getContentSize().height * 0.75)
+            tipBackground:getContentSize().height * 0.75)
 
     local heightUncollect, heightCollect --计算已收集和未收集分别需要多少行
-    if #(ConstDef.COLLECTED) == 0 then
+    -- 已收集
+    local collected = OutGameData:getUserInfo():getCollectedList()
+    if #(collected) == 0 then
         heightCollect = 1
-    elseif #(ConstDef.COLLECTED) % 4 == 0 then
-        heightCollect = #(ConstDef.COLLECTED) / 4
-    elseif #(ConstDef.COLLECTED) % 4 ~= 0 then
-        heightCollect = math.floor(#(ConstDef.COLLECTED) / 4) + 1
+    elseif #(collected) % 4 == 0 then
+        heightCollect = #(collected) / 4
+    elseif #(collected) % 4 ~= 0 then
+        heightCollect = math.floor(#(collected) / 4) + 1
     end
-
-    if #(ConstDef.UNCOLLECTED) == 0 then
+    -- 未收集
+    local uncollected = OutGameData:getUserInfo():getUnCollectedList()
+    if #(uncollected) == 0 then
         heightUncollect = 1
-    elseif #(ConstDef.UNCOLLECTED) % 4 == 0 then
-        heightUncollect = #(ConstDef.UNCOLLECTED) / 4
-    elseif #(ConstDef.UNCOLLECTED) % 4 ~= 0 then
-        heightUncollect = math.floor(#(ConstDef.UNCOLLECTED) / 4) + 1
+    elseif #(uncollected) % 4 == 0 then
+        heightUncollect = #(uncollected) / 4
+    elseif #(uncollected) % 4 ~= 0 then
+        heightUncollect = math.floor(#(uncollected) / 4) + 1
     end
-
-    local splitLineCollected = display.newSprite(PATH_SPLITLINE_COLLECTED) --已收集的分割线
-    collected_ = BagLayer.new(ConstDef.COLLECTED, "collected")
+    -- 已收集列表
+    local splitLineCollected = display.newSprite(StringDef.PATH_SPLITLINE_COLLECTED) --已收集的分割线
+    collected_ = BagLayer.new(collected, "collected")
     BagList_ = collected_.list
     local layoutCollect = ccui.Layout:create() --将已收集分割线和已收集的塔放在一个layout
     layoutCollect:setPosition(display.cx, display.cy)
     layoutCollect:setAnchorPoint(0.5, 1)
     layoutCollect:setContentSize(display.cx * 2,
-        heightCollect * test:getContentSize().height * ConstDef.scale_ +
-        heightCollect * test:getContentSize().height * 0.2 * ConstDef.scale_ +
-        splitLineCollected:getContentSize().height * (display.cx * 2 / splitLineCollected:getContentSize().width))
+            heightCollect * test:getContentSize().height * ConstDef.scale_ +
+                    heightCollect * test:getContentSize().height * 0.2 * ConstDef.scale_ +
+                    splitLineCollected:getContentSize().height * (display.cx * 2 / splitLineCollected:getContentSize().width))
     splitLineCollected:setScale(display.cx * 2 / splitLineCollected:getContentSize().width)
     splitLineCollected:setAnchorPoint(0, 1)
     splitLineCollected:setPosition(0, layoutCollect:getContentSize().height)
     layoutCollect:add(collected_)
     collected_:setPosition(layoutCollect:getContentSize().width * 0.5, layoutCollect:getContentSize().height)
     --collected:setContentSize(collected:getContentSize().width,layoutCollect:getContentSize().height)
-
+    -- 未收集列表
     layoutCollect:add(splitLineCollected)
     local layoutUncollect = ccui.Layout:create()
-    local splitLineUncollected = display.newSprite(PATH_SPLITLINE_UNCOLLECTED) --未收集的分割线
-    uncollected_ = BagLayer.new(ConstDef.UNCOLLECTED, "uncollected") --将未收集分割线和未收集的塔放在一个layout
+    local splitLineUncollected = display.newSprite(StringDef.PATH_SPLITLINE_UNCOLLECTED) --未收集的分割线
+    uncollected_ = BagLayer.new(uncollected, "uncollected") --将未收集分割线和未收集的塔放在一个layout
     layoutUncollect:setAnchorPoint(0.5, 1)
     layoutUncollect:setContentSize(display.cx * 2,
-        splitLineUncollected:getContentSize().height * (display.cx * 2 / splitLineUncollected:getContentSize().width) +
-        heightUncollect * test:getContentSize().height * 0.1 * ConstDef.scale_ +
-        splitLineUncollected:getContentSize().height * (display.cx * 2 / splitLineUncollected:getContentSize().width)
-        + heightUncollect * test:getContentSize().height * ConstDef.scale_)
+            splitLineUncollected:getContentSize().height * (display.cx * 2 / splitLineUncollected:getContentSize().width) +
+                    heightUncollect * test:getContentSize().height * 0.1 * ConstDef.scale_ +
+                    splitLineUncollected:getContentSize().height * (display.cx * 2 / splitLineUncollected:getContentSize().width)
+                    + heightUncollect * test:getContentSize().height * ConstDef.scale_)
     layoutUncollect:add(splitLineUncollected)
     splitLineUncollected:setScale(display.cx * 2 / splitLineUncollected:getContentSize().width)
     splitLineUncollected:setAnchorPoint(0, 1)

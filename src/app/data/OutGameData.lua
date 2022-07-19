@@ -11,9 +11,12 @@ local EventManager = require("app.manager.EventManager")
 local UserInfo = require("app.data.UserInfo")
 local Shop = require("app.data.Shop")
 local TestDataFactory = require("app.test.TestDataFactory")
-local Factory = require("app.utils.Factory")
-local TowerDef = require("app.def.TowerDef")
-local Log = require("app.utils.Log")
+
+
+local Factory = require("src/app/utils/Factory.lua")
+local TowerDef = require("src/app/def/TowerDef.lua")
+local Log = require("src/app/utils/Log.lua")
+
 --网络部分
 local OutGameMsgController = require("app.network.OutGameMsgController")
 local MsgDef = require("app.def.MsgDef")
@@ -52,32 +55,12 @@ function OutGameData:init()
     Log.i("OutGameData:init: " .. tostring(_diamondShop == nil))
     self:initTreasureBoxRewardWinningRate()
 
-    OutGameMsgController:init("127.0.0.0", 33333, 2)
-    OutGameMsgController:connect()
-    self:register()
+
+    -- OutGameMsgController:init("127.0.0.0", 33333, 2)
+    -- OutGameMsgController:connect()
+    -- self:register()
 end
 
--- 调用 OutGameData:getTreasureBoxRewardWinningRate()[ConstDef.TREASUREBOX_RARITY.R][ConstDef.TREASUREBOX_REWARD.R]
-function OutGameData:getTreasureBoxRewardWinningRate()
-    if _treasureBoxRewardWinningRate == nil then
-        self:initTreasureBoxRewardWinningRate()
-    end
-    return _treasureBoxRewardWinningRate
-end
-
-
--- function OutGameData:init()
---     _userInfo = UserInfo:getInstance()
---     self:initCoinShop()
---     self:initDiamondShop()
---     self:initTreasureBoxRewardWinningRate()
---     --_coinShop = Shop.new()
---     --_diamondShop = Shop.new()
--- end
-
--- function OutGameData:update(dt)
-
--- end
 
 -- 调用 OutGameData:getTreasureBoxRewardWinningRate()[ConstDef.TREASUREBOX_RARITY.R][ConstDef.TREASUREBOX_REWARD.R]
 function OutGameData:getTreasureBoxRewardWinningRate()
@@ -94,17 +77,11 @@ function OutGameData:initTreasureBoxRewardWinningRate()
         {
             -- 普通宝箱的没有找到
 
-            { {}, {} },
-            { {}, {} },
-            { {}, {} },
-            { {}, {} },
-            { {}, {} },
-
-            { {0}, {0} },
-            { {0}, {0} },
-            { {0}, {0} },
-            { {0}, {0} },
-            { {0}, {0} }
+            { { 0 }, { 0 } },
+            { { 0 }, { 0 } },
+            { { 0 }, { 0 } },
+            { { 0 }, { 0 } },
+            { { 0 }, { 0 } }
 
         },
         {
@@ -131,71 +108,42 @@ function OutGameData:initTreasureBoxRewardWinningRate()
     }
 end
 
+-- -测试的时候就用下面这三个函数
 function OutGameData:initDiamondShop()
-    -- TODO 从服务器读数据
     _diamondShop = TestDataFactory:getTestDiamondShop()
 end
 
 function OutGameData:initCoinShop()
-    Log.i("OutGameData:initCoinShop()")
     _coinShop = TestDataFactory:getTestCoinShop()
 end
 
 function OutGameData:initUserInfo()
-    Log.i("OutGameData:initUserInfo")
     _userInfo = UserInfo:getInstance()
 end
 
 function OutGameData:register()
-    OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.USERINFO_INIT, handler(self, self.initUserInfo))
-    OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.DIAMONDSHOP_INIT, handler(self, self.initDiamondShop))
-    OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.COINSHOP_INIT, handler(self, self.initCoinShop))
-    OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.USERINFO_DS, handler(self, self.userInfoDS))
-    OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.DIAMONDSHOP_DS, handler(self, self.diamondShopDS))
-    OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.COINSHOP_DS, handler(self, self.coinShopDS))
-    OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.CARD_COLLECT, handler(self, self.addCard))
-    OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.CARD_ATTRIBUTE_CHANGE,
-            handler(self, self.changeCardAttribute))
-    OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.ASSERT_CHANGE, handler(self, self.assertChange))
-end
 
 
-
-
----测试的时候就用下面这三个函数
---function OutGameData:initDiamondShop()
---    _diamondShop = TestDataFactory:getTestDiamondShop()
---end
---
---function OutGameData:initCoinShop()
---    _coinShop = TestDataFactory:getTestCoinShop()
---end
---
---function OutGameData:initUserInfo()
---    _userInfo = UserInfo:getInstance()
---end
-
-function OutGameData:register()
     ---这一部分是同步和初始化函数
     OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.USERINFO_INIT,
-            handler(self, self.initUserInfo))
+        handler(self, self.initUserInfo))
     OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.DIAMONDSHOP_INIT,
-            handler(self, self.initDiamondShop))
+        handler(self, self.initDiamondShop))
     OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.COINSHOP_INIT,
-            handler(self, self.initCoinShop))
+        handler(self, self.initCoinShop))
     OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.USERINFO_DS,
-            handler(self, self.userInfoDS))
+        handler(self, self.userInfoDS))
     OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.DIAMONDSHOP_DS,
-            handler(self, self.diamondShopDS))
+        handler(self, self.diamondShopDS))
     OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.COINSHOP_DS,
-            handler(self, self.coinShopDS))
+        handler(self, self.coinShopDS))
 
     OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.CARD_COLLECT,
-            handler(self, self.addCard))
+        handler(self, self.addCard))
     OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.CARD_ATTRIBUTE_CHANGE,
         handler(self, self.changeCardAttribute))
     OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.ASSERT_CHANGE,
-            handler(self, self.assertChange))
+        handler(self, self.assertChange))
 
 end
 
@@ -370,6 +318,7 @@ function OutGameData:assertChange(msg)
     _userInfo:setUserInfoCoinAmount(msg.userInfo.coinAmount)
     _userInfo:setUserInfoDiamondAmount(msg.userInfo.diamondAmount)
 end
+
 --[[--
     @description:该函数用于修改用户天梯的奖杯数
     该函数同时负责天梯奖励的解锁进度,保证数据同步
@@ -385,6 +334,7 @@ function OutGameData:trophyChange(msg)
         end
     end
 end
+
 --[[--
     @description:该函数用于领取奖励后同步本地数据
     这个函数和上面的购买商品的函数是几乎一模一样,除了增加了修改天梯数据的部分
@@ -417,7 +367,7 @@ function OutGameData:receiveReward(msg)
     for i = 1, #ladderTable do
         for j = 1, #ladderList do
             if ladderList[j].trophyCondition_ ==
-                    ladderTable[i].trophyCondition then
+                ladderTable[i].trophyCondition then
                 ladderList[j].trophyCondition_ = true
             end
         end
@@ -430,26 +380,22 @@ end
 ]]
 function OutGameData:modifyBattleTeam(msg)
     _userInfo:setUserInfoBattleTeam(TableUtil
-            :toBattleTeam(msg.userInfo.battleTeam))
+        :toBattleTeam(msg.userInfo.battleTeam))
 
 end
 
 -- 不太确定函数返回的是引用还是复制的值，所以调用的时候还是先调用这个再用别的
 function OutGameData:getUserInfo()
-    Log.i("getUserInfo: " .. tostring(_userInfo == nil))
     if _userInfo == nil then
         self:initUserInfo()
     end
-    Log.i("userInfo is nil ? " .. tostring(_userInfo == nil))
     return _userInfo
 end
 
 function OutGameData:getCoinShop()
-    Log.i("_coinShop is nullptr ? " .. (tostring(_coinShop == nil)))
     if _coinShop == nil then
         self:initCoinShop()
     end
-    Log.i("After init: _coinShop is nullptr ? " .. (tostring(_coinShop == nil)))
     return _coinShop
 end
 
@@ -516,4 +462,5 @@ function OutGameData:openTreasureBox(rewardType)
     end
     return res
 end
+
 return OutGameData
