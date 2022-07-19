@@ -99,39 +99,39 @@ end
 
 function OutGameData:initUserInfo()
     _userInfo = UserInfo:getInstance()
-    -- _userInfo:testData()
+    _userInfo:testData()
 end
 
 function OutGameData:register()
     ---这一部分是同步和初始化函数
     OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.USERINFO_INIT,
-        handler(self, self.initUserInfo))
+            handler(self, self.initUserInfo))
     OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.DIAMONDSHOP_INIT,
-        handler(self, self.initDiamondShop))
+            handler(self, self.initDiamondShop))
     OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.COINSHOP_INIT,
-        handler(self, self.initCoinShop))
+            handler(self, self.initCoinShop))
     OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.USERINFO_DS,
-        handler(self, self.userInfoDS))
+            handler(self, self.userInfoDS))
     OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.DIAMONDSHOP_DS,
-        handler(self, self.diamondShopDS))
+            handler(self, self.diamondShopDS))
     OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.COINSHOP_DS,
-        handler(self, self.coinShopDS))
+            handler(self, self.coinShopDS))
     ---这一部分是代表事件的函数
     OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.CARD_COLLECT,
-        handler(self, self.addCard))
+            handler(self, self.addCard))
     OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.CARD_ATTRIBUTE_CHANGE,
-        handler(self, self.changeCardAttribute))
+            handler(self, self.changeCardAttribute))
     OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.ASSERT_CHANGE,
-        handler(self, self.assertChange))
+            handler(self, self.assertChange))
 
     OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.PURCHASE_COMMODITY,
-        handler(self, self.purchaseCommodity))
+            handler(self, self.purchaseCommodity))
     OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.TROPHY_CHANGE,
-        handler(self, self.trophyChange))
+            handler(self, self.trophyChange))
     OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.MODIFY_BATTLETEAM,
-        handler(self, self.modifyBattleTeam))
+            handler(self, self.modifyBattleTeam))
     OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.RECEIVE_REWARD,
-        handler(self, self.receiveReward))
+            handler(self, self.receiveReward))
 
 
 end
@@ -355,7 +355,7 @@ function OutGameData:receiveReward(msg)
     for i = 1, #ladderTable do
         for j = 1, #ladderList do
             if ladderList[j].trophyCondition_ ==
-                ladderTable[i].trophyCondition then
+                    ladderTable[i].trophyCondition then
                 ladderList[j].received_ = true
                 break
             end
@@ -369,7 +369,7 @@ end
 ]]
 function OutGameData:modifyBattleTeam(msg)
     _userInfo:setUserInfoBattleTeam(TableUtil
-        :toBattleTeam(msg.userInfo.battleTeam))
+            :toBattleTeam(msg.userInfo.battleTeam))
 
 end
 

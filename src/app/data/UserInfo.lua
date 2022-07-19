@@ -31,7 +31,7 @@ function UserInfo:getInstance()
 end
 
 function UserInfo:initData()
-    self:testData()
+    --self:testData()
 end
 
 --test

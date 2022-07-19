@@ -5,7 +5,7 @@
 ]]
 local MsgController = {}
 local ByteArray = require("app.msg.ByteArray")
-local Log = require("app.util.Log")
+local Log = require("app.utils.Log")
 local MsgDef = require("app.def.MsgDef")
 
 local SimpleTCP = require("framework.SimpleTCP")
@@ -21,7 +21,7 @@ local HEART_BEAT_INTERVAL = 5 -- 心跳间隔，单位：秒
 -------------------------------------------------------------
 -- 本地变量定义
 -------------------------------------------------------------
-local socket_  -- 类型：SimpleTCP，已封装的tcp对象
+local socket_ -- 类型：SimpleTCP，已封装的tcp对象
 local isConnect_ = false -- 类型：boolean，是否连接服务
 local listenerMap_ = {} -- 类型：table，监听数据，key为唯一标识，value为function
 
