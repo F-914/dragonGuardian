@@ -4,10 +4,7 @@
 ]]
 --local TowerSprite = require("src/app/ui/node/TowerSprite.lua")
 --local RewardSprite = require("src/app/ui/node/RewardSprite.lua")
---------------
----该类已基本弃用
----如果哪里有使用,请告诉我(幸周)
--------------
+
 local CreateSpriteUtil = {}
 --[[--
     @description:该函数仅用于测试
