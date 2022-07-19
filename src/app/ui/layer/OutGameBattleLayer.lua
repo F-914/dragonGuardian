@@ -66,7 +66,8 @@ end
     @description: 执行事件的注册
 ]]
 function OutGameBattleLayer:onEnter()
-
+    -- TODO 这块应该更新一下 如果图鉴页面更改了战斗小队的卡牌 那么这里应该更新一下战斗小队的显示
+    -- TODO 考虑到这里有等级显示 那么每次升级之后同样需要更新
 end
 
 --[[--

@@ -59,13 +59,6 @@ function LineupLayer:init(lineupList)
                     button:loadTextureNormal(ConstDef.ICON_LINEUP_LIST[self.order], 0)
                     button:loadTexturePressed(ConstDef.ICON_LINEUP_LIST[self.order], 0)
                     team[i] = self.order
-                    --if self.lineupOrder == 1 then
-                    --    ConstDef.LINEUP_LIST.lineupOne[i] = order
-                    --elseif self.lineupOrder == 2 then
-                    --    ConstDef.LINEUP_LIST.lineupTwo[i] = order
-                    --elseif self.lineupOrder == 3 then
-                    --    ConstDef.LINEUP_LIST.lineupThree[i] = order
-                    --end
                     self.popup:setVisible(false)
                     self.popup:removeFromParent()
                     EventManger:doEvent(EventDef.ID.RESUME_BAG_BUTTON)
