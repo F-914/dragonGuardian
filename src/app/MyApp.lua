@@ -14,6 +14,7 @@ function MyApp:run()
     cc.FileUtils:getInstance():addSearchPath("res/")
     -- self:enterScene("InGameScene")
     self:enterScene("OutGameScene")
+    --self:enterScene("LoginScene")
 end
 
 return MyApp
