@@ -47,9 +47,13 @@ function CalibrateScaleSprite:init()
         :getUserInfo()
         :getTrophyAmount()
     self.rewordNodeData_ = OutGameData
+
+
         :getUserInfo()
         :getUserInfoLadder()
         :getLadderList()
+
+
 
     self:setScale(3, 1)
 

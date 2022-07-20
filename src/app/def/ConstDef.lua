@@ -153,11 +153,21 @@ local ConstDef = {
         StringDef.PATH_COIN_SHOP_COIN,
         StringDef.PATH_COIN_SHOP_DIAMOND,
     },
+
+
+
     ICON_SUBINSTANCE_TOWER_LIST_TYPE = {
         StringDef.PATH_SUBINTERFACE_TOWER_TYPE_ATTACK,
         StringDef.PATH_SUBINTERFACE_TOWER_TYPE_DISTURB,
         StringDef.PATH_SUBINTERFACE_TOWER_TYPE_AUX,
         StringDef.PATH_SUBINTERFACE_TOWER_TYPE_CONTROL
+    },
+
+
+    LINEUP_LIST = { --图鉴界面中的三个阵容
+        lineupOne = { 1, 1, 1, 1, 1 },
+        lineupTwo = { 2, 2, 2, 2, 2 },
+        lineupThree = { 3, 3, 3, 3, 3 }
     },
     STR_TOWER_TYPE = {
         StringDef.STR_TYPE_ATTACK,
@@ -178,6 +188,7 @@ local ConstDef = {
         StringDef.STR_ATK_TARGET_RIGHT,
         StringDef.STR_ATK_TARGET_RANDOM,
         StringDef.STR_ATK_TARGET_HP_FIRST,
+
     },
     TOWER_ATK_TARGET = {
         FRONT = 1, -- 前方
@@ -228,12 +239,14 @@ local ConstDef = {
         TREASUREBOX = 3,
         UR = 4
         -- 这是个啥……我也不知道这是啥了
+
     },
     TREASUREBOX_TYPE = {
         R = 1,
         SR = 2,
         SSR = 3,
         UR = 4,
+
     },
     TOWER_TYPE = {
         ATTACK = 1, -- 攻击类别

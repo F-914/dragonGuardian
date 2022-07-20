@@ -26,7 +26,10 @@ function TreasureBoxCommodityNode:initView()
     local commodityLayer = cc.CSLoader:getInstance():createNodeWithFlatBuffersFile("TreasureBoxLayer.csb")
     commodityLayer:addTo(self)
     -- boxButton
-    local boxButton = tolua.cast(ccui.Helper:seekWidgetByName(commodityLayer, "commodityButton"), "ccui.Button")
+
+
+    local boxButton = tolua.cast(ccui.Helper:seekWidgetByName(commodityLayer, "commodityLayer"), "ccui.Button")
+
     -- bg
     local bgImage = tolua.cast(ccui.Helper:seekWidgetByName(commodityLayer, "bgLayer"), "ccui.Layout")
     bgImage:setBackGroundImage(ConstDef.SHOP_BOX_TYPE_BASE_PATH[

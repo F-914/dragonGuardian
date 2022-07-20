@@ -11,13 +11,16 @@ local EventManager = require("app.manager.EventManager")
 local UserInfo = require("app.data.UserInfo")
 local Shop = require("app.data.Shop")
 local TestDataFactory = require("app.test.TestDataFactory")
+
+
 local Factory = require("src/app/utils/Factory.lua")
 local TowerDef = require("src/app/def/TowerDef.lua")
 local Log = require("src/app/utils/Log.lua")
+
 --网络部分
 local OutGameMsgController = require("app.network.OutGameMsgController")
-local MsgDef = require("src/app/def/MsgDef.lua")
-local TableUtil = require("src/app/utils/TableUtil.lua")
+local MsgDef = require("app.def.MsgDef")
+local TableUtil = require("app.utils.TableUtil")
 
 --
 local _userInfo
@@ -28,12 +31,41 @@ local _isAlive
 --
 ---测试时用这个
 function OutGameData:init()
-    --暂时先用这里的假数据，后面改成发送消息的方式初始化数据
+
+    --连接到服务器
+    -- OutGameMsgController:connect()
+    -- self:register()
+
+    -- TODO 如果在这里调用init就会出错，但是直接get是没有问题的
+    _userInfo = UserInfo:getInstance()
+    Log.i("OutGameData:init: " .. tostring(_userInfo == nil))
+    --self:initUserInfo()
+    _coinShop = TestDataFactory:getTestCoinShop()
+    --self:initCoinShop()
+    Log.i("OutGameData:init: " .. tostring(_coinShop == nil))
+    _diamondShop = TestDataFactory:getTestDiamondShop()
+    --self:initDiamondShop()
+    Log.i("OutGameData:init: " .. tostring(_diamondShop == nil))
+    self:initTreasureBoxRewardWinningRate()
+
+    OutGameMsgController:init("127.0.0.0", 33333, 2)
+    OutGameMsgController:connect()
+    self:register()
     self:initUserInfo()
     self:initCoinShop()
     self:initDiamondShop()
     self:initTreasureBoxRewardWinningRate()
 end
+
+-- 调用 OutGameData:getTreasureBoxRewardWinningRate()[ConstDef.TREASUREBOX_RARITY.R][ConstDef.TREASUREBOX_REWARD.R]
+function OutGameData:getTreasureBoxRewardWinningRate()
+    if _treasureBoxRewardWinningRate == nil then
+        self:initTreasureBoxRewardWinningRate()
+    end
+    return _treasureBoxRewardWinningRate
+end
+
+
 
 --function OutGameData:init()
 --    --连接到服务器
@@ -63,16 +95,31 @@ function OutGameData:getTreasureBoxRewardWinningRate()
     return _treasureBoxRewardWinningRate
 end
 
+
+
 function OutGameData:initTreasureBoxRewardWinningRate()
     -- TODO 感觉这个数据可能很少会发生变动，但是也不排除后续更新的可能
     _treasureBoxRewardWinningRate = {
         {
             -- 普通宝箱的没有找到
+
+            { {}, {} },
+            { {}, {} },
+            { {}, {} },
+            { {}, {} },
+            { {}, {} },
+
+            { {0}, {0} },
+            { {0}, {0} },
+            { {0}, {0} },
+            { {0}, {0} },
+            { {0}, {0} },
+
             { 0, 0 },
             { 0, 0 },
             { 0, 0 },
             { 0, 0 },
-            { 0, 0 }
+            { 0, 0 },
         },
         {
             { 130, 130 },
@@ -113,6 +160,24 @@ function OutGameData:initUserInfo()
 end
 
 function OutGameData:register()
+
+end
+
+---测试的时候就用下面这三个函数
+--function OutGameData:initDiamondShop()
+--    _diamondShop = TestDataFactory:getTestDiamondShop()
+--end
+--
+--function OutGameData:initCoinShop()
+--    _coinShop = TestDataFactory:getTestCoinShop()
+--end
+--
+--function OutGameData:initUserInfo()
+--    _userInfo = UserInfo:getInstance()
+--end
+
+function OutGameData:register()
+
     ---这一部分是同步和初始化函数
     OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.USERINFO_INIT,
         handler(self, self.initUserInfo))

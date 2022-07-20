@@ -74,7 +74,9 @@ function TrophyRewardsLayer:init()
     highLadderView:setDirection(2)
     highLadderView:addTo(self)
     --构建进度条
+
     local calibrateScale = CalibrateScaleSprite.new(StringDef.PATH_HIGH_LADDER_CALIBRATED_SCALE)
+
 
     calibrateScale:setAnchorPoint(0, 0)
     calibrateScale:setPosition(0, 15)
@@ -106,6 +108,7 @@ function TrophyRewardsLayer:init()
     for data, node in pairs(self.rewardsMap_) do
         node:setPosition(spSize.width * .5, spSize.height * .5)
         node:setScale(0.66)
+
         local itemLayer = itemLayers[data:getRewardLocation()]
         node.button_:addTouchEventListener(function(sender, eventType)
             if eventType == 2 then
