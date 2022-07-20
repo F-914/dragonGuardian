@@ -10,6 +10,7 @@ end)
 --local
 local BossDef = require("app.def.BossDef")
 local InGameData = require("app.data.InGameData")
+local SoundManager = require("app.manager.SoundManager")
 
 function BossMessage2nd:ctor()
     self.bossId_ = InGameData:getCurBoss()
@@ -30,6 +31,7 @@ function BossMessage2nd:BossInfo()
     maskLayer:addTouchEventListener(function(sender, eventType)
         if 2 == eventType then
             self:removeFromParent()
+            SoundManager:playSound("CLOSE")
         end
     end)
 

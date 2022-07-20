@@ -10,6 +10,7 @@ end)
 --local
 local ConstDef = require("app.def.ConstDef")
 local InGameData = require("app.data.InGameData")
+local SoundManager = require("app.manager.SoundManager")
 --
 
 function GiveUp2nd:ctor()
@@ -31,6 +32,7 @@ function GiveUp2nd:init()
         if 2 == eventType then
             --self:removeFromParent()
             InGameData:setGameState(ConstDef.GAME_STATE.PLAY)
+            SoundManager:playSound("CLOSE")
         end
     end)
 
@@ -66,6 +68,7 @@ function GiveUp2nd:init()
         if 2 == eventType then
             --self:removeFromParent()
             InGameData:setGameState(ConstDef.GAME_STATE.PLAY)
+            SoundManager:playSound("CLOSE")
         end
     end)
 
@@ -77,6 +80,9 @@ function GiveUp2nd:init()
         if 2 == eventType then
             --self:removeFromParent()
             InGameData:setGameState(ConstDef.GAME_STATE.PLAY)
+            SoundManager:playSound("CLIK")
+            InGameData:setGameState(ConstDef.GAME_STATE.RESULT)
+            SoundManager:playSound("LOSE")
         end
     end)
 

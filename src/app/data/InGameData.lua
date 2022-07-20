@@ -4,7 +4,7 @@
 ]]
 local InGameData = {}
 local Log = require("app.utils.Log")
-local Card = require("app.data.Card")
+local InGameCard = require("app.data.InGameCard")
 local Bullet = require("app.data.Bullet")
 local Enemy = require("app.data.Enemy")
 local ConstDef = require("app.def.ConstDef")
@@ -13,6 +13,7 @@ local TowerArrayDef = require("app.def.TowerArrayDef")
 local EnemyTowerArrayDef = require("app.def.EnemyTowerArrayDef")
 local GirdLocation = require("app.def.GirdLocation")
 local EventManager = require("app.manager.EventManager")
+local SoundManager = require("app.manager.SoundManager")
 
 -- TODO 这里可能得存两份，一份自己的，一份敌人的
 local cards_ = {}
@@ -214,7 +215,7 @@ end
     @param number：塔表格位置x
     @param number：塔表格位置y
 ]]
-function InGameData:createCard(level,x,y)
+function InGameData:createCard(star,x,y)
     local num = math.random(1, 5)
     local id = TowerArrayDef[num].ID
     local card
@@ -222,16 +223,15 @@ function InGameData:createCard(level,x,y)
         local xPos = GirdLocation.PLAYER[x][y].X
         local yPos =  GirdLocation.PLAYER[x][y].Y
         GirdLocation.PLAYER[x][y].IS_USED = true
-        card = Card.new(1, xPos, yPos, x, y, id,_,_,_,level)
+        card = InGameCard.new(1, xPos, yPos, x, y, id, star, TowerArrayDef[num].LEVEL)
     else
         local cx, cy, xLocate, yLocate= self:setCardRandomPosision(1)
         if cx == nil or cy == nil or xLocate == nil or yLocate == nil then
         else
-            card = Card.new(1, cx, cy, xLocate, yLocate, id,_,_,_,level)
+            card = InGameCard.new(1, cx, cy, xLocate, yLocate, id, star, TowerArrayDef[num].LEVEL)
         end
     end
     cards_[#cards_+1] = card
-    --print(vardump(cards_))
 end
 
 --[[--
@@ -241,7 +241,7 @@ end
     @param number：塔表格位置x
     @param number：塔表格位置y
 ]]
-function InGameData:createEnemyCard(level,x,y)
+function InGameData:createEnemyCard(star,x,y)
     local num = math.random(1, 5)
     local id = EnemyTowerArrayDef[num].ID
     local card
@@ -249,19 +249,15 @@ function InGameData:createEnemyCard(level,x,y)
         local xPos = GirdLocation.ENEMY[x][y].X
         local yPos = GirdLocation.ENEMY[x][y].Y
         GirdLocation.ENEMY[x][y].IS_USED = true
-        print("\nInGameData:createEnemyCard  x,y ",x ,y)
-        print("\nInGameData:createEnemyCard  GirdLocation.ENEMY[x][y].y ",GirdLocation.ENEMY[x][y].y)
-        print("InGameData:createEnemyCard  xPos, yPos",xPos, yPos)
-        card = Card.new(2, xPos, yPos, x, y, id,_,_,_,level)
+        card = InGameCard.new(2, xPos, yPos, x, y, id, star, TowerArrayDef[num].LEVEL)
     else
         local cx, cy ,xLocate , yLocate= self:setCardRandomPosision(2)
         if cx == nil or cy == nil or xLocate == nil or yLocate == nil then
         else
-            card = Card.new(2, cx, cy, xLocate, yLocate, id,_,_,_,level)
+            card = InGameCard.new(2, cx, cy, xLocate, yLocate, id, star)
         end
     end
     enemyCards_[#enemyCards_+1] = card
-    --print(vardump(cards_))
 end
 
 --[[--
@@ -360,11 +356,11 @@ function InGameData:isMergeCard(card,curX,curY)
         print(vardump(scheduleBullet_))
 
     --合并塔
-    if delta < 50 and targetCard.c:getCardLevel() == card:getCardLevel()
+    if delta < 50 and targetCard.c:getCardStar() == card:getCardStar()
                 and targetCard.c:getCardId() == card:getCardId() then
         --目标塔位置生成新塔
-        local newLevel = targetCard.c:getCardLevel()
-        self:createCard(newLevel + 1, targetCard.c:getXLocate(), targetCard.c:getYLocate())
+        local newStar = targetCard.c:getCardStar()
+        self:createCard(newStar + 1, targetCard.c:getXLocate(), targetCard.c:getYLocate())
 
         --当前位置暂用状态修改
         GirdLocation.PLAYER[card:getXLocate()][card:getYLocate()].IS_USED = false
@@ -392,11 +388,11 @@ function InGameData:enemyMerge()
         for j = i+1,#enemyCards_ do
             --两塔相同类型、等级
             if enemyCards_[i]:getCardId() == enemyCards_[j]:getCardId()
-                    and enemyCards_[i]:getCardLevel() == enemyCards_[j]:getCardLevel() then
+                    and enemyCards_[i]:getCardStar() == enemyCards_[j]:getCardStar() then
                 --目标塔位置生成新塔
-                local newLevel = enemyCards_[i]:getCardLevel()
+                local newStar = enemyCards_[i]:getCardStar()
                 print("enemyCards_[i]:getXLocate() enemyCards_[i]:getYLocate()",enemyCards_[i]:getXLocate(),enemyCards_[i]:getYLocate())
-                self:createEnemyCard(newLevel + 1, enemyCards_[i]:getXLocate(), enemyCards_[i]:getYLocate())
+                self:createEnemyCard(newStar + 1, enemyCards_[i]:getXLocate(), enemyCards_[i]:getYLocate())
 
                 --当前位置暂用状态修改
                 GirdLocation.ENEMY[enemyCards_[j]:getXLocate()][enemyCards_[j]:getYLocate()].IS_USED = false
@@ -480,12 +476,13 @@ end
 
     @return none
 ]]
-function InGameData:shoot(camp, type, x, y, level)
+function InGameData:shoot(camp, type, x, y, star, level)
+    print("射击间隔，等级：", level)
     local timeCreateBulletSchdule = schedule:scheduleScriptFunc(function(dt)
         if self:getGameState() == ConstDef.GAME_STATE.PLAY then
             if self.isHasEnemy_ then
                 -- 产生子弹
-                local bullet = Bullet.new(camp, type, x, y)
+                local bullet = Bullet.new(camp, type, x, y, _, star)
                 bullet:setDirection(self:getClosestEnemy(camp, bullet))
                 if camp == 1 then
                     bullets_[#bullets_ + 1] = bullet
