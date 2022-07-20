@@ -184,7 +184,7 @@ function _handleMsg(event, data)
             for _, listener in pairs(listenerMap_) do
                 listener(msg)
             end
-            if msg["type"] == MsgDef.ACKTYPE.GAME.SEND_BATTLETEAM then
+            if msg["type"] == MsgDef.ACKTYPE.LOBBY.MATCH_SUC then
                 EnemyBattleTeam_ = msg["battleTeam"]
             elseif msg["type"] == MsgDef.ACKTYPE.GAME.REFRESHHP then
                 -- body
@@ -193,12 +193,14 @@ function _handleMsg(event, data)
             elseif msg["type"] == MsgDef.ACKTYPE.LOBBY.LOGIN then
                 Pid_ = msg["pid"]
             elseif msg["type"] == MsgDef.ACKTYPE.LOBBY.CARD_USE then
-                local teamIndex=msg["teamIndex"]
-                local cardIndex=msg["cardIndex"]
-                local cardId=msg["cardId"]
-                OutGameData:getUserInfo():getBattleTeam():setIndexTeamCard(teamIndex,cardIndex,cardId)
+                local battleTeam=msg["userInfoBattleTeam"]
+                OutGameData:getUserInfo():setUserInfoBattleTeam(battleTeam)
             elseif msg["type"] == MsgDef.ACKTYPE.LOBBY.CARD_ATTRIBUTE_CHANGE then
-                
+                local cardList=msg["userInfoCardList"]
+                OutGameData:getUserInfo().userInfoCardList_=cardList
+            elseif msg["type"] == MsgDef.ACKTYPE.LOBBY.CARD_COLLECT then
+                local cardList=msg["userInfoCardList"]
+                OutGameData:getUserInfo().userInfoCardList_=cardList
             end
         end
     else

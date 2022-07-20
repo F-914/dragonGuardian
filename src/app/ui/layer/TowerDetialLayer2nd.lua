@@ -235,7 +235,7 @@ function TowerDetialLayer2nd:init(cardId, bag)
         if eventType == 2 then
             enhanceAtk:setVisible(true)
             --OutGameData:getUserInfo():getBattleTeam():setIndexTeamCard()
-            OutGameData:getUserInfo():getBattleTeam():getCardList()[cardId].cardAtk= OutGameData:getUserInfo():getBattleTeam():getCardList()[cardId].cardAtkUpgrade
+            --OutGameData:getUserInfo():getBattleTeam():getCardList()[cardId].cardAtk= OutGameData:getUserInfo():getBattleTeam():getCardList()[cardId].cardAtkUpgrade
             EventManager:doEvent(EventDef.ID.CARD_INTENSIFY,cardId)
         end
     end)
@@ -251,7 +251,7 @@ function TowerDetialLayer2nd:init(cardId, bag)
         if eventType == 2 then
             --enhanceAtk:setVisible(true)
             --OutGameData:getUserInfo():getBattleTeam():setIndexTeamCard()
-            OutGameData:getUserInfo():getBattleTeam():getCardList()[cardId].cardLevel= OutGameData:getUserInfo():getBattleTeam():getCardList()[cardId].cardLevel+1
+            --OutGameData:getUserInfo():getBattleTeam():getCardList()[cardId].cardLevel= OutGameData:getUserInfo():getBattleTeam():getCardList()[cardId].cardLevel+1
             EventManager:doEvent(EventDef.ID.CARD_UPGRADE,cardId)
         end
     end)
