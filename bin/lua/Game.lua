@@ -196,7 +196,7 @@ function update()
 end
 --[[
     @description: 向对方发送己方增加塔的消息
-    @param msg 类型:json msg必须包含pid，serialNumber，塔序号cardId和位置信息location
+    @param msg 类型:json msg必须包含pid，serialNumber，塔card和位置信息location
     @return none
 ]]
 function towerAdd(msg)
@@ -213,7 +213,7 @@ function towerAdd(msg)
 	local back={}
 	back["location"]=msg["location"]
 	back["type"]=MsgDef.ACKTYPE.GAME.TOWER_ADD
-	back["cardId"]=msg["cardOrder"]
+	back["card"]=msg["card"]
 	back["otherPid"]=findOtherPlayer(msg["pid"], msg["serialNumber"])
 	local backStr=cjson.encode(back)
 	sendMsg2ClientByPid(back["otherPid"],backStr)
@@ -240,7 +240,7 @@ function hpChange(msg)
 				send["hp"]=k.players[1].hp
 				if k.players[1].hp<=0 then 
 					send["type"]=MsgDef.ACKTYPE.GAME.GAMEOVER
-					send["state"]=false--表示存活状态
+					send["state"]="false"--表示存活状态
 				else
 					send["type"]=MsgDef.ACKTYPE.GAME.REFRESHHP
 				end
@@ -254,7 +254,7 @@ function hpChange(msg)
 				send["hp"]=k.players[2].hp
 				if k.players[2].hp<=0 then 
 					send["type"]=MsgDef.ACKTYPE.GAME.GAMEOVER
-					send["state"]=false--表示存活状态
+					send["state"]="true"--表示存活状态
 				else
 					send["type"]=MsgDef.ACKTYPE.GAME.REFRESHHP
 				end
