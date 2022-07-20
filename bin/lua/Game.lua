@@ -212,7 +212,7 @@ function towerAdd(msg)
 	end
 	local back={}
 	back["location"]=msg["location"]
-	back["type"]=msg["type"]
+	back["type"]=MsgDef.ACKTYPE.GAME.TOWER_ADD
 	back["cardId"]=msg["cardOrder"]
 	back["otherPid"]=findOtherPlayer(msg["pid"], msg["serialNumber"])
 	local backStr=cjson.encode(back)
@@ -232,7 +232,7 @@ function hpChange(msg)
 	for v,k in ipairs(gameingList_) do
 		if(k.game.serialNumber==serial) then
 			--test=v
-			print("v.."..v)
+			--print("v.."..v)
 			if k.players[1].pid==id then
 				k.players[1].hp=k.players[1].hp+change
 				local send={}

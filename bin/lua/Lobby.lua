@@ -171,7 +171,7 @@ function cardUse(msg)
 	local back={}
 	back["pid"]=id
 	back["userInfoBattleTeam"]=data["userInfo"]["userInfoBattleTeam"]
-    back["type"]=MsgDef.LOBBY.CARD_USE
+    back["type"]=MsgDef.ACKTYPELOBBY.CARD_USE
 	local backMsg=cjson.encode(back)
     sendMsg2ClientByPid(id, backMsg)
 end
