@@ -312,7 +312,6 @@ end
 ]]
 function trophyChange(msg)
     local id, data_str = requestPlayerDBData(msg["loginName"])
-
 	if (data_str == nil or data_str == '') then
 		__G__TRACKBACK__("PLAYER NOT EXIST")
 		return
@@ -417,31 +416,27 @@ function purChaseCommodity(msg)
 		return
 	end
 
-	local data=cjson.decode(data_str)
+	local data = cjson.decode(data_str)
 	local userInfo = data["userInfo"]
-	userInfo.coinAmount = msg.userInfo.coinAmount
-	userInfo.diamondAmount = msg.userInfo.diamondAmount
-	local clientCardList = data.userInfo.cardList
-	local msgCardList = msg.userInfo.cardList
+	userInfo.userInfoCoinAmount = msg.userInfo.userInfoCoinAmount
+	userInfo.userInfoDiamondAmount = msg.userInfo.userInfoDiamondAmount
+	--用户的数据
+	local clientCardList = data.userInfo.userInfoCardList
+	--来自消息的数据
+	local msgCardList = msg.userInfo.userInfoCardList
 	for i = 1, #msgCardList do
-		local isExist = false
-		for j = 1, #clientCardList do
-			if msgCardList[i].cardId == clientCardList[j].cardId then
-				isExist = true
-				clientCardList[j].cardAmount = clientCardList[j].cardAmount +
-						msgCardList[i].cardAmount
-				break
-			end
-		end
-		if not isExist then
-			table.insert(clientCardList, msgCardList[i])
+		if clientCardList[msgCardList[i].cardId] then
+			clientCardList[msgCardList[i].cardId].cardAmount =
+			clientCardList[msgCardList[i].cardId].cardAmount +
+					msgCardList[i].cardAmount
+		else
+			table.insert(clientCardList, msgCardList[i].cardId, msgCardList[i])
 		end
 	end
 	local saveData = cjson.encode(data)
 	savePlayerDBData(id,saveData)
 	msg["type"] = MsgDef.ACKTYPE.LOBBY.PURCHASE_COMMODITY
-	local backMsg = cjson.encode(msg)
-	sendMsg2ClientByPid(id, backMsg)
+	sendMsg2ClientByPid(id, cjson.encode(msg))
 end
 --[[--
 	@description: 修改队伍信息
@@ -456,7 +451,7 @@ function modifyBattleTeam(msg)
 		return
 	end
 	local data = cjson.decode(data_str)
-	data.userInfo.battleTeam = msg.userInfo.battleTeam
+	data.userInfo.userInfoBattleTeam = msg.userInfo.userInfoBattleTeam
 	savePlayerDBData(id, cjson.encode(data))
 	msg["type"] = MsgDef.ACKTYPE.LOBBY.MODIFY_BATTLETEAM
 	sendMsg2ClientByPid(id, cjson.encode(msg))
@@ -474,26 +469,21 @@ function receiveReward(msg)
 	end
 	local data = cjson.decode(data_str)
 	local userInfo = data["userInfo"]
-	userInfo.coinAmount = msg.userInfo.coinAmount
-	userInfo.diamondAmount = msg.userInfo.diamondAmount
-	local clientCardList = data.userInfo.cardList
-	local msgCardList = msg.userInfo.cardList
+	userInfo.userInfoCoinAmount = msg.userInfo.userInfoCoinAmount
+	userInfo.userInfoDiamondAmount = msg.userInfo.userInfoDiamondAmount
+	local clientCardList = data.userInfo.userInfoCardList
+	local msgCardList = msg.userInfo.userInfoCardList
 	for i = 1, #msgCardList do
-		local isExist = false
-		for j = 1, #clientCardList do
-			if msgCardList[i].cardId == clientCardList[j].cardId then
-				isExist = true
-				clientCardList[j].cardAmount = clientCardList[j].cardAmount +
-						msgCardList[i].cardAmount
-				break
-			end
-		end
-		if not isExist then
-			table.insert(clientCardList, msgCardList[i])
+		if clientCardList[msgCardList[i].cardId] then
+			clientCardList[msgCardList[i].cardId].cardAmount =
+			clientCardList[msgCardList[i].cardId].cardAmount +
+					msgCardList[i].cardAmount
+		else
+			table.insert(clientCardList, msgCardList[i].cardId, msgCardList[i])
 		end
 	end
-	local clientLadderList = data.userInfo.ladder.ladderList
-	local msgLadderList = data.userInfo.ladder.ladderList
+	local clientLadderList = data.userInfo.userInfoLadder.ladderList
+	local msgLadderList = msg.userInfo.userInfoLadder.ladderList
 	for i = 1, #msgLadderList do
 		for j = 1, #clientLadderList do
 			if msgLadderList[i].trophyCondition
@@ -505,7 +495,7 @@ function receiveReward(msg)
 	end
 	savePlayerDBData(id, cjson.encode(data))
 	msg["type"] = MsgDef.ACKTYPE.LOBBY.RECEIVE_REWARD
-	sendMsg2ClientByPid(id, msg)
+	sendMsg2ClientByPid(id, cjson.encode(msg))
 end
 --[[--
 	@description: 奖杯数量改变
@@ -519,17 +509,17 @@ function trophyChange(msg)
 		return
 	end
 	local data = cjson.decode(data_str)
-	local clientLadderList = data.userInfo.ladder.ladderList
-	local trophyAmount = msg.userInfo.trophyAmount
+	local clientLadderList = data.userInfo.userInfoLadder.ladderList
+	local trophyAmount = msg.userInfo.userInfoTrophyAmount
 	data.userInfo.trophyAmount = trophyAmount
 	for i = 1, #clientLadderList do
-		if clientLadderList[i].trophyCondition > trophyAmount then
-			clientLadderList[i].locked = true
+		if clientLadderList[i].trophyCondition < trophyAmount then
+			clientLadderList[i].locked = false
 		end
 	end
 	savePlayerDBData(id, cjson.encode(data))
 	msg["type"] = MsgDef.ACKTYPE.LOBBY.TROPHY_CHANGE
-	sendMsg2ClientByPid(id, msg)
+	sendMsg2ClientByPid(id, cjson.encode(msg))
 end
 --[[--
 	@description: 初始化用户信息
