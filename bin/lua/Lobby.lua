@@ -30,7 +30,7 @@ function __G__TRACKBACK__(errorMessage)
 end
 --[[
     @description: 注册函数
-    @param msg 类型:json 要求msg必须含有loginName，pid,
+    @param msg 类型:json 要求msg必须含有loginName，userInfo,
     @return none
 ]]
 function playerLogin(msg)
@@ -42,6 +42,7 @@ function playerLogin(msg)
 		local saveData = {}
 	    saveData["pid"] = id
 		saveData["nick"] = msg["loginName"]
+		saveData["userInfo"]=msg["userInfo"]
 	    data_str = cjson.encode(saveData)
 		savePlayerDBData(id, data_str)
 		print(data_str)
@@ -139,16 +140,95 @@ function processLobbyMsg()
 	elseif (msg["type"] == MsgDef.REQTYPE.LOBBY.MODIFY_BATTLETEAM) then
 		modifyBattleTeam(msg)
 	elseif (msg["type"] == MsgDef.REQTYPE.LOBBY.RECEIVE_REWARD)then
-		receiveReward(msg)	
+		receiveReward(msg)
+	elseif msg["type"]==MsgDef.REQTYPE.LOBBY.MATCH_SUC then
+		matchSuc(msg)
+	elseif msg["type"]==MsgDef.REQTYPE.LOBBY.CARD_USE then
+		cardUse(msg)
 	end
 end
+--[[
+    @description:替换卡牌的函数
+    @param msg 类型:json 要求data必须含有loginName,队伍下表teamIndex,被替换的卡牌下标cardIndex，
+	                            用于替换的卡牌序号cardId
+    @return none
+]]
+function cardUse(msg)
+	local id, data_str = requestPlayerDBData(msg["loginName"])
+	if (data_str == nil or data_str == '') then
+		__G__TRACKBACK__("PLAYER NOT EXIST")
+		return
+	end
+	local data=cjson.decode(data_str)
+	local teamIndex=msg["teamIndex"]
+	local cardIndex=msg["cardIndex"]
+	local cardId=msg["cardId"]
 
+	data["userInfo"]["userInfoBattleTeam"]["team"][teamIndex][cardIndex]=cardId
+    local saveData=cjson.encode(data)
+    savePlayerDBData(id,saveData)
+    
+	local back={}
+	back["pid"]=id
+	back["userInfoBattleTeam"]=data["userInfo"]["userInfoBattleTeam"]
+    back["type"]=MsgDef.LOBBY.CARD_USE
+	local backMsg=cjson.encode(back)
+    sendMsg2ClientByPid(id, backMsg)
+end
+--[[
+    @description: 返回匹配成功消息,并且向双方发送对战双方的battleTeam
+    @param msg 类型:json 要求data必须含有对战玩家的otherPid
+    @return none
+]]
+function matchSuc(msg)
+	local id, data_str = requestPlayerDBData(msg["nick"])
+	if (data_str == nil or data_str == '') then
+		__G__TRACKBACK__("PLAYER NOT EXIST")
+		return
+	end
+	local data=cjson.decode(data_str)
+	local standByTeam=data["userInfo"]["userInfoBattleTeam"]["standByTeam"]
+	
+	local back={}
+	back["pid"]=msg["pid"]
+	back["hp"]=msg["hp"]
+	back["nick"]=msg["nick"]
+	back["type"]=msg["type"]
+	back["serial"]=msg["serial"]
+	back["type"]=MsgDef.ACKTYPE.LOBBY.MATCH_SUC
+	back["otherPid"]=msg["otherPid"]--匹配到的玩家id
+	back["battleTeam"]=data["userInfoBattleTeam"]["team"][standByTeam]--获取当前的出战队伍
+	
+	local backMsg=cjson.encode(msg)
+	sendMsg2ClientByPid(msg["otherPid"],backMsg)
+end
 function update()
 	--main loop
 	processLobbyMsg()
 	--other logic update
 end
+--[[
+    @description: 返回匹配成功消息的函数
+    @param msg 类型:json 要求data必须含有对战玩家的otherPid
+    @return none
+]]
+--[[function battleTeamSetLobby(msg)
+	local id, data_str = requestPlayerDBData(msg["loginName"])
+	if (data_str == nil or data_str == '') then
+		__G__TRACKBACK__("PLAYER NOT EXIST")
+		return
+	end
+	local data=cjson.decode(data_str)
+	data["battleTeam"]=msg["battleTeam"]
 
+	local saveData=cjson.encode(data)
+    savePlayerDBData(id,saveData)
+
+	--msg["pid"]=id
+	--msg["type"]=MsgDef.REQTYPE.GAME.TOWER_LINEUP
+	--local backMsg=cjson.encode(msg)
+	--sendMsg2Game(backMsg)
+end]]
 function main()
 	initLobbyModule()
 	local loopTimer = Timer.new()
@@ -162,7 +242,7 @@ function main()
 end
 --[[
     @description: 修改用户的金币
-    @param msg 类型:json 要求msg必须含有loginName，userInfo，
+    @param msg 类型:json 要求msg必须含有loginName，userInfoCoinAmount，
 	                     会回传一个确认消息permission，修改成功或者失败
     @return none
 ]]
@@ -174,19 +254,19 @@ function coinChange(msg)
 		return
 	end
 	local data=cjson.decode(data_str)
-	if msg["userInfo"]==nil then
-		__G__TRACKBACK__("USERINFO NOT EXIST")
+	if msg["userInfoCoinAmount"]==nil then
+		__G__TRACKBACK__("USERINFO CoinAmount NOT EXIST")
 		return
 	end
-    local coinamount=msg["userInfo"]["coinAmount"]
-    data["userInfo"]["coinAmount"]=coinamount
+    local coinamount=msg["userInfoCoinAmount"]
+    data["userInfo"]["userInfoCoinAmount"]=coinamount
 	local saveData=cjson.encode(data)
 	savePlayerDBData(id,saveData)
 
     local back={}
 	back["permission"]="yes"
     back["type"]=MsgDef.ACKTYPE.LOBBY.COIN_CHANGE
-	back["coinAmount"]= data["userInfo"]["coinAmount"]
+	back["userInfoCoinAmount"]= data["userInfo"]["userInfoCoinAmount"]
 	back["pid"]=id
 	local backMsg=cjson.encode(back)
     sendMsg2ClientByPid(id, backMsg)
@@ -194,7 +274,7 @@ function coinChange(msg)
 end
 --[[
     @description: 修改用户的钻石
-    @param msg 类型:json 要求msg必须含有loginName，userInfo，
+    @param msg 类型:json 要求msg必须含有loginName，userInfoDiamondAmount，
 	                     会回传一个确认消息permission，修改成功或者失败
     @return none
 ]]
@@ -206,19 +286,19 @@ function diamondChange(msg)
 		return
 	end
 	local data=cjson.decode(data_str)
-	if msg["userInfo"]==nil then
-		__G__TRACKBACK__("USERINFO NOT EXIST")
+	if msg["userInfoDiamondAmount"]==nil then
+		__G__TRACKBACK__("USERINFO DiamondAmount NOT EXIST")
 		return
 	end
-    local diamondamount=msg["userInfo"]["diamondAmount"]
-    data["userInfo"]["diamondAmount"]=diamondamount
+    local diamondamount=msg["userInfoDiamondAmount"]
+    data["userInfo"]["userInfoDiamondAmount"]=diamondamount
 	local saveData=cjson.encode(data)
 	savePlayerDBData(id,saveData)
 
     local back={}
 	back["permission"]="yes"
     back["type"]=MsgDef.ACKTYPE.LOBBY.COIN_CHANGE
-	back["diamondAmount"]= data["userInfo"]["diamondAmount"]
+	back["userInfoDiamondAmount"]= data["userInfo"]["userInfoDiamondAmount"]
 	back["pid"]=id
 	local backMsg=cjson.encode(back)
     sendMsg2ClientByPid(id, backMsg)
@@ -226,7 +306,7 @@ function diamondChange(msg)
 end
 --[[
     @description: 修改用户的奖杯
-    @param msg 类型:json 要求msg必须含有loginName，userInfo，
+    @param msg 类型:json 要求msg必须含有loginName，userInfoTrophyAmount
 	                     会回传一个确认消息permission，修改成功或者失败
     @return none
 ]]
@@ -238,19 +318,19 @@ function trophyChange(msg)
 		return
 	end
 	local data=cjson.decode(data_str)
-	if msg["userInfo"]==nil then
-		__G__TRACKBACK__("USERINFO NOT EXIST")
+	if msg["userInfoTrophyAmount"]==nil then
+		__G__TRACKBACK__("USERINFO TrophyAmount NOT EXIST")
 		return
 	end
-    local trophyamount=msg["userInfo"]["trophyAmount"]
-    data["userInfo"]["trophyAmount"]=trophyamount
+    local trophyamount=msg["userInfoTrophyAmount"]
+    data["userInfo"]["userInfoTrophyAmount"]=trophyamount
 	local saveData=cjson.encode(data)
 	savePlayerDBData(id,saveData)
 
     local back={}
-	back["permission"]="yes"
+	back["permission"]="suc"
     back["type"]=MsgDef.ACKTYPE.LOBBY.COIN_CHANGE
-	back["trophyAmount"]= data["userInfo"]["trophyAmount"]
+	back["userInfoTrophyAmount"]= data["userInfo"]["userInfoTrophyAmount"]
 	back["pid"]=id
 	local backMsg=cjson.encode(back)
     sendMsg2ClientByPid(id, backMsg)
@@ -258,7 +338,7 @@ function trophyChange(msg)
 end
 --[[
     @description: 添加卡牌到已收集的队列中
-    @param msg 类型:json 该消息必须含有对象loginName来获取用户资料，必须含有卡牌对象card,
+    @param msg 类型:json 该消息必须含有对象loginName来获取用户资料，必须含有新增加的卡牌card,
 	                     返回type=MsgDef.ACKTYPE.CARD_COLLECT确认消息
     @return none
 ]]
@@ -271,26 +351,27 @@ function collectCard(msg)
 	end
 
 	local data=cjson.decode(data_str)
-	if(msg["userInfo"]["card"]==nil) then
+	if(msg["card"]==nil) then
 		__G__TRACKBACK__("CARD NOT EXIST")
 		return
     end
-    table.insert(data["userInfo"]["collectedCardList"],msg["userInfo"]["card"])--此处可根据数据结构修改
+    table.insert(data["userInfo"]["userInfoCardList"],msg["card"])--此处可根据数据结构修改
+	--data["userInfo"]["userInfoCardList"]=msg["userInfo"]["userInfoCardList"]
 	local saveData=cjson.encode(data)
     savePlayerDBData(id,saveData)
     
 	local back={}
 	back["type"]=MsgDef.ACKTYPE.LOBBY.CARD_COLLECT
     back["confirm"]="suc"
-	back["collectedCardList"]=data["userInfo"]["collectedCardList"]
-	
+	back["userInfoCardList"]=data["userInfo"]["userInfoCardList"]
+	back["pid"]=id
 	local backMsg=cjson.encode(back)
 	sendMsg2ClientByPid(id,backMsg)
 end
 --[[
     @description: 改变卡牌的属性
-    @param msg 类型:json 要求msg必须含有三个成员loginName，order，attribute，update其中order是对应的卡牌序列，
-	                attribute是需要修改的属性,update是变化后的值
+    @param msg 类型:json 要求msg必须含有loginName,变更属性的卡序号cardId,变更的属性名称attribute,变更后
+	                                               的值upgrade
     @return none
 ]]
 function cardAttributeChange(msg)
@@ -299,34 +380,26 @@ function cardAttributeChange(msg)
 	if (data_str == nil or data_str == '') then
 		__G__TRACKBACK__("PLAYER NOT EXIST")
 		return
-	end
-    if msg["userInfo"]==nil then
-		__G__TRACKBACK__("USERINFO NOT EXIST")
-		return
-	end
+	elseif msg["cardId"]==nil or msg["attribute"]==nil or msg["upgrade"]==nil then
+		__G__TRACKBACK__("MSG WRONG")
+    end
 	local data=cjson.decode(data_str)
-	local order=msg["userInfo"]["order"]
-	local attribute=msg["userInfo"]["attribute"]
-	if(data["collectedCardList"][order]==nil) then
-		__G__TRACKBACK__("CARD UNCOLLECTED")
-		return
-	elseif (data["collectedCardList"][order][attribute]==nil) then
-		__G__TRACKBACK__("ATTRIBUTE NOT EXIST")
-		return
-	end
-	data["collectedCardList"][order][attribute]=msg["userInfo"]["update"]
+	local cardId=msg["cardId"]
+	local attribute=msg["attribute"]
+	local upgrade=msg["upgrade"]
+	
+	data["userInfo"]["userInfoCardList"][cardId][attribute]=upgrade
 
     local saveData=cjson.encode(data)
 	savePlayerDBData(id,saveData)
     
 	local back={}
-	local userInfo={}
-	userInfo["pid"]=id
-	userInfo["type"]=MsgDef.ACKTYPE.LOBBY.CARD_ATTRIBUTE_CHANGE
-	userInfo["order"]=msg["order"]
-	userInfo["attribute"]=msg["attribute"]
-	userInfo["confirm"]=msg["suc"]
-	back["userInfo"]=userInfo
+	back["pid"]=id
+	back["type"]=MsgDef.ACKTYPE.LOBBY.CARD_ATTRIBUTE_CHANGE
+	back["order"]=msg["order"]
+	back["userInfoCardList"]=data["userInfo"]["userInfoCardList"]
+	back["confirm"]=msg["suc"]
+	
 	local backMsg=cjson.encode(back)
 
     sendMsg2ClientByPid(id, backMsg)

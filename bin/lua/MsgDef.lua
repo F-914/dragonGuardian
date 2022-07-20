@@ -24,8 +24,13 @@ MsgDef.REQTYPE = {
         --创建游戏(因为存在匹配所以先创造游戏，匹配到了就开始游戏)
         STARTGAME = 1000 + 10,
         --开始游戏
-        GAMEOVER = 1000 + 11
+        GAMEOVER = 1000 + 11,
         --游戏结束
+        MATCHING=1000+12,
+        --匹配中
+        SEND_BATTLETEAM=1000+13,
+        --发送阵容
+        MATCH_SUC=1000+14,
     },
     LOBBY = {
         UPLOADSCORE = 1,
@@ -39,11 +44,18 @@ MsgDef.REQTYPE = {
         DIAMOND_CHANGE = 5,
         --使用或增加金币/钻石
         TROPHY_CHANGE = 6,
+       
         --使用或增加金币/钻石
         CARD_COLLECT = 17,
         --收集塔
         CARD_ATTRIBUTE_CHANGE = 18,
         --游戏改变塔的属性，比如攻击力等，用于升级
+        ASSERT_CHANGE=19,
+        --改变资源，包括任何可通过userInfo[name]直接访问的数据
+        MATCH_SUC=20,
+        --匹配成功
+        CARD_USE=21,
+        --替换卡牌
         --[[--以下部分来自幸周]]
         ---以下部分均是同步和初始化消息,由调度器定时发送或者来自初始化时发送
         USERINFO_DS = 7,
@@ -75,7 +87,11 @@ MsgDef.ACKTYPE = {
     HEARTBEAT = 0x80000 + 4,
     GAME = {
         STARTGAME = 0x80000 + 1,
-        GAMEOVER = 0x80000 + 2
+        GAMEOVER = 0x80000 + 2,
+        REFRESHHP=0X80000+3,
+        --刷新HP
+        TOWER_ADD=0X80000+4,
+        --增加塔
     },
     LOBBY = {
         LOGIN = 0x80000 + 5,
@@ -89,7 +105,8 @@ MsgDef.ACKTYPE = {
         ASSERT_CHANGE = 0x80000 + 6,
         CARD_COLLECT = 0x80000 + 7,
         CARD_ATTRIBUTE_CHANGE = 0x80000 + 8,
-        
+        MATCH_SUC=0x80000 + 19,
+        SEND_BATTLETEAM= 0x80000 + 20,
         --[[--以下部分来自幸周
             虽然和发送类型的名字一样，但使用情况不同，
             这几个类型主要是客户端同步数据和修改数据函数的注册的类型

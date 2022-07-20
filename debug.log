@@ -1,0 +1,99 @@
+Quick-Cocos2dx-Community C++ support ready.
+
+------------------------------------------------
+
+LOAD LUA FILE: D:/cocos-github/dragonGuardian/src/main.lua
+
+------------------------------------------------
+
+[LUA-print] [LuaPanda] load LuaPanda success
+
+[LUA-print] [LuaPanda] change coroutine.create
+
+[LUA-print] [LuaPanda] Debugger start as CLIENT. connect host:127.0.0.1 port:8818
+
+[LUA-print] [LuaPanda] changeRunState :0 | from:lua
+
+[LUA-print] [LuaPanda] reGetSock success
+
+[LUA-print] [LuaPanda] First connect failed!
+
+[LUA-print] [LuaPanda] change hook state :0
+
+[LUA-print] [LuaPanda] change [Coroutine] HookState: 0
+
+[LUA-print] ===========================================================
+
+[LUA-print]               LOAD QUICK FRAMEWORK
+
+[LUA-print] ===========================================================
+
+[LUA-print] [INFO] 
+
+[LUA-print] [INFO] # DEBUG                        = 2
+
+[LUA-print] [INFO] #
+
+[LUA-print] [INFO] # device.platform              = windows
+
+[LUA-print] [INFO] # device.model                 = unknown
+
+[LUA-print] [INFO] # device.language              = cn
+
+[LUA-print] [INFO] # device.writablePath          = D:\cocos-github\dragonGuardian\
+
+[LUA-print] [INFO] # device.directorySeparator    = \
+
+[LUA-print] [INFO] # device.pathSeparator         = ;
+
+[LUA-print] [INFO] #
+
+[LUA-print] [INFO] # CONFIG_SCREEN_AUTOSCALE      = EXACT_FIT
+
+[LUA-print] [INFO] # CONFIG_SCREEN_WIDTH          = 720.00
+
+[LUA-print] [INFO] # CONFIG_SCREEN_HEIGHT         = 1280.00
+
+[LUA-print] [INFO] # display.widthInPixels        = 720.00
+
+[LUA-print] [INFO] # display.heightInPixels       = 1280.00
+
+[LUA-print] [INFO] # display.contentScaleFactor   = 1.00
+
+[LUA-print] [INFO] # display.width                = 720.00
+
+[LUA-print] [INFO] # display.height               = 1280.00
+
+[LUA-print] [INFO] # display.cx                   = 360.00
+
+[LUA-print] [INFO] # display.cy                   = 640.00
+
+[LUA-print] [INFO] # display.left                 = 0.00
+
+[LUA-print] [INFO] # display.right                = 720.00
+
+[LUA-print] [INFO] # display.top                  = 1280.00
+
+[LUA-print] [INFO] # display.bottom               = 0.00
+
+[LUA-print] [INFO] # display.c_left               = -360.00
+
+[LUA-print] [INFO] # display.c_right              = 360.00
+
+[LUA-print] [INFO] # display.c_top                = 640.00
+
+[LUA-print] [INFO] # display.c_bottom             = -640.00
+
+[LUA-print] [INFO] #
+
+can not get file data of src/framework/protobuf/app/util/Log.lua
+
+[LUA ERROR] [string "src/app/msg/MsgController.lua"]:8: module 'app.util.Log' not found:
+	no field package.preload['app.util.Log']
+	no file '.\app\util\Log.dll'
+	no file 'E:\Quick-Cocos2dx-Community\quick\player\win32\app\util\Log.dll'
+	no file 'E:\Quick-Cocos2dx-Community\quick\player\win32\loadall.dll'
+	no file '.\app.dll'
+	no file 'E:\Quick-Cocos2dx-Community\quick\player\win32\app.dll'
+	no file 'E:\Quick-Cocos2dx-Community\quick\player\win32\loadall.dll'
+
