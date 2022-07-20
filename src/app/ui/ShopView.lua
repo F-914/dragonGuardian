@@ -3,10 +3,10 @@
  ShopView.lua
 ]]
 local ShopView = class(
-    "ShopView",
-    function()
-        return display.newColorLayer(cc.c4b(0, 0, 0, 0))
-    end)
+        "ShopView",
+        function()
+            return display.newColorLayer(cc.c4b(0, 0, 0, 0))
+        end)
 -- local
 local StoreList = require("app.test.StoreList")
 local Log = require("app.utils.Log")
@@ -14,6 +14,7 @@ local audio = require("framework.audio")
 local StringDef = require("app.def.StringDef")
 local ShopBackgroundLayer = require("app.ui.layer.ShopBackgroundLayer")
 local ShopLayer = require("app.ui.layer.ShopLayer")
+local BackgroundLayer = require("app.ui.layer.BackgroundLayer")
 --
 --local _shopLayer
 --local _buttonCoinClik

@@ -15,11 +15,11 @@ local TestDataFactory = require("app.test.TestDataFactory")
 local OpenTreasureChest2nd = require("app.ui.secondaryui.OpenTreasure2nd")
 local OutGameData = require("app.data.OutGameData")
 local ConstDef = require("app.def.ConstDef")
-local NotEnoughNotifi2nd = require("src/app/ui/secondaryui/NotEnoughNotifi2nd.lua")
+local NotEnoughNotifi2nd = require("app.ui.secondaryui.NotEnoughNotifi2nd")
 --
-local MsgDef = require("src/app/def/MsgDef.lua")
-local TableUtil = require("src/app/utils/TableUtil.lua")
-local OutMsgController = require("src/app/network/OutGameMsgController.lua")
+local MsgDef = require("app.def.MsgDef")
+local TableUtil = require("app.utils.TableUtil")
+local OutMsgController = require("app.network.OutGameMsgController")
 --
 --[[--
     @description: 构造方法
@@ -42,9 +42,9 @@ function TrophyRewardsLayer:init()
     --各项属性初始化，暂时保持这样，后面可能会因为需求变化
     --self.rewardsMap_ = Factory:createRewardList(GameData.rewards_)
     self.rewardsMap_ = Factory:createRewardList(OutGameData
-        :getUserInfo()
-        :getUserInfoLadder()
-        :getLadderList())
+            :getUserInfo()
+            :getUserInfoLadder()
+            :getLadderList())
 
     local spriteBG = display.newSprite(StringDef.PATH_HIGH_LADDER_BACKGROUND)
     --给的资源就不对称
@@ -77,7 +77,6 @@ function TrophyRewardsLayer:init()
 
     local calibrateScale = CalibrateScaleSprite.new(StringDef.PATH_HIGH_LADDER_CALIBRATED_SCALE)
 
-
     calibrateScale:setAnchorPoint(0, 0)
     calibrateScale:setPosition(0, 15)
     calibrateScale:addTo(highLadderView)
@@ -106,7 +105,7 @@ function TrophyRewardsLayer:init()
     itemLayer:addTo(highLadderView)
 
     for data, node in pairs(self.rewardsMap_) do
-        node:setPosition(spSize.width * .5, spSize.height * .5)
+        node:setPosition(spSize.width * .5, spSize.height * .4)
         node:setScale(0.66)
 
         local itemLayer = itemLayers[data:getRewardLocation()]
@@ -116,22 +115,27 @@ function TrophyRewardsLayer:init()
                     local notifiUi = NotEnoughNotifi2nd.new(3)
                     notifiUi:addTo(display.getRunningScene(), 2)
                 elseif not data:isReceived() then
-                    local rewardName = data.rewardName_
-                    local rewardType = data.rewardType_
+                    local rewardName = data:getRewardName()
+                    local rewardType = data:getRewardType()
                     if rewardType == ConstDef.REWARD_TYPE.TREASUREBOX then
                         ---将reward类里面的实际奖励传递给二级界面
-                        local twoLevelUi = OpenTreasureChest2nd.new(data.reward_, 0, 0)
+                        local twoLevelUi = OpenTreasureChest2nd.new(data.reward_, 0, 0, true, data.trophyCondition_)
                         twoLevelUi:addTo(display.getRunningScene(), 2)
                     elseif rewardType == ConstDef.REWARD_TYPE.CARD then
                         local msgUserInfo = {}
                         local userInfo = OutGameData.getUserInfo()
-                        msgUserInfo.coinAmount = userInfo.coinAmount_
-                        msgUserInfo.diamondAmount = userInfo.diamondAmount_
-                        msgUserInfo.cardList = {}
-                        table.insert(msgUserInfo.cardList, TableUtil:removeTableFunction(data.reward_))
+                        msgUserInfo.userInfoCoinAmount = userInfo:getCoinAmount()
+                        msgUserInfo.userInfoDiamondAmount = userInfo:getDiamondAmount()
+                        msgUserInfo.userInfoCardList = {}
+                        msgUserInfo.userInfoLadder = {}
+                        msgUserInfo.userInfoLadder.ladderList = {}
+                        msgUserInfo.userInfoLadder.ladderList[1] = {
+                            trophyCondition = data:getTrophyCondition()
+                        }
+                        table.insert(msgUserInfo.userInfoCardList, TableUtil:removeTableFunction(data.reward_))
                         local msg = TableUtil:encapsulateAsMsg(MsgDef.REQTYPE
-                            .LOBBY.RECEIVE_REWARD, userInfo.account_,
-                            "userInfo", msgUserInfo)
+                                                                     .LOBBY.RECEIVE_REWARD, userInfo:getAccount(),
+                                "userInfo", msgUserInfo)
                         OutMsgController:sendMsg(msg)
                     elseif rewardType == ConstDef.REWARD_TYPE.RANDOM then
                         --[[--
@@ -141,21 +145,28 @@ function TrophyRewardsLayer:init()
                     elseif rewardType == ConstDef.REWARD_TYPE.CURRENCY then
                         local msgUserInfo = {}
                         local userInfo = OutGameData:getUserInfo()
-                        local currency = data.rewards_
+                        local currency = data:getRewardReward()
                         if currency.currencyType_ == ConstDef.CURRENCY_TYPE.COIN then
-                            msgUserInfo.coinAmount = userInfo.coinAmount_ + currency.currencyAmount_
-                            msgUserInfo.diamondAmount = userInfo.diamondAmount_
+                            msgUserInfo.userInfoCoinAmount = userInfo:getCoinAmount() +
+                                    currency:getCurrencyAmount()
+                            msgUserInfo.userInfoDiamondAmount = userInfo:getDiamondAmount()
                         elseif currency.currencyType_ == ConstDef.CURRENCY_TYPE.DIAMOND then
-                            msgUserInfo.coinAmount = userInfo.coinAmount_
-                            msgUserInfo.diamondAmount = userInfo.diamondAmount_ + currency.currencyAmount_
+                            msgUserInfo.userInfoCoinAmount = userInfo:getCoinAmount()
+                            msgUserInfo.userInfoDiamondAmount = userInfo:getDiamondAmount() +
+                                    currency:getCurrencyAmount()
                         else
-                            msgUserInfo.coinAmount = userInfo.coinAmount_
-                            msgUserInfo.diamondAmount = userInfo.diamondAmount_
+                            msgUserInfo.userInfoCoinAmount = userInfo:getCoinAmount()
+                            msgUserInfo.userInfoDiamondAmount = userInfo:getDiamondAmount()
                         end
-                        msgUserInfo.cardList = {}
+                        msgUserInfo.userInfoCardList = {}
+                        msgUserInfo.userInfoLadder = {}
+                        msgUserInfo.userInfoLadder.ladderList = {}
+                        msgUserInfo.userInfoLadder.ladderList[1] = {
+                            trophyCondition = data:getTrophyCondition()
+                        }
                         local msg = TableUtil:encapsulateAsMsg(MsgDef.REQTYPE
-                            .LOBBY.RECEIVE_REWARD, userInfo.account_,
-                            "userInfo", msgUserInfo)
+                                                                     .LOBBY.RECEIVE_REWARD, userInfo:getAccount(),
+                                "userInfo", msgUserInfo)
                         OutMsgController:sendMsg(msg)
                     end
                 end
@@ -166,7 +177,7 @@ function TrophyRewardsLayer:init()
     end
     --构建钥匙
     local keySprite = display.newSprite(StringDef.PATH_HIGH_LADDER_CALIBRATED_SCALE_KEY)
-    keySprite:setPosition(18, 35)
+    keySprite:setPosition(7, 35)
     keySprite:addTo(highLadderView)
 end
 

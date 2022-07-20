@@ -66,8 +66,6 @@ function OutGameData:getTreasureBoxRewardWinningRate()
     return _treasureBoxRewardWinningRate
 end
 
-
-
 --function OutGameData:init()
 --    --连接到服务器
 --    -- OutGameMsgController:connect()
@@ -96,10 +94,6 @@ function OutGameData:getTreasureBoxRewardWinningRate()
     return _treasureBoxRewardWinningRate
 end
 
-
-
-
-
 function OutGameData:initTreasureBoxRewardWinningRate()
     -- TODO 感觉这个数据可能很少会发生变动，但是也不排除后续更新的可能
     _treasureBoxRewardWinningRate = {
@@ -120,11 +114,11 @@ function OutGameData:initTreasureBoxRewardWinningRate()
             { {}, {} },
             { {}, {} },
 
-            { {0}, {0} },
-            { {0}, {0} },
-            { {0}, {0} },
-            { {0}, {0} },
-            { {0}, {0} },
+            { { 0 }, { 0 } },
+            { { 0 }, { 0 } },
+            { { 0 }, { 0 } },
+            { { 0 }, { 0 } },
+            { { 0 }, { 0 } },
 
             { 0, 0 },
             { 0, 0 },
@@ -171,10 +165,11 @@ function OutGameData:initUserInfo()
     _userInfo:testData()
 end
 
-function OutGameData:register()
+-- function OutGameData:register()
 
 
-end
+-- end
+
 
 ---测试的时候就用下面这三个函数
 --function OutGameData:initDiamondShop()
@@ -485,50 +480,36 @@ end
 --[[--
     @description:这个函数用于随机生成奖励
     @param type:宝箱的类型，
-    @return type:table table的结构如下,
-    {
-        {cardId = 1, number = 23, rarity = "R"},
-        {cardId = 1, number = 23, rarity = "R"},
-        {cardId = 1, number = 23, rarity = "SR"},
-        {cardId = 1, number = 23, rarity = "SSR"},
-        {cardId = 1, number = 23, rarity = "SSR"},
-        coinNum = 2333
-    }包括coinNum和一个数组，数组长度小于等于8
+    @return type:array 返回一个array
 
     之所以只有这么点属性，是因为这些属性足够表示出一个刚从宝箱开出来的卡片，
     同时将这样的消息传递给服务器时，传递的消息也比较少
-
 ]]
 function OutGameData:openTreasureBox(rewardType)
-    ---算法暂时先这样，后面再再根据更具体的要求完善
     --local rewardData = self:getTreasureBoxRewardWinningRate()[rewardType]
     math.randomseed(os.time())
-    local res = Factory:getChestRewardModel()
+    local res = {}
     local rArray = TableUtil:clone(TowerDef.TOWER_R_IDLIST)
     local srArray = TableUtil:clone(TowerDef.TOWER_SR_IDLIST)
     local ssrArray = TableUtil:clone(TowerDef.TOWER_SSR_IDLIST)
     local urArray = TableUtil:clone(TowerDef.TOWER_UR_IDLIST)
     for i = 1, 8 do
-        if res[i].rarity == "R" then
+        if i >= 1 and i <= 4 then
             local removeIndex = math.random(1, #rArray)
-            res[i].cardId = rArray[removeIndex]
+            res[i] = Factory:createCardObj(rArray[removeIndex], math.random(30, 50))
             table.remove(rArray, removeIndex)
-            res[i].number = math.random(30, 50)
-        elseif res[i].rarity == "SR" then
+        elseif i >= 5 and i <= 6 then
             local removeIndex = math.random(1, #srArray)
-            res[i].cardId = srArray[removeIndex]
+            res[i] = Factory:createCardObj(srArray[removeIndex], math.random(7, 13))
             table.remove(srArray, removeIndex)
-            res[i].number = math.random(7, 13)
-        elseif res[i].rarity == "SSR" then
+        elseif i == 7 then
             local removeIndex = math.random(1, #ssrArray)
-            res[i].cardId = ssrArray[removeIndex]
+            res[i] = Factory:createCardObj(ssrArray[removeIndex], math.random(7, 13))
             table.remove(ssrArray, removeIndex)
-            res[i].number = math.random(7, 13)
-        elseif res[i].rarity == "UR" then
+        elseif i == 8 then
             local removeIndex = math.random(1, #urArray)
-            res[i].cardId = urArray[removeIndex]
+            res[i] = Factory:createCardObj(urArray[removeIndex], math.random(0, 1))
             table.remove(urArray, removeIndex)
-            res[i].number = math.random(0, 1)
         end
     end
     res.coinNum = 2333

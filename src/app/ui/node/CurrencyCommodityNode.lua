@@ -13,7 +13,14 @@ local ConstDef = require("app.def.ConstDef")
 local StringDef = require("app.def.StringDef")
 local Commodity = require("app.data.Commodity")
 local OutGameData = require("app.data.OutGameData")
+local NotEnoughNotifi2nd = require("app.ui.secondaryui.NotEnoughNotifi2nd")
+local TableUtil = require("app.utils.TableUtil")
 local Log = require("app.utils.Log")
+local OutGameMsgController = require("app.network.OutGameMsgController")
+local NotEnoughNotifi2nd = require("app.ui.secondaryui.NotEnoughNotifi2nd")
+local MsgDef = require("app.def.MsgDef")
+local OpenTreasure2nd = require("app.ui.secondaryui.OpenTreasure2nd")
+local TableUtil = require("app.utils.TableUtil")
 --
 --
 function CurrencyCommodityNode:ctor(commodity)
@@ -56,53 +63,40 @@ function CurrencyCommodityNode:initView()
             Log.i("2")
             audio.playEffect(StringDef.PATH_GET_FREE_ITEM)
             commodityLayer:scale(1)
-            if self.commodity_.commodityPrice_ >
-                    OutGameData:getUserInfo().coinAmount then
+            if self.commodity_:getCommodityPrice() >
+                OutGameData:getUserInfo():getCoinAmount() then
                 local notifiUi = NotEnoughNotifi2nd.new(1)
-                --notifiUi:addTo(self:getParent())---因为不知道节点的关系，不知道加在哪里
+                notifiUi:addTo(display.getRunningScene(), 2)
             else
-                if self.commodity_.commodityType_ ==
-                        ConstDef.COMMODITY_TYPE.TOWER then
+                if self.commodity_:getCommodityType() ==
+                    ConstDef.COMMODITY_TYPE.CURRENCY then
                     local msgUserInfo = {}
                     local userInfo = OutGameData:getUserInfo()
-                    msgUserInfo.coinAmount = userInfo.coinAmount_
-                            - self.commodity_.price
-                    msgUserInfo.diamondAmount = userInfo.diamondAmount_
-                    msgUserInfo.cardList = {}
-                    table.insert(msgUserInfo.cardList, TableUtil:removeTableFunction(
-                            self.commodity_.commodityCommodity_))
-                    local msg = TableUtil:encapsulateAsMsg(MsgDef.REQTYPE
-                                                                 .LOBBY.PURCHASE_COMMODITY, userInfo.account_,
-                            "userInfo", msgUserInfo)
-                    OutGameMsgController:sendMsg(msg)
-                elseif self.commodity_.commodityType_ ==
-                        ConstDef.COMMODITY_TYPE.CURRENCY then
-                    local msgUserInfo = {}
-                    local userInfo = OutGameData:getUserInfo()
-                    msgUserInfo.coinAmount = userInfo.coinAmount_
-                            - self.commodity_.price
-                    msgUserInfo.diamondAmount = userInfo.diamondAmount_
-                    msgUserInfo.cardList = {}
-                    local currency = self.commodity_.commodityCommodity_
-                    if currency.currencyType_ ==
-                            ConstDef.CURRENCY_TYPE.COIN then
-                        msgUserInfo.coinAmount = msgUserInfo.coinAmount
-                                + currency.currencyAmount_
-                    elseif currency.currencyType_ ==
-                            ConstDef.CURRENCY_TYPE.DIAMOND then
-                        msgUserInfo.diamondAmount = msgUserInfo.diamondAmount
-                                + currency.currencyAmount_
+                    msgUserInfo.userInfoCoinAmount = userInfo:getCoinAmount()
+                        - self.commodity_:getCommodityPrice()
+                    msgUserInfo.userInfoDiamondAmount = userInfo:getDiamondAmount()
+                    msgUserInfo.userInfoCardList = {}
+                    local currency = self.commodity_:getCommodityCommodity()
+                    if currency:getCurrencyType() ==
+                        ConstDef.CURRENCY_TYPE.COIN then
+                        msgUserInfo.userInfoCoinAmount = msgUserInfo.userInfoCoinAmount
+                            + currency:getCurrencyAmount()
+                    elseif currency:getCurrencyType() ==
+                        ConstDef.CURRENCY_TYPE.DIAMOND then
+                        msgUserInfo.userInfoDiamondAmount = msgUserInfo.userInfoDiamondAmount
+                            + currency:getCurrencyAmount()
                     end
                     local msg = TableUtil:encapsulateAsMsg(MsgDef.REQTYPE
-                                                                 .LOBBY.PURCHASE_COMMODITY, userInfo.account_,
-                            "userInfo", msgUserInfo)
+                        .LOBBY.PURCHASE_COMMODITY, userInfo:getAccount(),
+                        "userInfo", msgUserInfo)
                     OutGameMsgController:sendMsg(msg)
-                elseif self.commodity_.commodityType_ ==
-                        ConstDef.COMMODITY_TYPE.TREASUREBOX then
+                elseif self.commodity_:getCommodityType() ==
+                    ConstDef.COMMODITY_TYPE.TREASUREBOX then
                     local openTreasure2nd = OpenTreasure2nd.new(
-                            self.commodity_.commodityCommodity_,
-                            0 - self.commodity_.commodityPrice_, 0)
-                    --openTreasure2nd:addTo()--不知道加在哪里
+                        self.commodity_.commodityCommodity_,
+                        0 - self.commodity_.commodityPrice_, 0,
+                        false, 0)
+                    openTreasure2nd:addTo(display.getRunningScene(), 2)
                 end
             end
         end

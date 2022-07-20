@@ -4,8 +4,6 @@
 --- DateTime: 2022-07-07 12:02
 ---
 local TowerCommodityNode = class("TowerCommodityNode",
-    --function() return cc.Node:create() end)
-    --        require("app.ui.layer.BaseLayer"))
     function()
         return ccui.Layout:create()
     end)
@@ -18,6 +16,7 @@ local Commodity = require("app.data.Commodity")
 local OutGameData = require("app.data.OutGameData")
 local ShopConfirmPurchase2nd = require("app.ui.secondaryui.ShopConfirmPurchase2nd")
 local TypeConvert = require("app.utils.TypeConvert")
+local NotEnoughNotifi2nd = require("app.ui.secondaryui.NotEnoughNotifi2nd")
 --
 --
 function TowerCommodityNode:ctor(commodity)
@@ -80,7 +79,12 @@ function TowerCommodityNode:initView()
         if 2 == eventType then
             --dragonButton:setTouchEnabled(false)
             audio.playEffect(StringDef.PATH_GET_PADI_ITEM)
-            _buttonCoinClick(commodityLayer, commodityButton, self.commodity_)
+            if self.commodity_:getCommodityPrice() > OutGameData:getUserInfo():getCoinAmount() then
+                local notifiUi = NotEnoughNotifi2nd.new(1)
+                notifiUi:addTo(display.getRunningScene(), 2)
+            else
+                _buttonCoinClick(commodityLayer, commodityButton, self.commodity_)
+            end
         end
     end)
 end

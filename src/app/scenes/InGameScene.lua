@@ -9,10 +9,13 @@ end)
 --local
 local InGameData = require("app.data.InGameData")
 local InGameBattleView = require("app.ui.InGameBattleView")
+local SoundManager = require("app.manager.SoundManager")
 --
 
 function InGameScene:ctor()
     InGameData:init()
+    SoundManager:loadSound()
+
     self.inGameBattleView_ = InGameBattleView.new()
     self:addChild(self.inGameBattleView_)
 

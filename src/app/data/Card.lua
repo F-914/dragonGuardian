@@ -91,7 +91,8 @@ function Card:ctor(cardId, name, rarity, type, level, cardAmount, atk, atkTarget
         fireCdUpgrade, skills
         , extraDamage, fatalityRate, location)
 
-    EventManager:doEvent(EventDef.ID.CREATE_CARD, self)
+    EventManager:doEvent(EventDef.ID.CREATE_CARD, self, cardId)
+
 end
 
 
@@ -139,18 +140,18 @@ function Card:setCard(cardId, name, rarity, type, level, cardAmount, atk, atkTar
     self.cardLocation_ = location
 end
 
---[[--
-    销毁
+-- --[[--
+--     销毁
 
-    @param none
+--     @param none
 
-    @return none
-]]
-function Card:destory()
-    --Log.i("destory")
-    self.isDeath_ = true
-    EventManager:doEvent(EventDef.ID.DESTORY_CARD, self)
-end
+--     @return none
+-- ]]
+-- function Card:destory()
+--     --Log.i("destory")
+--     self.isDeath_ = true
+--     EventManager:doEvent(EventDef.ID.DESTORY_CARD, self)
+-- end
 
 ---设置塔等级
 function Card:setCardLevel(level)
@@ -158,13 +159,13 @@ function Card:setCardLevel(level)
 end
 
 --- 塔表格位置
-function Card:getXLocate()
-    return self.xLocate_
-end
-
-function Card:getYLocate()
-    return self.yLocate_
-end
+--function Card:getXLocate()
+--    return self.xLocate_
+--end
+--
+--function Card:getYLocate()
+--    return self.yLocate_
+--end
 
 --- 塔编号
 function Card:getCardId()
@@ -197,10 +198,6 @@ end
 -- 防御塔名称
 function Card:getCardName()
     return self.cardName_
-end
-
-function Card:getCardLevel()
-    return self.cardLevel_
 end
 
 -- 攻击力

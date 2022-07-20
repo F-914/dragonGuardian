@@ -42,12 +42,14 @@ end
 function TableUtil:toCard(msg)
     local skills = {}
     for i = 1, #msg.skills do
-        skills[i] = self:toSkill(msg.skills[i])
+        skills[i] = self:toSkill(msg.cardSkills[i])
     end
-    return Card.new(msg.cardId, msg.name, msg.rarity,
-    msg.type, msg.level, msg.cardAmount ,msg.atk, msg.atkTarget, msg.atkUpgrade,
-    msg.atkEnhance, msg.fireCd, msg.fireCdEnhance,
-    msg.fireCdUpgrade, skills, msg.extraDamage, msg.fatalityRate, msg.location)
+    return Card.new(msg.cardId, msg.cardName, msg.cardRarity,
+            msg.cardType, msg.cardLevel, msg.cardAmount ,msg.cardAtk,
+            msg.cardAtkTarget, msg.cardAtkUpgrade,
+            msg.cardAtkEnhance, msg.cardFireCd, msg.cardFireCdEnhance,
+            msg.cardFireCdUpgrade, skills, msg.cardExtraDamage, msg.cardFatalityRate,
+            nil)
 end
 --[[--
     @将表格转化为commodity对象，表格需要有目标对象属性的字段
@@ -191,7 +193,8 @@ end
 ---
 
 --[[--
-    @description: 将对象作为消息传递给服务器时，用这个函数去除对象中的方法，
+    @description: 将对象作为消息传递给服务器时，
+    用这个函数去除对象中的方法，同时去除对象中属性后面的_
     测试过继承，组合两种常见情况,
 
     @param obj type:object 对象
@@ -201,12 +204,11 @@ end
 function TableUtil:removeTableFunction(obj)
     local res = {}
     for key, value in pairs(obj) do
-        --print(type(key)..": ", key, " = "..type(value)..": ", value)
         if key ~= "class" then
             if type(value) == "table" then
-                value = self:myJsonTest(value)
+                value = self:removeTableFunction(value)
             end
-            res[key] = value
+            res[string.sub(key, 1, -2)] = value
         end
     end
     return res
@@ -214,15 +216,18 @@ end
 --[[--
     @description:将之前去除函数的对象数据进一步封装成发送的消息
     @param type type:string, 该消息的类型，
-    @param data type:table,对象去除函数后的数据
-    @param index type:string, 数据的索引名称
-    @param ... 留待扩展
+    @param loginName type:string,用户名
+    @param ... 参数应该满足第一个时index，第二个data，第三个是index，第四个data
     @return type:table, 经过json打包过后直接可以发送的消息
 ]]
-function TableUtil:encapsulateAsMsg(type, data, index, ...)
+function TableUtil:encapsulateAsMsg(type, loginName,...)
     local msg = {}
     msg.type = type
-    msg[index] = data
+    msg.loginName = loginName
+    local arg = {...}
+    for i = 1, #arg, 2 do
+        msg[arg[i]] = arg[i + 1]
+    end
     return msg
 end
 --[[--

@@ -12,8 +12,8 @@ local ConstDef = require("app.def.ConstDef")
 local StringDef = require("app.def.StringDef")
 local Commodity = require("app.data.Commodity")
 local OutGameData = require("app.data.OutGameData")
-local OpenTreasure2nd = require("src/app/ui/secondaryui/OpenTreasure2nd.lua")
-local NotEnoughNotifi2nd = require("src/app/ui/secondaryui/NotEnoughNotifi2nd.lua")
+local OpenTreasure2nd = require("app.ui.secondaryui.OpenTreasure2nd")
+local NotEnoughNotifi2nd = require("app.ui.secondaryui.NotEnoughNotifi2nd.lua")
 --
 
 function TreasureBoxCommodityNode:ctor(commodity)
@@ -28,19 +28,17 @@ function TreasureBoxCommodityNode:initView()
     -- boxButton
 
 
-   
 
     local boxButton = tolua.cast(ccui.Helper:seekWidgetByName(commodityLayer, "commodityButton"), "ccui.Button")
-
 
     -- bg
     local bgImage = tolua.cast(ccui.Helper:seekWidgetByName(commodityLayer, "bgLayer"), "ccui.Layout")
     bgImage:setBackGroundImage(ConstDef.SHOP_BOX_TYPE_BASE_PATH[
-        self.commodity_:getCommodityCommodity():getTreasureBoxType()])
+    self                               .commodity_:getCommodityCommodity():getTreasureBoxType()])
     -- box
     local boxLayer = tolua.cast(ccui.Helper:seekWidgetByName(commodityLayer, "boxLayer"), "ccui.Layout")
     boxLayer:setBackGroundImage(ConstDef.SHOP_BOX_TYPE_BOX_PATH[
-        self.commodity_:getCommodityCommodity():getTreasureBoxType()])
+    self                                .commodity_:getCommodityCommodity():getTreasureBoxType()])
     -- price
     local priceLayer = tolua.cast(ccui.Helper:seekWidgetByName(commodityLayer, "priceField"), "ccui.Layout")
     local boxPrice = display.newTTFLabel({
@@ -63,13 +61,13 @@ function TreasureBoxCommodityNode:initView()
             --boxButton:setTouchEnabled(false)
             audio.playEffect(StringDef.PATH_OPEN_BOX)
             boxLayer:scale(1)
-            if self.commodity_.commodityPrice_ >
-                    OutGameData:getUserInfo().userInfoCoinAmount_ then
+            if self.commodity_:getCommodityPrice() >
+                    OutGameData:getUserInfo():getDiamondAmount() then
                 local notifiUi = NotEnoughNotifi2nd.new(1)
                 notifiUi:addTo(display.getRunningScene(), 2)
             else
                 local openTreasure2nd = OpenTreasure2nd.new(self.commodity_.commodityCommodity_,
-                        0, 0 - self.commodity_.commodityPrice_)
+                        0, 0 - self.commodity_.commodityPrice_, false, 0)
                 openTreasure2nd:addTo(display.getRunningScene(), 2)
             end
         end

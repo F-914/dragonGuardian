@@ -230,6 +230,7 @@ local StringDef = {
     PATH_HIGH_LADDER_DIAMOND = "res/home/battle/high_ladder/diamond.png",
     --
     PATH_BACKGROUND_SHOP = "home/shop/background_shop.png",
+    PATH_COIN_SHOP_BASE_SHADE = "home/shop/coins_shop/base_shade.png",
     PATH_COIN_SHOP_BASE_TITLE = "home/shop/coins_shop/base_title.png",
     PATH_COIN_SHOP_BASE_REFRESH = "home/shop/coins_shop/base_remaining_refresh_time.png",
     PATH_COIN_SHOP_TIP_REFRESH = "home/shop/coins_shop/tips_remaining_refresh_time.png",
@@ -240,6 +241,7 @@ local StringDef = {
     PATH_COIN_SHOP_BASE_FRAGMENT = "home/shop/coins_shop/base_fragments_number.png",
     PATH_COIN_SHOP_ICON_COIN = "home/shop/coins_shop/icon_coin.png",
     PATH_COIN_SHOP_STORE_TITLE = "home/shop/coins_shop/title_coin_store.png",
+    PATH_COIN_SHOP_BASE_SHADE = "home/shop/coins_shop/base_shade.png",
     --
     PATH_SHOP_SECOND_PURCHASE_CONFIRM_BASE = "home/shop/second_purchase_confirmation_popup/base_popup.png",
     PATH_SHOP_SECOND_PURCHASE_CONFIRM_CLOSE = "home/shop/second_purchase_confirmation_popup/button_close.png",

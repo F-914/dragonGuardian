@@ -36,6 +36,8 @@ EventDef.ID = {
     HIT_ENEMY = 27,  --怪物受到攻击
     SEND_LINEUP=28,
 
+    CARD_LEVEL_UP = 29
+
 }
 
 return EventDef

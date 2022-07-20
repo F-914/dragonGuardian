@@ -7,11 +7,12 @@
 local Factory = {}
 
 
-local ConstDef = require("src/app/def/ConstDef.lua")
-local Log = require("src/app/utils/Log.lua")
+local ConstDef = require("app.def.ConstDef")
+local Log = require("app.utils.Log")
 local StringDef = require("app.def.StringDef")
 local TypeConvert = require("app.utils.TypeConvert")
-
+local TowerDef = require("app.def.TowerDef")
+local Card = require("app.data.Card")
 --[[--
     @description: 创建用于宝箱奖励的贴图
     @data type:table, 奖励的数据
@@ -20,32 +21,40 @@ local TypeConvert = require("app.utils.TypeConvert")
 function Factory:createChestRewardTower(data)
     local arr = {}
     local count = 1
+    local rarityMap = {
+        [1] = "R",
+        [2] = "SR",
+        [3] = "SSR",
+        [4] = "UR"
+    }
     for _, ele in ipairs(data) do
-        local sprite = display.newSprite("res/home/general/second_open_treasure_popup/icon_tower/" ..
-            ele.cardId .. ".png")
-        local spSize = sprite:getContentSize()
-        local rarityTTF = display.newTTFLabel({
-            text = ele.rarity,
-            font = "res/font/fzhzgbjw.ttf",
-            size = 21,
-            color = cc.c3b(255, 255, 255)
-        })
-        rarityTTF:enableOutline(cc.c4b(20, 20, 66, 255), 2)
-        rarityTTF:setPosition(spSize.width * .5, 0 - spSize.height * .2)
-        rarityTTF:addTo(sprite)
+        if ele.cardAmount ~= 0 then
+            local sprite = display.newSprite("res/home/general/second_open_treasure_popup/icon_tower/" ..
+                ele.cardId .. ".png")
+            local spSize = sprite:getContentSize()
+            local rarityTTF = display.newTTFLabel({
+                text = rarityMap[ele.cardRarity],
+                font = "res/font/fzhzgbjw.ttf",
+                size = 21,
+                color = cc.c3b(255, 255, 255)
+            })
+            rarityTTF:enableOutline(cc.c4b(20, 20, 66, 255), 2)
+            rarityTTF:setPosition(spSize.width * .5, 0 - spSize.height * .2)
+            rarityTTF:addTo(sprite)
 
-        local numberTTF = display.newTTFLabel({
-            text = "x" .. tostring(ele.number),
-            font = "res/font/fzzchjw.ttf",
-            size = 21,
-            color = cc.c3b(255, 255, 255)
-        })
-        numberTTF:enableOutline(cc.c4b(0, 0, 0, 255), 4)
-        numberTTF:setPosition(spSize.width * .9, spSize.height * .9)
-        numberTTF:addTo(sprite)
+            local numberTTF = display.newTTFLabel({
+                text = "x" .. tostring(ele.cardAmount),
+                font = "res/font/fzzchjw.ttf",
+                size = 21,
+                color = cc.c3b(255, 255, 255)
+            })
+            numberTTF:enableOutline(cc.c4b(0, 0, 0, 255), 4)
+            numberTTF:setPosition(spSize.width * .9, spSize.height * .9)
+            numberTTF:addTo(sprite)
 
-        arr[count] = sprite
-        count = count + 1
+            arr[count] = sprite
+            count = count + 1
+        end
     end
     return arr
 end
@@ -409,18 +418,17 @@ function Factory:createChestRewardItem(size, numFloor, numUpper, rarity)
     return layout
 end
 
-function Factory:getChestRewardModel()
-    return {
-        coinNum = 0,
-        { cardId = 0, number = 0, rarity = "R" },
-        { cardId = 0, number = 0, rarity = "R" },
-        { cardId = 0, number = 0, rarity = "R" },
-        { cardId = 0, number = 0, rarity = "R" },
-        { cardId = 0, number = 0, rarity = "SR" },
-        { cardId = 0, number = 0, rarity = "SR" },
-        { cardId = 0, number = 0, rarity = "SSR" },
-        { cardId = 0, number = 0, rarity = "UR" },
-    }
+function Factory:createCardObj(id, quantity)
+    local srcData = TowerDef[id]
+    ---skill是nil，因为现在没有技能
+    local card = Card.new(srcData.ID, srcData.NAME, srcData.RARITY,
+        srcData.TYPE, srcData.LEVEL, quantity, srcData.ATK,
+        srcData.ATK_TARGET, srcData.ATK_UPGRADE,
+        srcData.ATK_ENHANCE, srcData.FIRECD,
+        srcData.FIRECD_ENHANCE, srcData.FIRECD_UPGRADE,
+        nil, srcData.EXTRA_DAMAGE, srcData.FATALITY_RATE
+    )
+    return require("src/app/utils/TableUtil.lua"):removeTableFunction(card)
 end
 
 return Factory

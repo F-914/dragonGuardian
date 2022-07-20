@@ -13,33 +13,54 @@ local TowerArrayDef = {
         ID = 12,
         ICON_PATH = StringDef.PATH_TOWER_12,
         TYPE = TowerDef[4].TYPE,
-        SP = 102
+        SP = 102,
+        LEVEL = 1
     },
     {
         ID = 5,
         ICON_PATH = StringDef.PATH_TOWER_05,
         TYPE = TowerDef[5].TYPE,
-        SP = 100
+        SP = 100,
+        LEVEL = 1
     },
     {
         ID = 6,
         ICON_PATH = StringDef.PATH_TOWER_06,
         TYPE = TowerDef[6].TYPE,
-        SP = 101
+        SP = 101,
+        LEVEL = 1
     },
     {
         ID = 7,
         ICON_PATH = StringDef.PATH_TOWER_07,
         TYPE = TowerDef[7].TYPE,
-        SP = 100
+        SP = 100,
+        LEVEL = 1
     },
     {
         ID = 8,
         ICON_PATH = StringDef.PATH_TOWER_08,
         TYPE = TowerDef[8].TYPE,
-        SP = 100
+        SP = 100,
+        LEVEL = 1
     },
 }
+
+--[[--
+    强化升级设置
+]]
+function TowerArrayDef:levelUp(id)
+    print("TowerArrayDef id", id)
+    self[id].LEVEL = self[id].LEVEL + 1
+end
+
+--[[--
+    强化后修改sp价格
+]]
+function TowerArrayDef:changeSP(id, sp)
+    print("id, sp", id, sp)
+    self[id].SP = sp
+end
 
 --[[--
     获取塔种类对应名称
