@@ -310,7 +310,7 @@ end
 	                     会回传一个确认消息permission，修改成功或者失败
     @return none
 ]]
-function trophyChange(msg)
+--[[function trophyChange(msg)
     local id, data_str = requestPlayerDBData(msg["loginName"])
 	if (data_str == nil or data_str == '') then
 		__G__TRACKBACK__("PLAYER NOT EXIST")
@@ -334,7 +334,7 @@ function trophyChange(msg)
 	local backMsg=cjson.encode(back)
     sendMsg2ClientByPid(id, backMsg)
 	
-end
+end]]
 --[[
     @description: 添加卡牌到已收集的队列中
     @param msg 类型:json 该消息必须含有对象loginName来获取用户资料，userInfo必须含有新增加的卡牌card,
