@@ -26,25 +26,15 @@ function TreasureBoxCommodityNode:initView()
     local commodityLayer = cc.CSLoader:getInstance():createNodeWithFlatBuffersFile("TreasureBoxLayer.csb")
     commodityLayer:addTo(self)
     -- boxButton
-<<<<<<< HEAD
     local boxButton = tolua.cast(ccui.Helper:seekWidgetByName(commodityLayer, "commodityButton"), "ccui.Button")
-=======
-
-
-   
-
-    local boxButton = tolua.cast(ccui.Helper:seekWidgetByName(commodityLayer, "commodityButton"), "ccui.Button")
-
-
->>>>>>> origin/dev_txf
     -- bg
     local bgImage = tolua.cast(ccui.Helper:seekWidgetByName(commodityLayer, "bgLayer"), "ccui.Layout")
     bgImage:setBackGroundImage(ConstDef.SHOP_BOX_TYPE_BASE_PATH[
-    self                               .commodity_:getCommodityCommodity():getTreasureBoxType()])
+        self.commodity_:getCommodityCommodity():getTreasureBoxType()])
     -- box
     local boxLayer = tolua.cast(ccui.Helper:seekWidgetByName(commodityLayer, "boxLayer"), "ccui.Layout")
     boxLayer:setBackGroundImage(ConstDef.SHOP_BOX_TYPE_BOX_PATH[
-    self                                .commodity_:getCommodityCommodity():getTreasureBoxType()])
+        self.commodity_:getCommodityCommodity():getTreasureBoxType()])
     -- price
     local priceLayer = tolua.cast(ccui.Helper:seekWidgetByName(commodityLayer, "priceField"), "ccui.Layout")
     local boxPrice = display.newTTFLabel({
@@ -68,12 +58,12 @@ function TreasureBoxCommodityNode:initView()
             audio.playEffect(StringDef.PATH_OPEN_BOX)
             boxLayer:scale(1)
             if self.commodity_:getCommodityPrice() >
-                    OutGameData:getUserInfo():getDiamondAmount() then
+                OutGameData:getUserInfo():getDiamondAmount() then
                 local notifiUi = NotEnoughNotifi2nd.new(1)
                 notifiUi:addTo(display.getRunningScene(), 2)
             else
                 local openTreasure2nd = OpenTreasure2nd.new(self.commodity_.commodityCommodity_,
-                        0, 0 - self.commodity_.commodityPrice_, false, 0)
+                    0, 0 - self.commodity_.commodityPrice_, false, 0)
                 openTreasure2nd:addTo(display.getRunningScene(), 2)
             end
         end

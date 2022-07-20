@@ -35,7 +35,14 @@ EventDef.ID = {
     CREATE_ENEMY_CARD = 26,
     HIT_ENEMY = 27, --怪物受到攻击
     SEND_LINEUP = 28,
-    CARD_LEVEL_UP = 29
+    CARD_LEVEL_UP = 29,
+    -- TODO 此处不知道下面这三个是不是要加上 先放在这里 以保证程序运行
+    CARD_USE = 30,
+    --卡牌使用
+    CARD_INTENSIFY = 31,
+    --卡牌强化
+    CARD_UPGRADE = 32,
+    --卡牌升级
 }
 
 return EventDef
