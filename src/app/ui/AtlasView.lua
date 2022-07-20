@@ -20,11 +20,10 @@ local AtlasView =
 local ConstDef = require("app.def.ConstDef")
 local EventDef = require("app.def.EventDef")
 local MsgDef = require("app.def.MsgDef")
-local MsgController = require("src/app/msg/MsgController.lua")
+local MsgController = require("app.msg.MsgController")
 local EventManager = require("app.manager.EventManager")
 
 local TowerDetailLayer = require("app.ui.layer.TowerDetialLayer2nd")
-
 local BackgroundLayer = require("app.ui.layer.BackgroundLayer")
 local LineupLayer = require("app.ui.layer.LineupLayer")
 local BagLayer = require("app.ui.layer.BagLayer")

@@ -212,6 +212,7 @@ function _handleMsg(event, data)
                 --敌方添加塔
             elseif msg["type"] == MsgDef.ACKTYPE.LOBBY.LOGIN then
                 Pid_ = msg["pid"]
+                OutGameScene._userInfo=msg["userInfo"]
             elseif msg["type"] == MsgDef.ACKTYPE.LOBBY.CARD_USE then
                 local battleTeam=msg["userInfoBattleTeam"]
                 OutGameData:getUserInfo():setUserInfoBattleTeam(battleTeam)
@@ -223,9 +224,10 @@ function _handleMsg(event, data)
                 OutGameData:getUserInfo().userInfoCardList_=cardList
             end
         end
-    else
+    else 
         Log.e(TAG, "_handleMsg() unexpect event, event=", event)
     end
+
 end
 
 return MsgController

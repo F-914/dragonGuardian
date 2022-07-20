@@ -28,8 +28,14 @@ MsgDef.REQTYPE = {
         --创建游戏(因为存在匹配所以先创造游戏，匹配到了就开始游戏)
         STARTGAME = 1000 + 10,
         --开始游戏
-        GAMEOVER = 1000 + 11
+        GAMEOVER = 1000 + 11,
         --游戏结束
+        MATCHING=1000+12,
+        --匹配中
+        SEND_BATTLETEAM=1000+13,
+        --发送阵容
+        MATCH_SUC=1000+14,
+        --匹配成功
     },
     LOBBY = {
         UPLOADSCORE = 1,
@@ -75,7 +81,8 @@ MsgDef.REQTYPE = {
         --卡牌强化
         CARD_UPGRADE = 19,
         --卡牌升级
-
+        MATCH_SUC=20,
+        --匹配成功
     }
 }
 
@@ -87,6 +94,7 @@ MsgDef.ACKTYPE = {
         STARTGAME = 0x80000 + 1,
         GAMEOVER = 0x80000 + 2,
         REFRESHHP = 0x80000 + 3,
+        TOWER_ADD=0X80000+4,
     },
     LOBBY = {
         LOGIN = 0x80000 + 5,
@@ -121,6 +129,8 @@ MsgDef.ACKTYPE = {
         MODIFY_BATTLETEAM = 0x80000 + 17,
         --修改战斗队伍信息
         RECEIVE_REWARD = 0x80000 + 18,
+
+        
 
     }
 }
