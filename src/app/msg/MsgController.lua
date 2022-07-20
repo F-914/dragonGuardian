@@ -186,10 +186,30 @@ function _handleMsg(event, data)
             end
             if msg["type"] == MsgDef.ACKTYPE.LOBBY.MATCH_SUC then
                 EnemyBattleTeam_ = msg["battleTeam"]
+                EnemyHp_=msg["hp"]
+                EnemyNick_=msg["nick"]
+                EnemyPid_=msg["pid"]
             elseif msg["type"] == MsgDef.ACKTYPE.GAME.REFRESHHP then
-                -- body
+                local id=msg["pid"]
+                if id==EnemyPid_ then --敌方玩家扣血
+
+                elseif id==Pid_ then --自己扣血
+                    -- body
+                end
             elseif msg["type"] == MsgDef.ACKTYPE.GAME.GAMEOVER then
-                -- body
+                local state=msg["state"]
+                local id=msg["pid"]
+                if state==false then--游戏失败
+                if id==Pid_ then --自己死亡，游戏失败
+
+                   elseif id==EnemyPid_ then--对方死亡，游戏胜利
+                    -- body
+                    end
+                end
+            elseif msg["type"] == MsgDef.ACKTYPE.GAME.TOWER_ADD then
+                local location=msg["location"]
+                local card=msg["card"]
+                --敌方添加塔
             elseif msg["type"] == MsgDef.ACKTYPE.LOBBY.LOGIN then
                 Pid_ = msg["pid"]
             elseif msg["type"] == MsgDef.ACKTYPE.LOBBY.CARD_USE then
