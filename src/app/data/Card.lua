@@ -86,12 +86,12 @@ function Card:ctor(cardId, name, rarity, type, level, cardAmount, atk, atkTarget
                    fireCdUpgrade,
                    skills, extraDamage, fatalityRate, location)
     self:setCard(cardId, name, rarity, type, level, cardAmount, atk, atkTarget, atkUpgrade, atkEnhance, fireCd,
+
         fireCdEnhance,
         fireCdUpgrade, skills
         , extraDamage, fatalityRate, location)
-    EventManager:doEvent(EventDef.ID.CREATE_CARD, self, cardId)
+    -- EventManager:doEvent(EventDef.ID.CREATE_CARD, self, cardId)
 end
-
 
 -- function Card:setCard(cardId, name, rarity, type, level, cardAmount, atk, atkTarget, atkUpgrade, atkEnhance, fireCd,
 --                       fireCdEnhance,
@@ -247,11 +247,8 @@ function Card:addCardAmount(number)
     self.cardAmount_ = self.cardAmount_ + number
 end
 
-
-
 function Card:getCardAmount()
     return self.cardAmount_
 end
-
 
 return Card

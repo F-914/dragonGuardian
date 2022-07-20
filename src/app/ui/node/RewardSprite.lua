@@ -50,6 +50,7 @@ function RewardSprite:ctor(res, data)
 
 
             text = tostring(self.data_.reward_.currencyAmount_),
+
             font = StringDef.PATH_FONT_FZBIAOZJW,
             size = 18,
             color = cc.c3b(168, 176, 225)

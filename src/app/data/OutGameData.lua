@@ -48,6 +48,7 @@ function OutGameData:init()
     Log.i("OutGameData:init: " .. tostring(_diamondShop == nil))
     self:initTreasureBoxRewardWinningRate()
 
+
     OutGameMsgController:init("127.0.0.0", 33333, 2)
     OutGameMsgController:connect()
     self:register()
@@ -99,6 +100,14 @@ function OutGameData:initTreasureBoxRewardWinningRate()
         {
             -- 普通宝箱的没有找到
 
+
+            { { 0 }, { 0 } },
+            { { 0 }, { 0 } },
+            { { 0 }, { 0 } },
+            { { 0 }, { 0 } },
+            { { 0 }, { 0 } },
+
+
             { {}, {} },
             { {}, {} },
             { {}, {} },
@@ -116,6 +125,7 @@ function OutGameData:initTreasureBoxRewardWinningRate()
             { 0, 0 },
             { 0, 0 },
             { 0, 0 },
+
         },
         {
             { 130, 130 },
@@ -173,6 +183,7 @@ end
 --end
 
 function OutGameData:register()
+
 
     ---这一部分是同步和初始化函数
     OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.USERINFO_INIT,

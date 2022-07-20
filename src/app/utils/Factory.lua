@@ -66,6 +66,7 @@ end
 ]]
 function Factory:createTeamSprite(teamData)
     local mapSprites = {}
+
     for i = 1, #teamData do
 
         local cardId = teamData[i]
@@ -73,11 +74,13 @@ function Factory:createTeamSprite(teamData)
         --解决循环嵌套
         local towerSprite = require("src/app/ui/node/TowerSprite.lua").new("res/home/general/icon_tower/" ..
             TypeConvert.Integer2StringLeadingZero(cardId, 2) .. ".png", cardData)
+
         --mapSprites[cardData] = towerSprite
         mapSprites[i] = {
             [1] = cardData,
             [2] = towerSprite,
         }
+
 
     end
 

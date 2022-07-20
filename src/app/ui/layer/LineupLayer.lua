@@ -2,6 +2,7 @@
     根据ConstDef中的已收集表COLLECTED创建出五个一行的阵容行列
     LineupLayer.lua
 ]]
+
 local LineupLayer = class("LineupLayer", function()
     return display.newLayer()
 end)
@@ -12,6 +13,7 @@ local EventManger = require("app.manager.EventManager")
 local OutGameData = require("app.data.OutGameData")
 local Log = require("app.utils.Log")
 --
+
 --[[--
     @description:构造方法
     @param lineupList 类型:表，用于保存阵容队列中有哪些塔，存储塔的下标
@@ -46,6 +48,7 @@ function LineupLayer:init(lineupList)
         button:addTouchEventListener(function(sender, eventType)
             --注册塔的点击事件，用于替换阵容中的塔，在其他情况下设置为不可点击
             if eventType == 2 then
+
                 -- 先判断一下队伍中是否已经有这个卡牌了
                 local team = OutGameData:getUserInfo():getBattleTeam():getIndexTeam(self.lineupOrder)
                 local flag = true
@@ -61,9 +64,12 @@ function LineupLayer:init(lineupList)
                     team[i] = self.order
                     self.popup:setVisible(false)
                     self.popup:removeFromParent()
+                    --OutGameData:getUserInfo():getBattleTeam():setIndexTeamCard(self.lineupOrder,i,self.order)
+                    EventManger:doEvent(EventDef.ID.CARD_USE,self.lineupOrder,i,self.order)
                     EventManger:doEvent(EventDef.ID.RESUME_BAG_BUTTON)
                     EventManger:doEvent(EventDef.ID.SHOW_BAG)
                 end
+
             end
         end)
         table.insert(list, button)
@@ -82,5 +88,10 @@ end
 function LineupLayer:setLineupOrder(lineupOrder)
     self.lineupOrder = lineupOrder
 end
-
+function LineupLayer:onEnter()
+   
+end
+function  LineupLayer:onExit()
+    
+end
 return LineupLayer

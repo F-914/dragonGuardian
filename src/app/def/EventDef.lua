@@ -23,6 +23,7 @@ EventDef.ID = {
     CREATE_SKILL = 15,
     CREATE_TREASUREBOX = 16,
     CREATE_TREASUREBOXREWARD = 17,
+
     CREATE_BULLET = 18,
     CREATE_IN_GAME_CARD = 19,
     DESTORY_ENEMY = 20,
@@ -32,8 +33,8 @@ EventDef.ID = {
     HURT_ENEMY = 24,
     CARD_MERGE = 25,
     CREATE_ENEMY_CARD = 26,
-    HIT_ENEMY = 27,  --怪物受到攻击
-    SEND_LINEUP=28,
+    HIT_ENEMY = 27, --怪物受到攻击
+    SEND_LINEUP = 28,
     CARD_LEVEL_UP = 29
 }
 

@@ -47,6 +47,7 @@ function UserInfo:testData()
     self.userInfoBattleTeam_ = TestDataFactory:getTeamDataTest()
     self.userInfoLadder_ = TestDataFactory:getLadderTest()
     self.userInfoCardList_ = TestDataFactory:getCardListTest()
+
 end
 
 function UserInfo:setUserInfo(account, avatar, nickname, coinAmount, diamondAmount, trophyAmount, battleTeam, ladder,
@@ -132,6 +133,7 @@ end
 function UserInfo:setUserInfoBattleTeam(battleTeam)
     self.battleTeam_ = battleTeam
 end
+
 
 function UserInfo:getCollectedList()
     local cardList = self:getCardList()
