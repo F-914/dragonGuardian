@@ -8,7 +8,7 @@ UserInfo.instance_ = nil
 -- local
 local ConstDef = require("app.def.ConstDef")
 local StringDef = require("app.def.StringDef")
--- local TestDataFactory = require("app.test.TestDataFactory")
+local TestDataFactory = require("app.test.TestDataFactory")
 local BattleTeam = require("app.data.BattleTeam")
 local Card = require("app.data.Card")
 local Log = require("app.utils.Log")

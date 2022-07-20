@@ -24,7 +24,7 @@ local HEART_BEAT_INTERVAL = 5 -- 心跳间隔，单位：秒
 local socket_ -- 类型：SimpleTCP，已封装的tcp对象
 local isConnect_ = false -- 类型：boolean，是否连接服务
 local listenerMap_ = {} -- 类型：table，监听数据，key为唯一标识，value为function
-
+local OutGameData=require("app.data.OutGameData")
 -------------------------------------------------------------
 -- 本地方法声明
 -------------------------------------------------------------
@@ -192,6 +192,13 @@ function _handleMsg(event, data)
                 -- body
             elseif msg["type"] == MsgDef.ACKTYPE.LOBBY.LOGIN then
                 Pid_ = msg["pid"]
+            elseif msg["type"] == MsgDef.ACKTYPE.LOBBY.CARD_USE then
+                local teamIndex=msg["teamIndex"]
+                local cardIndex=msg["cardIndex"]
+                local cardId=msg["cardId"]
+                OutGameData:getUserInfo():getBattleTeam():setIndexTeamCard(teamIndex,cardIndex,cardId)
+            elseif msg["type"] == MsgDef.ACKTYPE.LOBBY.CARD_ATTRIBUTE_CHANGE then
+                
             end
         end
     else

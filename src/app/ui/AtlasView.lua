@@ -3,7 +3,8 @@
     AtlasView
     -- TODO 这个页面的滑动 滑到最下面的时候看不到最后一行 需要修一下 @txf
 ]]
-local AtlasView = class(
+local AtlasView =
+    class(
     "AtlasView",
     function()
         return display.newColorLayer(cc.c4b(0, 0, 0, 0))
@@ -12,10 +13,9 @@ local AtlasView = class(
 --
 local ConstDef = require("app.def.ConstDef")
 local EventDef = require("app.def.EventDef")
-local MsgDef=require("app.def.MsgDef")
-local MsgController=require("src/app/msg/MsgController.lua")
+local MsgDef = require("app.def.MsgDef")
+local MsgController = require("src/app/msg/MsgController.lua")
 local EventManager = require("app.manager.EventManager")
-
 
 local TowerDetailLayer = require("app.ui.layer.TowerDetialLayer2nd")
 
@@ -51,51 +51,53 @@ function AtlasView:ctor()
             local cardId = order
             local tower = TowerDetailLayer.new(cardId, collected_)
             self:add(tower)
-            tower.use:addTouchEventListener(function(sender, eventType)
-                --注册塔的详情中，“使用”按钮的点击事件
-                if eventType == 2 then
-                    local popup = PopupLayer.new(order)
-                    self:add(popup)
-                    popup:setPosition(0, 0)
-                    tower:setVisible(false)
-                    tower:removeFromParent()
+            tower.use:addTouchEventListener(
+                function(sender, eventType)
+                    --注册塔的详情中，“使用”按钮的点击事件
+                    if eventType == 2 then
+                        local popup = PopupLayer.new(order)
+                        self:add(popup)
+                        popup:setPosition(0, 0)
+                        tower:setVisible(false)
+                        tower:removeFromParent()
 
-                    for i = 1, 5 do
-                        --将当前阵容队列中的图标设置为可点击
-                        lineup1_.button[i]:setTouchEnabled(true)
-                        lineup2_.button[i]:setTouchEnabled(true)
-                        lineup3_.button[i]:setTouchEnabled(true)
-                    end
-                    lineup1_:setOrder(order)
-                    lineup2_:setOrder(order)
-                    lineup3_:setOrder(order)
-                    lineup1_:setPopup(popup)
-                    lineup2_:setPopup(popup)
-                    lineup3_:setPopup(popup)
-                    lineup1_:setLineupOrder(1)
-                    lineup2_:setLineupOrder(2)
-                    lineup3_:setLineupOrder(3)
-
-                    EventManager:doEvent(EventDef.ID.HIDE_BAG)
-                    popup.cancel:addTouchEventListener(function(sender, eventType)
-                        if eventType == 2 then
-
-                            popup:setVisible(false)
-                            popup:removeFromParent()
-
-                            EventManager:doEvent(EventDef.ID.SHOW_BAG)
-                            EventManager:doEvent(EventDef.ID.RESUME_BAG_BUTTON)
-
+                        for i = 1, 5 do
+                            --将当前阵容队列中的图标设置为可点击
+                            lineup1_.button[i]:setTouchEnabled(true)
+                            lineup2_.button[i]:setTouchEnabled(true)
+                            lineup3_.button[i]:setTouchEnabled(true)
                         end
-                    end)
+                        lineup1_:setOrder(order)
+                        lineup2_:setOrder(order)
+                        lineup3_:setOrder(order)
+                        lineup1_:setPopup(popup)
+                        lineup2_:setPopup(popup)
+                        lineup3_:setPopup(popup)
+                        lineup1_:setLineupOrder(1)
+                        lineup2_:setLineupOrder(2)
+                        lineup3_:setLineupOrder(3)
 
-                    table.remove(ConstDef.BUTTON_CLICK, 1)
-                    for i = 1, #(BagList_) do
-                        --将图鉴中的塔设置为不可点击
-                        BagList_[i]:setTouchEnabled(false)
+                        EventManager:doEvent(EventDef.ID.HIDE_BAG)
+                        popup.cancel:addTouchEventListener(
+                            function(sender, eventType)
+                                if eventType == 2 then
+                                    popup:setVisible(false)
+                                    popup:removeFromParent()
+
+                                    EventManager:doEvent(EventDef.ID.SHOW_BAG)
+                                    EventManager:doEvent(EventDef.ID.RESUME_BAG_BUTTON)
+                                end
+                            end
+                        )
+
+                        table.remove(ConstDef.BUTTON_CLICK, 1)
+                        for i = 1, #(BagList_) do
+                            --将图鉴中的塔设置为不可点击
+                            BagList_[i]:setTouchEnabled(false)
+                        end
                     end
                 end
-            end)
+            )
         end
     end
 
@@ -109,18 +111,22 @@ function AtlasView:ctor()
             end
         end
     )
-    EventManager:regListener(EventDef.ID.RESUME_BAG_BUTTON, self, function()
-        --注册恢复图鉴中的塔为可点击
-        for i = 1, #(BagList_) do
-            BagList_[i]:setTouchEnabled(true)
-        end
+    EventManager:regListener(
+        EventDef.ID.RESUME_BAG_BUTTON,
+        self,
+        function()
+            --注册恢复图鉴中的塔为可点击
+            for i = 1, #(BagList_) do
+                BagList_[i]:setTouchEnabled(true)
+            end
 
-        for i = 1, 5 do
-            lineup1_.button[i]:setTouchEnabled(false)
-            lineup2_.button[i]:setTouchEnabled(false)
-            lineup3_.button[i]:setTouchEnabled(false)
+            for i = 1, 5 do
+                lineup1_.button[i]:setTouchEnabled(false)
+                lineup2_.button[i]:setTouchEnabled(false)
+                lineup3_.button[i]:setTouchEnabled(false)
+            end
         end
-    end)
+    )
     self.clickScheduler = cc.Director:getInstance():getScheduler():scheduleScriptFunc(clickListener, 0.1, false) --通过scheduler监听函数
 end
 
@@ -143,9 +149,14 @@ end
     @return none
 ]]
 local function createCheckbox(parents, number)
-    local checkbox = ccui.CheckBox:create(StringDef.PATH_ICON_UNCHOOSE, StringDef.PATH_ICON_CHOOSE,
-        StringDef.PATH_ICON_CHOOSE, StringDef.PATH_ICON_UNCHOOSE,
-        StringDef.PATH_ICON_UNCHOOSE)
+    local checkbox =
+        ccui.CheckBox:create(
+        StringDef.PATH_ICON_UNCHOOSE,
+        StringDef.PATH_ICON_CHOOSE,
+        StringDef.PATH_ICON_CHOOSE,
+        StringDef.PATH_ICON_UNCHOOSE,
+        StringDef.PATH_ICON_UNCHOOSE
+    )
     parents:add(checkbox)
     checkbox:setTouchEnabled(true)
     checkbox:setAnchorPoint(0.5, 0.5)
@@ -187,12 +198,18 @@ function AtlasView:createLineupList()
     local basemapConnection = display.newSprite(StringDef.PATH_BASEMAP_CONNECTION)
     basemapTitle:add(basemapConnection)
     basemapConnection:setAnchorPoint(0.5, 0.5)
-    basemapConnection:setPosition(basemapTitle:getContentSize().width * 0.65, basemapTitle:getContentSize().height * 0.5) --
+    basemapConnection:setPosition(
+        basemapTitle:getContentSize().width * 0.65,
+        basemapTitle:getContentSize().height * 0.5
+    ) --
 
     local checkbox1 = createCheckbox(basemapConnection, 1) --创造三个checkbox用于切换当前阵容
     checkbox1:setPosition(0, basemapConnection:getContentSize().height * 0.5)
     local checkbox2 = createCheckbox(basemapConnection, 2)
-    checkbox2:setPosition(basemapConnection:getContentSize().width * 0.5, basemapConnection:getContentSize().height * 0.5)
+    checkbox2:setPosition(
+        basemapConnection:getContentSize().width * 0.5,
+        basemapConnection:getContentSize().height * 0.5
+    )
     local checkbox3 = createCheckbox(basemapConnection, 3)
     checkbox3:setPosition(basemapConnection:getContentSize().width, basemapConnection:getContentSize().height * 0.5)
 
@@ -279,15 +296,13 @@ function AtlasView:createBag()
     local textureLong = display.newSprite(StringDef.PATH_TEXTURE_LONG)
     tipBackground:add(textureLong)
     textureLong:setAnchorPoint(0.5, 0.5)
-    textureLong:setPosition(tipBackground:getContentSize().width * 0.5,
-        tipBackground:getContentSize().height * 0.25)
+    textureLong:setPosition(tipBackground:getContentSize().width * 0.5, tipBackground:getContentSize().height * 0.25)
     local textureShort = display.newSprite(StringDef.PATH_TEXTURE_SHORT)
     tipBackground:add(textureShort)
     textureShort:setAnchorPoint(0.5, 0.5)
-    textureShort:setPosition(tipBackground:getContentSize().width * 0.4,
-        tipBackground:getContentSize().height * 0.75)
+    textureShort:setPosition(tipBackground:getContentSize().width * 0.4, tipBackground:getContentSize().height * 0.75)
 
-    local heightUncollect, heightCollect --计算已收集和未收集分别需要多少行
+    local heightUncollect, heightCollect  --计算已收集和未收集分别需要多少行
     -- 已收集
     local collected = OutGameData:getUserInfo():getCollectedList()
     if #(collected) == 0 then
@@ -313,10 +328,12 @@ function AtlasView:createBag()
     local layoutCollect = ccui.Layout:create() --将已收集分割线和已收集的塔放在一个layout
     layoutCollect:setPosition(display.cx, display.cy)
     layoutCollect:setAnchorPoint(0.5, 1)
-    layoutCollect:setContentSize(display.cx * 2,
+    layoutCollect:setContentSize(
+        display.cx * 2,
         heightCollect * test:getContentSize().height * ConstDef.scale_ +
-        heightCollect * test:getContentSize().height * 0.2 * ConstDef.scale_ +
-        splitLineCollected:getContentSize().height * (display.cx * 2 / splitLineCollected:getContentSize().width))
+            heightCollect * test:getContentSize().height * 0.2 * ConstDef.scale_ +
+            splitLineCollected:getContentSize().height * (display.cx * 2 / splitLineCollected:getContentSize().width)
+    )
     splitLineCollected:setScale(display.cx * 2 / splitLineCollected:getContentSize().width)
     splitLineCollected:setAnchorPoint(0, 1)
     splitLineCollected:setPosition(0, layoutCollect:getContentSize().height)
@@ -329,11 +346,14 @@ function AtlasView:createBag()
     local splitLineUncollected = display.newSprite(StringDef.PATH_SPLITLINE_UNCOLLECTED) --未收集的分割线
     uncollected_ = BagLayer.new(uncollected, "uncollected") --将未收集分割线和未收集的塔放在一个layout
     layoutUncollect:setAnchorPoint(0.5, 1)
-    layoutUncollect:setContentSize(display.cx * 2,
+    layoutUncollect:setContentSize(
+        display.cx * 2,
         splitLineUncollected:getContentSize().height * (display.cx * 2 / splitLineUncollected:getContentSize().width) +
-        heightUncollect * test:getContentSize().height * 0.1 * ConstDef.scale_ +
-        splitLineUncollected:getContentSize().height * (display.cx * 2 / splitLineUncollected:getContentSize().width)
-        + heightUncollect * test:getContentSize().height * ConstDef.scale_)
+            heightUncollect * test:getContentSize().height * 0.1 * ConstDef.scale_ +
+            splitLineUncollected:getContentSize().height *
+                (display.cx * 2 / splitLineUncollected:getContentSize().width) +
+            heightUncollect * test:getContentSize().height * ConstDef.scale_
+    )
     layoutUncollect:add(splitLineUncollected)
     splitLineUncollected:setScale(display.cx * 2 / splitLineUncollected:getContentSize().width)
     splitLineUncollected:setAnchorPoint(0, 1)
@@ -351,17 +371,24 @@ function AtlasView:createBag()
     listView:add(layoutCollect)
     listView:add(layoutUncollect)
 
-    EventManager:regListener(EventDef.ID.HIDE_BAG, self, function()
-        --注册隐藏图鉴
-        layoutCollect:setVisible(false)
-        layoutUncollect:setVisible(false)
-    end)
-    EventManager:regListener(EventDef.ID.SHOW_BAG, self, function()
-        --注册显示图鉴
-        layoutCollect:setVisible(true)
-        layoutUncollect:setVisible(true)
-    end)
-
+    EventManager:regListener(
+        EventDef.ID.HIDE_BAG,
+        self,
+        function()
+            --注册隐藏图鉴
+            layoutCollect:setVisible(false)
+            layoutUncollect:setVisible(false)
+        end
+    )
+    EventManager:regListener(
+        EventDef.ID.SHOW_BAG,
+        self,
+        function()
+            --注册显示图鉴
+            layoutCollect:setVisible(true)
+            layoutUncollect:setVisible(true)
+        end
+    )
 end
 
 --[[--
@@ -370,32 +397,56 @@ end
     @return none
 ]]
 function AtlasView:onEnter()
-    EventManager:regListener(EventDef.ID.CARD_USE,self,function(index)
-        
-        local msg={
-        loginName=OutGameData:getUserInfo():getNickname(),
-        teamIndex=index,
-        team=OutGameData:getUserInfo():getBattleTeam():getIndexTeam(index),
-        type=MsgDef.REQTYPE.LOBBY.CARD_USE
-       }
-       MsgController:sendMsg(msg)
-    end)
-    EventManager:regListener(EventDef.ID.CARD_INTENSIFY,self,function (cardId)
-        local msg={
-            loginName=OutGameData:getUserInfo():getNickname(),
-            card=OutGameData:getUserInfo():getCardList()[cardId],
-            type=MsgDef.REQTYPE.LOBBY.CARD_ATTRIBUTE_CHANGE
-           }
-           MsgController:sendMsg(msg)
-    end)
-    EventManager:regListener(EventDef.ID.CARD_UPGRADE,self,function (cardId)
-        local msg={
-            loginName=OutGameData:getUserInfo():getNickname(),
-            card=OutGameData:getUserInfo():getCardList()[cardId],
-            type=MsgDef.REQTYPE.LOBBY.CARD_ATTRIBUTE_CHANGE
-           }
-           MsgController:sendMsg(msg)
-    end)
+    EventManager:regListener(
+        EventDef.ID.CARD_USE,
+        self,
+        function(teamIndex,cardIndex,cardId)
+            local msg = {
+                loginName = OutGameData:getUserInfo():getNickname(),
+                type = MsgDef.REQTYPE.LOBBY.CARD_USE,
+                userInfo={
+                    teamIndex = teamIndex,
+                    cardIndex=cardIndex,
+                    cardId=cardId
+                }
+            }
+            MsgController:sendMsg(msg)
+        end
+    )
+    EventManager:regListener(
+        EventDef.ID.CARD_INTENSIFY,
+        self,
+        function(cardId, atkUpgrade)
+            local msg = {
+                loginName = OutGameData:getUserInfo():getNickname(),
+                userInfo = {
+                    cardId = cardId,
+                    attribute = "cardAtk",
+                    upgrade = atkUpgrade
+                },
+                type = MsgDef.REQTYPE.LOBBY.CARD_ATTRIBUTE_CHANGE
+            }
+            MsgController:sendMsg(msg)
+        end
+    )
+    EventManager:regListener(
+        EventDef.ID.CARD_UPGRADE,
+        self,
+        function(cardId)
+            local msg = {
+                loginName = OutGameData:getUserInfo():getNickname(),
+                type = MsgDef.REQTYPE.LOBBY.CARD_ATTRIBUTE_CHANGE,
+                userInfo={
+                    cardId = cardId,
+                attribute = "cardLevel",
+                upgrade = 1,
+                }
+                
+               
+            }
+            MsgController:sendMsg(msg)
+        end
+    )
 
     self:createLineupList()
     self:createBag()
@@ -408,7 +459,7 @@ end
 ]]
 function AtlasView:onExit()
     --退出时注销注册的事件
-    
+
     EventManager:unRegListener(EventDef.ID.CARD_USE, self)
     EventManager:unRegListener(EventDef.ID.CARD_INTENSIFY, self)
     EventManager:unRegListener(EventDef.ID.CARD_UPGRADE, self)
