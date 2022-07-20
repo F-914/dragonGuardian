@@ -33,9 +33,9 @@ end
 ]]
 function TableUtil:toCard(msg)
     local skills = {}
-    for i = 1, #msg.cardSkills do
-        skills[i] = self:toSkill(msg.cardSkills[i])
-    end
+    --for i = 1, #msg.cardSkills do
+    --    skills[i] = self:toSkill(msg.cardSkills[i])
+    --end
     return Card.new(msg.cardId, msg.cardName, msg.cardRarity,
             msg.cardType, msg.cardLevel, msg.cardAmount ,msg.cardAtk,
             msg.cardAtkTarget, msg.cardAtkUpgrade,
@@ -51,16 +51,16 @@ end
 ]]
 function TableUtil:toCommodity(msg)
     local obj = nil
-    if msg.type == ConstDef.REWARD_TYPE.CURRENCY then
-        obj = self:toCurrency(msg.reward)
-    elseif msg.type == ConstDef.REWARD_TYPE.TOWER then
-        obj = self:toCard(msg.reward)
-    elseif msg.type == ConstDef.REWARD_TYPE.TREASUREBOX then
-        obj = self:toTreasureBox(msg.reward)
-    elseif msg.type == ConstDef.REWARD_TYPE.UR then
+    if msg.commodityType == ConstDef.COMMODITY_TYPE.CURRENCY then
+        obj = self:toCurrency(msg.commodityCommodity)
+    elseif msg.commodityType == ConstDef.COMMODITY_TYPE.TOWER then
+        obj = self:toCard(msg.commodityCommodity)
+    elseif msg.commodityType == ConstDef.COMMODITY_TYPE.TREASUREBOX then
+        obj = self:toTreasureBox(msg.commodityCommodity)
+    elseif msg.commodityType== ConstDef.COMMODITY_TYPE.UR then
         obj = nil
     else
-        Log.e("uncatch this commodity type:", msg.type)
+        Log.e("uncatch this commodity type:", msg.commodityType)
     end
 
     return Commodity.new(msg.commodityName, msg.commodityType,
@@ -176,6 +176,7 @@ function TableUtil:toUserInfo(msg)
             self:toBattleTeam(msg.userInfoBattleTeam),
             self:toLadder(msg.userInfoLadder),
     cardList)
+    return userInfo
 end
 function TableUtil:toBoolean(string)
     if string == "true"then

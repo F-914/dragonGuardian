@@ -6,11 +6,13 @@ local OutGameBattleLayer = class("OutGameBattleLayer", function()
     return display.newLayer()
 end)
 --local
-local GameData = require("app.test.GameData")
 local Matching_2nd = require("app.ui.secondaryui.Matching2nd")
 local Factory = require("app.utils.Factory")
 local StringDef = require("app.def.StringDef")
 local OutGameData = require("app.data.OutGameData")
+local Log = require("app.utils.Log")
+local EventManager = require("app.manager.EventManager")
+local EventDef = require("app.def.EventDef")
 --
 --[[--
     @description: 构造方法
@@ -38,7 +40,9 @@ function OutGameBattleLayer:init()
     local selectTeamSprite = display.newSprite(StringDef.PATH_BASE_SELECTED_TEAM)
     selectTeamSprite:setPosition(display.width * .5, display.height * .08)
     selectTeamSprite:addTo(teamLayer)
-
+    -- local cardList = OutGameData:getUserInfo():getCardList()
+    -- for i = 1, #(teamData) do
+    --     local node = self.teamMap_[ cardList[teamData[i]] ]
     for i = 1, #self.teamMap_ do
         local node = self.teamMap_[i][2]
         node:setPosition(-70 + display.width * 0.2 * i, display.height * .075)
@@ -55,6 +59,7 @@ function OutGameBattleLayer:init()
             local matchingView = Matching_2nd.new(self)
             self.twoLevelUi_ = matchingView
             matchingView:addTo(display.getRunningScene(), 2)
+            EventManager:doEvent(EventDef.ID.SEND_LINEUP, self)
         end
     end)
 
@@ -64,7 +69,8 @@ end
     @description: 执行事件的注册
 ]]
 function OutGameBattleLayer:onEnter()
-
+    -- TODO 这块应该更新一下 如果图鉴页面更改了战斗小队的卡牌 那么这里应该更新一下战斗小队的显示
+    -- TODO 考虑到这里有等级显示 那么每次升级之后同样需要更新
 end
 
 --[[--

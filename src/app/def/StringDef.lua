@@ -6,46 +6,6 @@
     这样的做是为了便于管理，当某个路径发生变化时，只需要在这里改一下就好了，否则需要遍历所有文件找到所有的路径进行修改
     ::>_<::
 ]]
---local PATH_ICON_01, PATH_ICON_LINEUP_01, PATH_ICON_UNCOLLECTED_01 = "res/collected/1.png", "res/icon_lineup/1.png",
---"res/uncollected/1.png"
---local PATH_ICON_02, PATH_ICON_LINEUP_02, PATH_ICON_UNCOLLECTED_02 = "res/collected/2.png", "res/icon_lineup/2.png",
---"res/uncollected/2.png"
---local PATH_ICON_03, PATH_ICON_LINEUP_03, PATH_ICON_UNCOLLECTED_03 = "res/collected/3.png", "res/icon_lineup/3.png",
---"res/uncollected/3.png"
---local PATH_ICON_04, PATH_ICON_LINEUP_04, PATH_ICON_UNCOLLECTED_04 = "res/collected/4.png", "res/icon_lineup/4.png",
---"res/uncollected/4.png"
---local PATH_ICON_05, PATH_ICON_LINEUP_05, PATH_ICON_UNCOLLECTED_05 = "res/collected/5.png", "res/icon_lineup/5.png",
---"res/uncollected/5.png"
---local PATH_ICON_06, PATH_ICON_LINEUP_06, PATH_ICON_UNCOLLECTED_06 = "res/collected/7.png", "res/icon_lineup/6.png",
---"res/uncollected/6.png"
---local PATH_ICON_07, PATH_ICON_LINEUP_07, PATH_ICON_UNCOLLECTED_07 = "res/collected/7.png", "res/icon_lineup/7.png",
---"res/uncollected/7.png"
---local PATH_ICON_08, PATH_ICON_LINEUP_08, PATH_ICON_UNCOLLECTED_08 = "res/collected/8.png", "res/icon_lineup/8.png",
---"res/uncollected/8.png"
---local PATH_ICON_09, PATH_ICON_LINEUP_09, PATH_ICON_UNCOLLECTED_09 = "res/collected/9.png", "res/icon_lineup/9.png",
---"res/uncollected/9.png"
---local PATH_ICON_10, PATH_ICON_LINEUP_10, PATH_ICON_UNCOLLECTED_10 = "res/collected/10.png", "res/icon_lineup/10.png",
---"res/uncollected/10.png"
---local PATH_ICON_11, PATH_ICON_LINEUP_11, PATH_ICON_UNCOLLECTED_11 = "res/collected/11.png", "res/icon_lineup/11.png",
---"res/uncollected/11.png"
---local PATH_ICON_12, PATH_ICON_LINEUP_12, PATH_ICON_UNCOLLECTED_12 = "res/collected/12.png", "res/icon_lineup/12.png",
---"res/uncollected/12.png"
---local PATH_ICON_13, PATH_ICON_LINEUP_13, PATH_ICON_UNCOLLECTED_13 = "res/collected/13.png", "res/icon_lineup/13.png",
---"res/uncollected/13.png"
---local PATH_ICON_14, PATH_ICON_LINEUP_14, PATH_ICON_UNCOLLECTED_14 = "res/collected/14.png", "res/icon_lineup/14.png",
---"res/uncollected/14.png"
---local PATH_ICON_15, PATH_ICON_LINEUP_15, PATH_ICON_UNCOLLECTED_15 = "res/collected/15.png", "res/icon_lineup/15.png",
---"res/uncollected/15.png"
---local PATH_ICON_16, PATH_ICON_LINEUP_16, PATH_ICON_UNCOLLECTED_16 = "res/collected/16.png", "res/icon_lineup/16.png",
---"res/uncollected/16.png"
---local PATH_ICON_17, PATH_ICON_LINEUP_17, PATH_ICON_UNCOLLECTED_17 = "res/collected/17.png", "res/icon_lineup/17.png",
---"res/uncollected/17.png"
---local PATH_ICON_18, PATH_ICON_LINEUP_18, PATH_ICON_UNCOLLECTED_18 = "res/collected/18.png", "res/icon_lineup/18.png",
---"res/uncollected/18.png"
---local PATH_ICON_19, PATH_ICON_LINEUP_19, PATH_ICON_UNCOLLECTED_19 = "res/collected/19.png", "res/icon_lineup/19.png",
---"res/uncollected/19.png"
---local PATH_ICON_20, PATH_ICON_LINEUP_20, PATH_ICON_UNCOLLECTED_20 = "res/collected/20.png", "res/icon_lineup/20.png",
---"res/uncollected/20.png"
 local StringDef = {
     --图鉴页面，已收集中使用的彩色图标
     PATH_ICON_01 = "res/collected/1.png",
@@ -167,6 +127,27 @@ local StringDef = {
     PATH_SUBINTERFACE_TOWER_LEVEL_18 = "res/home/guide/subinterface_tower_list/level/Lv.18.png",
     PATH_SUBINTERFACE_TOWER_LEVEL_19 = "res/home/guide/subinterface_tower_list/level/Lv.19.png",
     PATH_SUBINTERFACE_TOWER_LEVEL_20 = "res/home/guide/subinterface_tower_list/level/Lv.20.png",
+    -- lineup level
+    PATH_SUBINTERFACE_TOWER_LINE_UP_01 = "res/home/guide/subinterface_current_lineup/level/Lv.1.png",
+    PATH_SUBINTERFACE_TOWER_LINE_UP_02 = "res/home/guide/subinterface_current_lineup/level/Lv.2.png",
+    PATH_SUBINTERFACE_TOWER_LINE_UP_03 = "res/home/guide/subinterface_current_lineup/level/Lv.3.png",
+    PATH_SUBINTERFACE_TOWER_LINE_UP_04 = "res/home/guide/subinterface_current_lineup/level/Lv.4.png",
+    PATH_SUBINTERFACE_TOWER_LINE_UP_05 = "res/home/guide/subinterface_current_lineup/level/Lv.5.png",
+    PATH_SUBINTERFACE_TOWER_LINE_UP_06 = "res/home/guide/subinterface_current_lineup/level/Lv.6.png",
+    PATH_SUBINTERFACE_TOWER_LINE_UP_07 = "res/home/guide/subinterface_current_lineup/level/Lv.7.png",
+    PATH_SUBINTERFACE_TOWER_LINE_UP_08 = "res/home/guide/subinterface_current_lineup/level/Lv.8.png",
+    PATH_SUBINTERFACE_TOWER_LINE_UP_09 = "res/home/guide/subinterface_current_lineup/level/Lv.9.png",
+    PATH_SUBINTERFACE_TOWER_LINE_UP_10 = "res/home/guide/subinterface_current_lineup/level/Lv.10.png",
+    PATH_SUBINTERFACE_TOWER_LINE_UP_11 = "res/home/guide/subinterface_current_lineup/level/Lv.11.png",
+    PATH_SUBINTERFACE_TOWER_LINE_UP_12 = "res/home/guide/subinterface_current_lineup/level/Lv.12.png",
+    PATH_SUBINTERFACE_TOWER_LINE_UP_13 = "res/home/guide/subinterface_current_lineup/level/Lv.13.png",
+    PATH_SUBINTERFACE_TOWER_LINE_UP_14 = "res/home/guide/subinterface_current_lineup/level/Lv.14.png",
+    PATH_SUBINTERFACE_TOWER_LINE_UP_15 = "res/home/guide/subinterface_current_lineup/level/Lv.15.png",
+    PATH_SUBINTERFACE_TOWER_LINE_UP_16 = "res/home/guide/subinterface_current_lineup/level/Lv.16.png",
+    PATH_SUBINTERFACE_TOWER_LINE_UP_17 = "res/home/guide/subinterface_current_lineup/level/Lv.17.png",
+    PATH_SUBINTERFACE_TOWER_LINE_UP_18 = "res/home/guide/subinterface_current_lineup/level/Lv.18.png",
+    PATH_SUBINTERFACE_TOWER_LINE_UP_19 = "res/home/guide/subinterface_current_lineup/level/Lv.19.png",
+    PATH_SUBINTERFACE_TOWER_LINE_UP_20 = "res/home/guide/subinterface_current_lineup/level/Lv.20.png",
     --音乐音效
     PATH_LOBBY_BGM_120BPM = "sound_ogg/lobby_bgm_120bpm.ogg",
     PATH_GET_FREE_ITEM = "sound_ogg/get_free_item.ogg",
@@ -216,6 +197,8 @@ local StringDef = {
     PATH_SUBINTERFACE_TOWER_TYPE_AUX = "home/guide/subinterface_tower_list/type_assist.png",
     PATH_SUBINTERFACE_TOWER_TYPE_CONTROL = "home/guide/subinterface_tower_list/type_control.png",
 
+    PATH_SUBINTERFACE_TOWER_PROGRESS = "res/home/guide/subinterface_tower_list/progress_progress_fragments_number.png",
+    PATH_SUBINTERFACE_TOWER_PROGRESS_BASE = "res/home/guide/subinterface_tower_list/progress_base_fragments_number.png",
 
     PATH_ICON_PROPERTY_TYPE = "res/home/guide/second_tower_infor_popup/icon_property/type.png",
     PATH_ICON_PROPERTY_ATK = "res/home/guide/second_tower_infor_popup/icon_property/atk.png",
@@ -258,6 +241,7 @@ local StringDef = {
     PATH_COIN_SHOP_BASE_FRAGMENT = "home/shop/coins_shop/base_fragments_number.png",
     PATH_COIN_SHOP_ICON_COIN = "home/shop/coins_shop/icon_coin.png",
     PATH_COIN_SHOP_STORE_TITLE = "home/shop/coins_shop/title_coin_store.png",
+    PATH_COIN_SHOP_BASE_SHADE = "home/shop/coins_shop/base_shade.png",
     --
     PATH_SHOP_SECOND_PURCHASE_CONFIRM_BASE = "home/shop/second_purchase_confirmation_popup/base_popup.png",
     PATH_SHOP_SECOND_PURCHASE_CONFIRM_CLOSE = "home/shop/second_purchase_confirmation_popup/button_close.png",
@@ -296,8 +280,10 @@ local StringDef = {
     --
     PATH_SECOND_CONFIRM_BOX_NORMAL = "res/home/general/second_open_confirm_popup/icon_box_normal.png",
     PATH_SECOND_CONFIRM_BOX_RARE = "res/home/general/second_open_confirm_popup/icon_box_rare.png",
+
     PATH_SECOND_CONFIRM_BOX_EPIC = "res/home/general/second_open_confirm_popup/icon_box_epic.png",
     PATH_SECOND_CONFIRM_BOX_LEGEND = "res/home/general/second_open_confirm_popup/icon_box_legend.png",
+
     --
     PATH_DIAMOND_SHOP_BOX_NORMAL = "home/shop/diamond_shop/box_normal.png",
     PATH_DIAMOND_SHOP_BOX_RARE = "home/shop/diamond_shop/box_rare.png",
@@ -310,15 +296,34 @@ local StringDef = {
     PATH_SECOND_CONFIRM_RANDOM_CARD_LEGEND = "res/home/general/second_open_confirm_popup/icon_legend.png",
     --
     PATH_DIAMOND_SHOP_BASE_PRE = "home/shop/diamond_shop/base_",
-    -- "home/shop/coins_shop/commodity_icon_tower_fragment/",
     --
     PATH_DEFAULT_AVATAR = "home/top_player_info/default_avatar.png",
     -- TTF
     PATH_FONT_FZBIAOZJW = "res/font/fzbiaozjw.ttf",
     PATH_FONT_FZZCHJW = "font/fzzchjw.ttf",
-    PATH_TTF_HZGBJW = "res/front/fzhzgbjw.ttf",
-    PATH_TTF_BIAOZJW = "res/front/fzbiaozjw.ttf",
+    PATH_TTF_HZGBJW = "res/font/fzhzgbjw.ttf",
+    PATH_TTF_BIAOZJW = "res/font/fzbiaozjw.ttf",
     --
     PATH_POSTFIX_PNG = ".png",
+
+
+    -- string
+    STR_TYPE_ATTACK = "攻击",
+    STR_TYPE_DISTURB = "干扰",
+    STR_TYPE_AUX = "辅助",
+    STR_TYPE_CONTROL = "控制",
+    --
+    STR_RARITY_R = "普通",
+    STR_RARITY_SR = "稀有",
+    STR_RARITY_SSR = "史诗",
+    STR_RARITY_UR = "传奇",
+    --
+    STR_ATK_TARGET_FRONT = "前方",
+    STR_ATK_TARGET_BACK = "后方",
+    STR_ATK_TARGET_LEFT = "左方",
+    STR_ATK_TARGET_RIGHT = "右方",
+    STR_ATK_TARGET_RANDOM = "随机",
+    STR_ATK_TARGET_HP_FIRST = "优先血量最高",
+
 }
 return StringDef

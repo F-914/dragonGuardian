@@ -6,12 +6,13 @@
 ]]
 local Factory = {}
 
-local ConstDef = require("src/app/def/ConstDef.lua")
-local Log = require("src/app/utils/Log.lua")
+
+local ConstDef = require("app.def.ConstDef")
+local Log = require("app.utils.Log")
 local StringDef = require("app.def.StringDef")
 local TypeConvert = require("app.utils.TypeConvert")
-local TowerDef = require("src/app/def/TowerDef.lua")
-local Card = require("src/app/data/Card.lua")
+local TowerDef = require("app.def.TowerDef")
+local Card = require("app.data.Card")
 --[[--
     @description: 创建用于宝箱奖励的贴图
     @data type:table, 奖励的数据
@@ -29,7 +30,7 @@ function Factory:createChestRewardTower(data)
     for _, ele in ipairs(data) do
         if ele.cardAmount ~= 0 then
             local sprite = display.newSprite("res/home/general/second_open_treasure_popup/icon_tower/" ..
-                    ele.cardId .. ".png")
+                ele.cardId .. ".png")
             local spSize = sprite:getContentSize()
             local rarityTTF = display.newTTFLabel({
                 text = rarityMap[ele.cardRarity],
@@ -65,17 +66,22 @@ end
 ]]
 function Factory:createTeamSprite(teamData)
     local mapSprites = {}
+
     for i = 1, #teamData do
+
         local cardId = teamData[i]
         local cardData = require("app.data.OutGameData"):getUserInfo():getCardList()[cardId]
         --解决循环嵌套
         local towerSprite = require("src/app/ui/node/TowerSprite.lua").new("res/home/general/icon_tower/" ..
             TypeConvert.Integer2StringLeadingZero(cardId, 2) .. ".png", cardData)
+
         --mapSprites[cardData] = towerSprite
         mapSprites[i] = {
             [1] = cardData,
             [2] = towerSprite,
         }
+
+
     end
 
     return mapSprites
@@ -86,11 +92,13 @@ end
     @param type:string 塔类型的名称
     @return type:Sprite, 代表塔类型的精灵
 ]]
+
 -- function Factory:createTowerType(type)
 ---路径问题暂时这样简单的解决,
 -- local sprite = display.newSprite("res/home/guide/subinterface_tower_list/type_" .. type .. ".png")
 function Factory:createTowerType(type)
     local sprite = display.newSprite(ConstDef.ICON_SUBINSTANCE_TOWER_LIST_TYPE[type])
+
     return sprite
 end
 
@@ -409,16 +417,18 @@ function Factory:createChestRewardItem(size, numFloor, numUpper, rarity)
     numberTTF:addTo(layout)
     return layout
 end
+
 function Factory:createCardObj(id, quantity)
     local srcData = TowerDef[id]
     ---skill是nil，因为现在没有技能
     local card = Card.new(srcData.ID, srcData.NAME, srcData.RARITY,
-            srcData.TYPE, srcData.LEVEL, quantity, srcData.ATK,
-            srcData.ATK_TARGET, srcData.ATK_UPGRADE,
-            srcData.ATK_ENHANCE, srcData.FIRECD,
-            srcData.FIRECD_ENHANCE, srcData.FIRECD_UPGRADE,
-            nil, srcData.EXTRA_DAMAGE, srcData.FATALITY_RATE
+        srcData.TYPE, srcData.LEVEL, quantity, srcData.ATK,
+        srcData.ATK_TARGET, srcData.ATK_UPGRADE,
+        srcData.ATK_ENHANCE, srcData.FIRECD,
+        srcData.FIRECD_ENHANCE, srcData.FIRECD_UPGRADE,
+        nil, srcData.EXTRA_DAMAGE, srcData.FATALITY_RATE
     )
     return require("src/app/utils/TableUtil.lua"):removeTableFunction(card)
 end
+
 return Factory

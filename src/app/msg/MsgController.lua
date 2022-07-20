@@ -5,7 +5,8 @@
 ]]
 local MsgController = {}
 local ByteArray = require("app.msg.ByteArray")
-local Log = require("app.util.Log")
+local Log = require("app.utils.Log")
+local MsgDef = require("app.def.MsgDef")
 
 local SimpleTCP = require("framework.SimpleTCP")
 local scheduler = require("framework.scheduler")
@@ -23,7 +24,7 @@ local HEART_BEAT_INTERVAL = 5 -- 心跳间隔，单位：秒
 local socket_ -- 类型：SimpleTCP，已封装的tcp对象
 local isConnect_ = false -- 类型：boolean，是否连接服务
 local listenerMap_ = {} -- 类型：table，监听数据，key为唯一标识，value为function
-
+local OutGameData = require("app.data.OutGameData")
 -------------------------------------------------------------
 -- 本地方法声明
 -------------------------------------------------------------
@@ -183,7 +184,49 @@ function _handleMsg(event, data)
             for _, listener in pairs(listenerMap_) do
                 listener(msg)
             end
+            if msg["type"] == MsgDef.ACKTYPE.LOBBY.MATCH_SUC then
+                EnemyBattleTeam_ = msg["battleTeam"]
+                EnemyHp_ = msg["hp"]
+                EnemyNick_ = msg["nick"]
+                EnemyPid_ = msg["pid"]
+            elseif msg["type"] == MsgDef.ACKTYPE.GAME.REFRESHHP then
+                local id = msg["pid"]
+                if id == EnemyPid_ then
+                    --敌方玩家扣血
+
+                elseif id == Pid_ then
+                    --自己扣血
+                    -- body
+                end
+            elseif msg["type"] == MsgDef.ACKTYPE.GAME.GAMEOVER then
+
+                local id = msg["pid"]
+
+                if id == Pid_ then
+                    --自己死亡，游戏失败
+
+                elseif id == EnemyPid_ then
+                    --对方死亡，游戏胜利
+                    -- body
+                end
+            end
+        elseif msg["type"] == MsgDef.ACKTYPE.GAME.TOWER_ADD then
+            local location = msg["location"]
+            local card = msg["card"]
+            --敌方添加塔
+        elseif msg["type"] == MsgDef.ACKTYPE.LOBBY.LOGIN then
+            Pid_ = msg["pid"]
+        elseif msg["type"] == MsgDef.ACKTYPE.LOBBY.CARD_USE then
+            local battleTeam = msg["userInfoBattleTeam"]
+            OutGameData:getUserInfo():setUserInfoBattleTeam(battleTeam)
+        elseif msg["type"] == MsgDef.ACKTYPE.LOBBY.CARD_ATTRIBUTE_CHANGE then
+            local cardList = msg["userInfoCardList"]
+            OutGameData:getUserInfo().userInfoCardList_ = cardList
+        elseif msg["type"] == MsgDef.ACKTYPE.LOBBY.CARD_COLLECT then
+            local cardList = msg["userInfoCardList"]
+            OutGameData:getUserInfo().userInfoCardList_ = cardList
         end
+        --end
     else
         Log.e(TAG, "_handleMsg() unexpect event, event=", event)
     end

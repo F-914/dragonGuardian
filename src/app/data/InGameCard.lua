@@ -12,30 +12,71 @@ local EventDef = require("app.def.EventDef")
 local EventManager = require("app.manager.EventManager")
 --
 --
-function InGameCard:ctor(inGameCardId, cardStar)
-    self:setInGameCard(inGameCardId, cardStar)
-    EventManager:doEvent(EventDef.ID.CREATE_IN_GAME_CARD, self)
+
+                        --1, cx, cy, xLocate, yLocate, id, level
+function InGameCard:ctor(camp, x, y, xLocate, yLocate, cardId, star, level)
+    self:init(camp, x, y, xLocate, yLocate, cardId, star, level)
+    if camp == 1 then
+        EventManager:doEvent(EventDef.ID.CREATE_CARD, self, cardId)
+    elseif camp == 2 then
+        EventManager:doEvent(EventDef.ID.CREATE_ENEMY_CARD, self, cardId)
+    end
 end
 
-function InGameCard:setInGameCard(inGameCardId, cardStar)
-    self.inGameCardId_ = inGameCardId
-    self.cardStar_ = cardStar
+function InGameCard:init(camp, x, y, xLocate, yLocate, cardId, star, level)
+    self.camp_ = camp
+    self.x_ = x
+    self.y_ = y
+    self.xLocate_ = xLocate
+    self.yLocate_ = yLocate
+    self.cardId_ = cardId
+    self.star_ = star
+    if level ~= nil then
+        self.level_ = level
+    else
+        self.level_ = 1
+    end
 end
 
-function InGameCard:getInGameCardId()
-    return self.inGameCardId_
+--[[--
+    销毁
+
+    @param none
+
+    @return none
+]]
+function InGameCard:destory()
+    --Log.i("destory")
+    self.isDeath_ = true
+    EventManager:doEvent(EventDef.ID.DESTORY_CARD, self)
 end
 
-function InGameCard:setInGameCard(inGameCardId)
-    self.inGameCardId_ = inGameCardId
+---设置塔等级
+function InGameCard:setCardLevel(level)
+    self.level_ = level
+end
+
+---设置塔星级
+function InGameCard:setCardLStar(star)
+    self.star_ = star
+end
+
+--- 塔表格位置
+function InGameCard:getXLocate()
+    return self.xLocate_
+end
+
+function InGameCard:getYLocate()
+    return self.yLocate_
+end
+
+function InGameCard:getCardLevel()
+    return self.level_
 end
 
 function InGameCard:getCardStar()
-    return self.cardStar_
+    return self.star_
 end
 
-function InGameCard:setCardStar(cardStar)
-    self.cardStar_ = cardStar
-end
 
 return InGameCard

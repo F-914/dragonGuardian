@@ -13,8 +13,9 @@ local ConstDef = require("app.def.ConstDef")
 local StringDef = require("app.def.StringDef")
 local Commodity = require("app.data.Commodity")
 local OutGameData = require("app.data.OutGameData")
+local NotEnoughNotifi2nd = require("app.ui.secondaryui.NotEnoughNotifi2nd")
+local TableUtil = require("app.utils.TableUtil")
 local Log = require("app.utils.Log")
-
 local OutGameMsgController = require("app.network.OutGameMsgController")
 local NotEnoughNotifi2nd = require("app.ui.secondaryui.NotEnoughNotifi2nd")
 local MsgDef = require("app.def.MsgDef")
@@ -37,6 +38,9 @@ function CurrencyCommodityNode:initView()
     local commodityButton = tolua.cast(ccui.Helper:seekWidgetByName(commodityLayer, "commodityButton"), "ccui.Button")
     -- 设置货币类型
     local currencyTypeLayer = tolua.cast(ccui.Helper:seekWidgetByName(commodityLayer, "commodityLayout"), "ccui.Layout")
+    print(self.commodity_)
+    print(self.commodity_:getCommodityType())
+    print(self.commodity_:getCommodityCommodity())
     currencyTypeLayer:setBackGroundImage(ConstDef.ICON_CURRENCY_TYPE[
         self.commodity_:getCommodityCommodity():getCurrencyType()])
     -- 设置货币数量
@@ -63,38 +67,38 @@ function CurrencyCommodityNode:initView()
             audio.playEffect(StringDef.PATH_GET_FREE_ITEM)
             commodityLayer:scale(1)
             if self.commodity_:getCommodityPrice() >
-                    OutGameData:getUserInfo():getCoinAmount() then
+                OutGameData:getUserInfo():getCoinAmount() then
                 local notifiUi = NotEnoughNotifi2nd.new(1)
                 notifiUi:addTo(display.getRunningScene(), 2)
             else
                 if self.commodity_:getCommodityType() ==
-                        ConstDef.COMMODITY_TYPE.CURRENCY then
+                    ConstDef.COMMODITY_TYPE.CURRENCY then
                     local msgUserInfo = {}
                     local userInfo = OutGameData:getUserInfo()
                     msgUserInfo.userInfoCoinAmount = userInfo:getCoinAmount()
-                            - self.commodity_:getCommodityPrice()
+                        - self.commodity_:getCommodityPrice()
                     msgUserInfo.userInfoDiamondAmount = userInfo:getDiamondAmount()
                     msgUserInfo.userInfoCardList = {}
                     local currency = self.commodity_:getCommodityCommodity()
                     if currency:getCurrencyType() ==
-                            ConstDef.CURRENCY_TYPE.COIN then
+                        ConstDef.CURRENCY_TYPE.COIN then
                         msgUserInfo.userInfoCoinAmount = msgUserInfo.userInfoCoinAmount
-                                + currency:getCurrencyAmount()
+                            + currency:getCurrencyAmount()
                     elseif currency:getCurrencyType() ==
-                            ConstDef.CURRENCY_TYPE.DIAMOND then
+                        ConstDef.CURRENCY_TYPE.DIAMOND then
                         msgUserInfo.userInfoDiamondAmount = msgUserInfo.userInfoDiamondAmount
-                                + currency:getCurrencyAmount()
+                            + currency:getCurrencyAmount()
                     end
                     local msg = TableUtil:encapsulateAsMsg(MsgDef.REQTYPE
-                            .LOBBY.PURCHASE_COMMODITY, userInfo:getAccount(),
-                            "userInfo", msgUserInfo)
+                        .LOBBY.PURCHASE_COMMODITY, userInfo:getAccount(),
+                        "userInfo", msgUserInfo)
                     OutGameMsgController:sendMsg(msg)
                 elseif self.commodity_:getCommodityType() ==
-                        ConstDef.COMMODITY_TYPE.TREASUREBOX then
+                    ConstDef.COMMODITY_TYPE.TREASUREBOX then
                     local openTreasure2nd = OpenTreasure2nd.new(
-                            self.commodity_.commodityCommodity_,
-                            0 - self.commodity_.commodityPrice_, 0,
-                            false, 0)
+                        self.commodity_.commodityCommodity_,
+                        0 - self.commodity_.commodityPrice_, 0,
+                        false, 0)
                     openTreasure2nd:addTo(display.getRunningScene(), 2)
                 end
             end

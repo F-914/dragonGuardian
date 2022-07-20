@@ -47,7 +47,10 @@ function RewardSprite:ctor(res, data)
     ---这里改成这样,更符合数据模型
     if self.data_.rewardType_ == ConstDef.REWARD_TYPE.CURRENCY then
         quantityTTF = display.newTTFLabel({
+
+
             text = tostring(self.data_.reward_.currencyAmount_),
+
             font = StringDef.PATH_FONT_FZBIAOZJW,
             size = 18,
             color = cc.c3b(168, 176, 225)

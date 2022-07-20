@@ -58,12 +58,12 @@ function TreasureBoxCommodityNode:initView()
             audio.playEffect(StringDef.PATH_OPEN_BOX)
             boxLayer:scale(1)
             if self.commodity_:getCommodityPrice() >
-                    OutGameData:getUserInfo():getDiamondAmount() then
+                OutGameData:getUserInfo():getDiamondAmount() then
                 local notifiUi = NotEnoughNotifi2nd.new(1)
                 notifiUi:addTo(display.getRunningScene(), 2)
             else
                 local openTreasure2nd = OpenTreasure2nd.new(self.commodity_.commodityCommodity_,
-                        0, 0 - self.commodity_.commodityPrice_, false, 0)
+                    0, 0 - self.commodity_.commodityPrice_, false, 0)
                 openTreasure2nd:addTo(display.getRunningScene(), 2)
             end
         end

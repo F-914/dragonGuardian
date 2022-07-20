@@ -2,24 +2,32 @@
     图鉴界面的二级界面，用于实现塔的详情
     TowerDetial_2nd.lua
 ]]
+
 local TowerDetialLayer2nd = class("TowerDetialLayer2nd", function()
     return display.newLayer()
 end)
 --local
 local ConstDef = require("app.def.ConstDef")
 local StringDef = require("app.def.StringDef")
-local TowerButtonLayer2nd = require("src/app/ui/layer/TowerButtonLayer2nd.lua")
+local EventDef=require("app.def.EventDef")
+local TowerButtonLayer2nd = require("app.ui.layer.TowerButtonLayer2nd")
+local Log = require("app.utils.Log")
+local OutGameData = require("app.data.OutGameData")
+local EventManager=require("app.manager.EventManager")
 --
+
 --[[--
     @description: 构造方法
     @param none
     @return none
 ]]
-function TowerDetialLayer2nd:ctor(card, bag)
-
+function TowerDetialLayer2nd:ctor(cardId, bag)
     self.use = nil
-    self.order = card.order
-    self:init(card, bag)
+    self.intensify=nil
+    self.upgrade=nil
+    self.order = cardId
+    self:init(cardId, bag)
+
 end
 
 --[[--
@@ -27,7 +35,8 @@ end
     @param bag 类型:对应的已收集或者未收集的塔图鉴
     @return none
 ]]
-function TowerDetialLayer2nd:init(card, bag)
+function TowerDetialLayer2nd:init(cardId, bag)
+    --print("has been used")
     local ttf = {}
     ttf.fontFilePath = StringDef.PATH_TTF_BIAOZJW
     ttf.fontSize = 30
@@ -36,16 +45,18 @@ function TowerDetialLayer2nd:init(card, bag)
     self:add(mask)
     mask:setAnchorPoint(0.5, 0.5)
     mask:setPosition(display.cx, display.cy)
-
+    -- get card
+    local card = OutGameData:getUserInfo():getCardList()[cardId]
+    --
     local popup = display.newSprite(StringDef.PATH_POPUP)
     mask:add(popup)
     popup:setScale(mask:getContentSize().width / popup:getContentSize().width * 0.8)
     popup:setAnchorPoint(0.5, 0.5)
     popup:setPosition(mask:getContentSize().width * 0.5, mask:getContentSize().height * 0.4)
 
-    local icon_ = self:createIcon(card, popup)
-    icon_:setAnchorPoint(0.5, 0.5)
-    icon_:setPosition(popup:getContentSize().width * 0.65, popup:getContentSize().height * 1.47)
+    local icon = self:createIcon(cardId, popup) --左上角大图
+    icon:setAnchorPoint(0.5, 0.5)
+    icon:setPosition(popup:getContentSize().width * 0.70, popup:getContentSize().height * 1.63)
 
     local baseSkillIntroducion = display.newSprite(StringDef.PATH_BASE_SKILL_INTRODUCTION)
     popup:add(baseSkillIntroducion)
@@ -61,7 +72,7 @@ function TowerDetialLayer2nd:init(card, bag)
     skillIntroductionLabel:setString("test")
     skillIntroductionLabel:setAnchorPoint(0, 1)
     skillIntroductionLabel:setPosition(0,
-            baseSkillIntroducion:getContentSize().height - skillIntroduction:getContentSize().height)
+        baseSkillIntroducion:getContentSize().height - skillIntroduction:getContentSize().height)
 
     ttf.fontSize = 50
     local types = display.newSprite(StringDef.PATH_TEXTURE_TYPE_1)
@@ -72,18 +83,18 @@ function TowerDetialLayer2nd:init(card, bag)
     baseSkillIntroducion:add(typesLabel)
     typesLabel:setAnchorPoint(0, 1)
     typesLabel:setPosition(0, baseSkillIntroducion:getContentSize().height * 1.55)
-    typesLabel:setString(card.type)
+    typesLabel:setString(ConstDef.STR_TOWER_TYPE[card:getCardType()])
     local ratity = display.newSprite(StringDef.PATH_RATITY)
     baseSkillIntroducion:add(ratity)
     ratity:setAnchorPoint(0, 1)
     ratity:setPosition(baseSkillIntroducion:getContentSize().width * 0.6,
-            baseSkillIntroducion:getContentSize().height * 1.75)
+        baseSkillIntroducion:getContentSize().height * 1.75)
     local ratityLabel = cc.Label:createWithTTF(ttf, "0")
     baseSkillIntroducion:add(ratityLabel)
     ratityLabel:setAnchorPoint(0, 1)
     ratityLabel:setPosition(baseSkillIntroducion:getContentSize().width * 0.6,
-            baseSkillIntroducion:getContentSize().height * 1.55)
-    ratityLabel:setString(card.ratity)
+        baseSkillIntroducion:getContentSize().height * 1.55)
+    ratityLabel:setString(ConstDef.STR_TOWER_RARITY[card:getCardRarity()])
     ttf.fontSize = 30
 
     local defaultLayoutType = display.newSprite(StringDef.PATH_BASE_ATTRIBUTE_DEFAULT)
@@ -102,7 +113,7 @@ function TowerDetialLayer2nd:init(card, bag)
     defaultLayoutType:add(ttfType)
     ttfType:setAnchorPoint(0, 0.5)
     ttfType:setPosition(defaultLayoutType:getContentSize().width * 0.3, defaultLayoutType:getContentSize().height * 0.35)
-    ttfType:setString(card.type)
+    ttfType:setString(ConstDef.STR_TOWER_TYPE[card:getCardType()])
 
     local defaultLayoutAtk = display.newSprite(StringDef.PATH_BASE_ATTRIBUTE_DEFAULT)
     popup:add(defaultLayoutAtk)
@@ -120,18 +131,18 @@ function TowerDetialLayer2nd:init(card, bag)
     defaultLayoutAtk:add(ttfAtk)
     ttfAtk:setAnchorPoint(0, 0.5)
     ttfAtk:setPosition(defaultLayoutAtk:getContentSize().width * 0.3, defaultLayoutAtk:getContentSize().height * 0.35)
-    ttfAtk:setString(card.atk)
+    ttfAtk:setString(tostring(card:getCardAtk()))
 
     local defaultLayoutAtkSpeed = display.newSprite(StringDef.PATH_BASE_ATTRIBUTE_DEFAULT)
     popup:add(defaultLayoutAtkSpeed)
     defaultLayoutAtkSpeed:setAnchorPoint(0.5, 0.5)
     defaultLayoutAtkSpeed:setPosition(popup:getContentSize().width * 0.25,
-            popup:getContentSize().height * 0.55 - defaultLayoutAtkSpeed:getContentSize().height * 1.2)
+        popup:getContentSize().height * 0.55 - defaultLayoutAtkSpeed:getContentSize().height * 1.2)
     local iconAtkSpeed = display.newSprite(StringDef.PATH_ICON_PROPERTY_ATK_SPEED)
     defaultLayoutAtkSpeed:add(iconAtkSpeed)
     iconAtkSpeed:setAnchorPoint(0.5, 0.5)
     iconAtkSpeed:setPosition(defaultLayoutAtkSpeed:getContentSize().width * 0.2,
-            defaultLayoutAtkSpeed:getContentSize().height * 0.5)
+        defaultLayoutAtkSpeed:getContentSize().height * 0.5)
     local textureAtkSpeed = display.newSprite(StringDef.PATH_TEXTURE_ATK_SPEED)
     iconAtkSpeed:add(textureAtkSpeed)
     textureAtkSpeed:setAnchorPoint(0, 0.5)
@@ -140,19 +151,19 @@ function TowerDetialLayer2nd:init(card, bag)
     defaultLayoutAtkSpeed:add(ttfAtkSpeed)
     ttfAtkSpeed:setAnchorPoint(0, 0.5)
     ttfAtkSpeed:setPosition(defaultLayoutAtkSpeed:getContentSize().width * 0.3,
-            defaultLayoutAtkSpeed:getContentSize().height * 0.35)
-    ttfAtkSpeed:setString(card.fireCd .. "s")
+        defaultLayoutAtkSpeed:getContentSize().height * 0.35)
+    ttfAtkSpeed:setString(tostring(card:getCardFireCd()) .. "s")
 
     local defaultLayoutTarget = display.newSprite(StringDef.PATH_BASE_ATTRIBUTE_DEFAULT)
     popup:add(defaultLayoutTarget)
     defaultLayoutTarget:setAnchorPoint(0.5, 0.5)
     defaultLayoutTarget:setPosition(popup:getContentSize().width * 0.75,
-            popup:getContentSize().height * 0.55 - defaultLayoutAtkSpeed:getContentSize().height * 1.2)
+        popup:getContentSize().height * 0.55 - defaultLayoutAtkSpeed:getContentSize().height * 1.2)
     local iconTarget = display.newSprite(StringDef.PATH_ICON_PROPERTY_TARGET)
     defaultLayoutTarget:add(iconTarget)
     iconTarget:setAnchorPoint(0.5, 0.5)
     iconTarget:setPosition(defaultLayoutTarget:getContentSize().width * 0.2,
-            defaultLayoutTarget:getContentSize().height * 0.5)
+        defaultLayoutTarget:getContentSize().height * 0.5)
     local textureTarget = display.newSprite(StringDef.PATH_TEXTURE_TARGET)
     iconTarget:add(textureTarget)
     textureTarget:setAnchorPoint(0, 0.5)
@@ -161,19 +172,19 @@ function TowerDetialLayer2nd:init(card, bag)
     defaultLayoutTarget:add(ttfTarget)
     ttfTarget:setAnchorPoint(0, 0.5)
     ttfTarget:setPosition(defaultLayoutTarget:getContentSize().width * 0.3,
-            defaultLayoutTarget:getContentSize().height * 0.35)
-    ttfTarget:setString(card.atkTarget)
+        defaultLayoutTarget:getContentSize().height * 0.35)
+    ttfTarget:setString(ConstDef.STR_TOWER_ATK_TARGET[card:getCardTarget()])
 
     local defaultLayoutSkillSlow = display.newSprite(StringDef.PATH_BASE_ATTRIBUTE_DEFAULT)
     popup:add(defaultLayoutSkillSlow)
     defaultLayoutSkillSlow:setAnchorPoint(0.5, 0.5)
     defaultLayoutSkillSlow:setPosition(popup:getContentSize().width * 0.25,
-            popup:getContentSize().height * 0.55 - defaultLayoutSkillSlow:getContentSize().height * 2.4)
+        popup:getContentSize().height * 0.55 - defaultLayoutSkillSlow:getContentSize().height * 2.4)
     local iconSkillSlow = display.newSprite(StringDef.PATH_ICON_PROPERTY_SKILL_SLOW)
     defaultLayoutSkillSlow:add(iconSkillSlow)
     iconSkillSlow:setAnchorPoint(0.5, 0.5)
     iconSkillSlow:setPosition(defaultLayoutSkillSlow:getContentSize().width * 0.2,
-            defaultLayoutSkillSlow:getContentSize().height * 0.5)
+        defaultLayoutSkillSlow:getContentSize().height * 0.5)
     local textureSkillSlow = display.newSprite(StringDef.PATH_TEXTURE_SKILL_SLOW)
     iconSkillSlow:add(textureSkillSlow)
     textureSkillSlow:setAnchorPoint(0, 0.5)
@@ -182,29 +193,29 @@ function TowerDetialLayer2nd:init(card, bag)
     defaultLayoutSkillSlow:add(ttfSkillSlow)
     ttfSkillSlow:setAnchorPoint(0, 0.5)
     ttfSkillSlow:setPosition(defaultLayoutSkillSlow:getContentSize().width * 0.3,
-            defaultLayoutSkillSlow:getContentSize().height * 0.35)
+        defaultLayoutSkillSlow:getContentSize().height * 0.35)
     ttfSkillSlow:setString("test")
 
     local defaultLayoutSkillTriggerTime = display.newSprite(StringDef.PATH_BASE_ATTRIBUTE_DEFAULT)
     popup:add(defaultLayoutSkillTriggerTime)
     defaultLayoutSkillTriggerTime:setAnchorPoint(0.5, 0.5)
     defaultLayoutSkillTriggerTime:setPosition(popup:getContentSize().width * 0.75,
-            popup:getContentSize().height * 0.55 - defaultLayoutSkillTriggerTime:getContentSize().height * 2.4)
+        popup:getContentSize().height * 0.55 - defaultLayoutSkillTriggerTime:getContentSize().height * 2.4)
     local iconSkillTriggerTime = display.newSprite(StringDef.PATH_ICON_PROPERTY_SKILL_TRIGGER_TIME)
     defaultLayoutSkillTriggerTime:add(iconSkillTriggerTime)
     iconSkillTriggerTime:setAnchorPoint(0.5, 0.5)
     iconSkillTriggerTime:setPosition(defaultLayoutSkillTriggerTime:getContentSize().width * 0.2,
-            defaultLayoutSkillTriggerTime:getContentSize().height * 0.5)
+        defaultLayoutSkillTriggerTime:getContentSize().height * 0.5)
     local textureSkillTriggerTime = display.newSprite(StringDef.PATH_TEXTURE_SKILL_TRIGGER_TIME)
     iconSkillTriggerTime:add(textureSkillTriggerTime)
     textureSkillTriggerTime:setAnchorPoint(0, 0.5)
     textureSkillTriggerTime:setPosition(iconSkillTriggerTime:getContentSize().width + 10,
-            iconSkillTriggerTime:getContentSize().height)
+        iconSkillTriggerTime:getContentSize().height)
     local ttfSkillTriggerTime = cc.Label:createWithTTF(ttf, "0")
     defaultLayoutSkillTriggerTime:add(ttfSkillTriggerTime)
     ttfSkillTriggerTime:setAnchorPoint(0, 0.5)
     ttfSkillTriggerTime:setPosition(defaultLayoutSkillTriggerTime:getContentSize().width * 0.3,
-            defaultLayoutSkillTriggerTime:getContentSize().height * 0.35)
+        defaultLayoutSkillTriggerTime:getContentSize().height * 0.35)
     ttfSkillTriggerTime:setString("test")
 
     local buttonIntensify = ccui.Button:create(StringDef.PATH_BUTTON_INTENSIFY, StringDef.PATH_BUTTON_INTENSIFY)
@@ -217,21 +228,34 @@ function TowerDetialLayer2nd:init(card, bag)
     defaultLayoutAtk:add(enhanceAtk)
     enhanceAtk:setVisible(false)
     enhanceAtk:setColor(cc.c3b(200, 200, 0))
-    enhanceAtk:setString("+" .. card.atkEnhance)
+    enhanceAtk:setString("+" .. tostring(card:getCardAtkEnhance()))
     enhanceAtk:setAnchorPoint(1, 0.5)
     enhanceAtk:setPosition(defaultLayoutAtk:getContentSize().width, defaultLayoutAtk:getContentSize().height * 0.35)
     buttonIntensify:addTouchEventListener(function(sender, eventType)
-
         if eventType == 2 then
             enhanceAtk:setVisible(true)
+            --OutGameData:getUserInfo():getBattleTeam():setIndexTeamCard()
+            --OutGameData:getUserInfo():getBattleTeam():getCardList()[cardId].cardAtk= OutGameData:getUserInfo():getBattleTeam():getCardList()[cardId].cardAtkUpgrade
+            EventManager:doEvent(EventDef.ID.CARD_INTENSIFY,cardId)
         end
     end)
+    self.intensify=buttonIntensify
 
     local buttonLevelup = ccui.Button:create(StringDef.PATH_BUTTON_LEVELUP, StringDef.PATH_BUTTON_LEVELUP)
     popup:add(buttonLevelup)
     buttonLevelup:setAnchorPoint(0.5, 0.5)
     buttonLevelup:setPosition(popup:getContentSize().width * 0.5, popup:getContentSize().height * 0.15)
     buttonLevelup:setPressedActionEnabled(true)
+    self.upgrade=buttonLevelup
+    buttonLevelup:addTouchEventListener(function(sender, eventType)
+        if eventType == 2 then
+            --enhanceAtk:setVisible(true)
+            --OutGameData:getUserInfo():getBattleTeam():setIndexTeamCard()
+            --OutGameData:getUserInfo():getBattleTeam():getCardList()[cardId].cardLevel= OutGameData:getUserInfo():getBattleTeam():getCardList()[cardId].cardLevel+1
+            EventManager:doEvent(EventDef.ID.CARD_UPGRADE,cardId)
+        end
+    end)
+    
     local coin = display.newSprite(StringDef.PATH_ICON_COIN)
     buttonLevelup:add(coin)
     coin:setAnchorPoint(0, 0.5)
@@ -241,14 +265,27 @@ function TowerDetialLayer2nd:init(card, bag)
     buttonLevelup:add(ttfLevelup)
     ttfLevelup:setAnchorPoint(0.5, 0.5)
     ttfLevelup:setPosition(buttonLevelup:getContentSize().width * 0.5, buttonLevelup:getContentSize().height * 0.35)
-    ttfLevelup:setString("test")
+
+    -- 升级所需要的金币
+    ttfLevelup:setString(tostring(ConstDef.CARD_UPDATE_CONDITION.COIN_CONDITION[card:getCardLevel()]))
+    -- 这里需要一个EventListener
 
     local buttonUse = ccui.Button:create(StringDef.PATH_BUTTON_USE, StringDef.PATH_BUTTON_USE)
+
     popup:add(buttonUse)
     buttonUse:setAnchorPoint(0.5, 0.5)
     buttonUse:setPosition(popup:getContentSize().width * 0.8, popup:getContentSize().height * 0.15)
     buttonUse:setPressedActionEnabled(true)
     self.use = buttonUse
+    --[[buttonUse:addTouchEventListener(function(sender, eventType)
+
+        if eventType == 2 then
+            enhanceAtk:setVisible(true)
+            --OutGameData:getUserInfo():getBattleTeam():setIndexTeamCard()
+            
+            EventManager:doEvent(EventDef.ID.CARD_USE)
+        end
+    end)]]
 
     local buttonCLose = ccui.Button:create(StringDef.PATH_BUTTON_CLOSE, StringDef.PATH_BUTTON_CLOSE)
     popup:add(buttonCLose)
@@ -256,13 +293,10 @@ function TowerDetialLayer2nd:init(card, bag)
     buttonCLose:setAnchorPoint(1, 1)
     buttonCLose:setPosition(popup:getContentSize().width, popup:getContentSize().height)
     buttonCLose:addTouchEventListener(function(sender, eventType)
-
         if eventType == 2 then
-
             mask:setVisible(false)
             mask:removeFromParent()
             local list_ = bag.list
-            --print(table.getn(list_))
             for i = 1, table.getn(list_) do
                 list_[i]:setTouchEnabled(true)
             end
@@ -275,6 +309,7 @@ function TowerDetialLayer2nd:init(card, bag)
     popup:add(nowCriticalHit)
     nowCriticalHit:setAnchorPoint(0.5, 0)
     nowCriticalHit:setPosition(popup:getContentSize().width * 0.48, 20)
+    -- TODO 需要计算出来这块的暴击率
     nowCriticalHit:setString("XXX%")
     nowCriticalHit:setColor(cc.c3b(255, 200, 0))
 
@@ -282,6 +317,7 @@ function TowerDetialLayer2nd:init(card, bag)
     popup:add(afterLevelup)
     afterLevelup:setAnchorPoint(0.5, 0)
     afterLevelup:setPosition(popup:getContentSize().width * 0.74, 20)
+    -- TODO 升级后的暴击伤害
     afterLevelup:setString("XXX%")
     afterLevelup:setColor(cc.c3b(255, 200, 0))
 end
@@ -292,12 +328,12 @@ end
            parents 类型:生成图标的父对象
     @return icon
 ]]
-function TowerDetialLayer2nd:createIcon(card, parents)
-    local icon = TowerButtonLayer2nd.new(card)
+function TowerDetialLayer2nd:createIcon(cardId, parents)
+    local icon = TowerButtonLayer2nd.new(cardId)
     parents:add(icon)
     icon:setAnchorPoint(0.5, 0.5)
-    --icon:setPosition(parents:getContentSize().width*0.65,parents:getContentSize().height*1.42)
-    icon:setPosition(0, 0)
+    icon:setPosition(parents:getContentSize().width * 0.65, parents:getContentSize().height * 1.42)
+    --icon:setPosition(100, 10)
     return icon
 end
 
@@ -324,5 +360,10 @@ function TowerDetialLayer2nd:createLayout(parents, base, icon, texture, label)
     ttf_:setPosition(defaultLayout:getContentSize().width * 0.3, defaultLayout:getContentSize().height * 0.35)
     ttf_:setString(label)
 end
-
+function TowerDetialLayer2nd:onEnter()
+    
+end
+function TowerDetialLayer2nd:onExit()
+    
+end
 return TowerDetialLayer2nd

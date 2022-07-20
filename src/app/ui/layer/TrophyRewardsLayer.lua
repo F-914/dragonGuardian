@@ -15,11 +15,11 @@ local TestDataFactory = require("app.test.TestDataFactory")
 local OpenTreasureChest2nd = require("app.ui.secondaryui.OpenTreasure2nd")
 local OutGameData = require("app.data.OutGameData")
 local ConstDef = require("app.def.ConstDef")
-local NotEnoughNotifi2nd = require("src/app/ui/secondaryui/NotEnoughNotifi2nd.lua")
+local NotEnoughNotifi2nd = require("app.ui.secondaryui.NotEnoughNotifi2nd")
 --
-local MsgDef = require("src/app/def/MsgDef.lua")
-local TableUtil = require("src/app/utils/TableUtil.lua")
-local OutMsgController = require("src/app/network/OutGameMsgController.lua")
+local MsgDef = require("app.def.MsgDef")
+local TableUtil = require("app.utils.TableUtil")
+local OutMsgController = require("app.network.OutGameMsgController")
 --
 --[[--
     @description: 构造方法
@@ -74,6 +74,7 @@ function TrophyRewardsLayer:init()
     highLadderView:setDirection(2)
     highLadderView:addTo(self)
     --构建进度条
+
     local calibrateScale = CalibrateScaleSprite.new(StringDef.PATH_HIGH_LADDER_CALIBRATED_SCALE)
 
     calibrateScale:setAnchorPoint(0, 0)
@@ -100,12 +101,13 @@ function TrophyRewardsLayer:init()
     local itemLayer = ccui.Layout:create()
     itemLayer:setBackGroundColorType(3)
     itemLayer:setAnchorPoint(.5, .5)
-    itemLayer:setContentSize(120 , 120)
+    itemLayer:setContentSize(120, 120)
     itemLayer:addTo(highLadderView)
 
     for data, node in pairs(self.rewardsMap_) do
         node:setPosition(spSize.width * .5, spSize.height * .4)
         node:setScale(0.66)
+
         local itemLayer = itemLayers[data:getRewardLocation()]
         node.button_:addTouchEventListener(function(sender, eventType)
             if eventType == 2 then
@@ -117,7 +119,7 @@ function TrophyRewardsLayer:init()
                     local rewardType = data:getRewardType()
                     if rewardType == ConstDef.REWARD_TYPE.TREASUREBOX then
                         ---将reward类里面的实际奖励传递给二级界面
-                        local twoLevelUi = OpenTreasureChest2nd.new(data.reward_,0,0,true,data.trophyCondition_)
+                        local twoLevelUi = OpenTreasureChest2nd.new(data.reward_, 0, 0, true, data.trophyCondition_)
                         twoLevelUi:addTo(display.getRunningScene(), 2)
                     elseif rewardType == ConstDef.REWARD_TYPE.CARD then
                         local msgUserInfo = {}
@@ -132,12 +134,13 @@ function TrophyRewardsLayer:init()
                         }
                         table.insert(msgUserInfo.userInfoCardList, TableUtil:removeTableFunction(data.reward_))
                         local msg = TableUtil:encapsulateAsMsg(MsgDef.REQTYPE
-                                .LOBBY.RECEIVE_REWARD, userInfo:getAccount(),
+                                                                     .LOBBY.RECEIVE_REWARD, userInfo:getAccount(),
                                 "userInfo", msgUserInfo)
                         OutMsgController:sendMsg(msg)
                     elseif rewardType == ConstDef.REWARD_TYPE.RANDOM then
                         --[[--
                             这是什么玩意儿我也不知道
+                            随机奖励 不过看来用不到了 乐
                         ]]
                     elseif rewardType == ConstDef.REWARD_TYPE.CURRENCY then
                         local msgUserInfo = {}
@@ -162,13 +165,14 @@ function TrophyRewardsLayer:init()
                             trophyCondition = data:getTrophyCondition()
                         }
                         local msg = TableUtil:encapsulateAsMsg(MsgDef.REQTYPE
-                                .LOBBY.RECEIVE_REWARD, userInfo:getAccount(),
+                                                                     .LOBBY.RECEIVE_REWARD, userInfo:getAccount(),
                                 "userInfo", msgUserInfo)
                         OutMsgController:sendMsg(msg)
                     end
                 end
             end
         end)
+        Log.i("itemLayer is nullptr ? " .. tostring(itemLayer == nil))
         node:addTo(itemLayer)
     end
     --构建钥匙

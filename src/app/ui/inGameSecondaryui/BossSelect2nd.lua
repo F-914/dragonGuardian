@@ -13,7 +13,7 @@ local EventDef = require("app.def.EventDef")
 local EventManager = require("app.manager.EventManager")
 local TimeManager = require("app.manager.TimeManager")
 local InGameData = require("app.data.InGameData")
-local isRun = false    --用于存储boss图标动画是否已执行
+local isRun = false --用于存储boss图标动画是否已执行
 --
 
 -- -- 延时调用
@@ -30,27 +30,28 @@ local isRun = false    --用于存储boss图标动画是否已执行
 --     return handle
 -- end
 
-function BossSelect2nd:ctor()
+function BossSelect2nd:ctor(boss)
     self:init()
     self.homing_ = false
-    self.boss_ = math.random(1, 4)  --选择的boss
-    self.delta_ = display.cx/2      --图标之间间隔
-    self.line_ = self.delta_*8      --图标总长度
-    self:randomBoss(-self.delta_ *4, 1)
-    self:randomBoss(-self.delta_ *3, 2)
-    self:randomBoss(-self.delta_ *2, 3)
-    self:randomBoss(-self.delta_ , 4)
+    self.boss_ = boss --选择的boss
+    self.delta_ = display.cx / 2 --图标之间间隔
+    self.line_ = self.delta_ * 8 --图标总长度
+    self:randomBoss(-self.delta_ * 4, 1)
+    self:randomBoss(-self.delta_ * 3, 2)
+    self:randomBoss(-self.delta_ * 2, 3)
+    self:randomBoss(-self.delta_, 4)
     self:randomBoss(0, 1)
-    self:randomBoss(self.delta_ , 2)
-    self:randomBoss(self.delta_ *2, 3)
-    self:randomBoss(self.delta_ *3, 4)
+    self:randomBoss(self.delta_, 2)
+    self:randomBoss(self.delta_ * 2, 3)
+    self:randomBoss(self.delta_ * 3, 4)
 
-    self.bossDelta_ = {       --四个boss：-1,0,1,2
+    self.bossDelta_ = { --四个boss：-1,0,1,2
         0,
         -self.delta_,
-        self.delta_*2,
+        self.delta_ * 2,
         self.delta_
     }
+    print("随机boss 2：", self.boss_)
 end
 
 function BossSelect2nd:init()
@@ -83,7 +84,7 @@ function BossSelect2nd:init()
 
     local arrowSprite = cc.Sprite:create("battle_in_game/secondary_random_boss/arrow_gem.png")
     arrowSprite:setAnchorPoint(0.5, 0.5)
-    arrowSprite:setPosition(display.cx, display.cy + sizeBaseSelect.height/2)
+    arrowSprite:setPosition(display.cx, display.cy + sizeBaseSelect.height / 2)
     arrowSprite:addTo(self)
 end
 
@@ -93,34 +94,34 @@ end
     @param double, int 图标偏移量，boss编号
 ]]
 function BossSelect2nd:randomBoss(deltaX, num)
-    local bossSprite = cc.Sprite:create("battle_in_game/secondary_random_boss/boss-"..num..".png")
+    local bossSprite = cc.Sprite:create("battle_in_game/secondary_random_boss/boss-" .. num .. ".png")
     bossSprite:setAnchorPoint(0.5, 0.5)
     bossSprite:setPosition(display.cx + deltaX, display.cy)
     bossSprite:addTo(self)
 
-    local curDelta = 0      --最后减速时的偏移量
-    local speed = 50        -- 速度
-    local turns = 3         -- 圈数
-    local turnsNum = 0      --math.random(3, 5) * (display.width + delta)
+    local curDelta = 0 --最后减速时的偏移量
+    local speed = 50 -- 速度
+    local turns = 3 -- 圈数
+    local turnsNum = 0 --math.random(3, 5) * (display.width + delta)
     local curX = bossSprite:getPositionX()
 
     local scheduler = cc.Director:getInstance():getScheduler() --路径
     local timeSchedule = nil -- 刷新计时器(每0.1秒刷新)
     timeSchedule = scheduler:scheduleScriptFunc(function(dt)
         curX = bossSprite:getPositionX()
-        if turnsNum < turns  then
-            if curX > display.width + self.delta_  then
-                bossSprite:setPosition(-self.delta_ *3, display.cy)
+        if turnsNum < turns then
+            if curX > display.width + self.delta_ then
+                bossSprite:setPosition(-self.delta_ * 3, display.cy)
                 turnsNum = turnsNum + 1
             else
                 bossSprite:setPosition(curX + speed, display.cy)
             end
         elseif turnsNum == turns then
-            if curX >= deltaX - display.cx/4 then
+            if curX >= deltaX - display.cx / 4 then
                 local x = display.cx + deltaX + self.bossDelta_[self.boss_]
-                bossSprite:runAction(cc.EaseExponentialOut:create(cc.MoveTo:create(1,cc.p(x, display.cy))))
+                bossSprite:runAction(cc.EaseExponentialOut:create(cc.MoveTo:create(1, cc.p(x, display.cy))))
                 scheduler:unscheduleScriptEntry(timeSchedule)
-                TimeManager:delayDoSomething(function ()
+                TimeManager:delayDoSomething(function()
                     self:aniSelected()
                     isRun = true
                 end, 0.4)
@@ -138,13 +139,13 @@ end
 function BossSelect2nd:aniSelected()
     if isRun then
     else
-        local bossSprite = cc.Sprite:create("battle_in_game/secondary_random_boss/boss-"..self.boss_..".png")
+        local bossSprite = cc.Sprite:create("battle_in_game/secondary_random_boss/boss-" .. self.boss_ .. ".png")
         bossSprite:setAnchorPoint(0.5, 0.5)
         bossSprite:setPosition(display.cx, display.cy)
         bossSprite:addTo(self)
 
-        bossSprite:runAction(cc.EaseExponentialOut:create(cc.ScaleTo:create(0.5,3)))
-        TimeManager:delayDoSomething(function ()
+        bossSprite:runAction(cc.EaseExponentialOut:create(cc.ScaleTo:create(0.5, 3)))
+        TimeManager:delayDoSomething(function()
             self:removeFromParent()
             InGameData:setGameState(ConstDef.GAME_STATE.PLAY)
         end, 1)

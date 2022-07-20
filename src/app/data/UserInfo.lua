@@ -33,7 +33,7 @@ function UserInfo:getInstance()
 end
 
 function UserInfo:initData()
-    self:testData()
+    --self:testData()
 end
 
 --test
@@ -47,6 +47,7 @@ function UserInfo:testData()
     self.userInfoBattleTeam_ = TestDataFactory:getTeamDataTest()
     self.userInfoLadder_ = TestDataFactory:getLadderTest()
     self.userInfoCardList_ = TestDataFactory:getCardListTest()
+
 end
 
 function UserInfo:setUserInfo(account, avatar, nickname, coinAmount, diamondAmount, trophyAmount, battleTeam, ladder,
@@ -90,16 +91,7 @@ function UserInfo:getTrophyAmount()
     return self.userInfoTrophyAmount_
 end
 
-function UserInfo:getCoinAmount()
-    return self.userInfoCoinAmount_
-end
-
-function UserInfo:getDiamondAmount()
-    return self.userInfoDiamondAmount_
-end
-
 function UserInfo:getBattleTeam()
-    Log.i("getBattleTeam: battleTeam is nil ? " .. tostring(self.battleTeam_ == nil))
     return self.userInfoBattleTeam_
 end
 
@@ -128,7 +120,7 @@ function UserInfo:setUserInfoTrophyAmount(trophyAmount)
 end
 
 function UserInfo:getUserInfoCardList()
-    return self.userInfoCardList_
+    return self:getCardList()
 end
 
 function UserInfo:getCardList()
@@ -142,14 +134,16 @@ function UserInfo:setUserInfoBattleTeam(battleTeam)
     self.battleTeam_ = battleTeam
 end
 
+
 function UserInfo:getCollectedList()
+    local cardList = self:getCardList()
     local list = {}
     local set = {}
-    if self.cardList_ == nil then
+    if cardList == nil then
         return list
     end
-    for card in self.cardList_ do
-        local id = card.cardId
+    for i = 1, #cardList do
+        local id = cardList[i]:getCardId()
         if set[id] then
             -- nothing
         else
@@ -161,19 +155,20 @@ function UserInfo:getCollectedList()
 end
 
 function UserInfo:getUnCollectedList()
+    local cardList = self:getCardList()
     local list = {}
     local set = {}
     for id = 1, 20 do
         set[id] = true
     end
-    if self.cardList_ == nil then
+    if cardList == nil then
         for id = 1, 20 do
             table.insert(list, id)
         end
         return list
     end
-    for card in self.cardList_ do
-        local id = card.cardId
+    for i = 1, #cardList do
+        local id = cardList[i]:getCardId()
         if set[id] then
             set[id] = false
         end

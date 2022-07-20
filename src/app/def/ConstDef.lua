@@ -1,9 +1,11 @@
+
 --local
 local StringDef = require("app.def.StringDef")
---
+
 local ConstDef = {
     scale_ = 0.7,
     ROW_COMMODITY_NUMBER = 3,
+    CARD_TOTAL_NUM = 20,
     SHOP_ITEM_HEIGHT = display.height / 6,
     SHOP_ITEM_WIDTH = display.width / 5,
     ICON_LIST = { StringDef.PATH_ICON_01, StringDef.PATH_ICON_02,
@@ -126,24 +128,69 @@ local ConstDef = {
         StringDef.PATH_COIN_SHOP_TOWER_FRAGMENT_19,
         StringDef.PATH_COIN_SHOP_TOWER_FRAGMENT_20,
     },
+    ICON_SUBINTERFACE_TOWER_LINE_UP = {
+        StringDef.PATH_SUBINTERFACE_TOWER_LINE_UP_01,
+        StringDef.PATH_SUBINTERFACE_TOWER_LINE_UP_02,
+        StringDef.PATH_SUBINTERFACE_TOWER_LINE_UP_03,
+        StringDef.PATH_SUBINTERFACE_TOWER_LINE_UP_04,
+        StringDef.PATH_SUBINTERFACE_TOWER_LINE_UP_05,
+        StringDef.PATH_SUBINTERFACE_TOWER_LINE_UP_06,
+        StringDef.PATH_SUBINTERFACE_TOWER_LINE_UP_07,
+        StringDef.PATH_SUBINTERFACE_TOWER_LINE_UP_08,
+        StringDef.PATH_SUBINTERFACE_TOWER_LINE_UP_09,
+        StringDef.PATH_SUBINTERFACE_TOWER_LINE_UP_10,
+        StringDef.PATH_SUBINTERFACE_TOWER_LINE_UP_11,
+        StringDef.PATH_SUBINTERFACE_TOWER_LINE_UP_12,
+        StringDef.PATH_SUBINTERFACE_TOWER_LINE_UP_13,
+        StringDef.PATH_SUBINTERFACE_TOWER_LINE_UP_14,
+        StringDef.PATH_SUBINTERFACE_TOWER_LINE_UP_15,
+        StringDef.PATH_SUBINTERFACE_TOWER_LINE_UP_16,
+        StringDef.PATH_SUBINTERFACE_TOWER_LINE_UP_17,
+        StringDef.PATH_SUBINTERFACE_TOWER_LINE_UP_18,
+        StringDef.PATH_SUBINTERFACE_TOWER_LINE_UP_19,
+        StringDef.PATH_SUBINTERFACE_TOWER_LINE_UP_20,
+    },
     ICON_CURRENCY_TYPE = {
         StringDef.PATH_COIN_SHOP_COIN,
         StringDef.PATH_COIN_SHOP_DIAMOND,
     },
+
+
     ICON_SUBINSTANCE_TOWER_LIST_TYPE = {
         StringDef.PATH_SUBINTERFACE_TOWER_TYPE_ATTACK,
         StringDef.PATH_SUBINTERFACE_TOWER_TYPE_DISTURB,
         StringDef.PATH_SUBINTERFACE_TOWER_TYPE_AUX,
         StringDef.PATH_SUBINTERFACE_TOWER_TYPE_CONTROL
     },
+
+
     LINEUP_LIST = { --图鉴界面中的三个阵容
         lineupOne = { 1, 1, 1, 1, 1 },
         lineupTwo = { 2, 2, 2, 2, 2 },
         lineupThree = { 3, 3, 3, 3, 3 }
     },
-    ---这个应该是个变量，对每个用户而言都是不同的，不应该放在常量的这个位置
-    COLLECTED = {}, --已收集的塔，通过塔的序号1-20保存
-    UNCOLLECTED = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 }, --未收集的塔，通过塔的序号1-20保存
+
+    STR_TOWER_TYPE = {
+        StringDef.STR_TYPE_ATTACK,
+        StringDef.STR_TYPE_DISTURB,
+        StringDef.STR_TYPE_AUX,
+        StringDef.STR_TYPE_CONTROL,
+    },
+    STR_TOWER_RARITY = {
+        StringDef.STR_RARITY_R,
+        StringDef.STR_RARITY_SR,
+        StringDef.STR_RARITY_SSR,
+        StringDef.STR_RARITY_UR,
+    },
+    STR_TOWER_ATK_TARGET = {
+        StringDef.STR_ATK_TARGET_FRONT,
+        StringDef.STR_ATK_TARGET_BACK,
+        StringDef.STR_ATK_TARGET_LEFT,
+        StringDef.STR_ATK_TARGET_RIGHT,
+        StringDef.STR_ATK_TARGET_RANDOM,
+        StringDef.STR_ATK_TARGET_HP_FIRST,
+
+    },
     TOWER_ATK_TARGET = {
         FRONT = 1, -- 前方
         BACK = 2, -- 后方
@@ -193,12 +240,14 @@ local ConstDef = {
         TREASUREBOX = 3,
         UR = 4
         -- 这是个啥……我也不知道这是啥了
+
     },
     TREASUREBOX_TYPE = {
         R = 1,
         SR = 2,
         SSR = 3,
         UR = 4,
+
     },
     TOWER_TYPE = {
         ATTACK = 1, -- 攻击类别
@@ -220,14 +269,94 @@ local ConstDef = {
     },
     BUTTON_CLICK = {}, --用于实现部分功能的全局变量，希望后期能重写
     POPUP = {}, --用于实现弹窗部分功能的全局变量，希望后期能重写
-    LINEUP_LIST = {
-        lineupOne = { 1, 1, 1, 1, 1 },
-        lineupTwo = { 2, 2, 2, 2, 2 },
-        lineupThree = { 3, 3, 3, 3, 3 }
+
+    CARD_UPDATE_CONDITION = {
+        CARD_CONDITION = {
+            -- 这个里面是或者的关系
+            {
+                R = 2
+            },
+            {
+                R = 4
+            },
+            {
+                R = 10,
+                SR = 2,
+            },
+            {
+                R = 20,
+                SR = 4,
+            },
+            { R = 50,
+              SR = 10,
+              SSR = 2 },
+            { R = 100,
+              SR = 20,
+              SSR = 4 },
+            {
+                R = 200,
+                SR = 50,
+                SSR = 10
+            },
+            { R = 400,
+              SR = 100,
+              SSR = 20 },
+            {
+                R = 800,
+                SR = 200,
+                SSR = 50,
+                UR = 2
+            },
+            { R = 1000,
+              SR = 400,
+              SSR = 100,
+              UR = 4 },
+            {
+                R = 2000,
+                SR = 800,
+                SSR = 200,
+                UR = 10
+            },
+            { R = 5000,
+              SR = 1000,
+              SSR = 400,
+              UR = 20 },
+        },
+        COIN_CONDITION = {
+            5,
+            20,
+            50,
+            150,
+            400,
+            1000,
+            2000,
+            4000,
+            8000,
+            20000,
+            50000,
+            100000
+        }
     },
-    BUTTON_CLICK = {},
-    COLLECTED = {},
-    POPUP = {},
-    UNCOLLECTED = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 }
+    BULLET_SIZE = {
+        WIDTH = 10, --子弹宽度
+        HEIGHT = 10 --子弹高度
+    },
+    ENEMY_SIZE = {
+        --种类1，小怪（后续有时间可整体修改标识）
+        {
+            WIDTH = 43, --宽度
+            HEIGHT = 44 --高度
+        },
+        --种类2，精英怪
+        {
+            WIDTH = 72, --宽度
+            HEIGHT = 74 --高度
+        }
+    },
+    CARD_BUTTON_SIZE = {
+        WIDTH = 120 * 0.85,
+        HEIGHT = 120 * 0.85
+    }
+
 }
 return ConstDef
