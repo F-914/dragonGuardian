@@ -24,15 +24,7 @@ local Log = require("src/app/utils/Log.lua")
     @param type:table, 表格数据
 ]]
 function TableUtil:toBattleTeam(msg)
-    local myTeams = {}
-    for i = 1, #msg.myTeam do
-        local team = {}
-        for j = 1, #msg.myTeam[i] do
-            team[j] = self:toCard(msg.myTeam[i][j])
-        end
-        myTeams[i] = team
-    end
-    return BattleTeam.new(myTeams, msg.standByTeam)
+    return BattleTeam.new(msg.team, msg.standByTeam)
 end
 --[[--
     @将表格转化为card对象，表格需要有目标对象属性的字段
@@ -41,7 +33,7 @@ end
 ]]
 function TableUtil:toCard(msg)
     local skills = {}
-    for i = 1, #msg.skills do
+    for i = 1, #msg.cardSkills do
         skills[i] = self:toSkill(msg.cardSkills[i])
     end
     return Card.new(msg.cardId, msg.cardName, msg.cardRarity,
@@ -66,14 +58,14 @@ function TableUtil:toCommodity(msg)
     elseif msg.type == ConstDef.REWARD_TYPE.TREASUREBOX then
         obj = self:toTreasureBox(msg.reward)
     elseif msg.type == ConstDef.REWARD_TYPE.UR then
-        --鬼知道这玩意儿是啥
         obj = nil
     else
         Log.e("uncatch this commodity type:", msg.type)
     end
 
-    return Commodity.new(msg.name, msg.type, msg.price,
-            msg.priceUnit, msg.amount, obj)
+    return Commodity.new(msg.commodityName, msg.commodityType,
+            msg.commodityPrice, msg.commodityPriceUnit,
+            msg.commodityAmount, obj)
 end
 --[[--
     @将表格转化为currency对象，表格需要有目标对象属性的字段
@@ -81,7 +73,7 @@ end
     @param type:table, 表格数据
 ]]
 function TableUtil:toCurrency(msg)
-    return Currency.new(msg.type, msg.amount)
+    return Currency.new(msg.currencyType, msg.currencyAmount)
 end
 --[[--
     @将表格转化为enemy对象，表格需要有目标对象属性的字段
@@ -117,21 +109,21 @@ end
 function TableUtil:toReward(msg)
     ---这个reward不知道是啥
     local obj = nil
-    if msg.type == ConstDef.REWARD_TYPE.CURRENCY then
+    if msg.rewardType == ConstDef.REWARD_TYPE.CURRENCY then
         obj = self:toCurrency(msg.reward)
-    elseif msg.type == ConstDef.REWARD_TYPE.CARD then
+    elseif msg.rewardType == ConstDef.REWARD_TYPE.CARD then
         obj = self:toCard(msg.reward)
-    elseif msg.type == ConstDef.REWARD_TYPE.TREASUREBOX then
+    elseif msg.rewardType == ConstDef.REWARD_TYPE.TREASUREBOX then
         obj = self:toTreasureBox(msg.reward)
-    elseif msg.type == ConstDef.REWARD_TYPE.RANDOM then
+    elseif msg.rewardType == ConstDef.REWARD_TYPE.RANDOM then
         --我也不知道
         obj = nil
     else
         Log.e("uncatch this commodity type:", msg.type)
     end
-    return Reward.new(msg.rewardName, msg.rewardType, msg.location,
+    return Reward.new(msg.rewardName, msg.rewardType, msg.rewardLocation,
     self:toBoolean(msg.locked), self:toBoolean(msg.received),
-            msg.trophyCondition, msg.amount, obj)
+            msg.trophyCondition, msg.rewardAmount, obj)
 end
 --[[--
     @将表格转化为shop对象，表格需要有目标对象属性的字段
@@ -162,7 +154,8 @@ end
     @param type:table, 表格数据
 ]]
 function TableUtil:toTreasureBox(msg)
-    return TreasureBox.new(msg.name, msg.type, msg.desc)
+    return TreasureBox.new(msg.treasureBoxName, msg.treasureBoxType,
+            msg.treasureBoxDescription)
 end
 --[[--
     @将表格转化为enemy对象，表格需要有目标对象属性的字段
@@ -172,14 +165,16 @@ end
 function TableUtil:toUserInfo(msg)
     ---这个由于是单例模式，所以没有返回值
     local cardList = {}
-    for i = 1, #msg.cardList do
-        cardList[i] = self:toCard(msg.cardList[i])
+    for i = 1, #msg.userInfoCardList do
+        cardList[i] = self:toCard(msg.userInfoCardList[i])
     end
 
     local userInfo = UserInfo:getInstance()
-    userInfo:setUserInfo(msg.account, msg.avatar, msg.nickname,
-    msg.coinAmount, msg.diamondAmount, msg.trophyAmount,
-    self:toBattleTeam(msg.battleTeam), self:toLadder(msg.ladder),
+    userInfo:setUserInfo(msg.userInfoAccount, msg.userInfoAvatar,
+            msg.userInfoNickname, msg.userInfoCoinAmount,
+            msg.userInfoDiamondAmount, msg.userInfoTrophyAmount,
+            self:toBattleTeam(msg.userInfoBattleTeam),
+            self:toLadder(msg.userInfoLadder),
     cardList)
 end
 function TableUtil:toBoolean(string)
