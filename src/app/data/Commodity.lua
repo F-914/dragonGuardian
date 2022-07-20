@@ -13,7 +13,7 @@ local EventManager = require("app.manager.EventManager")
 
 ---Commodity.ctor 构造函数
 ---@param name      string 商品名
----@param type      string 商品类型
+---@param type      number 商品类型
 ---@param price     number 商品价格
 ---@param priceUnit string 价格单位
 ---@param amount    number 该商品目前的数量

@@ -3,8 +3,8 @@
     OutGameMsgController.lua
 ]]
 local OutGameMsgController = {}
-local SimpleTCP = require("src/framework/SimpleTCP.lua")
-local json = require("src/framework/json.lua")
+local SimpleTCP = require("framework.SimpleTCP")
+local json = require("framework.json")
 local ByteArray = require("app.network.ByteArray")
 local Log = require("app.utils.Log")
 

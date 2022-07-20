@@ -11,16 +11,27 @@ local ChestRewardGet2nd = require("app.ui.secondaryui.ChestRewardGet2nd")
 local TestDataFactory = require("app.test.TestDataFactory")
 local StringDef = require("app.def.StringDef")
 local OutGameData = require("src/app/data/OutGameData.lua")
+
+local MsgDef = require("src/app/def/MsgDef.lua")
+local OutGameMsgController = require("src/app/network/OutGameMsgController.lua")
+local TableUtil = require("src/app/utils/TableUtil.lua")
 --[[--
     @description: 构造函数
     @param treasureData type:table, 宝箱中的数据
     @return none
 ]]
-function OpenTreasureChest2nd:ctor(treasureBox, coinChange, diamondChange)
+function OpenTreasureChest2nd:ctor(treasureBox, coinChange,
+                                   diamondChange, isTrophy,
+                                    trophyAmount)
 
     self.data_ = treasureBox --表示奖励宝箱
     self.diamondChange_ = diamondChange
     self.coinChange_ = coinChange
+    ---一共两个地方获取宝箱，一个是购买，一个是天梯，上面两个数据用于购买时，使用
+    ---下面就是判断
+    self.isTrophy_ = isTrophy
+    ---当是天梯时这个有用
+    self.trophyAmount_ = trophyAmount
     self:init()
 
 end
@@ -66,14 +77,36 @@ function OpenTreasureChest2nd:init()
     openButton:setPosition(size.width * .5, 0)
     openButton:addTouchEventListener(function(sender, eventType)
         if eventType == 2 then
-            --[[--
-                这里应该调用outGameData的随机生成奖励的函数，用于生成奖励
-                同时想服务器发送消息，然后将数据传输给另一个显示宝箱开出的奖励的而日记界面
-            ]]
-            --这个暂时搞不定,因为没有tower的属性，这里的数据只有id和amount
-            local newView = ChestRewardGet2nd.new(OutGameData:openTreasureBox(self.data_.treasureBoxType_))
-            newView:addTo(self:getParent())
+            local cardDatas = OutGameData:openTreasureBox(self.data_:getTreasureBoxType())
+            local msgUserInfo = {}
+            local userInfo = OutGameData:getUserInfo()
+            msgUserInfo.userInfoCoinAmount = userInfo:getCoinAmount()
+                    + cardDatas.coinNum + self.coinChange_
+            msgUserInfo.userInfoDiamondAmount = userInfo:getDiamondAmount()
+                    + self.diamondChange_
+            local tp = cardDatas.coinNum
+            cardDatas.coinNum = nil
+            msgUserInfo.userInfoCardList = cardDatas
+            if self.isTrophy_ then
+                msgUserInfo.userInfoLadder = {}
+                msgUserInfo.userInfoLadder.ladderList = {}
+                msgUserInfo.userInfoLadder.ladderList[1] = {
+                    trophyCondition = self.trophyAmount_
+                }
+                local msg = TableUtil:encapsulateAsMsg(MsgDef.REQTYPE.LOBBY
+                        .RECEIVE_REWARD, userInfo:getAccount(),
+                        "userInfo", msgUserInfo)
+                OutGameMsgController:sendMsg(msg)
+            else
+                local msg = TableUtil:encapsulateAsMsg(MsgDef.REQTYPE.LOBBY
+                        .PURCHASE_COMMODITY, userInfo:getAccount(),
+                        "userInfo", msgUserInfo)
 
+                OutGameMsgController:sendMsg(msg)
+            end
+            cardDatas.coinNum = tp
+            local newView = ChestRewardGet2nd.new(cardDatas)
+            newView:addTo(display.getRunningScene(), 2)
             self:removeSelf()
         end
     end)

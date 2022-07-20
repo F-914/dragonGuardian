@@ -230,6 +230,7 @@ local StringDef = {
     PATH_HIGH_LADDER_DIAMOND = "res/home/battle/high_ladder/diamond.png",
     --
     PATH_BACKGROUND_SHOP = "home/shop/background_shop.png",
+    PATH_COIN_SHOP_BASE_SHADE = "home/shop/coins_shop/base_shade.png",
     PATH_COIN_SHOP_BASE_TITLE = "home/shop/coins_shop/base_title.png",
     PATH_COIN_SHOP_BASE_REFRESH = "home/shop/coins_shop/base_remaining_refresh_time.png",
     PATH_COIN_SHOP_TIP_REFRESH = "home/shop/coins_shop/tips_remaining_refresh_time.png",
