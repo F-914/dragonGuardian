@@ -216,6 +216,7 @@ local StringDef = {
     PATH_SUBINTERFACE_TOWER_TYPE_AUX = "home/guide/subinterface_tower_list/type_assist.png",
     PATH_SUBINTERFACE_TOWER_TYPE_CONTROL = "home/guide/subinterface_tower_list/type_control.png",
 
+
     PATH_ICON_PROPERTY_TYPE = "res/home/guide/second_tower_infor_popup/icon_property/type.png",
     PATH_ICON_PROPERTY_ATK = "res/home/guide/second_tower_infor_popup/icon_property/atk.png",
     PATH_ICON_PROPERTY_ATK_SPEED = "res/home/guide/second_tower_infor_popup/icon_property/atk_speed.png",
@@ -246,6 +247,7 @@ local StringDef = {
     PATH_HIGH_LADDER_DIAMOND = "res/home/battle/high_ladder/diamond.png",
     --
     PATH_BACKGROUND_SHOP = "home/shop/background_shop.png",
+    PATH_COIN_SHOP_BASE_SHADE = "home/shop/coins_shop/base_shade.png",
     PATH_COIN_SHOP_BASE_TITLE = "home/shop/coins_shop/base_title.png",
     PATH_COIN_SHOP_BASE_REFRESH = "home/shop/coins_shop/base_remaining_refresh_time.png",
     PATH_COIN_SHOP_TIP_REFRESH = "home/shop/coins_shop/tips_remaining_refresh_time.png",

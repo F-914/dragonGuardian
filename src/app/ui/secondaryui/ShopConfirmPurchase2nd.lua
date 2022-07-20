@@ -10,6 +10,11 @@ end)
 local audio = require("framework.audio")
 local StringDef = require("app.def.StringDef")
 local ConstDef = require("app.def.ConstDef")
+
+local OutGameData = require("app.data.OutGameData")
+local TableUtil = require("app.utils.TableUtil")
+local OutGameMsgController = require("app.network.OutGameMsgController")
+local MsgDef = require("app.def.MsgDef")
 --
 --
 function ShopConfirmPurchase2nd:ctor(baseLayer, baseButton, commodity, itemWidth, itemHeight)
@@ -18,7 +23,6 @@ function ShopConfirmPurchase2nd:ctor(baseLayer, baseButton, commodity, itemWidth
     self.commodity_ = commodity -- 商品
     self.itemWidth_ = itemWidth
     self.itemHeight_ = itemHeight
-    --
     self:initView()
 end
 
@@ -77,10 +81,28 @@ function ShopConfirmPurchase2nd:initView()
     purchaseButton:setAnchorPoint(0.5, 0.5)
     purchaseButton:setPosition(display.cx, display.cy - sizeSetBase.height * 17 / 48)
     purchaseButton:addTo(checkLayer)
+    local commodity = self.commodity_
+    local baseLayer = self.baseLayer_
+    local itemWidth = self.itemWidth_
+    local itemHeight = self.itemHeight_
+    local baseButton = self.baseButton_
     purchaseButton:addTouchEventListener(function(sender, eventType)
         if 2 == eventType then
-            _buttonCoinClickGrey(self.baseLayer_, self.itemWidth_, self.itemHeight_, self.baseButton_)
             audio.playEffect(StringDef.PATH_BUY_PAID_ITEM, false)
+
+            local msgUserInfo = {}
+            local userInfo = OutGameData:getUserInfo()
+            msgUserInfo.userInfoCoinAmount = userInfo:getCoinAmount()
+                    - commodity:getCommodityPrice()
+            msgUserInfo.userInfoDiamondAmount = userInfo:getDiamondAmount()
+            msgUserInfo.userInfoCardList = {}
+            table.insert(msgUserInfo.userInfoCardList, TableUtil:removeTableFunction(
+                    commodity:getCommodityCommodity()))
+            local msg = TableUtil:encapsulateAsMsg(MsgDef.REQTYPE
+                    .LOBBY.PURCHASE_COMMODITY, userInfo:getAccount(),
+                    "userInfo", msgUserInfo)
+            OutGameMsgController:sendMsg(msg)
+            _buttonCoinClickGrey(baseLayer, itemWidth, itemHeight, baseButton)
             checkLayer:removeFromParent()
         end
     end)
@@ -129,7 +151,7 @@ function _buttonCoinClickGrey(layer, itemWidth, itemHeight, button)
     button:setTouchEnabled(false)
     -- 遮罩
     local shadeSprite = cc.Sprite:create(StringDef.PATH_COIN_SHOP_BASE_SHADE)
-    shadeSprite:setPosition(itemWidth * 2 / 3, itemHeight / 2)
+    shadeSprite:setPosition(itemWidth * .55, itemHeight * .45)
     shadeSprite:setAnchorPoint(0.5, 0.5)
     shadeSprite:setOpacity(120)
     shadeSprite:addTo(layer)

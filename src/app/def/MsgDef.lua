@@ -3,7 +3,8 @@
     该监听器是msgController接受到消息调用的监听器
     依据不同的消息类型执行不同的事件
 ]]
-local MsgDef = {
+local MsgDef = {}
+MsgDef.REQTYPE = {
     --请求类型，是客户端发往服务器的
 
     GAME = {
@@ -58,6 +59,14 @@ local MsgDef = {
         --钻石商店信息初始化
         COINSHOP_INIT = 12,
         --金币商店初始化
+        ---以下是事件消息
+        PURCHASE_COMMODITY = 13,
+        --购买商品
+        TROPHY_CHANGE = 14,
+        --奖杯数改变
+        MODIFY_BATTLETEAM = 15,
+        --修改战斗队伍信息
+        RECEIVE_REWARD = 16,
     }
 }
 
@@ -93,7 +102,13 @@ MsgDef.ACKTYPE = {
         --钻石商店信息初始化
         COINSHOP_INIT = 0x80000 + 14,
         --金币商店初始化
-
+        PURCHASE_COMMODITY = 0x80000 + 15,
+        --购买商品
+        TROPHY_CHANGE = 0x80000 + 16,
+        --奖杯数改变
+        MODIFY_BATTLETEAM = 0x80000 + 17,
+        --修改战斗队伍信息
+        RECEIVE_REWARD = 0x80000 + 18,
 
     }
 }

@@ -25,16 +25,8 @@ end
     @description: 初始化方法
 ]]
 function OutGameBattleLayer:init()
-    --local cardList = OutGameData:getUserInfo():getUserInfoCardList()
     local teamData = OutGameData:getUserInfo():getBattleTeam():getCurrentBattleTeam()
-    --local teamData = {}
-    --for i = 1, #teamDataIds do
-    --    for j = 1, #cardList do
-    --        if cardList[j].cardId_ == teamDataIds[i] then
-    --            table.insert(teamData, i, cardList[j])
-    --        end
-    --    end
-    --end
+
     self.teamMap_ = Factory:createTeamSprite(teamData)
 
     local teamLayer = display.newLayer()

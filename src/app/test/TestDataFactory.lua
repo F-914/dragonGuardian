@@ -22,8 +22,8 @@ function TestDataFactory:getLadderTest()
     local Ladder = require("src/app/data/Ladder.lua")
     local Reward = require("src/app/data/Reward.lua")
     return Ladder.new({
-        Reward.new("cjb", 1, 1, false, true, 50, 1, Currency.new(1, 500)),
-        Reward.new("cjb", 2, 2, false, true, 100, 1, Card.new(1, "cjb", 3, 1, 7, 12, 100, "sb",
+        Reward.new("cjb", 1, 1, false, false, 50, 1, Currency.new(1, 500)),
+        Reward.new("cjb", 2, 2, false, false, 100, 1, Card.new(1, "cjb", 3, 1, 7, 12, 100, "sb",
                 10, 10, 10,10,10, {}, 100, 12)),
         Reward.new("cjb", 3, 3, false, false, 150, 1, TreasureBox.new("cjb", 3, "cjb")),
         Reward.new("cjb", 3, 4, false, false, 200, 1, TreasureBox.new("cjb", 4, "cjb")),
