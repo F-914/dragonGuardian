@@ -12,6 +12,7 @@ local InGameBattleView = require("app.ui.InGameBattleView")
 --
 
 function InGameScene:ctor()
+    InGameData:init()
     self.inGameBattleView_ = InGameBattleView.new()
     self:addChild(self.inGameBattleView_)
 

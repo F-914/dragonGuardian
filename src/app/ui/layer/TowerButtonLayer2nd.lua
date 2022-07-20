@@ -3,48 +3,38 @@
     TowerButtonLayer2nd.lua
 ]]
 local TowerButtonLayer2nd = class("TowerButtonLayer2nd", require("src/app/ui/layer/BaseLayer.lua"))
-local PATH_PROGRESS_BASE = "res/home/guide/subinterface_tower_list/progress_base_fragments_number.png"
-local PATH_PROGRESS = "res/home/guide/subinterface_tower_list/progress_progress_fragments_number.png"
-local PATH_TTF = "res/front/fzhzgbjw.ttf"
+--local
 local ConstDef = require("app.def.ConstDef")
-local PATH_LEVEL = {
-    "res/home/guide/subinterface_current_lineup/level/Lv.1.png",
-    "res/home/guide/subinterface_current_lineup/level/Lv.2.png",
-    "res/home/guide/subinterface_current_lineup/level/Lv.3.png",
-    "res/home/guide/subinterface_current_lineup/level/Lv.4.png",
-    "res/home/guide/subinterface_current_lineup/level/Lv.5.png",
-    "res/home/guide/subinterface_current_lineup/level/Lv.6.png",
-    "res/home/guide/subinterface_current_lineup/level/Lv.7.png",
-    "res/home/guide/subinterface_current_lineup/level/Lv.8.png",
-    "res/home/guide/subinterface_current_lineup/level/Lv.9.png",
-    "res/home/guide/subinterface_current_lineup/level/Lv.10.png",
-    "res/home/guide/subinterface_current_lineup/level/Lv.11.png",
-    "res/home/guide/subinterface_current_lineup/level/Lv.12.png",
-    "res/home/guide/subinterface_current_lineup/level/Lv.13.png",
-}
-function TowerButtonLayer2nd:ctor(card)
-    self:init(card)
+local OutGameData = require("app.data.OutGameData")
+local StringDef = require("app.def.StringDef")
+local Log = require("app.utils.Log")
+--
+function TowerButtonLayer2nd:ctor(cardId)
+    self:init(cardId)
 end
 
-function TowerButtonLayer2nd:init(card)
+function TowerButtonLayer2nd:init(cardId)
     local ttf = {}
-    ttf.fontFilePath = PATH_TTF
+    ttf.fontFilePath = StringDef.PATH_TTF_HZGBJW
     ttf.fontSize = 20
-    local button = ccui.Button:create(ConstDef.ICON_LIST[card.order], ConstDef.ICON_LIST[card.order])
+    local button = ccui.Button:create(ConstDef.ICON_LIST[cardId], ConstDef.ICON_LIST[cardId])
     button:setScale(0.8)
     self:add(button)
     --button:setAnchorPoint(0.5,0.5)
     --button:setPosition(display.cx,display.cy)
-    local level = display.newSprite(PATH_LEVEL[1])
+    --get card
+    local card = OutGameData:getUserInfo():getCardList()[cardId]
+    --
+    local level = display.newSprite(ConstDef.ICON_SUBINTERFACE_TOWER_LINE_UP[card:getCardLevel()])
     button:add(level)
     level:setAnchorPoint(0.5, 0.5)
     level:setPosition(button:getContentSize().width * 0.5, button:getContentSize().height * 0.4)
 
-    local progressBg = display.newSprite(PATH_PROGRESS_BASE)
+    local progressBg = display.newSprite(StringDef.PATH_SUBINTERFACE_TOWER_PROGRESS_BASE)
     button:add(progressBg)
     progressBg:setAnchorPoint(0.5, 0.5)
     progressBg:setPosition(button:getContentSize().width * 0.5, button:getContentSize().height * 0.2)
-    local progressSprite = display.newSprite(PATH_PROGRESS)
+    local progressSprite = display.newSprite(StringDef.PATH_SUBINTERFACE_TOWER_PROGRESS)
     local progressBar = cc.ProgressTimer:create(progressSprite)
     progressBg:add(progressBar)
     progressBar:setType(display.PROGRESS_TIMER_BAR)
@@ -52,17 +42,18 @@ function TowerButtonLayer2nd:init(card)
     progressBar:setBarChangeRate(cc.p(1, 0))
     progressBar:setAnchorPoint(0.5, 0.5)
     progressBar:setPosition(progressBg:getContentSize().width * 0.5, progressBg:getContentSize().height * 0.5)
-
-    local progressNumber = cc.Label:createWithTTF(ttf, "0")
+    -- 卡牌数量
+    local progressNumber = cc.Label:createWithTTF(ttf, tostring(card:getCardAmount()))
     progressBg:add(progressNumber)
     progressNumber:setAnchorPoint(0.5, 0.5)
     progressNumber:setPosition(progressBg:getContentSize().width * 0.5, progressBg:getContentSize().height * 0.5)
-    local upgradeNumber = card.upgradeNumber
+    -- 升级需要的卡牌
+    -- TODO 同样是升级的问题
+    local upgradeNumber = ConstDef.CARD_UPDATE_CONDITION.CARD_CONDITION[card:getCardLevel()].R
     --升级需要的卡片数量
-    local ownedNumber = card.ownedNumber
+    local ownedNumber = card:getCardAmount()
     --拥有的卡片数量
     progressNumber:setString(ownedNumber .. "/" .. upgradeNumber)
-
     progressBar:setPercentage(100 * (ownedNumber / upgradeNumber))
 end
 

@@ -14,7 +14,6 @@ end)
 
 -- local
 local StringDef = require("app.def.StringDef")
-local GameData = require("app.test.GameData")
 -- require的方式不一样好像会导致OutGameData被引入的不一样 比如下面这种被注释的情况就会导致OutGameData没有初始化过
 --local OutGameData = require("src.app.data.OutGameData")
 local OutGameData = require("app.data.OutGameData")
@@ -48,17 +47,13 @@ function CalibrateScaleSprite:init()
         :getUserInfo()
         :getTrophyAmount()
     self.rewordNodeData_ = OutGameData
-<<<<<<< HEAD
-            :getUserInfo()
-            :getUserInfoLadder()
-            :getLadderList()
-    Log.i("TrophyAmount_: " .. tostring(self.trophyAmount_))
-=======
+
+
         :getUserInfo()
         :getUserInfoLadder()
         :getLadderList()
 
->>>>>>> origin/dev_xz
+
 
     self:setScale(3, 1)
 
@@ -110,8 +105,11 @@ end
 ]]
 function CalibrateScaleSprite:update(dt)
     --监听到用户的钥匙数量发生变化
-    if not self.trophyAmount_ ~= GameData.trophyAmount_ then
-        self.trophyAmount_ = GameData.trophyAmount_
+    if self.trophyAmount_ == nil then
+        self.trophyAmount_ = OutGameData.getUserInfo():getTrophyAmount()
+    end
+    if not self.trophyAmount_ ~= OutGameData.getUserInfo():getTrophyAmount() then
+        self.trophyAmount_ = OutGameData.getUserInfo():getTrophyAmount()
         self.decorateBar_:setPosition(28.5 + (self.trophyAmount_ / 50 - 1) * 40.1, 7)
         self.yellowScale_:setPosition(26.5 + (self.trophyAmount_ / 50 - 1) * 40.1, 9)
     end

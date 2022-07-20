@@ -5,11 +5,13 @@
     Factory.lua
 ]]
 local Factory = {}
---local
-local TypeConvert = require("app.utils.TypeConvert")
-local ConstDef = require("app.def.ConstDef")
-local Log = require("app.utils.Log")
+
+
+local ConstDef = require("src/app/def/ConstDef.lua")
+local Log = require("src/app/utils/Log.lua")
 local StringDef = require("app.def.StringDef")
+local TypeConvert = require("app.utils.TypeConvert")
+
 --[[--
     @description: 创建用于宝箱奖励的贴图
     @data type:table, 奖励的数据
@@ -56,12 +58,20 @@ end
 function Factory:createTeamSprite(teamData)
     local mapSprites = {}
     for i = 1, #teamData do
-        local cardData = teamData[i]
-        ---这里后面可能需要路径
+
+        local cardId = teamData[i]
+        local cardData = require("app.data.OutGameData"):getUserInfo():getCardList()[cardId]
+        --解决循环嵌套
         local towerSprite = require("src/app/ui/node/TowerSprite.lua").new("res/home/general/icon_tower/" ..
-            TypeConvert.Integer2StringLeadingZero(cardData:getCardId(), 2) .. ".png", cardData)
-        mapSprites[cardData] = towerSprite
+            TypeConvert.Integer2StringLeadingZero(cardId, 2) .. ".png", cardData)
+        --mapSprites[cardData] = towerSprite
+        mapSprites[i] = {
+            [1] = cardData,
+            [2] = towerSprite,
+        }
+
     end
+
     return mapSprites
 end
 
@@ -70,12 +80,13 @@ end
     @param type:string 塔类型的名称
     @return type:Sprite, 代表塔类型的精灵
 ]]
--- function Factory:createTowerType(name)
---     local sprite = display.newSprite(ConstDef.ICON_SUBINSTANCE_TOWER_LIST_TYPE[name])
+
+-- function Factory:createTowerType(type)
+---路径问题暂时这样简单的解决,
+-- local sprite = display.newSprite("res/home/guide/subinterface_tower_list/type_" .. type .. ".png")
 function Factory:createTowerType(type)
-    ---路径问题暂时这样简单的解决,
-    local sprite = display.newSprite(ConstDef.ICON_SUBINSTANCE_TOWER_LIST_TYPE[name])
-    -- local sprite = display.newSprite("res/home/guide/subinterface_tower_list/type_" .. type .. ".png")
+    local sprite = display.newSprite(ConstDef.ICON_SUBINSTANCE_TOWER_LIST_TYPE[type])
+
     return sprite
 end
 
@@ -96,13 +107,13 @@ end
     @return none
 ]]
 function Factory:createBorder(rewardData)
-    if not rewardData.isUnlock then
+    if rewardData.locked_ then
         --解决循环嵌套，下同
         local border = require("src/app/ui/node/RewardSprite.lua").new("res/home/battle/high_ladder/locked_blue_border.png"
             , rewardData)
         return border
     else
-        if not rewardData.isGet then
+        if not rewardData.received_ then
             local border = require("src/app/ui/node/RewardSprite.lua").new("res/home/battle/high_ladder/unlocked_unreceived_yellow_border.png"
                 , rewardData)
             return border
@@ -223,7 +234,7 @@ function Factory:createRewardSprite(type)
         sprite:setScale(0.5)
         return sprite
     else
-        Log.e("param type is a unknown type")
+        Log.e("param type is a unknown type:")
     end
 end
 

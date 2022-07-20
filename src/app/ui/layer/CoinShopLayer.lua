@@ -27,13 +27,17 @@ function CoinShopLayer:initView()
     local freshLayer = tolua.cast(ccui.Helper:seekWidgetByName(coinShopLayer, "freshTime"), "ccui.Layout")
     -- TODO 这块能不能来个EventManager
     local refreshText = display.newTTFLabel({
-<<<<<<< HEAD
+
         text = OutGameData
                 :getCoinShop()
                 :getCoinShopRefreshTime(),
-=======
+
         text = OutGameData:getCoinShop():getCoinShopRefreshTime(),
->>>>>>> origin/dev_xz
+
+        text = OutGameData
+            :getCoinShop()
+            :getCoinShopRefreshTime(),
+
         font = StringDef.PATH_FONT_FZBIAOZJW,
         size = 30,
     })

@@ -57,9 +57,29 @@ end
     @description: 获取当前出战的队伍
 ]]
 function BattleTeam:getCurrentBattleTeam()
-
     Log.i("StandbyTeam: " .. tostring(self.standbyTeam_))
     return self.team_[self.standbyTeam_]
+end
+
+function BattleTeam:getIndexTeam(index)
+    if self.team_ == nil then
+        self.team_ = {}
+    end
+    if index > #(self.team_) then
+        return {}
+    end
+    return self.team_[index]
+end
+
+function BattleTeam:setIndexTeamCard(teamIndex, cardIndex, newCardId)
+    if teamIndex > #(self.team_) then
+        return
+    end
+    local team = self:getIndexTeam(teamIndex)
+    if cardIndex > #(team) then
+        return
+    end
+    team[cardIndex] = newCardId
 end
 
 return BattleTeam

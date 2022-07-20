@@ -33,7 +33,7 @@ function UserInfo:getInstance()
 end
 
 function UserInfo:initData()
-    self:testData()
+    --self:testData()
 end
 
 --test
@@ -43,53 +43,11 @@ function UserInfo:testData()
     self.userInfoNickname_ = "黑山老妖12138"
     self.userInfoCoinAmount_ = 123456
     self.userInfoDiamondAmount_ = 789999
-    self.userInfoTrophyAmount_ = 101
-    self.userInfoBattleTeam_ = BattleTeam.new(
-        {
-            { 1, 1, 1, 1, 1 },
-            { 1, 1, 1, 1, 1 },
-            { 1, 1, 1, 1, 1 }
-        },
-        1
-    )
-    self.userInfoLadder_ = Ladder.new(
-        { Reward.new(
-            "随便什么名字",
-            ConstDef.REWARD_TYPE.CURRENCY,
-            1,
-            true,
-            false,
-            500,
-            1000,
-            Currency.new(
-                ConstDef.CURRENCY_TYPE.COIN,
-                0
-            )
-        ) }
-    )
-    self.userInfoCardList_ = {
-        -- [cardId] = Card.new(cardId)
-        [1] = Card.new(
-            1,
-            "平平无奇防御塔",
-            ConstDef.TOWER_RARITY.R,
-            ConstDef.TOWER_TYPE.ATTACK,
-            math.random(10),
-            0,
-            math.random(100),
-            ConstDef.TOWER_ATK_TARGET.BACK,
-            math.random(100),
-            math.random(100),
-            math.random(100),
-            math.random(100),
-            math.random(100),
-            {},
-            math.random(100),
-            0.00,
-            2,
-            1
-        )
-    }
+
+    self.userInfoTrophyAmount_ = 200
+    self.userInfoBattleTeam_ = TestDataFactory:getTeamDataTest()
+    self.userInfoLadder_ = TestDataFactory:getLadderTest()
+    self.userInfoCardList_ = TestDataFactory:getCardListTest()
 end
 
 function UserInfo:setUserInfo(account, avatar, nickname, coinAmount, diamondAmount, trophyAmount, battleTeam, ladder,
@@ -142,7 +100,6 @@ function UserInfo:getDiamondAmount()
 end
 
 function UserInfo:getBattleTeam()
-    Log.i("getBattleTeam: battleTeam is nil ? " .. tostring(self.battleTeam_ == nil))
     return self.userInfoBattleTeam_
 end
 
@@ -171,7 +128,7 @@ function UserInfo:setUserInfoTrophyAmount(trophyAmount)
 end
 
 function UserInfo:getUserInfoCardList()
-    return self.userInfoCardList_
+    return self:getCardList()
 end
 
 function UserInfo:getCardList()
@@ -183,6 +140,52 @@ end
 
 function UserInfo:setUserInfoBattleTeam(battleTeam)
     self.battleTeam_ = battleTeam
+end
+
+function UserInfo:getCollectedList()
+    local cardList = self:getCardList()
+    local list = {}
+    local set = {}
+    if cardList == nil then
+        return list
+    end
+    for i = 1, #cardList do
+        local id = cardList[i]:getCardId()
+        if set[id] then
+            -- nothing
+        else
+            set[id] = true
+            table.insert(list, id)
+        end
+    end
+    return list
+end
+
+function UserInfo:getUnCollectedList()
+    local cardList = self:getCardList()
+    local list = {}
+    local set = {}
+    for id = 1, 20 do
+        set[id] = true
+    end
+    if cardList == nil then
+        for id = 1, 20 do
+            table.insert(list, id)
+        end
+        return list
+    end
+    for i = 1, #cardList do
+        local id = cardList[i]:getCardId()
+        if set[id] then
+            set[id] = false
+        end
+    end
+    for k, v in pairs(set) do
+        if v == true then
+            table.insert(list, k)
+        end
+    end
+    return list
 end
 
 return UserInfo
