@@ -14,6 +14,7 @@ local InGameData = require("app.data.InGameData")
 local Log = require("app.utils.Log")
 local TowerArrayDef = require("app.def.TowerArrayDef")
 local EnemyTowerArrayDef = require("app.def.EnemyTowerArrayDef")
+local SoundManager = require("app.manager.SoundManager")
 local EventDef = require("app.def.EventDef")
 local EventManager = require("app.manager.EventManager")
 local BossMessage2nd = require("app.ui.inGameSecondaryui.BossMessage2nd")
@@ -64,7 +65,7 @@ function InGameUpLayer:autoEnemyTower()
                 end
             end
         end
-    end, 2, false)
+    end, 5, false)
 end
 
 --[[--
@@ -227,6 +228,7 @@ function InGameUpLayer:init()
             -- local popup = GiveUp2nd.new()
             -- popup:addTo(self)
             InGameData:setGameState(ConstDef.GAME_STATE.PAUSE)
+            SoundManager:playSound("CLIK")
         end
     end)
     giveUpButton:addTo(self)
@@ -252,10 +254,10 @@ function InGameUpLayer:init()
             Log.i("boss info 2nd")
             local boss = BossMessage2nd:new()
             boss:addTo(self)
+            SoundManager:playSound("CLIK")
         end
     end)
     bossButton:addTo(self)
-    
 
     self:playerArray()
     self:enemyArray()
@@ -279,21 +281,17 @@ function InGameUpLayer:playerArray()
         layer:setContentSize(itemWidth, itemHeight)
         layer:addTo(listView)
 
-        local towerButton = ccui.Button:create("battle_in_game/battle_view/tower/tower_"..TowerArrayDef[j].ID..".png")
-        towerButton:setAnchorPoint(0.5, 1)
-        towerButton:setPosition(itemWidth/2, itemHeight*19/20)
-        local sizeTowerButton = towerButton:getContentSize()
-        towerButton:addTouchEventListener(function(sender, eventType)
-            if 2 == eventType then
-                --塔强化
-            end
-        end)
-        towerButton:addTo(layer)
-
         local levelSprite = cc.Sprite:create("battle_in_game/battle_view/level/LV.1.png")
         levelSprite:setAnchorPoint(0.5, 0)
         levelSprite:setPosition(itemWidth/2, 0)
         levelSprite:addTo(layer)
+
+        local towerButton = ccui.Button:create("battle_in_game/battle_view/tower/tower_"..TowerArrayDef[j].ID..".png")
+        towerButton:setAnchorPoint(0.5, 1)
+        towerButton:setPosition(itemWidth/2, itemHeight*19/20)
+        local sizeTowerButton = towerButton:getContentSize()
+        towerButton:addTo(layer)
+
 
         local towerType = EnemyTowerArrayDef:getTypeString(j)
         local towerTypeSprite = cc.Sprite:create("battle_in_game/battle_view/subscript_tower_type/"..towerType..".png")
@@ -317,6 +315,25 @@ function InGameUpLayer:playerArray()
         spTTF:setColor(cc.c3b(255,255,255))
         spTTF:enableOutline(cc.c4b(0,0,0,255), 1)
         spTTF:addTo(layer)
+
+        towerButton:addTouchEventListener(function(sender, eventType)
+            if 2 == eventType then
+                --塔强化
+                SoundManager:playSound("CLIK")
+                local sp = InGameData:getSp()
+                local spCost = TowerArrayDef[j].SP
+                if sp >= spCost then
+                    EventManager:doEvent(EventDef.ID.CARD_LEVEL_UP, j)
+                    local img = cc.Sprite:create("battle_in_game/battle_view/level/LV."..TowerArrayDef[j].LEVEL..".png"):getSpriteFrame()
+                    levelSprite:setSpriteFrame(img)
+                    TowerArrayDef:changeSP(j, spCost + 100)
+                    InGameData:changeSp(-spCost)
+                    self:refreshSp()
+                    spTTF:setString(TowerArrayDef[j].SP)
+                    self:levelUpTips(itemWidth/2, itemHeight*19/30, layer)
+                end
+            end
+        end)
 
     end
 end
@@ -348,6 +365,7 @@ function InGameUpLayer:enemyArray()
             if 2 == eventType then
                 local enemyTowerInfo = EnemyTowerInfo2nd.new(j)
                 enemyTowerInfo:addTo(self)
+                SoundManager:playSound("CLIK")
             end
         end)
         towerButton:addTo(layer)
@@ -377,6 +395,17 @@ function InGameUpLayer:refreshSp()
 end
 
 --[[--
+    强化提示
+]]
+function InGameUpLayer:levelUpTips(x, y, layer)
+    local tipsSprite = cc.Sprite:create("battle_in_game/battle_view/special_effects/level_up.png")
+    tipsSprite:setAnchorPoint(0.5, 0.5)
+    tipsSprite:setPosition(x, y)
+    tipsSprite:addTo(layer)
+    tipsSprite:runAction(cc.Spawn:create(cc.MoveBy:create(0.5, cc.p(0, 20)),cc.FadeOut:create(0.5)))
+end
+
+--[[--
     节点进入
 
     @param none
@@ -392,7 +421,8 @@ function InGameUpLayer:onEnter()
                     self.playerLive_[j].SPRITE:setVisible(false)
                     self.playerLive_[j].IS_VISIABLE = false
                     if j==3 then
-                        print("游戏结束1")
+                        print("游戏结束1 失败")
+                        SoundManager:playSound("LOSE")
                         InGameData:setGameState(ConstDef.GAME_STATE.RESULT)
                     end
                     break
@@ -409,7 +439,8 @@ function InGameUpLayer:onEnter()
                     self.enemyLife_[j].SPRITE:setVisible(false)
                     self.enemyLife_[j].IS_VISIABLE = false
                     if j==3 then
-                        print("游戏结束1")
+                        print("游戏结束2 胜利")
+                        SoundManager:playSound("WIN")
                         InGameData:setGameState(ConstDef.GAME_STATE.RESULT)
                     end
                     break

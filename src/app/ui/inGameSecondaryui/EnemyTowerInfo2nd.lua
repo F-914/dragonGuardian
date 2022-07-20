@@ -9,6 +9,7 @@ end)
 
 --local
 local EnemyTowerArrayDef = require("app.def.EnemyTowerArrayDef")
+local SoundManager = require("app.manager.SoundManager")
 
 --[[--
     描述：构造函数
@@ -36,6 +37,7 @@ function EnemyTowerInfo2nd:init()
     maskLayer:addTouchEventListener(function(sender, eventType)
         if 2 == eventType then
             self:removeFromParent()
+            SoundManager:playSound("CLOSE")
         end
     end)
 

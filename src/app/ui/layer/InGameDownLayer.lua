@@ -11,7 +11,9 @@ local Log = require("app.utils.Log")
 local ConstDef = require("app.def.ConstDef")
 local InGameData = require("app.data.InGameData")
 local EventDef = require("app.def.EventDef")
+local TowerArrayDef = require("app.def.TowerArrayDef")
 local EventManager = require("app.manager.EventManager")
+local SoundManager = require("app.manager.SoundManager")
 local InGameUpLayer = require("app.ui.layer.InGameUpLayer")
 local InGameEnemySprite = require("app.ui.node.InGameEnemySprite")
 local InGameTowerButton = require("app.ui.node.InGameTowerButton")
@@ -42,14 +44,16 @@ function InGameDownLayer:onEnter()
         local tower = InGameTowerButton.new(1,card,cardId)     -- 1指的是在我方生成
         self:addChild(tower, 3)
         self.cardMap_[card] = tower
-        InGameData:shoot(1, tower:getCardId(1), tower:getPositionX(), tower:getPositionY(), card:getCardLevel())
+        InGameData:shoot(1, tower:getCardId(1), tower:getPositionX(), tower:getPositionY(), card:getCardStar(), card:getCardLevel())
+        SoundManager:playSound("TOWER_BUILD")
     end)
 
     EventManager:regListener(EventDef.ID.CREATE_ENEMY_CARD, self, function(card, cardId)
+        print("cardId------------------------------------", cardId)
         local tower = InGameTowerButton.new(2,card,cardId)     -- 2指的是在敌方生成
         self:addChild(tower, 3)
         self.cardMap_[card] = tower
-        InGameData:shoot(2, tower:getCardId(2), tower:getPositionX(), tower:getPositionY(), card:getCardLevel())
+        InGameData:shoot(2, tower:getCardId(2), tower:getPositionX(), tower:getPositionY(), card:getCardStar(), card:getCardLevel())
     end)
 
     EventManager:regListener(EventDef.ID.DESTORY_CARD, self, function(card)
@@ -63,6 +67,7 @@ function InGameDownLayer:onEnter()
         local bulletNode = InGameBulletSprite.new("battle_in_game/battle_view/bullet/"..type..".png", bullet)
         self:addChild(bulletNode)
         self.bulletMap_[bullet] = bulletNode
+        SoundManager:playSound("TOWER_ATK")
     end)
 
     EventManager:regListener(EventDef.ID.DESTORY_BULLET, self, function(bullet)
@@ -91,11 +96,23 @@ function InGameDownLayer:onEnter()
     EventManager:regListener(EventDef.ID.CARD_MERGE, self, function(card)
         local node = self.cardMap_[card]
         node:removeFromParent()
+        SoundManager:playSound("TOWER_COMPOSE")
+    end)
+
+    EventManager:regListener(EventDef.ID.CARD_LEVEL_UP, self, function(id)
+        for _,node in pairs(self.cardMap_) do
+            if node:getCardId() == id then
+                node:setCardLevel(node:getCardLevel() + 1)
+            end
+        end
+        TowerArrayDef:levelUp(id)
+        SoundManager:playSound("TOWER_COMPOSE")
     end)
 
     EventManager:regListener(EventDef.ID.HIT_ENEMY, self, function(enemy, damage)
         local node = self.enemyMap_[enemy]
         node:hitEnemyTips(damage)
+        SoundManager:playSound("TOWER_ATK_HIT")
     end)
 
 end
@@ -115,6 +132,7 @@ function InGameDownLayer:onExit()
     EventManager:unRegListener(EventDef.ID.CREATE_ENEMY, self)
     EventManager:unRegListener(EventDef.ID.DESTORY_ENEMY, self)
     EventManager:unRegListener(EventDef.ID.CARD_MERGE, self)
+    EventManager:unRegListener(EventDef.ID.CARD_LEVEL_UP, self)
     EventManager:unRegListener(EventDef.ID.HIT_ENEMY, self)
 end
 

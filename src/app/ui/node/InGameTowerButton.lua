@@ -21,12 +21,14 @@ local towerTypeSprite
 local sizeTowerButton
 
 function InGameTowerButton:ctor(type, data, cardId)   -- 塔属于我方type=1，还是对方type=2
+    print("type, cardId", type, cardId)
+    print(vardump(data))
     self.type_ = type
     self.data_ = data   --联系InGameData中的数据（还未使用）
     self.data_.cardId_ = cardId
 
     self:initNum(cardId)   -- 生成第几个塔(队内序号)
-    self:buildPlayerTower(self.num_)
+    print("cardId, self.num_",cardId ,self.num_)
 
     if self.type_ == 1 then
         self:touchMove()    -- 我方塔可移动，敌方塔不可移动
@@ -54,10 +56,12 @@ function InGameTowerButton:initNum(id)
         if self.type_ == 1 then
             if TowerArrayDef[i].ID == id then
                 self.num_ = i
+                self:buildPlayerTower(self.num_)
             end
         else
             if EnemyTowerArrayDef[i].ID == id then
                 self.num_ = i
+                self:buildPlayerTower(self.num_)
             end
         end
     end
@@ -73,6 +77,8 @@ end
 function InGameTowerButton:buildPlayerTower(num)
     local towerButton
     if self.type_ == 1 then
+        print("---------------------------------num,",num)
+        print(vardump(TowerArrayDef[num]))
         towerButton = ccui.Button:create(TowerArrayDef[num].ICON_PATH)
     else
         towerButton = ccui.Button:create(EnemyTowerArrayDef[num].ICON_PATH)
@@ -90,7 +96,7 @@ function InGameTowerButton:buildPlayerTower(num)
     self:setAnchorPoint(0.5, 0.5)
     self:setContentSize(sizeTowerButton.width*0.85, sizeTowerButton.height*0.85)
 
-    towerTypeSprite = cc.Sprite:create("battle_in_game/battle_view/subscript_level/"..self.data_:getCardLevel()..".png")
+    towerTypeSprite = cc.Sprite:create("battle_in_game/battle_view/subscript_level/"..self.data_:getCardStar()..".png")
     towerTypeSprite:setAnchorPoint(1,1)
     --towerTypeSprite:scale(0.6)
     towerTypeSprite:setPosition(sizeTowerButton.width*0.85, sizeTowerButton.height*0.85)

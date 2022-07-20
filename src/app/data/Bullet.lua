@@ -14,7 +14,7 @@ local EventManager = require("app.manager.EventManager")
 
     @return none
 ]]
-function Bullet:ctor(camp, type, x, y, damage)
+function Bullet:ctor(camp, type, x, y, damage, star)
     Bullet.super:ctor(x, y, ConstDef.BULLET_SIZE.WIDTH, ConstDef.BULLET_SIZE.HEIGHT)
     self.camp_ = camp
     self.x_ = x
@@ -26,6 +26,9 @@ function Bullet:ctor(camp, type, x, y, damage)
         self.damage_ = damage
     else
         self.damage_ = 50
+    end
+    if star ~= nil then
+        self.damage_ = self.damage_ + (star - 1) * 10
     end
     EventManager:doEvent(EventDef.ID.CREATE_BULLET, self, type)
 end
