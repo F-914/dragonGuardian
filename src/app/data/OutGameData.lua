@@ -65,8 +65,6 @@ function OutGameData:getTreasureBoxRewardWinningRate()
     return _treasureBoxRewardWinningRate
 end
 
-
-
 --function OutGameData:init()
 --    --连接到服务器
 --    -- OutGameMsgController:connect()
@@ -95,8 +93,6 @@ function OutGameData:getTreasureBoxRewardWinningRate()
     return _treasureBoxRewardWinningRate
 end
 
-
-
 function OutGameData:initTreasureBoxRewardWinningRate()
     -- TODO 感觉这个数据可能很少会发生变动，但是也不排除后续更新的可能
     _treasureBoxRewardWinningRate = {
@@ -109,11 +105,11 @@ function OutGameData:initTreasureBoxRewardWinningRate()
             { {}, {} },
             { {}, {} },
 
-            { {0}, {0} },
-            { {0}, {0} },
-            { {0}, {0} },
-            { {0}, {0} },
-            { {0}, {0} },
+            { { 0 }, { 0 } },
+            { { 0 }, { 0 } },
+            { { 0 }, { 0 } },
+            { { 0 }, { 0 } },
+            { { 0 }, { 0 } },
 
             { 0, 0 },
             { 0, 0 },
@@ -159,9 +155,9 @@ function OutGameData:initUserInfo()
     _userInfo:testData()
 end
 
-function OutGameData:register()
+-- function OutGameData:register()
 
-end
+-- end
 
 ---测试的时候就用下面这三个函数
 --function OutGameData:initDiamondShop()

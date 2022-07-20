@@ -8,7 +8,7 @@ UserInfo.instance_ = nil
 -- local
 local ConstDef = require("app.def.ConstDef")
 local StringDef = require("app.def.StringDef")
--- local TestDataFactory = require("app.test.TestDataFactory")
+local TestDataFactory = require("app.test.TestDataFactory")
 local BattleTeam = require("app.data.BattleTeam")
 local Card = require("app.data.Card")
 local Log = require("app.utils.Log")
@@ -43,7 +43,6 @@ function UserInfo:testData()
     self.userInfoNickname_ = "黑山老妖12138"
     self.userInfoCoinAmount_ = 123456
     self.userInfoDiamondAmount_ = 789999
-
     self.userInfoTrophyAmount_ = 200
     self.userInfoBattleTeam_ = TestDataFactory:getTeamDataTest()
     self.userInfoLadder_ = TestDataFactory:getLadderTest()

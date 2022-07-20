@@ -814,7 +814,6 @@ function MenuView:createAvatarSelection(layer)
                         end)
                     end
                 elseif avatarNum == #avatarObtain + 1 then
-                    -- 11
                     iNotObtain = i + 1
                     avatarNum = avatarNum + 1
                     break
