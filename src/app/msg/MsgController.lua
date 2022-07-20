@@ -197,9 +197,9 @@ function _handleMsg(event, data)
                     -- body
                 end
             elseif msg["type"] == MsgDef.ACKTYPE.GAME.GAMEOVER then
-                local state=msg["state"]
+                
                 local id=msg["pid"]
-                if state=="false" then--游戏失败
+                
                 if id==Pid_ then --自己死亡，游戏失败
 
                    elseif id==EnemyPid_ then--对方死亡，游戏胜利
