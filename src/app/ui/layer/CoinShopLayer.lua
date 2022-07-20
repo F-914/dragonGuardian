@@ -3,7 +3,12 @@
 --- Created by Zoybzo.
 --- DateTime: 2022-07-05 16:08
 ---
-local CoinShopLayer = class("CoinShopLayer", require("app.ui.layer.BaseLayer"))
+local CoinShopLayer = class("CoinShopLayer",
+        require("app.ui.layer.BaseLayer")
+        --function()
+        --    return ccui.Layout:create()
+        --end
+)
 --local
 local StringDef = require("app.def.StringDef")
 local OutGameData = require("app.data.OutGameData")

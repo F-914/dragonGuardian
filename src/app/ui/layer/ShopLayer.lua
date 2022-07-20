@@ -4,9 +4,9 @@
 --- DateTime: 2022-07-05 15:00
 ---
 local ShopLayer = class("ShopLayer",
-    function()
-        return display.newLayer()
-    end)
+        function()
+            return display.newLayer()
+        end)
 --local
 local StringDef = require("app.def.StringDef")
 local CoinShopLayer = require("app.ui.layer.CoinShopLayer")
@@ -26,22 +26,36 @@ end
 function ShopLayer:initView()
     local listView = ccui.ListView:create()
     listView:setContentSize(display.width, display.height * 7 / 8) -- 滑动区域大小
+    --listView:setContentSize(display.cx * 2, display.cy * 1.4) -- 滑动区域大小
     -- TODO 这里的滑动出了点问题
-    listView:setBounceEnabled(true)
-    --listView:setScrollBarEnabled(false)
+    --listView:setBounceEnabled(true)
     listView:setAnchorPoint(0.5, 0.5)
     listView:setPosition(display.cx, display.cy)
-    listView:setDirection(1) -- 垂直
+    --listView:setPosition(display.cx, display.cy * 1.4)
+    listView:setDirection(ccui.ListViewDirection.vertical)
     listView:addTo(self)
 
     self.coinShopLayer_ = CoinShopLayer.new()
+    self.coinShopLayer_:setTouchSwallowEnabled(false)
     listView:addChild(self.coinShopLayer_)
     --listView:pushBackCustomItem(self.coinShopLayer_)
 
     self.diamondShopLayer_ = DiamondShopLayer.new()
+    self.diamondShopLayer_:setTouchSwallowEnabled(false)
     listView:addChild(self.diamondShopLayer_)
     --listView:pushBackCustomItem(self.coinShopLayer_)
 
+    --local coinShopLayer = ccui.Layout:create()
+    --self.coinShopLayer_ = CoinShopLayer.new():addTo(coinShopLayer)
+    --listView:pushBackCustomItem(coinShopLayer)
+    --
+    --local diamondShopLayer = ccui.Layout:create()
+    --self.diamondShopLayer_ = DiamondShopLayer.new():addTo(diamondShopLayer)
+    --listView:pushBackCustomItem(diamondShopLayer)
+    --
+    --local layer = ccui.Layout:create()
+    --layer:setContentSize(display.width, display.height * 0.2)
+    --listView:pushBackCustomItem(layer)
 end
 
 function ShopLayer:onEnter()

@@ -154,13 +154,13 @@ function Card:setCardLevel(level)
 end
 
 --- 塔表格位置
-function Card:getXLocate()
-    return self.xLocate_
-end
-
-function Card:getYLocate()
-    return self.yLocate_
-end
+--function Card:getXLocate()
+--    return self.xLocate_
+--end
+--
+--function Card:getYLocate()
+--    return self.yLocate_
+--end
 
 --- 塔编号
 function Card:getCardId()

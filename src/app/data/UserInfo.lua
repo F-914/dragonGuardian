@@ -90,14 +90,6 @@ function UserInfo:getTrophyAmount()
     return self.userInfoTrophyAmount_
 end
 
-function UserInfo:getCoinAmount()
-    return self.userInfoCoinAmount_
-end
-
-function UserInfo:getDiamondAmount()
-    return self.userInfoDiamondAmount_
-end
-
 function UserInfo:getBattleTeam()
     return self.userInfoBattleTeam_
 end

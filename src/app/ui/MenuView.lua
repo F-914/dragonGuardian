@@ -3,12 +3,21 @@
     MenuView.lua
 ]]
 local MenuView = class(
-    "MenuView",
-    function()
-        return display.newColorLayer(cc.c4b(0, 0, 0, 0))
-    end
+        "MenuView",
+        function()
+            return display.newColorLayer(cc.c4b(0, 0, 0, 0))
+        end
 )
 -- local
+local audio = require "framework.audio"
+local MenuConfig = require "app.test.MenuConfig"
+local TowerDef = require "app.def.TowerDef"
+local Log = require "app.utils.Log"
+local UserInfo = require("app.data.UserInfo")
+local StringDef = require("app.def.StringDef")
+local OutGameData = require("app.data.OutGameData")
+local ConstDef = require("app.def.ConstDef")
+--
 local _priority = 0 -- 存储层优先级
 local _menuTopLayer
 local _avatarButton
@@ -21,15 +30,6 @@ local _tabGuide
 local _battleTitle, _battleIcon
 local _shopTitle, _shopIcon
 local _guideTitle, _guideIcon
--- userinfo
-local _userInfo
-
-local audio = require "framework.audio"
-local MenuConfig = require "app.test.MenuConfig"
-local TowerDef = require "app.def.TowerDef"
-local Log = require "app.utils.Log"
-local UserInfo = require("app.data.UserInfo")
-local StringDef = require("app.def.StringDef")
 --
 
 --[[--
@@ -41,7 +41,6 @@ local StringDef = require("app.def.StringDef")
 ]]
 function MenuView:ctor(layer, num)
     _priority = num
-    _userInfo = UserInfo:getInstance()
     self:loadMusic()
     local menuTop = self:createMenuTop()
     local menuBottom = self:createMenuBottom()
@@ -83,7 +82,7 @@ function MenuView:createMenuTop()
     topBase:addTo(_menuTopLayer)
 
     -- 头像框按钮
-    _avatarButton = ccui.Button:create(_userInfo:getAvatar())
+    _avatarButton = ccui.Button:create(OutGameData:getUserInfo():getAvatar())
     _avatarButton:setAnchorPoint(0.5, 0.5)
     -- base的高度
     local baseHeight = sizeBase.height * display.width / sizeBase.width
@@ -119,7 +118,7 @@ function MenuView:createMenuTop()
     local sizeNameBase = nameBase:getContentSize()
 
     local nameText = display.newTTFLabel({
-        text = _userInfo:getNickname(),
+        text = OutGameData:getUserInfo():getNickname(),
         font = StringDef.PATH_FONT_FZZCHJW,
         size = 20
     })
@@ -133,7 +132,7 @@ function MenuView:createMenuTop()
     cupSprite:addTo(_menuTopLayer)
 
     local scoreText = display.newTTFLabel({
-        text = _userInfo:getTrophyAmount(),
+        text = OutGameData:getUserInfo():getTrophyAmount(),
         font = "font/fzbiaozjw.ttf",
         size = 24
     })
@@ -152,7 +151,7 @@ function MenuView:createMenuTop()
     coinSprite:addTo(_menuTopLayer)
 
     local coinNum = display.newTTFLabel({
-        text = _userInfo:getCoinAmount(),
+        text = OutGameData:getUserInfo():getCoinAmount(),
         font = StringDef.PATH_FONT_FZBIAOZJW,
         size = 26
     })
@@ -171,7 +170,7 @@ function MenuView:createMenuTop()
     diaSprite:addTo(_menuTopLayer)
 
     local diaNum = display.newTTFLabel({
-        text = _userInfo:getDiamondAmount(),
+        text = OutGameData:getUserInfo():getDiamondAmount(),
         font = StringDef.PATH_FONT_FZBIAOZJW,
         size = 26
     })
@@ -213,10 +212,10 @@ function MenuView:createMenuBottom()
     _tabBattle:setTouchEnabled(false)
     _tabBattle:addTo(menuBottomLayer)
 
-    battleIcon_ = cc.Sprite:create("home/bottom_tab_button/icon_battle.png")
-    battleIcon_:setAnchorPoint(0.5, 0.5)
-    battleIcon_:setPosition(display.cx, _sizeTab.height / 2 + _sizeTab.height / 5)
-    battleIcon_:addTo(menuBottomLayer, 2)
+    _battleIcon = cc.Sprite:create("home/bottom_tab_button/icon_battle.png")
+    _battleIcon:setAnchorPoint(0.5, 0.5)
+    _battleIcon:setPosition(display.cx, _sizeTab.height / 2 + _sizeTab.height / 5)
+    _battleIcon:addTo(menuBottomLayer, 2)
 
     _battleTitle = cc.Sprite:create("home/bottom_tab_button/title_battle.png")
     _battleTitle:setAnchorPoint(0.5, 1)
@@ -300,41 +299,41 @@ end
 ]]
 function MenuView:bottomMenuControl(num)
     if num == 2 then
-        print("mid-battle")
+        Log.i("mid-battle")
         _tabShop:setTouchEnabled(true)
         _tabBattle:setTouchEnabled(false)
         _tabGuide:setTouchEnabled(true)
         _curPageSprite:runAction(cc.MoveTo:create(0.08, cc.p(display.cx, 0)))
-        battleIcon_:runAction(cc.MoveTo:create(0.08, cc.p(display.cx, _sizeTab.height / 2 + _sizeTab.height / 5)))
+        _battleIcon:runAction(cc.MoveTo:create(0.08, cc.p(display.cx, _sizeTab.height / 2 + _sizeTab.height / 5)))
         _battleTitle:setVisible(true)
         _shopIcon:runAction(cc.MoveTo:create(0.08, cc.p(_sizeTab.width / 2, _sizeTab.height / 2)))
         _shopTitle:setVisible(false)
         _guideIcon:runAction(cc.MoveTo:create(0.08, cc.p(display.width - _sizeTab.width / 2, _sizeTab.height / 2)))
         _guideTitle:setVisible(false)
     elseif num == 1 then
-        print("left-shop")
+        Log.i("left-shop")
         _tabShop:setTouchEnabled(false)
         _tabBattle:setTouchEnabled(true)
         _tabGuide:setTouchEnabled(true)
         _curPageSprite:runAction(cc.MoveTo:create(0.08, cc.p(display.cx / 3, 0)))
-        battleIcon_:runAction(cc.MoveTo:create(0.08, cc.p(display.cx, _sizeTab.height / 2)))
+        _battleIcon:runAction(cc.MoveTo:create(0.08, cc.p(display.cx, _sizeTab.height / 2)))
         _battleTitle:setVisible(false)
         _shopIcon:runAction(cc.MoveTo:create(0.08, cc.p(_sizeTab.width / 2, _sizeTab.height / 2 + _sizeTab.height / 5)))
         _shopTitle:setVisible(true)
         _guideIcon:runAction(cc.MoveTo:create(0.08, cc.p(display.width - _sizeTab.width / 2, _sizeTab.height / 2)))
         _guideTitle:setVisible(false)
     elseif num == 3 then
-        print("right-guide")
+        Log.i("right-guide")
         _tabShop:setTouchEnabled(true)
         _tabBattle:setTouchEnabled(true)
         _tabGuide:setTouchEnabled(false)
         _curPageSprite:runAction(cc.MoveTo:create(0.08, cc.p(display.cx * 5 / 3, 0)))
-        battleIcon_:runAction(cc.MoveTo:create(0.08, cc.p(display.cx, _sizeTab.height / 2)))
+        _battleIcon:runAction(cc.MoveTo:create(0.08, cc.p(display.cx, _sizeTab.height / 2)))
         _battleTitle:setVisible(false)
         _shopIcon:runAction(cc.MoveTo:create(0.08, cc.p(_sizeTab.width / 2, _sizeTab.height / 2)))
         _shopTitle:setVisible(false)
         _guideIcon:runAction(cc.MoveTo:create(0.08,
-            cc.p(display.width - _sizeTab.width / 2, _sizeTab.height / 2 + _sizeTab.height / 5)))
+                cc.p(display.width - _sizeTab.width / 2, _sizeTab.height / 2 + _sizeTab.height / 5)))
         _guideTitle:setVisible(true)
     end
 end
@@ -347,7 +346,7 @@ end
     @return none
 ]]
 function MenuView:createSecondMenu(layer)
-    print("second menu")
+    Log.i("second menu")
     local secMenuLayer = ccui.Layout:create()
     secMenuLayer:setBackGroundColor(cc.c4b(0, 0, 0, 100))
     secMenuLayer:setBackGroundColorType(1)
@@ -389,8 +388,8 @@ function MenuView:createSecondMenu(layer)
     local announcIcon = cc.Sprite:create("home/top_player_info/second_menu/button_announcement.png")
     announcIcon:setAnchorPoint(0.5, 0.5)
     announcIcon:setPosition(secMenuBaseCX - sizeSecMenuBase.width * 7 / 24,
-        secMenuBaseCY + sizeSecMenuBase.height * 3 /
-        9)
+            secMenuBaseCY + sizeSecMenuBase.height * 3 /
+                    9)
     announcIcon:addTo(secMenuLayer)
 
     ------------------------------------------------------------------------------------------------
@@ -442,8 +441,8 @@ function MenuView:createSecondMenu(layer)
     local settingIcon = cc.Sprite:create("home/top_player_info/second_menu/button_setting.png")
     settingIcon:setAnchorPoint(0.5, 0.5)
     settingIcon:setPosition(secMenuBaseCX - sizeSecMenuBase.width * 7 / 24,
-        secMenuBaseCY - sizeSecMenuBase.height * 3 /
-        9)
+            secMenuBaseCY - sizeSecMenuBase.height * 3 /
+                    9)
     settingIcon:addTo(secMenuLayer)
 
     settingButton:addTouchEventListener(function(sender, eventType)
@@ -491,7 +490,7 @@ function MenuView:createSecondSetting(layer)
     local setClose = ccui.Button:create("home/top_player_info/second_setting/button_close.png")
     setClose:setAnchorPoint(0.5, 0.5)
     setClose:setPosition(display.cx + sizeSetBase.width / 2 - sizeSetBase.width / 17,
-        display.cy + sizeSetBase.height / 2 - sizeSetBase.height / 10)
+            display.cy + sizeSetBase.height / 2 - sizeSetBase.height / 10)
     setClose:addTo(secAvatarLayer)
     setClose:addTouchEventListener(function(sender, eventType)
         if 2 == eventType then
@@ -548,11 +547,11 @@ function MenuView:createSecondSetting(layer)
 
     --CheckBox音效
     local ckbEffect = ccui.CheckBox:create(
-        "home/top_player_info/second_setting/CheckBox_on.png", --普通状态
-        "home/top_player_info/second_setting/CheckBox_on.png", --普通按下
-        "home/top_player_info/second_setting/CheckBox_off.png", --选中状态
-        "home/top_player_info/second_setting/CheckBox_on.png", --普通禁用
-        "home/top_player_info/second_setting/CheckBox_off.png"--选中禁用
+            "home/top_player_info/second_setting/CheckBox_on.png", --普通状态
+            "home/top_player_info/second_setting/CheckBox_on.png", --普通按下
+            "home/top_player_info/second_setting/CheckBox_off.png", --选中状态
+            "home/top_player_info/second_setting/CheckBox_on.png", --普通禁用
+            "home/top_player_info/second_setting/CheckBox_off.png"--选中禁用
     )
     ckbEffect:setPosition(cc.p(display.width / 2 - sizeSetBase.width / 15, display.height / 2 + sizeSetBase.height / 5))
     ckbEffect:setAnchorPoint(0, 0.5)
@@ -586,11 +585,11 @@ function MenuView:createSecondSetting(layer)
 
     --CheckBox音乐
     local ckbBgm = ccui.CheckBox:create(
-        "home/top_player_info/second_setting/CheckBox_on.png", --普通状态
-        "home/top_player_info/second_setting/CheckBox_on.png", --普通按下
-        "home/top_player_info/second_setting/CheckBox_off.png", --选中状态
-        "home/top_player_info/second_setting/CheckBox_on.png", --普通禁用
-        "home/top_player_info/second_setting/CheckBox_off.png"--选中禁用
+            "home/top_player_info/second_setting/CheckBox_on.png", --普通状态
+            "home/top_player_info/second_setting/CheckBox_on.png", --普通按下
+            "home/top_player_info/second_setting/CheckBox_off.png", --选中状态
+            "home/top_player_info/second_setting/CheckBox_on.png", --普通禁用
+            "home/top_player_info/second_setting/CheckBox_off.png"--选中禁用
     )
     ckbBgm:setPosition(cc.p(display.width / 2 - sizeSetBase.width / 15, display.height / 2 + sizeSetBase.height / 15))
     ckbBgm:setAnchorPoint(0, 0.5)
@@ -609,7 +608,7 @@ function MenuView:createSecondSetting(layer)
     local introduceTitle = cc.Sprite:create("home/top_player_info/second_setting/title_skill_introduce.png")
     introduceTitle:setAnchorPoint(0, 0.5)
     introduceTitle:setPosition(cc.p(display.width / 3 - sizeSetBase.width / 10, display.height / 2 -
-        sizeSetBase.height / 15))
+            sizeSetBase.height / 15))
     introduceTitle:addTo(secAvatarLayer)
 
     -- 事件回调函数
@@ -623,11 +622,11 @@ function MenuView:createSecondSetting(layer)
 
     --CheckBox技能介绍
     local ckbIntro = ccui.CheckBox:create(
-        "home/top_player_info/second_setting/CheckBox_on.png", --普通状态
-        "home/top_player_info/second_setting/CheckBox_on.png", --普通按下
-        "home/top_player_info/second_setting/CheckBox_off.png", --选中状态
-        "home/top_player_info/second_setting/CheckBox_on.png", --普通禁用
-        "home/top_player_info/second_setting/CheckBox_off.png"--选中禁用
+            "home/top_player_info/second_setting/CheckBox_on.png", --普通状态
+            "home/top_player_info/second_setting/CheckBox_on.png", --普通按下
+            "home/top_player_info/second_setting/CheckBox_off.png", --选中状态
+            "home/top_player_info/second_setting/CheckBox_on.png", --普通禁用
+            "home/top_player_info/second_setting/CheckBox_off.png"--选中禁用
     )
     ckbIntro:setPosition(cc.p(display.width / 2 - sizeSetBase.width / 15, display.height / 2 - sizeSetBase.height / 15))
     ckbIntro:setAnchorPoint(0, 0.5)
@@ -674,7 +673,7 @@ function MenuView:createAvatarSelection(layer)
     local selectionClose = ccui.Button:create("home/top_player_info/second_avatar_selection/button_close.png")
     selectionClose:setAnchorPoint(0.5, 0.5)
     selectionClose:setPosition(display.cx + sizeSetBase.width / 2 - sizeSetBase.width / 17,
-        display.cy + sizeSetBase.height / 2 - sizeSetBase.height / 23)
+            display.cy + sizeSetBase.height / 2 - sizeSetBase.height / 23)
     selectionClose:addTo(secAvatarLayer)
     selectionClose:addTouchEventListener(function(sender, eventType)
         if 2 == eventType then
@@ -697,19 +696,18 @@ function MenuView:createAvatarSelection(layer)
     avatarConfirm:addTo(secAvatarLayer)
     avatarConfirm:addTouchEventListener(function(sender, eventType)
         if 2 == eventType then
-            -- TODO 这块得改一下
             audio.playEffect("sound_ogg/ui_btn_click.ogg")
             --MenuConfig.AVATER.ICON_PATH = TowerDef[curAvatarID].ICON_PATH
-            _userInfo:setAvatar(TowerDef[curAvatarID].ICON_PATH)
-            --_userInfo:setAvatarId(curAvatarID)
+            OutGameData:getUserInfo():setAvatar(TowerDef[curAvatarID].ICON_PATH)
+            --OutGameData:getUserInfo():setAvatarId(curAvatarID)
             secAvatarLayer:removeFromParent()
-            _avatarButton:loadTextures(_userInfo:getAvatar(), "")
+            _avatarButton:loadTextures(OutGameData:getUserInfo():getAvatar(), "")
         end
     end)
 
     ------------------------------------------------------------------------------------------
     -- 当前选中头像展示
-    local avatarCur = cc.Sprite:create(_userInfo:getAvatar())
+    local avatarCur = cc.Sprite:create(OutGameData:getUserInfo():getAvatar())
     avatarCur:setAnchorPoint(0.5, 0.5)
     avatarCur:setPosition(sizeSetBase.width / 3, display.cy + sizeSetBase.height * 8 / 24)
     avatarCur:addTo(secAvatarLayer)
@@ -745,19 +743,20 @@ function MenuView:createAvatarSelection(layer)
     -- 按是否获得将头像分类
     local avatarObtain = {}
     local avatarNotObtain = {}
-    for id, tower in ipairs(TowerDef) do
-        if tower.IS_OBTAIN then
-            if tower.RARITY == "legend" then
-                table.insert(avatarObtain, 1, tower)
-            else
-                table.insert(avatarObtain, tower)
-            end
+    local cardList = OutGameData:getUserInfo():getCardList()
+    for i = 1, ConstDef.CARD_TOTAL_NUM do
+        if cardList[i] == nil then
+            table.insert(avatarNotObtain, i)
         else
-            table.insert(avatarNotObtain, tower)
+            if cardList[i]:getCardRarity() == ConstDef.TOWER_RARITY.UR then
+                table.insert(avatarObtain, 1, i)
+            else
+                table.insert(avatarObtain, i)
+            end
         end
     end
-    print("obtain tower:", #avatarObtain)
-    print("not obtain tower:", #avatarNotObtain)
+    Log.i("obtain tower:" .. #(avatarObtain))
+    Log.i("not obtain tower:" .. #(avatarNotObtain))
 
     local iNotObtain = 0 -- 未获得标题层数
     for i = 1, 8 do
@@ -767,13 +766,14 @@ function MenuView:createAvatarSelection(layer)
         colLayer:addTo(listView)
 
         if i == 1 then
+            -- 已获取标题
             colLayer:setContentSize(sizeSetBase.width, itemHeight / 2)
             local avatarTitleBase = cc.Sprite:create("home/top_player_info/second_avatar_selection/division_obtain.png")
             avatarTitleBase:setAnchorPoint(0.5, 0.5)
             avatarTitleBase:setPosition(sizeSetBase.width / 2, itemHeight / 4)
             avatarTitleBase:addTo(colLayer)
         elseif i == iNotObtain then
-            print("not obtain")
+            -- 未获取标题
             colLayer:setContentSize(sizeSetBase.width, itemHeight / 2)
             local avatarTitleBaseTwo = cc.Sprite:create("home/top_player_info/second_avatar_selection/division_not_obtain.png")
             avatarTitleBaseTwo:setAnchorPoint(0.5, 0.5)
@@ -798,7 +798,7 @@ function MenuView:createAvatarSelection(layer)
                     if tower == nil then
                         Log.i("obtaon tower is empty")
                     else
-                        local avatarButton = ccui.Button:create(tower.ICON_PATH)
+                        local avatarButton = ccui.Button:create(ConstDef.ICON_TOWER_LIST[tower])
                         avatarButton:setAnchorPoint(0.5, 0.5)
                         avatarButton:setPosition(itemWidth / 2, itemHeight / 2)
                         avatarButton:addTo(rowLayer)
@@ -806,23 +806,26 @@ function MenuView:createAvatarSelection(layer)
                         avatarButton:addTouchEventListener(function(sender, eventType)
                             if 2 == eventType then
                                 -- 更换头像展示
-                                local img = cc.Sprite:create(tower.ICON_PATH):getSpriteFrame()
+                                local img = cc.Sprite:create(ConstDef.ICON_TOWER_LIST[tower]):getSpriteFrame()
                                 avatarCur:setSpriteFrame(img)
-                                curAvatarID = tower.ID
+                                curAvatarID = tower
+                                --OutGameData:getUserInfo():setAvatar(ConstDef.ICON_TOWER_LIST[tower])
                             end
                         end)
                     end
                 elseif avatarNum == #avatarObtain + 1 then
+                    -- 11
                     iNotObtain = i + 1
                     avatarNum = avatarNum + 1
+                    break
                 else
                     local num = avatarNum - #avatarObtain - 1
-                    print("num:", num)
+                    Log.i("num:", num)
                     local tower = avatarNotObtain[num]
                     if tower == nil then
                         Log.i("not obtain tower is empty")
                     else
-                        local avatarButton = ccui.Button:create(tower.ICON_PATH_GREY)
+                        local avatarButton = ccui.Button:create(ConstDef.ICON_TOWER_GREY_LIST[tower])
                         avatarButton:setAnchorPoint(0.5, 0.5)
                         avatarButton:setPosition(itemWidth / 2, itemHeight / 2)
                         avatarButton:addTo(rowLayer)

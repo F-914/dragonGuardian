@@ -3,7 +3,12 @@
 --- Created by Zoybzo.
 --- DateTime: 2022-07-05 16:08
 ---
-local DiamondShopLayer = class("DiamondShopLayer", require("app.ui.layer.BaseLayer"))
+local DiamondShopLayer = class("DiamondShopLayer",
+require("app.ui.layer.BaseLayer")
+--        function()
+--            return ccui.Layout:create()
+--        end
+)
 --local
 local Log = require("app.utils.Log")
 local StringDef = require("app.def.StringDef")

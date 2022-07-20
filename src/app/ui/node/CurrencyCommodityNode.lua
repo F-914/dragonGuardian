@@ -4,16 +4,21 @@
 --- DateTime: 2022-07-07 11:55
 ---
 local CurrencyCommodityNode = class("CurrencyCommodityNode",
-    function()
-        return ccui.Layout:create()
-    end)
+        function()
+            return ccui.Layout:create()
+        end)
 --local
 local audio = require("framework.audio")
 local ConstDef = require("app.def.ConstDef")
 local StringDef = require("app.def.StringDef")
 local Commodity = require("app.data.Commodity")
 local OutGameData = require("app.data.OutGameData")
+local NotEnoughNotifi2nd = require("app.ui.secondaryui.NotEnoughNotifi2nd")
+local TableUtil = require("app.utils.TableUtil")
 local Log = require("app.utils.Log")
+local OutGameMsgController = require("app.network.OutGameMsgController")
+local OpenTreasure2nd = require("app.ui.secondaryui.OpenTreasure2nd")
+local MsgDef = require("app.def.MsgDef")
 --
 --
 function CurrencyCommodityNode:ctor(commodity)
@@ -32,7 +37,7 @@ function CurrencyCommodityNode:initView()
     -- 设置货币类型
     local currencyTypeLayer = tolua.cast(ccui.Helper:seekWidgetByName(commodityLayer, "commodityLayout"), "ccui.Layout")
     currencyTypeLayer:setBackGroundImage(ConstDef.ICON_CURRENCY_TYPE[
-        self.commodity_:getCommodityCommodity():getCurrencyType()])
+    self                                         .commodity_:getCommodityCommodity():getCurrencyType()])
     -- 设置货币数量
     local numberLayer = tolua.cast(ccui.Helper:seekWidgetByName(commodityLayer, "numberField"), "ccui.Layout")
     local num = display.newTTFLabel({
@@ -57,7 +62,7 @@ function CurrencyCommodityNode:initView()
             audio.playEffect(StringDef.PATH_GET_FREE_ITEM)
             commodityLayer:scale(1)
             if self.commodity_.commodityPrice_ >
-                    OutGameData:getUserInfo().coinAmount then
+                    OutGameData:getUserInfo():getCoinAmount() then
                 local notifiUi = NotEnoughNotifi2nd.new(1)
                 --notifiUi:addTo(self:getParent())---因为不知道节点的关系，不知道加在哪里
             else
@@ -65,43 +70,36 @@ function CurrencyCommodityNode:initView()
                         ConstDef.COMMODITY_TYPE.TOWER then
                     local msgUserInfo = {}
                     local userInfo = OutGameData:getUserInfo()
-                    msgUserInfo.coinAmount = userInfo.coinAmount_
-                            - self.commodity_.price
-                    msgUserInfo.diamondAmount = userInfo.diamondAmount_
+                    msgUserInfo.coinAmount = userInfo:getCoinAmount()
+                            - self.commodity_:getCommodityPrice()
+                    msgUserInfo.diamondAmount = userInfo:getDiamondAmount()
                     msgUserInfo.cardList = {}
                     table.insert(msgUserInfo.cardList, TableUtil:removeTableFunction(
-                            self.commodity_.commodityCommodity_))
-                    local msg = TableUtil:encapsulateAsMsg(MsgDef.REQTYPE
-                                                                 .LOBBY.PURCHASE_COMMODITY, userInfo.account_,
+                            self.commodity_:getCommodityCommodity()))
+                    local msg = TableUtil:encapsulateAsMsg(MsgDef.REQTYPE.LOBBY.PURCHASE_COMMODITY, userInfo:getAccount(),
                             "userInfo", msgUserInfo)
                     OutGameMsgController:sendMsg(msg)
                 elseif self.commodity_.commodityType_ ==
                         ConstDef.COMMODITY_TYPE.CURRENCY then
                     local msgUserInfo = {}
                     local userInfo = OutGameData:getUserInfo()
-                    msgUserInfo.coinAmount = userInfo.coinAmount_
-                            - self.commodity_.price
-                    msgUserInfo.diamondAmount = userInfo.diamondAmount_
+                    msgUserInfo.coinAmount = userInfo:getCoinAmount()
+                            - self.commodity_:getCommodityPrice()
+                    msgUserInfo.diamondAmount = userInfo:getDiamondAmount()
                     msgUserInfo.cardList = {}
-                    local currency = self.commodity_.commodityCommodity_
-                    if currency.currencyType_ ==
-                            ConstDef.CURRENCY_TYPE.COIN then
-                        msgUserInfo.coinAmount = msgUserInfo.coinAmount
-                                + currency.currencyAmount_
-                    elseif currency.currencyType_ ==
-                            ConstDef.CURRENCY_TYPE.DIAMOND then
+                    local currency = self.commodity_:getCommodityCommodity()
+                    if currency:getCurrencyType() == ConstDef.CURRENCY_TYPE.COIN then
+                        msgUserInfo.coinAmount = msgUserInfo.coinAmount + currency:getCurrencyAmount()
+                    elseif currency.currencyType_ == ConstDef.CURRENCY_TYPE.DIAMOND then
                         msgUserInfo.diamondAmount = msgUserInfo.diamondAmount
-                                + currency.currencyAmount_
+                                + currency:getCurrencyAmount()
                     end
-                    local msg = TableUtil:encapsulateAsMsg(MsgDef.REQTYPE
-                                                                 .LOBBY.PURCHASE_COMMODITY, userInfo.account_,
+                    local msg = TableUtil:encapsulateAsMsg(MsgDef.REQTYPE.LOBBY.PURCHASE_COMMODITY, userInfo:getAccount(),
                             "userInfo", msgUserInfo)
                     OutGameMsgController:sendMsg(msg)
-                elseif self.commodity_.commodityType_ ==
-                        ConstDef.COMMODITY_TYPE.TREASUREBOX then
-                    local openTreasure2nd = OpenTreasure2nd.new(
-                            self.commodity_.commodityCommodity_,
-                            0 - self.commodity_.commodityPrice_, 0)
+                elseif self.commodity_:getCommodityType() == ConstDef.COMMODITY_TYPE.TREASUREBOX then
+                    local openTreasure2nd = OpenTreasure2nd.new(self.commodity_:getCommodityCommodity(),
+                            0 - self.commodity_:getCommodityPrice(), 0)
                     --openTreasure2nd:addTo()--不知道加在哪里
                 end
             end
