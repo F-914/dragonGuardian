@@ -30,15 +30,8 @@ local _treasureBoxRewardWinningRate
 local _isAlive
 --
 ---测试时用这个
---function OutGameData:init()
---    --暂时先用这里的假数据，后面改成发送消息的方式初始化数据
---    self:initUserInfo()
---    self:initCoinShop()
---    self:initDiamondShop()
---    self:initTreasureBoxRewardWinningRate()
---end
-
 function OutGameData:init()
+
     --连接到服务器
     -- OutGameMsgController:connect()
     -- self:register()
@@ -56,11 +49,14 @@ function OutGameData:init()
     self:initTreasureBoxRewardWinningRate()
 
 
-    -- OutGameMsgController:init("127.0.0.0", 33333, 2)
-    -- OutGameMsgController:connect()
-    -- self:register()
+    OutGameMsgController:init("127.0.0.0", 33333, 2)
+    OutGameMsgController:connect()
+    self:register()
+    self:initUserInfo()
+    self:initCoinShop()
+    self:initDiamondShop()
+    self:initTreasureBoxRewardWinningRate()
 end
-
 
 -- 调用 OutGameData:getTreasureBoxRewardWinningRate()[ConstDef.TREASUREBOX_RARITY.R][ConstDef.TREASUREBOX_REWARD.R]
 function OutGameData:getTreasureBoxRewardWinningRate()
@@ -71,39 +67,92 @@ function OutGameData:getTreasureBoxRewardWinningRate()
 end
 
 
+
+--function OutGameData:init()
+--    --连接到服务器
+--    -- OutGameMsgController:connect()
+--    -- self:register()
+--    --_userInfo = self:initUserInfo()
+--    Log.i("OutGameData:init: " .. tostring(_userInfo == nil))
+--    self:initUserInfo()
+--    --_coinShop = TestDataFactory:getTestCoinShop()
+--    --self:initCoinShop()
+--    Log.i("OutGameData:init: " .. tostring(_coinShop == nil))
+--    _diamondShop = TestDataFactory:getTestDiamondShop()
+--    --self:initDiamondShop()
+--    Log.i("OutGameData:init: " .. tostring(_diamondShop == nil))
+--    self:initTreasureBoxRewardWinningRate()
+--
+--    -- OutGameMsgController:init("127.0.0.0", 33333, 2)
+--    -- OutGameMsgController:connect()
+--    -- self:register()
+--end
+
+-- 调用 OutGameData:getTreasureBoxRewardWinningRate()[ConstDef.TREASUREBOX_RARITY.R][ConstDef.TREASUREBOX_REWARD.R]
+function OutGameData:getTreasureBoxRewardWinningRate()
+    if _treasureBoxRewardWinningRate == nil then
+        self:initTreasureBoxRewardWinningRate()
+    end
+    return _treasureBoxRewardWinningRate
+end
+
+
+
+
+
 function OutGameData:initTreasureBoxRewardWinningRate()
     -- TODO 感觉这个数据可能很少会发生变动，但是也不排除后续更新的可能
     _treasureBoxRewardWinningRate = {
         {
             -- 普通宝箱的没有找到
 
+
             { { 0 }, { 0 } },
             { { 0 }, { 0 } },
             { { 0 }, { 0 } },
             { { 0 }, { 0 } },
-            { { 0 }, { 0 } }
+            { { 0 }, { 0 } },
+
+
+            { {}, {} },
+            { {}, {} },
+            { {}, {} },
+            { {}, {} },
+            { {}, {} },
+
+            { {0}, {0} },
+            { {0}, {0} },
+            { {0}, {0} },
+            { {0}, {0} },
+            { {0}, {0} },
+
+            { 0, 0 },
+            { 0, 0 },
+            { 0, 0 },
+            { 0, 0 },
+            { 0, 0 },
 
         },
         {
-            { { 130 }, { 130 } },
-            { { 40 }, { 40 } },
-            { { 7 }, { 7 } },
-            { { 0 }, { 1 } },
-            { { 1230 }, { 1230 } }
+            { 130, 130 },
+            { 40, 40 },
+            { 7, 7 },
+            { 0, 1 },
+            { 1230, 1230 }
         },
         {
-            { { 139 }, { 139 } },
-            { { 36 }, { 36 } },
-            { { 7 }, { 7 } },
-            { { 0 }, { 1 } },
-            { { 1280 }, { 1280 } }
+            { 139, 139 },
+            { 36, 6 },
+            { 7, 7 },
+            { 0, 1 },
+            { 1280, 1280 }
         },
         {
-            { { 187 }, { 187 } },
-            { { 51 }, { 51 } },
-            { { 21 }, { 21 } },
-            { { 1 }, { 1 } },
-            { { 3040 }, { 3040 } }
+            { 187, 187 },
+            { 51, 51 },
+            { 21, 21 },
+            { 1, 1 },
+            { 3040, 3040 }
         }
     }
 end
@@ -119,7 +168,26 @@ end
 
 function OutGameData:initUserInfo()
     _userInfo = UserInfo:getInstance()
+    _userInfo:testData()
 end
+
+function OutGameData:register()
+
+
+end
+
+---测试的时候就用下面这三个函数
+--function OutGameData:initDiamondShop()
+--    _diamondShop = TestDataFactory:getTestDiamondShop()
+--end
+--
+--function OutGameData:initCoinShop()
+--    _coinShop = TestDataFactory:getTestCoinShop()
+--end
+--
+--function OutGameData:initUserInfo()
+--    _userInfo = UserInfo:getInstance()
+--end
 
 function OutGameData:register()
 
@@ -137,6 +205,14 @@ function OutGameData:register()
         handler(self, self.diamondShopDS))
     OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.COINSHOP_DS,
         handler(self, self.coinShopDS))
+
+    ---这一部分是代表事件的函数
+    OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.CARD_COLLECT,
+        handler(self, self.addCard))
+    OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.CARD_ATTRIBUTE_CHANGE,
+        handler(self, self.changeCardAttribute))
+    OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.ASSERT_CHANGE,
+        handler(self, self.assertChange))
 
     OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.CARD_COLLECT,
         handler(self, self.addCard))
@@ -179,17 +255,17 @@ function OutGameData:update(dt)
     ---同时隔一段事件发送心跳消息，确认在线
 end
 
-function OutGameData:initDiamondShop(msg)
-    _diamondShop = TableUtil:toShop(msg.diamondShop)
-end
-
-function OutGameData:initCoinShop(msg)
-    _coinShop = TableUtil:toShop(msg.coinShop)
-end
-
-function OutGameData:initUserInfo(msg)
-    TableUtil:toUserInfo(msg.userInfo)
-end
+--function OutGameData:initDiamondShop(msg)
+--    _diamondShop = TableUtil:toShop(msg.diamondShop)
+--end
+--
+--function OutGameData:initCoinShop(msg)
+--    _coinShop = TableUtil:toShop(msg.coinShop)
+--end
+--
+--function OutGameData:initUserInfo(msg)
+--    TableUtil:toUserInfo(msg.userInfo)
+--end
 
 --[[--
     @description 接受来自服务器的消息，确定新增的卡片,并将数据同步至本地数据
@@ -432,11 +508,6 @@ function OutGameData:openTreasureBox(rewardType)
     local srArray = TableUtil:clone(TowerDef.TOWER_SR_IDLIST)
     local ssrArray = TableUtil:clone(TowerDef.TOWER_SSR_IDLIST)
     local urArray = TableUtil:clone(TowerDef.TOWER_UR_IDLIST)
-    --local rMin, rMax, rTypeAmount = rewardData[1][1], rewardData[1][2], 4
-    --local srMin, srMax, srTypeAmount = rewardData[2][1], rewardData[2][2], 2
-    --local ssrMin, ssrMax, ssrTypeAmount = rewardData[3][1], rewardData[3][2], 1
-    --local urMin, urMax, urTypeAmount = rewardData[4][1], rewardData[4][2], 1
-    --local coinMin, coinMax = rewardData[5][1], rewardData[5][2]
     for i = 1, 8 do
         if res[i].rarity == "R" then
             local removeIndex = math.random(1, #rArray)
@@ -460,6 +531,7 @@ function OutGameData:openTreasureBox(rewardType)
             res[i].number = math.random(0, 1)
         end
     end
+    res.coinNum = 2333
     return res
 end
 

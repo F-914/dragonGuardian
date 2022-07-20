@@ -71,4 +71,15 @@ function BattleTeam:getIndexTeam(index)
     return self.team_[index]
 end
 
+function BattleTeam:setIndexTeamCard(teamIndex, cardIndex, newCardId)
+    if teamIndex > #(self.team_) then
+        return
+    end
+    local team = self:getIndexTeam(teamIndex)
+    if cardIndex > #(team) then
+        return
+    end
+    team[cardIndex] = newCardId
+end
+
 return BattleTeam

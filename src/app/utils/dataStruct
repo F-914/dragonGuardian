@@ -1,0 +1,37 @@
+{
+	type = "", 消息类型
+	LoginName = "", 登录名
+	userInfo = {
+		account = "",
+		avatar = "",
+		nickName = "",
+		coinAmount = 0,
+		diamondAmount = 0,
+		trophyAmount = 0,
+		battleTeam = {
+			team_ = {
+			    {   {},一张卡牌，之后的四个同理
+				    {},{},{},{},
+				},一个队伍，下面两个同理
+				{   {},一张卡牌，之后的四个同理
+                    {},{},{},{},
+				},
+				{   {},一张卡牌，下面的四个同理
+                    {},{},{},{},
+				},
+			},
+			standByTeam = 0
+		}
+		ladder = {
+		    ladderList = {
+		    }ladderList就是由reward构成的数组
+		}
+		cardList = {
+		}由卡片(card)构成的数组
+	}
+	diamondShop = {
+	}由商品(commodity)构成的数组
+	coinShop = {
+	}由商品（commodity）构成的列表
+}--最外层的封装，收发消息按照这个格式，比如发送金币修改的消息，就把这个结构中
+修改后的金币值填充发送，其余不相关的部分可以没有比如ladder完全可以没有，

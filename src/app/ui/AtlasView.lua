@@ -4,10 +4,10 @@
     -- TODO 这个页面的滑动 滑到最下面的时候看不到最后一行 需要修一下 @txf
 ]]
 local AtlasView = class(
-        "AtlasView",
-        function()
-            return display.newColorLayer(cc.c4b(0, 0, 0, 0))
-        end
+    "AtlasView",
+    function()
+        return display.newColorLayer(cc.c4b(0, 0, 0, 0))
+    end
 )
 --
 local ConstDef = require("app.def.ConstDef")
@@ -101,13 +101,13 @@ function AtlasView:ctor()
 
     self:initView()
     self:registerScriptHandler(
-            function(event)
-                if event == "enter" then
-                    self:onEnter()
-                elseif event == "exit" then
-                    self:onExit()
-                end
+        function(event)
+            if event == "enter" then
+                self:onEnter()
+            elseif event == "exit" then
+                self:onExit()
             end
+        end
     )
     EventManager:regListener(EventDef.ID.RESUME_BAG_BUTTON, self, function()
         --注册恢复图鉴中的塔为可点击
@@ -143,8 +143,9 @@ end
     @return none
 ]]
 local function createCheckbox(parents, number)
-    local checkbox = ccui.CheckBox:create(StringDef.PATH_ICON_UNCHOOSE, StringDef.PATH_ICON_CHOOSE, StringDef.PATH_ICON_CHOOSE, StringDef.PATH_ICON_UNCHOOSE,
-            StringDef.PATH_ICON_UNCHOOSE)
+    local checkbox = ccui.CheckBox:create(StringDef.PATH_ICON_UNCHOOSE, StringDef.PATH_ICON_CHOOSE,
+        StringDef.PATH_ICON_CHOOSE, StringDef.PATH_ICON_UNCHOOSE,
+        StringDef.PATH_ICON_UNCHOOSE)
     parents:add(checkbox)
     checkbox:setTouchEnabled(true)
     checkbox:setAnchorPoint(0.5, 0.5)
@@ -279,12 +280,12 @@ function AtlasView:createBag()
     tipBackground:add(textureLong)
     textureLong:setAnchorPoint(0.5, 0.5)
     textureLong:setPosition(tipBackground:getContentSize().width * 0.5,
-            tipBackground:getContentSize().height * 0.25)
+        tipBackground:getContentSize().height * 0.25)
     local textureShort = display.newSprite(StringDef.PATH_TEXTURE_SHORT)
     tipBackground:add(textureShort)
     textureShort:setAnchorPoint(0.5, 0.5)
     textureShort:setPosition(tipBackground:getContentSize().width * 0.4,
-            tipBackground:getContentSize().height * 0.75)
+        tipBackground:getContentSize().height * 0.75)
 
     local heightUncollect, heightCollect --计算已收集和未收集分别需要多少行
     -- 已收集
@@ -313,9 +314,9 @@ function AtlasView:createBag()
     layoutCollect:setPosition(display.cx, display.cy)
     layoutCollect:setAnchorPoint(0.5, 1)
     layoutCollect:setContentSize(display.cx * 2,
-            heightCollect * test:getContentSize().height * ConstDef.scale_ +
-                    heightCollect * test:getContentSize().height * 0.2 * ConstDef.scale_ +
-                    splitLineCollected:getContentSize().height * (display.cx * 2 / splitLineCollected:getContentSize().width))
+        heightCollect * test:getContentSize().height * ConstDef.scale_ +
+        heightCollect * test:getContentSize().height * 0.2 * ConstDef.scale_ +
+        splitLineCollected:getContentSize().height * (display.cx * 2 / splitLineCollected:getContentSize().width))
     splitLineCollected:setScale(display.cx * 2 / splitLineCollected:getContentSize().width)
     splitLineCollected:setAnchorPoint(0, 1)
     splitLineCollected:setPosition(0, layoutCollect:getContentSize().height)
@@ -329,10 +330,10 @@ function AtlasView:createBag()
     uncollected_ = BagLayer.new(uncollected, "uncollected") --将未收集分割线和未收集的塔放在一个layout
     layoutUncollect:setAnchorPoint(0.5, 1)
     layoutUncollect:setContentSize(display.cx * 2,
-            splitLineUncollected:getContentSize().height * (display.cx * 2 / splitLineUncollected:getContentSize().width) +
-                    heightUncollect * test:getContentSize().height * 0.1 * ConstDef.scale_ +
-                    splitLineUncollected:getContentSize().height * (display.cx * 2 / splitLineUncollected:getContentSize().width)
-                    + heightUncollect * test:getContentSize().height * ConstDef.scale_)
+        splitLineUncollected:getContentSize().height * (display.cx * 2 / splitLineUncollected:getContentSize().width) +
+        heightUncollect * test:getContentSize().height * 0.1 * ConstDef.scale_ +
+        splitLineUncollected:getContentSize().height * (display.cx * 2 / splitLineUncollected:getContentSize().width)
+        + heightUncollect * test:getContentSize().height * ConstDef.scale_)
     layoutUncollect:add(splitLineUncollected)
     splitLineUncollected:setScale(display.cx * 2 / splitLineUncollected:getContentSize().width)
     splitLineUncollected:setAnchorPoint(0, 1)

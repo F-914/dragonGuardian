@@ -1,7 +1,6 @@
 
 --local
 local StringDef = require("app.def.StringDef")
---
 
 local ConstDef = {
     scale_ = 0.7,
@@ -9,36 +8,36 @@ local ConstDef = {
     SHOP_ITEM_HEIGHT = display.height / 6,
     SHOP_ITEM_WIDTH = display.width / 5,
     ICON_LIST = { StringDef.PATH_ICON_01, StringDef.PATH_ICON_02,
-                  StringDef.PATH_ICON_03, StringDef.PATH_ICON_04,
-                  StringDef.PATH_ICON_05, StringDef.PATH_ICON_06,
-                  StringDef.PATH_ICON_07, StringDef.PATH_ICON_08,
-                  StringDef.PATH_ICON_09, StringDef.PATH_ICON_10,
-                  StringDef.PATH_ICON_11, StringDef.PATH_ICON_12,
-                  StringDef.PATH_ICON_13, StringDef.PATH_ICON_14,
-                  StringDef.PATH_ICON_15, StringDef.PATH_ICON_16,
-                  StringDef.PATH_ICON_17, StringDef.PATH_ICON_18,
-                  StringDef.PATH_ICON_19, StringDef.PATH_ICON_20 },
+        StringDef.PATH_ICON_03, StringDef.PATH_ICON_04,
+        StringDef.PATH_ICON_05, StringDef.PATH_ICON_06,
+        StringDef.PATH_ICON_07, StringDef.PATH_ICON_08,
+        StringDef.PATH_ICON_09, StringDef.PATH_ICON_10,
+        StringDef.PATH_ICON_11, StringDef.PATH_ICON_12,
+        StringDef.PATH_ICON_13, StringDef.PATH_ICON_14,
+        StringDef.PATH_ICON_15, StringDef.PATH_ICON_16,
+        StringDef.PATH_ICON_17, StringDef.PATH_ICON_18,
+        StringDef.PATH_ICON_19, StringDef.PATH_ICON_20 },
     ICON_LINEUP_LIST = { StringDef.PATH_ICON_LINEUP_01, StringDef.PATH_ICON_LINEUP_02,
-                         StringDef.PATH_ICON_LINEUP_03, StringDef.PATH_ICON_LINEUP_04,
-                         StringDef.PATH_ICON_LINEUP_05, StringDef.PATH_ICON_LINEUP_06,
-                         StringDef.PATH_ICON_LINEUP_07, StringDef.PATH_ICON_LINEUP_08,
-                         StringDef.PATH_ICON_LINEUP_09, StringDef.PATH_ICON_LINEUP_10,
-                         StringDef.PATH_ICON_LINEUP_11, StringDef.PATH_ICON_LINEUP_12,
-                         StringDef.PATH_ICON_LINEUP_13, StringDef.PATH_ICON_LINEUP_14,
-                         StringDef.PATH_ICON_LINEUP_15, StringDef.PATH_ICON_LINEUP_16,
-                         StringDef.PATH_ICON_LINEUP_17, StringDef.PATH_ICON_LINEUP_18,
-                         StringDef.PATH_ICON_LINEUP_19, StringDef.PATH_ICON_LINEUP_20
+        StringDef.PATH_ICON_LINEUP_03, StringDef.PATH_ICON_LINEUP_04,
+        StringDef.PATH_ICON_LINEUP_05, StringDef.PATH_ICON_LINEUP_06,
+        StringDef.PATH_ICON_LINEUP_07, StringDef.PATH_ICON_LINEUP_08,
+        StringDef.PATH_ICON_LINEUP_09, StringDef.PATH_ICON_LINEUP_10,
+        StringDef.PATH_ICON_LINEUP_11, StringDef.PATH_ICON_LINEUP_12,
+        StringDef.PATH_ICON_LINEUP_13, StringDef.PATH_ICON_LINEUP_14,
+        StringDef.PATH_ICON_LINEUP_15, StringDef.PATH_ICON_LINEUP_16,
+        StringDef.PATH_ICON_LINEUP_17, StringDef.PATH_ICON_LINEUP_18,
+        StringDef.PATH_ICON_LINEUP_19, StringDef.PATH_ICON_LINEUP_20
     },
     ICON_UNCOLLECTED_LIST = { StringDef.PATH_ICON_UNCOLLECTED_01, StringDef.PATH_ICON_UNCOLLECTED_02,
-                              StringDef.PATH_ICON_UNCOLLECTED_03, StringDef.PATH_ICON_UNCOLLECTED_04,
-                              StringDef.PATH_ICON_UNCOLLECTED_05, StringDef.PATH_ICON_UNCOLLECTED_06,
-                              StringDef.PATH_ICON_UNCOLLECTED_07, StringDef.PATH_ICON_UNCOLLECTED_08,
-                              StringDef.PATH_ICON_UNCOLLECTED_09, StringDef.PATH_ICON_UNCOLLECTED_10,
-                              StringDef.PATH_ICON_UNCOLLECTED_11, StringDef.PATH_ICON_UNCOLLECTED_12,
-                              StringDef.PATH_ICON_UNCOLLECTED_13, StringDef.PATH_ICON_UNCOLLECTED_14,
-                              StringDef.PATH_ICON_UNCOLLECTED_15, StringDef.PATH_ICON_UNCOLLECTED_16,
-                              StringDef.PATH_ICON_UNCOLLECTED_17, StringDef.PATH_ICON_UNCOLLECTED_18,
-                              StringDef.PATH_ICON_UNCOLLECTED_19, StringDef.PATH_ICON_UNCOLLECTED_20,
+        StringDef.PATH_ICON_UNCOLLECTED_03, StringDef.PATH_ICON_UNCOLLECTED_04,
+        StringDef.PATH_ICON_UNCOLLECTED_05, StringDef.PATH_ICON_UNCOLLECTED_06,
+        StringDef.PATH_ICON_UNCOLLECTED_07, StringDef.PATH_ICON_UNCOLLECTED_08,
+        StringDef.PATH_ICON_UNCOLLECTED_09, StringDef.PATH_ICON_UNCOLLECTED_10,
+        StringDef.PATH_ICON_UNCOLLECTED_11, StringDef.PATH_ICON_UNCOLLECTED_12,
+        StringDef.PATH_ICON_UNCOLLECTED_13, StringDef.PATH_ICON_UNCOLLECTED_14,
+        StringDef.PATH_ICON_UNCOLLECTED_15, StringDef.PATH_ICON_UNCOLLECTED_16,
+        StringDef.PATH_ICON_UNCOLLECTED_17, StringDef.PATH_ICON_UNCOLLECTED_18,
+        StringDef.PATH_ICON_UNCOLLECTED_19, StringDef.PATH_ICON_UNCOLLECTED_20,
     },
     ICON_TOWER_LEVEL_LIST = {
         StringDef.PATH_SUBINTERFACE_TOWER_LEVEL_01,
@@ -155,6 +154,7 @@ local ConstDef = {
         StringDef.PATH_COIN_SHOP_DIAMOND,
     },
 
+
     ICON_SUBINSTANCE_TOWER_LIST_TYPE = {
         StringDef.PATH_SUBINTERFACE_TOWER_TYPE_ATTACK,
         StringDef.PATH_SUBINTERFACE_TOWER_TYPE_DISTURB,
@@ -163,11 +163,11 @@ local ConstDef = {
     },
 
 
-
     LINEUP_LIST = { --图鉴界面中的三个阵容
         lineupOne = { 1, 1, 1, 1, 1 },
         lineupTwo = { 2, 2, 2, 2, 2 },
-        lineupThree = { 3, 3, 3, 3, 3 },
+        lineupThree = { 3, 3, 3, 3, 3 }
+    },
 
     STR_TOWER_TYPE = {
         StringDef.STR_TYPE_ATTACK,
@@ -287,19 +287,19 @@ local ConstDef = {
                 SR = 4,
             },
             { R = 50,
-              SR = 10,
-              SSR = 2 },
+                SR = 10,
+                SSR = 2 },
             { R = 100,
-              SR = 20,
-              SSR = 4 },
+                SR = 20,
+                SSR = 4 },
             {
                 R = 200,
                 SR = 50,
                 SSR = 10
             },
             { R = 400,
-              SR = 100,
-              SSR = 20 },
+                SR = 100,
+                SSR = 20 },
             {
                 R = 800,
                 SR = 200,
@@ -307,9 +307,9 @@ local ConstDef = {
                 UR = 2
             },
             { R = 1000,
-              SR = 400,
-              SSR = 100,
-              UR = 4 },
+                SR = 400,
+                SSR = 100,
+                UR = 4 },
             {
                 R = 2000,
                 SR = 800,
@@ -317,9 +317,9 @@ local ConstDef = {
                 UR = 10
             },
             { R = 5000,
-              SR = 1000,
-              SSR = 400,
-              UR = 20 },
+                SR = 1000,
+                SSR = 400,
+                UR = 20 },
         },
         COIN_CONDITION = {
             5,
@@ -335,8 +335,27 @@ local ConstDef = {
             50000,
             100000
         }
+    },
+    BULLET_SIZE = {
+        WIDTH = 10, --子弹宽度
+        HEIGHT = 10 --子弹高度
+    },
+    ENEMY_SIZE = {
+        --种类1，小怪（后续有时间可整体修改标识）
+        {
+            WIDTH = 43, --宽度
+            HEIGHT = 44 --高度
+        },
+        --种类2，精英怪
+        {
+            WIDTH = 72, --宽度
+            HEIGHT = 74 --高度
+        }
+    },
+    CARD_BUTTON_SIZE = {
+        WIDTH = 120 * 0.85,
+        HEIGHT = 120 * 0.85
     }
 
-}
 }
 return ConstDef

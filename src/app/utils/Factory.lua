@@ -58,15 +58,23 @@ end
 function Factory:createTeamSprite(teamData)
     local mapSprites = {}
 
-    for i = 1, #(teamData) do
+    for i = 1, #teamData do
+
         local cardId = teamData[i]
         local cardData = require("app.data.OutGameData"):getUserInfo():getCardList()[cardId]
         --解决循环嵌套
         local towerSprite = require("src/app/ui/node/TowerSprite.lua").new("res/home/general/icon_tower/" ..
             TypeConvert.Integer2StringLeadingZero(cardId, 2) .. ".png", cardData)
 
-        mapSprites[cardData] = towerSprite
+        --mapSprites[cardData] = towerSprite
+        mapSprites[i] = {
+            [1] = cardData,
+            [2] = towerSprite,
+        }
+
+
     end
+
     return mapSprites
 end
 
@@ -102,13 +110,13 @@ end
     @return none
 ]]
 function Factory:createBorder(rewardData)
-    if not rewardData.isUnlock then
+    if rewardData.locked_ then
         --解决循环嵌套，下同
         local border = require("src/app/ui/node/RewardSprite.lua").new("res/home/battle/high_ladder/locked_blue_border.png"
             , rewardData)
         return border
     else
-        if not rewardData.isGet then
+        if not rewardData.received_ then
             local border = require("src/app/ui/node/RewardSprite.lua").new("res/home/battle/high_ladder/unlocked_unreceived_yellow_border.png"
                 , rewardData)
             return border
@@ -229,7 +237,7 @@ function Factory:createRewardSprite(type)
         sprite:setScale(0.5)
         return sprite
     else
-        Log.e("param type is a unknown type")
+        Log.e("param type is a unknown type:")
     end
 end
 

@@ -5,7 +5,8 @@
 ]]
 local MsgController = {}
 local ByteArray = require("app.msg.ByteArray")
-local Log = require("app.util.Log")
+local Log = require("app.utils.Log")
+local MsgDef = require("app.def.MsgDef")
 
 local SimpleTCP = require("framework.SimpleTCP")
 local scheduler = require("framework.scheduler")
@@ -182,6 +183,15 @@ function _handleMsg(event, data)
 
             for _, listener in pairs(listenerMap_) do
                 listener(msg)
+            end
+            if msg["type"] == MsgDef.ACKTYPE.GAME.SEND_BATTLETEAM then
+                EnemyBattleTeam_ = msg["battleTeam"]
+            elseif msg["type"] == MsgDef.ACKTYPE.GAME.REFRESHHP then
+                -- body
+            elseif msg["type"] == MsgDef.ACKTYPE.GAME.GAMEOVER then
+                -- body
+            elseif msg["type"] == MsgDef.ACKTYPE.LOBBY.LOGIN then
+                Pid_ = msg["pid"]
             end
         end
     else

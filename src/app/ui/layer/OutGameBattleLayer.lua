@@ -6,12 +6,13 @@ local OutGameBattleLayer = class("OutGameBattleLayer", function()
     return display.newLayer()
 end)
 --local
-local GameData = require("app.test.GameData")
 local Matching_2nd = require("app.ui.secondaryui.Matching2nd")
 local Factory = require("app.utils.Factory")
 local StringDef = require("app.def.StringDef")
 local OutGameData = require("app.data.OutGameData")
 local Log = require("app.utils.Log")
+local EventManager = require("app.manager.EventManager")
+local EventDef = require("app.def.EventDef")
 --
 --[[--
     @description: 构造方法
@@ -26,8 +27,16 @@ end
     @description: 初始化方法
 ]]
 function OutGameBattleLayer:init()
+    --local cardList = OutGameData:getUserInfo():getUserInfoCardList()
     local teamData = OutGameData:getUserInfo():getBattleTeam():getCurrentBattleTeam()
-    Log.i("OutGameBattleLayer:init() size: " .. tostring(#(teamData)))
+    --local teamData = {}
+    --for i = 1, #teamDataIds do
+    --    for j = 1, #cardList do
+    --        if cardList[j].cardId_ == teamDataIds[i] then
+    --            table.insert(teamData, i, cardList[j])
+    --        end
+    --    end
+    --end
     self.teamMap_ = Factory:createTeamSprite(teamData)
 
     local teamLayer = display.newLayer()
@@ -39,10 +48,11 @@ function OutGameBattleLayer:init()
     local selectTeamSprite = display.newSprite(StringDef.PATH_BASE_SELECTED_TEAM)
     selectTeamSprite:setPosition(display.width * .5, display.height * .08)
     selectTeamSprite:addTo(teamLayer)
-
-    local cardList = OutGameData:getUserInfo():getCardList()
-    for i = 1, #(teamData) do
-        local node = self.teamMap_[cardList[teamData[i]]]
+    -- local cardList = OutGameData:getUserInfo():getCardList()
+    -- for i = 1, #(teamData) do
+    --     local node = self.teamMap_[ cardList[teamData[i]] ]
+    for i = 1, #self.teamMap_ do
+        local node = self.teamMap_[i][2]
         node:setPosition(-70 + display.width * 0.2 * i, display.height * .075)
         node:setScale(0.8)
         teamLayer:addChild(node)
@@ -57,6 +67,7 @@ function OutGameBattleLayer:init()
             local matchingView = Matching_2nd.new(self)
             self.twoLevelUi_ = matchingView
             matchingView:addTo(display.getRunningScene(), 2)
+            EventManager:doEvent(EventDef.ID.SEND_LINEUP, self)
         end
     end)
 
@@ -83,8 +94,8 @@ end
     @return none
 ]]
 function OutGameBattleLayer:update(dt)
-    for _, node in pairs(self.teamMap_) do
-        node:update(dt)
+    for i = 1, #self.teamMap_ do
+        self.teamMap_[i][2]:update()
     end
     if self.twoLevelUi_ then
         self.twoLevelUi_:update(dt)
