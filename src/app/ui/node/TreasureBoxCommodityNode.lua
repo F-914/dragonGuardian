@@ -27,8 +27,6 @@ function TreasureBoxCommodityNode:initView()
     commodityLayer:addTo(self)
     -- boxButton
 
-
-
     local boxButton = tolua.cast(ccui.Helper:seekWidgetByName(commodityLayer, "commodityButton"), "ccui.Button")
 
     -- bg

@@ -167,10 +167,7 @@ end
 
 -- function OutGameData:register()
 
-
 -- end
-
-
 ---测试的时候就用下面这三个函数
 --function OutGameData:initDiamondShop()
 --    _diamondShop = TestDataFactory:getTestDiamondShop()
@@ -217,7 +214,6 @@ function OutGameData:register()
         handler(self, self.assertChange))
 
 end
-
 
 --[[--
     @description 本地同步来自服务器userinfo的数据
