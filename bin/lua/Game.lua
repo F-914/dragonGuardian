@@ -240,7 +240,7 @@ function hpChange(msg)
 				send["hp"]=k.players[1].hp
 				if k.players[1].hp<=0 then 
 					send["type"]=MsgDef.ACKTYPE.GAME.GAMEOVER
-					send["state"]="false"--表示存活状态
+					
 				else
 					send["type"]=MsgDef.ACKTYPE.GAME.REFRESHHP
 				end
@@ -254,7 +254,7 @@ function hpChange(msg)
 				send["hp"]=k.players[2].hp
 				if k.players[2].hp<=0 then 
 					send["type"]=MsgDef.ACKTYPE.GAME.GAMEOVER
-					send["state"]="true"--表示存活状态
+					
 				else
 					send["type"]=MsgDef.ACKTYPE.GAME.REFRESHHP
 				end
