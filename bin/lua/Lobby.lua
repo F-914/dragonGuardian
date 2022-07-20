@@ -242,7 +242,7 @@ function main()
 end
 --[[
     @description: 修改用户的金币
-    @param msg 类型:json 要求msg必须含有loginName，userInfoCoinAmount，
+    @param msg 类型:json 要求msg必须含有loginName，userInfo，
 	                     会回传一个确认消息permission，修改成功或者失败
     @return none
 ]]
@@ -254,11 +254,11 @@ function coinChange(msg)
 		return
 	end
 	local data=cjson.decode(data_str)
-	if msg["userInfoCoinAmount"]==nil then
+	if msg["userInfo"]["userInfoCoinAmount"]==nil then
 		__G__TRACKBACK__("USERINFO CoinAmount NOT EXIST")
 		return
 	end
-    local coinamount=msg["userInfoCoinAmount"]
+    local coinamount=msg["userInfo"]["userInfoCoinAmount"]
     data["userInfo"]["userInfoCoinAmount"]=coinamount
 	local saveData=cjson.encode(data)
 	savePlayerDBData(id,saveData)
@@ -274,7 +274,7 @@ function coinChange(msg)
 end
 --[[
     @description: 修改用户的钻石
-    @param msg 类型:json 要求msg必须含有loginName，userInfoDiamondAmount，
+    @param msg 类型:json 要求msg必须含有loginName，userInfo，
 	                     会回传一个确认消息permission，修改成功或者失败
     @return none
 ]]
@@ -286,11 +286,11 @@ function diamondChange(msg)
 		return
 	end
 	local data=cjson.decode(data_str)
-	if msg["userInfoDiamondAmount"]==nil then
+	if msg["userInfo"]["userInfoDiamondAmount"]==nil then
 		__G__TRACKBACK__("USERINFO DiamondAmount NOT EXIST")
 		return
 	end
-    local diamondamount=msg["userInfoDiamondAmount"]
+    local diamondamount=msg["userInfo"]["userInfoDiamondAmount"]
     data["userInfo"]["userInfoDiamondAmount"]=diamondamount
 	local saveData=cjson.encode(data)
 	savePlayerDBData(id,saveData)
@@ -306,7 +306,7 @@ function diamondChange(msg)
 end
 --[[
     @description: 修改用户的奖杯
-    @param msg 类型:json 要求msg必须含有loginName，userInfoTrophyAmount
+    @param msg 类型:json 要求msg必须含有loginName，userInfo
 	                     会回传一个确认消息permission，修改成功或者失败
     @return none
 ]]
@@ -318,11 +318,11 @@ function trophyChange(msg)
 		return
 	end
 	local data=cjson.decode(data_str)
-	if msg["userInfoTrophyAmount"]==nil then
+	if msg["userInfo"]["userInfoTrophyAmount"]==nil then
 		__G__TRACKBACK__("USERINFO TrophyAmount NOT EXIST")
 		return
 	end
-    local trophyamount=msg["userInfoTrophyAmount"]
+    local trophyamount=msg["userInfo"]["userInfoTrophyAmount"]
     data["userInfo"]["userInfoTrophyAmount"]=trophyamount
 	local saveData=cjson.encode(data)
 	savePlayerDBData(id,saveData)
@@ -338,7 +338,7 @@ function trophyChange(msg)
 end
 --[[
     @description: 添加卡牌到已收集的队列中
-    @param msg 类型:json 该消息必须含有对象loginName来获取用户资料，必须含有新增加的卡牌card,
+    @param msg 类型:json 该消息必须含有对象loginName来获取用户资料，userInfo必须含有新增加的卡牌card,
 	                     返回type=MsgDef.ACKTYPE.CARD_COLLECT确认消息
     @return none
 ]]
@@ -351,11 +351,11 @@ function collectCard(msg)
 	end
 
 	local data=cjson.decode(data_str)
-	if(msg["card"]==nil) then
+	if(msg["userInfo"]["card"]==nil) then
 		__G__TRACKBACK__("CARD NOT EXIST")
 		return
     end
-    table.insert(data["userInfo"]["userInfoCardList"],msg["card"])--此处可根据数据结构修改
+    table.insert(data["userInfo"]["userInfoCardList"],msg["userInfo"]["card"])--此处可根据数据结构修改
 	--data["userInfo"]["userInfoCardList"]=msg["userInfo"]["userInfoCardList"]
 	local saveData=cjson.encode(data)
     savePlayerDBData(id,saveData)
@@ -370,7 +370,7 @@ function collectCard(msg)
 end
 --[[
     @description: 改变卡牌的属性
-    @param msg 类型:json 要求msg必须含有loginName,变更属性的卡序号cardId,变更的属性名称attribute,变更后
+    @param msg 类型:json 要求msg必须含有loginName,userInfo必须含有变更属性的卡序号cardId,变更的属性名称attribute,变更后
 	                                               的值upgrade
     @return none
 ]]
@@ -380,13 +380,13 @@ function cardAttributeChange(msg)
 	if (data_str == nil or data_str == '') then
 		__G__TRACKBACK__("PLAYER NOT EXIST")
 		return
-	elseif msg["cardId"]==nil or msg["attribute"]==nil or msg["upgrade"]==nil then
+	elseif msg["userInfo"]["cardId"]==nil or msg["userInfo"]["attribute"]==nil or msg["userInfo"]["upgrade"]==nil then
 		__G__TRACKBACK__("MSG WRONG")
     end
 	local data=cjson.decode(data_str)
-	local cardId=msg["cardId"]
-	local attribute=msg["attribute"]
-	local upgrade=msg["upgrade"]
+	local cardId=msg["userInfo"]["cardId"]
+	local attribute=msg["userInfo"]["attribute"]
+	local upgrade=msg["userInfo"]["upgrade"]
 	
 	data["userInfo"]["userInfoCardList"][cardId][attribute]=upgrade
 
