@@ -26,9 +26,9 @@ function OutGameScene:ctor()
     loadView = LoadView.new()
     loadView:addTo(self, 3)
     --test
-    --GameData:init()
-    OutGameData:init()
-    --
+    --OutGameData:init()
+    ---在这里我随便写了个
+    OutGameData:init("scsacasca")
     self.mainUIBattleView_ = MainUIBattleView.new()
     self.atlasView_ = AtlasView.new()
     self.shopView_ = ShopView.new()
