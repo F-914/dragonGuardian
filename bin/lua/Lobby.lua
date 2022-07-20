@@ -45,7 +45,7 @@ function playerLogin(msg)
 		saveData["userInfo"]=msg["userInfo"]
 	    data_str = cjson.encode(saveData)
 		savePlayerDBData(id, data_str)
-		print(data_str)
+		--print(data_str)
 	end
 	local data = cjson.decode(data_str)
 	setPid2Sid(data["pid"], msg["sid"])
@@ -75,6 +75,7 @@ function sendLoginAck2Client(data)
 	ack["type"] = MsgDef.ACKTYPE.LOBBY.LOGIN
 	ack["pid"] = data["pid"]
 	ack["nick"] = data["nick"]
+	ack["userInfo"]=data["userInfo"]
 	local retMsg = cjson.encode(ack)
 	sendMsg2ClientByPid(ack["pid"], retMsg)
 end
