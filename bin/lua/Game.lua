@@ -139,7 +139,7 @@ function matching(msg)
 				matchSuc1["nick"]=gameWaitList_[matching].players[2].nick
                 matchSuc2["type"]=MsgDef.REQTYPE.LOBBY.MATCH_SUC
 				matchSuc2["serial"]=gameWaitList_[matching].game.serialNumber
-				matchSuc1["otherPid"]=gameWaitList_[matching].players[1].pid--匹配到的玩家id
+				matchSuc2["otherPid"]=gameWaitList_[matching].players[1].pid--匹配到的玩家id
                 local str2=cjson.encode(matchSuc2)
 				sendMsg2Lobby(str2)
                 
