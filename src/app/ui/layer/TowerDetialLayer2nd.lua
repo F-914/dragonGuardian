@@ -9,9 +9,11 @@ end)
 --local
 local ConstDef = require("app.def.ConstDef")
 local StringDef = require("app.def.StringDef")
+local EventDef=require("app.def.EventDef")
 local TowerButtonLayer2nd = require("app.ui.layer.TowerButtonLayer2nd")
 local Log = require("app.utils.Log")
 local OutGameData = require("app.data.OutGameData")
+local EventManager=require("app.manager.EventManager")
 --
 
 --[[--
@@ -21,7 +23,8 @@ local OutGameData = require("app.data.OutGameData")
 ]]
 function TowerDetialLayer2nd:ctor(cardId, bag)
     self.use = nil
-
+    self.intensify=nil
+    self.upgrade=nil
     self.order = cardId
     self:init(cardId, bag)
 
@@ -232,7 +235,8 @@ function TowerDetialLayer2nd:init(cardId, bag)
         if eventType == 2 then
             enhanceAtk:setVisible(true)
             --OutGameData:getUserInfo():getBattleTeam():setIndexTeamCard()
-            EventManager:doEvent(EventDef.ID.CARD_INTENSIFY)
+            OutGameData:getUserInfo():getBattleTeam():getCardList()[cardId].cardAtk= OutGameData:getUserInfo():getBattleTeam():getCardList()[cardId].cardAtkUpgrade
+            EventManager:doEvent(EventDef.ID.CARD_INTENSIFY,cardId)
         end
     end)
     self.intensify=buttonIntensify
@@ -242,9 +246,17 @@ function TowerDetialLayer2nd:init(cardId, bag)
     buttonLevelup:setAnchorPoint(0.5, 0.5)
     buttonLevelup:setPosition(popup:getContentSize().width * 0.5, popup:getContentSize().height * 0.15)
     buttonLevelup:setPressedActionEnabled(true)
-
+    self.upgrade=buttonLevelup
+    buttonLevelup:addTouchEventListener(function(sender, eventType)
+        if eventType == 2 then
+            --enhanceAtk:setVisible(true)
+            --OutGameData:getUserInfo():getBattleTeam():setIndexTeamCard()
+            OutGameData:getUserInfo():getBattleTeam():getCardList()[cardId].cardLevel= OutGameData:getUserInfo():getBattleTeam():getCardList()[cardId].cardLevel+1
+            EventManager:doEvent(EventDef.ID.CARD_UPGRADE,cardId)
+        end
+    end)
+    
     local coin = display.newSprite(StringDef.PATH_ICON_COIN)
-
     buttonLevelup:add(coin)
     coin:setAnchorPoint(0, 0.5)
     coin:setPosition(buttonLevelup:getContentSize().width * 0.2, buttonLevelup:getContentSize().height * 0.35)

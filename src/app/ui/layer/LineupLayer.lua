@@ -64,6 +64,8 @@ function LineupLayer:init(lineupList)
                     team[i] = self.order
                     self.popup:setVisible(false)
                     self.popup:removeFromParent()
+                    OutGameData:getUserInfo():getBattleTeam():setIndexTeamCard(self.lineupOrder,self.order,ConstDef.ICON_LINEUP_LIST[self.order])
+                    EventManager:doEvent(EventDef.ID.CARD_USE,self.lineupOrder)
                     EventManger:doEvent(EventDef.ID.RESUME_BAG_BUTTON)
                     EventManger:doEvent(EventDef.ID.SHOW_BAG)
                 end

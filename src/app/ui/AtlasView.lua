@@ -12,6 +12,7 @@ local AtlasView = class(
 --
 local ConstDef = require("app.def.ConstDef")
 local EventDef = require("app.def.EventDef")
+local MsgDef=require("app.def.MsgDef")
 local MsgController=require("src/app/msg/MsgController.lua")
 local EventManager = require("app.manager.EventManager")
 
@@ -302,7 +303,7 @@ function AtlasView:createBag()
     elseif #(uncollected) % 4 == 0 then
         heightUncollect = #(uncollected) / 4
     elseif #(uncollected) % 4 ~= 0 then
-        heightUncollect = math.floor(#(uncollected) / 4) + 1
+        heightUncollect = math.floor(#(uncollected) / 4) + 2
     end
     -- 已收集列表
     local splitLineCollected = display.newSprite(StringDef.PATH_SPLITLINE_COLLECTED) --已收集的分割线
