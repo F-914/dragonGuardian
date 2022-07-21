@@ -56,10 +56,13 @@ function OutGameBattleLayer:init()
     battleButton:setScale(0.9)
     battleButton:addTouchEventListener(function(sender, eventType)
         if eventType == 2 then
-            local matchingView = Matching_2nd.new(self)
-            self.twoLevelUi_ = matchingView
-            matchingView:addTo(display.getRunningScene(), 2)
-            EventManager:doEvent(EventDef.ID.SEND_LINEUP, self)
+            --local matchingView = Matching_2nd.new(self)
+            --self.twoLevelUi_ = matchingView
+            --matchingView:addTo(display.getRunningScene(), 2)
+            --EventManager:doEvent(EventDef.ID.SEND_LINEUP, self)
+            -- TODO 暂时改成了直接进入单机模式
+            local inGameScene = require("app.scenes.InGameScene").new()
+            display.replaceScene(inGameScene)
         end
     end)
 
