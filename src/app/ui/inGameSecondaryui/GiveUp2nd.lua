@@ -38,14 +38,14 @@ function GiveUp2nd:init()
 
     local baseSprite = cc.Sprite:create("battle_in_game/secondary_verify_give_up/basemap_popup.png")
     baseSprite:setAnchorPoint(0.5, 0.5)
-    baseSprite:setPosition(display.cx, display.cy*21/20)
+    baseSprite:setPosition(display.cx, display.cy * 21 / 20)
     baseSprite:addTo(self)
     local sizeBase = baseSprite:getContentSize()
 
     --触摸遮挡层
     local interceptLayer = ccui.Layout:create()
     interceptLayer:setAnchorPoint(0.5, 0.5)
-    interceptLayer:setPosition(display.cx, display.cy*21/20)
+    interceptLayer:setPosition(display.cx, display.cy * 21 / 20)
     interceptLayer:setContentSize(sizeBase.width, sizeBase.height)
     interceptLayer:setTouchEnabled(true)
     interceptLayer:addTo(self)
@@ -56,13 +56,13 @@ function GiveUp2nd:init()
         size = 32
     })
     tipsTTF:setAnchorPoint(0.5, 0.5)
-    tipsTTF:setPosition(display.cx, display.cy*21/20 + sizeBase.height/40)
-    tipsTTF:setColor(cc.c3b(255,255,255))
+    tipsTTF:setPosition(display.cx, display.cy * 21 / 20 + sizeBase.height / 40)
+    tipsTTF:setColor(cc.c3b(255, 255, 255))
     tipsTTF:addTo(self)
 
     local cancleButton = ccui.Button:create("battle_in_game/secondary_verify_give_up/button_cancel.png")
     cancleButton:setAnchorPoint(0.5, 0.5)
-    cancleButton:setPosition(display.cx - sizeBase.width/4, display.cy - sizeBase.height/6 + sizeBase.height/40)
+    cancleButton:setPosition(display.cx - sizeBase.width / 4, display.cy - sizeBase.height / 6 + sizeBase.height / 40)
     cancleButton:addTo(self)
     cancleButton:addTouchEventListener(function(sender, eventType)
         if 2 == eventType then
@@ -74,7 +74,7 @@ function GiveUp2nd:init()
 
     local confirmButton = ccui.Button:create("battle_in_game/secondary_verify_give_up/button_confirm.png")
     confirmButton:setAnchorPoint(0.5, 0.5)
-    confirmButton:setPosition(display.cx + sizeBase.width/4, display.cy - sizeBase.height/6 + sizeBase.height/40)
+    confirmButton:setPosition(display.cx + sizeBase.width / 4, display.cy - sizeBase.height / 6 + sizeBase.height / 40)
     confirmButton:addTo(self)
     confirmButton:addTouchEventListener(function(sender, eventType)
         if 2 == eventType then
@@ -83,6 +83,8 @@ function GiveUp2nd:init()
             SoundManager:playSound("CLIK")
             InGameData:setGameState(ConstDef.GAME_STATE.RESULT)
             SoundManager:playSound("LOSE")
+            local inGameScene = require("app.scenes.OutGameScene").new()
+            display.replaceScene(inGameScene)
         end
     end)
 
