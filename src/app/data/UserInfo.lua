@@ -32,6 +32,19 @@ function UserInfo:getInstance()
     return self.instance_
 end
 
+function UserInfo:setUserInfo(account, avatar, nickname, coinAmount, diamondAmount, trophyAmount, battleTeam, ladder,
+                              cardList)
+    self.userInfoAccount_ = account
+    self.userInfoAvatar_ = avatar
+    self.userInfoNickname_ = nickname
+    self.userInfoCoinAmount_ = coinAmount
+    self.userInfoDiamondAmount_ = diamondAmount
+    self.userInfoTrophyAmount_ = trophyAmount
+    self.userInfoBattleTeam_ = battleTeam
+    self.userInfoLadder_ = ladder
+    self.userInfoCardList_ = cardList
+end
+
 function UserInfo:initData()
     --self:testData()
 end
@@ -47,19 +60,6 @@ function UserInfo:testData()
     self.userInfoBattleTeam_ = TestDataFactory:getTeamDataTest()
     self.userInfoLadder_ = TestDataFactory:getLadderTest()
     self.userInfoCardList_ = TestDataFactory:getCardListTest()
-end
-
-function UserInfo:setUserInfo(account, avatar, nickname, coinAmount, diamondAmount, trophyAmount, battleTeam, ladder,
-                              cardList)
-    self.userInfoAccount_ = account
-    self.userInfoAvatar_ = avatar
-    self.userInfoNickname_ = nickname
-    self.userInfoCoinAmount_ = coinAmount
-    self.userInfoDiamondAmount_ = diamondAmount
-    self.userInfoTrophyAmount_ = trophyAmount
-    self.userInfoBattleTeam_ = battleTeam
-    self.userInfoLadder_ = ladder
-    self.userInfoCardList_ = cardList
 end
 
 function UserInfo:update(dt)
