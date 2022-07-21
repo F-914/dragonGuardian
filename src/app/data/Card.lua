@@ -94,7 +94,10 @@ function Card:ctor(cardId, name, rarity, type, level, cardAmount, atk, atkTarget
 end
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> origin/dev_xz
 -- function Card:setCard(cardId, name, rarity, type, level, cardAmount, atk, atkTarget, atkUpgrade, atkEnhance, fireCd,
 --                       fireCdEnhance,
 -- function Card:ctor(camp, x, y, xLocate, yLocate, cardId, name, rarity, type, level, atk, atkTarget, atkUpgrade, atkEnhance, fireCd, fireCdEnhance,
@@ -111,7 +114,10 @@ end
 --     end
 -- end
 
+<<<<<<< HEAD
 >>>>>>> c7f939b78a6e526fb50bd6ef2afbd0484de7354b
+=======
+>>>>>>> origin/dev_xz
 function Card:setCard(cardId, name, rarity, type, level, cardAmount, atk, atkTarget, atkUpgrade, atkEnhance, fireCd
                       , fireCdEnhance, fireCdUpgrade, skills, extraDamage, fatalityRate, location)
 

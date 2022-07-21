@@ -21,6 +21,8 @@ local NotEnoughNotifi2nd = require("app.ui.secondaryui.NotEnoughNotifi2nd")
 local MsgDef = require("app.def.MsgDef")
 local OpenTreasure2nd = require("app.ui.secondaryui.OpenTreasure2nd")
 local TableUtil = require("app.utils.TableUtil")
+local EventManager = require("app.manager.EventManager")
+local EventDef = require("app.def.EventDef")
 --
 --
 function CurrencyCommodityNode:ctor(commodity)
@@ -38,6 +40,9 @@ function CurrencyCommodityNode:initView()
     local commodityButton = tolua.cast(ccui.Helper:seekWidgetByName(commodityLayer, "commodityButton"), "ccui.Button")
     -- 设置货币类型
     local currencyTypeLayer = tolua.cast(ccui.Helper:seekWidgetByName(commodityLayer, "commodityLayout"), "ccui.Layout")
+    print(self.commodity_)
+    print(self.commodity_:getCommodityType())
+    print(self.commodity_:getCommodityCommodity())
     currencyTypeLayer:setBackGroundImage(ConstDef.ICON_CURRENCY_TYPE[
         self.commodity_:getCommodityCommodity():getCurrencyType()])
     -- 设置货币数量
@@ -98,6 +103,7 @@ function CurrencyCommodityNode:initView()
                         false, 0)
                     openTreasure2nd:addTo(display.getRunningScene(), 2)
                 end
+                EventManager:doEvent(EventDef.ID.CREATE_NEW_ATLAS_VIEW)
             end
         end
     end)

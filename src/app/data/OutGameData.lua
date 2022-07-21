@@ -13,9 +13,15 @@ local Shop = require("app.data.Shop")
 local TestDataFactory = require("app.test.TestDataFactory")
 
 
+<<<<<<< HEAD
 local Factory = require("src/app/utils/Factory.lua")
 local TowerDef = require("src/app/def/TowerDef.lua")
 local Log = require("src/app/utils/Log.lua")
+=======
+local Factory = require("app.utils.Factory")
+local TowerDef = require("app.def.TowerDef")
+local Log = require("app.utils.Log")
+>>>>>>> origin/dev_xz
 
 --网络部分
 local OutGameMsgController = require("app.network.OutGameMsgController")
@@ -28,6 +34,7 @@ local _coinShop
 local _diamondShop
 local _treasureBoxRewardWinningRate
 local _isAlive
+<<<<<<< HEAD
 --
 ---测试时用这个
 -- function OutGameData:init()
@@ -66,6 +73,10 @@ local _isAlive
 --     return _treasureBoxRewardWinningRate
 -- end
 
+=======
+local _loginName
+local _scene
+>>>>>>> origin/dev_xz
 --function OutGameData:init()
 --    --暂时先用这里的假数据，后面改成发送消息的方式初始化数据
 --    self:initUserInfo()
@@ -74,16 +85,12 @@ local _isAlive
 --    self:initTreasureBoxRewardWinningRate()
 --end
 ---初始化outGameData信息至少需要一个loginName，再outGameScene处我随便写了个
-function OutGameData:init(loginName)
-    OutGameMsgController:init("127.0.0.0", 33333, 2)
+function OutGameData:init(loginName, scene)
+    OutGameMsgController:init("127.0.0.1", 33333, 2)
     OutGameMsgController:connect()
     self:register()
-    local msgUserInfo = TableUtil:encapsulateAsMsg(MsgDef.REQTYPE.LOBBY.USERINFO_INIT, loginName)
-    local msgCoinShop = TableUtil:encapsulateAsMsg(MsgDef.REQTYPE.LOBBY.COINSHOP_INIT, loginName)
-    local msgDiamondShop = TableUtil:encapsulateAsMsg(MsgDef.REQTYPE.LOBBY.DIAMONDSHOP_INIT, loginName)
-    OutGameMsgController:sendMsg(msgUserInfo)
-    OutGameMsgController:sendMsg(msgCoinShop)
-    OutGameMsgController:sendMsg(msgDiamondShop)
+    _loginName = loginName
+    _scene = scene
     self:initTreasureBoxRewardWinningRate()
 end
 
@@ -130,8 +137,7 @@ function OutGameData:initTreasureBoxRewardWinningRate()
         }
     }
 end
-
--- -测试的时候就用下面这三个函数
+---测试的时候就用下面这三个函数
 --function OutGameData:initDiamondShop()
 --    _diamondShop = TestDataFactory:getTestDiamondShop()
 --end
@@ -180,6 +186,7 @@ function OutGameData:register()
 
     ---这一部分是代表事件的函数
     OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.CARD_COLLECT,
+<<<<<<< HEAD
         handler(self, self.addCard))
     OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.CARD_ATTRIBUTE_CHANGE,
         handler(self, self.changeCardAttribute))
@@ -187,12 +194,17 @@ function OutGameData:register()
         handler(self, self.assertChange))
 
     OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.CARD_COLLECT,
+=======
+>>>>>>> origin/dev_xz
         handler(self, self.addCard))
     OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.CARD_ATTRIBUTE_CHANGE,
         handler(self, self.changeCardAttribute))
     OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.ASSERT_CHANGE,
         handler(self, self.assertChange))
-
+    OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.RECEIVE_REWARD,
+        handler(self, self.receiveReward))
+    OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.PURCHASE_COMMODITY,
+        handler(self, self.purchaseCommodity))
 end
 
 --[[--
@@ -200,7 +212,7 @@ end
     @param msg type:table, 由服务器发送的消息
 ]]
 function OutGameData:userInfoDS(msg)
-    TableUtil:toUserInfo(msg.userInfo)
+    _userInfo = TableUtil:toUserInfo(msg.userInfo)
 end
 
 --[[--
@@ -220,24 +232,49 @@ end
 function OutGameData:diamondShopDS(msg)
     _diamondShop = TableUtil:toShop(msg.diamondShop)
 end
+--[[--
 
+]]
+local count = 1
 function OutGameData:update(dt)
     ---在这里,进行计时，每隔一段时间进行发送消息进行数据同步
     ---同时隔一段事件发送心跳消息，确认在线
 end
-
+local initCount = 1
 function OutGameData:initDiamondShop(msg)
     _diamondShop = TableUtil:toShop(msg.diamondShop)
+    if initCount == 3 then
+        _scene:eventTriggerLoadView()
+    else
+        initCount = initCount + 1
+    end
 end
 
 function OutGameData:initCoinShop(msg)
     _coinShop = TableUtil:toShop(msg.coinShop)
+    if initCount == 3 then
+        _scene:eventTriggerLoadView()
+    else
+        initCount = initCount + 1
+    end
 end
 
 function OutGameData:initUserInfo(msg)
-    TableUtil:toUserInfo(msg.userInfo)
+    _userInfo = TableUtil:toUserInfo(msg.userInfo)
+    if initCount == 3 then
+        _scene:eventTriggerLoadView()
+    else
+        initCount = initCount + 1
+    end
 end
-
+function OutGameData:eventTriggerInit()
+    local msgUserInfo = TableUtil:encapsulateAsMsg(MsgDef.REQTYPE.LOBBY.USERINFO_INIT, _loginName)
+    local msgCoinShop = TableUtil:encapsulateAsMsg(MsgDef.REQTYPE.LOBBY.COINSHOP_INIT, _loginName)
+    local msgDiamondShop = TableUtil:encapsulateAsMsg(MsgDef.REQTYPE.LOBBY.DIAMONDSHOP_INIT, _loginName)
+    OutGameMsgController:sendMsg(msgUserInfo)
+    OutGameMsgController:sendMsg(msgCoinShop)
+    OutGameMsgController:sendMsg(msgDiamondShop)
+end
 --[[--
     @description 接受来自服务器的消息，确定新增的卡片,并将数据同步至本地数据
     这个函数可以一口气增加大量卡片
@@ -352,6 +389,7 @@ end
     这个函数和上面的购买商品的函数是几乎一模一样,除了增加了修改天梯数据的部分
 ]]
 function OutGameData:receiveReward(msg)
+    print("received")
     _userInfo:setUserInfoCoinAmount(msg.userInfo.userInfoCoinAmount)
     _userInfo:setUserInfoDiamondAmount(msg.userInfo.userInfoDiamondAmount)
     --将卡片数据合并至userInfo中
@@ -393,23 +431,26 @@ end
 
 -- 不太确定函数返回的是引用还是复制的值，所以调用的时候还是先调用这个再用别的
 function OutGameData:getUserInfo()
-    if _userInfo == nil then
-        self:initUserInfo()
-    end
+    --if _userInfo == nil then
+    --    local msgUserInfo = TableUtil:encapsulateAsMsg(MsgDef.REQTYPE.LOBBY.USERINFO_INIT, _loginName)
+    --    OutGameMsgController:sendMsg(msgUserInfo)
+    --end
     return _userInfo
 end
 
 function OutGameData:getCoinShop()
-    if _coinShop == nil then
-        self:initCoinShop()
-    end
+    --if _coinShop == nil then
+    --    local msgCoinShop = TableUtil:encapsulateAsMsg(MsgDef.REQTYPE.LOBBY.COINSHOP_INIT, _loginName)
+    --    OutGameMsgController:sendMsg(msgCoinShop)
+    --end
     return _coinShop
 end
 
 function OutGameData:getDiamondShop()
-    if _diamondShop == nil then
-        self:initDiamondShop()
-    end
+    --if _diamondShop == nil then
+    --    local msgDiamondShop = TableUtil:encapsulateAsMsg(MsgDef.REQTYPE.LOBBY.DIAMONDSHOP_INIT, _loginName)
+    --    OutGameMsgController:sendMsg(msgDiamondShop)
+    --end
     return _diamondShop
 end
 

@@ -10,11 +10,11 @@ local Factory = require("app.utils.Factory")
 local ChestRewardGet2nd = require("app.ui.secondaryui.ChestRewardGet2nd")
 local TestDataFactory = require("app.test.TestDataFactory")
 local StringDef = require("app.def.StringDef")
-local OutGameData = require("src/app/data/OutGameData.lua")
+local OutGameData = require("app.data.OutGameData")
 
-local MsgDef = require("src/app/def/MsgDef.lua")
-local OutGameMsgController = require("src/app/network/OutGameMsgController.lua")
-local TableUtil = require("src/app/utils/TableUtil.lua")
+local MsgDef = require("app.def.MsgDef")
+local OutGameMsgController = require("app.network.OutGameMsgController")
+local TableUtil = require("app.utils.TableUtil")
 --[[--
     @description: 构造函数
     @param treasureData type:table, 宝箱中的数据
@@ -72,7 +72,6 @@ function OpenTreasureChest2nd:init()
         end
     end)
     closeButton:addTo(backSprite)
-
     local openButton = ccui.Button:create(StringDef.PATH_SECOND_OPEN_BUTTON_OPEN)
     openButton:setPosition(size.width * .5, 0)
     openButton:addTouchEventListener(function(sender, eventType)

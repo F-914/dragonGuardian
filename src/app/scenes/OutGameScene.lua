@@ -26,28 +26,28 @@ local MsgDef = require("app.def.MsgDef")
 local pageView
 local loadView
 local userInfo_
+<<<<<<< HEAD
+=======
+local pageLayers = {}
+>>>>>>> origin/dev_xz
 --
----GameData我这里至少是没用了
 function OutGameScene:ctor()
+    OutGameData:init("scsjxas13323", self)
+
     loadView = LoadView.new()
     loadView:addTo(self, 3)
-    --test
-    --OutGameData:init()
-    ---在这里我随便写了个
-    OutGameData:init("scsacasca")
+end
+function OutGameScene:eventTriggerLoadView()
     self.mainUIBattleView_ = MainUIBattleView.new()
     self.atlasView_ = AtlasView.new()
     self.shopView_ = ShopView.new()
-
-    MenuView.new(self, 1)
+    self.menuView_ = MenuView.new(self, 1)
     self:sliderView()
-
     self:addNodeEventListener(cc.NODE_ENTER_FRAME_EVENT, handler(self, self.update))
     self:performWithDelay(function()
         self:scheduleUpdate()
     end, 1)
 end
-
 function OutGameScene:onEnter()
     -- 主界面默认音乐播放
     if MenuConfig.IS_PLAY_BGM then
@@ -66,12 +66,20 @@ function OutGameScene:onEnter()
         }
         MsgController:sendMsg(msg)
     end)
+<<<<<<< HEAD
+=======
+    EventManager:regListener(EventDef.ID.CREATE_NEW_ATLAS_VIEW, self, function()
+        self.atlasView_:removeFromParent()
+        self.atlasView_ = AtlasView.new()
+        self.atlasView_:addTo(pageLayers[3])
+    end)
+>>>>>>> origin/dev_xz
 end
 
 function OutGameScene:update(dt)
-    --GameData:update(dt)
     OutGameData:update(dt)
     self.mainUIBattleView_:update(dt)
+    self.menuView_:updateLabel()
 end
 
 function OutGameScene:onExit()
@@ -124,6 +132,7 @@ function OutGameScene:sliderView()
         layer:setContentSize(display.width, display.height)
         -- ShopScene.new(layer, 0)
         layerTable[i]:addTo(layer, 0)
+        pageLayers[i] = layer
         pageView:addPage(layer)
         -- pageView:addPage(layerTable[i])
     end

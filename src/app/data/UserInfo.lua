@@ -60,6 +60,11 @@ function UserInfo:testData()
     self.userInfoBattleTeam_ = TestDataFactory:getTeamDataTest()
     self.userInfoLadder_ = TestDataFactory:getLadderTest()
     self.userInfoCardList_ = TestDataFactory:getCardListTest()
+<<<<<<< HEAD
+=======
+
+end
+>>>>>>> origin/dev_xz
 
 end
 
@@ -138,6 +143,7 @@ end
 function UserInfo:getCollectedList()
     local cardList = self:getCardList()
     local list = {}
+<<<<<<< HEAD
     local set = {}
     if cardList == nil then
         return list
@@ -149,8 +155,19 @@ function UserInfo:getCollectedList()
         else
             set[id] = true
             table.insert(list, id)
+=======
+    if cardList == nil then
+        return list
+    end
+    for i, v in pairs(cardList) do
+        if cardList[i] and v.cardId_ == i then
+            table.insert(list, i)
+>>>>>>> origin/dev_xz
         end
     end
+    --for i = 1, #list do
+    --    print(list[i])
+    --end
     return list
 end
 
@@ -159,8 +176,9 @@ function UserInfo:getUnCollectedList()
     local list = {}
     local set = {}
     for id = 1, 20 do
-        set[id] = true
+        table.insert(set, id, id)
     end
+<<<<<<< HEAD
     if cardList == nil then
         for id = 1, 20 do
             table.insert(list, id)
@@ -171,12 +189,15 @@ function UserInfo:getUnCollectedList()
         local id = cardList[i]:getCardId()
         if set[id] then
             set[id] = false
+=======
+    for i, v in pairs(cardList) do
+        if cardList[i] and v.cardId_ == i then
+            table.removebyvalue(set, i, false)
+>>>>>>> origin/dev_xz
         end
     end
-    for k, v in pairs(set) do
-        if v == true then
-            table.insert(list, k)
-        end
+    for _, v in pairs(set) do
+        table.insert(list, v)
     end
     return list
 end

@@ -9,6 +9,10 @@ local ByteArray = require("app.network.ByteArray")
 local Log = require("app.utils.Log")
 
 local TAG = "OutGameMsgController"
+local handleMessage
+local socket_
+local listenerMap_ = {}
+local isConnected_ = false
 --[[--
     @description: 初始化函数
     @param serviceIP type:string ip地址
@@ -19,9 +23,6 @@ function OutGameMsgController:init(serviceIP, servicePort, heartBeatInterval)
     self.serviceIP_ = serviceIP
     self.servicePort_ = servicePort
     self.heartBeatInterval_ = heartBeatInterval
-    self.socket_ = nil
-    self.isConnected_ = false
-    self.listenerMap_ = {}
 end
 
 --[[--
@@ -29,33 +30,32 @@ end
 
 ]]
 function OutGameMsgController:connect()
-    if self.isConnected_ or self.socket_ then
+    if isConnected_ or socket_ then
         Log.w(TAG, "already connected")
         return
     end
     Log.i("IP: " .. tostring(self.serviceIP_))
-    self.socket_ = SimpleTCP.new(self.serviceIP_, self.servicePort_, self.handleMessage)
-    self.socket_:connect()
-    self.isConnected_ = true
+    socket_ = SimpleTCP.new(self.serviceIP_, self.servicePort_, handleMessage)
+    socket_:connect()
 end
 
 --[[--
     @description: 断开连接
 ]]
 function OutGameMsgController:disConnect()
-    if not self.isConnected_ or not self.socket_ then
+    if not isConnected_ or not socket_ then
         return
     end
-    self.socket_:close()
-    self.socket_ = nil
-    self.isConnected_ = false
+    socket_:close()
+    socket_ = nil
+    isConnected_ = false
 end
 
 --[[--
     @description: 确认连接状态
 ]]
 function OutGameMsgController:isConnect()
-    return self.isConnected_
+    return isConnected_
 end
 
 --[[--
@@ -64,7 +64,7 @@ end
     @return type: bool, 发送消息成功或者失败
 ]]
 function OutGameMsgController:sendMsg(msg)
-    if not self.isConnected_ or not self.socket_ then
+    if not isConnected_ or not socket_ then
         Log.w(TAG, "socket is not connect")
         return false
     end
@@ -74,7 +74,7 @@ function OutGameMsgController:sendMsg(msg)
     ba:setPos(1)
     ba:writeInt(#js)
     ba:writeStringBytes(js)
-    self.socket_:send(ba:getPack())
+    socket_:send(ba:getPack())
     return true
 end
 
@@ -84,15 +84,19 @@ end
     @param data type:bool[], 返回的数据的二进制文件，如果该数据没有key关键字
     则无法分发事件,所以需要确保接受的数据有key
 ]]
-function OutGameMsgController:handleMessage(event, data)
+function handleMessage(event, data)
     if event == SimpleTCP.EVENT_CONNECTING then
         Log.w(TAG, "connecting")
     elseif event == SimpleTCP.EVENT_CONNECTED then
         Log.w(TAG, "connected")
+        isConnected_ = true
+        require("app.data.OutGameData"):eventTriggerInit()
     elseif event == SimpleTCP.EVENT_FAILED then
         Log.w(TAG, "connect failed")
+        isConnected_ = false
     elseif event == SimpleTCP.EVENT_CLOSED then
         Log.w(TAG, "connect closed")
+        isConnected_ = false
     elseif event == SimpleTCP.EVENT_DATA then
         if data then
             local ba = ByteArray.new()
@@ -100,10 +104,8 @@ function OutGameMsgController:handleMessage(event, data)
             ba:setPos(1)
             local len = ba:readInt()
             local msg = json.decode(ba:readStringBytes(len))
-
-            ---每一个返回的消息应该有type(可能与属性重复们可以改成其他的)字段,用于回调函数
-            if msg.type and self.listenerMap_[msg.type] then
-                self.listenerMap_[msg.type](msg)
+            if msg.type and listenerMap_[msg.type] then
+                listenerMap_[msg.type](msg)
             end
         end
     else
@@ -122,11 +124,11 @@ function OutGameMsgController:registerListener(key, listener)
         Log.e(TAG, "key or listener may be nullptr")
         return
     end
-    if self.listenerMap_[key] then
+    if listenerMap_[key] then
         Log.w(TAG, "key already exist")
         return
     end
-    self.listenerMap_[key] = listener
+    listenerMap_[key] = listener
 end
 
 --[[--
@@ -136,8 +138,9 @@ end
 function OutGameMsgController:unRegisterListener(key)
     if not key then
         Log.w(TAG, "key is nil")
+        return
     end
-    self.listenerMap_[key] = nil
+    listenerMap_[key] = nil
 end
 
 return OutGameMsgController

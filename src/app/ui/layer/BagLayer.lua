@@ -89,10 +89,17 @@ function BagLayer:init(lineupList, types)
             )
             for j = 0, 3 do
                 local cardId = i + j
+<<<<<<< HEAD
                 if lineupList[cardId] == nil then
                     break
                 end
                 --Log.i("un: " .. tostring(lineupList[cardId]))
+=======
+                print(cardId)
+                if lineupList[cardId] == nil then
+                    break
+                end
+>>>>>>> origin/dev_xz
                 local button = ccui.Button:create(ConstDef.ICON_LIST[lineupList[cardId]],
                         ConstDef.ICON_LIST[lineupList[cardId]])
                 button:addTo(layout)
@@ -109,8 +116,13 @@ function BagLayer:init(lineupList, types)
                     end
                 end)
                 table.insert(list_, button)
+<<<<<<< HEAD
                 -- get card
                 local card = OutGameData:getUserInfo():getCardList()[cardId]
+=======
+                ---太草率了，检测的是lineupList[cardId],还用cardId,而且就不该取名叫cardId
+                local card = OutGameData:getUserInfo():getCardList()[lineupList[cardId]]
+>>>>>>> origin/dev_xz
                 -- 卡牌等级
                 local level = display.newSprite(ConstDef.ICON_SUBINTERFACE_TOWER_LINE_UP[card:getCardLevel()])
                 button:add(level)

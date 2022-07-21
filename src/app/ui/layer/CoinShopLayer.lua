@@ -40,6 +40,12 @@ function CoinShopLayer:initView()
         text = OutGameData:getCoinShop():getCoinShopRefreshTime(),
 
         text = OutGameData
+                :getCoinShop()
+                :getCoinShopRefreshTime(),
+
+        text = OutGameData:getCoinShop():getCoinShopRefreshTime(),
+
+        text = OutGameData
             :getCoinShop()
             :getCoinShopRefreshTime(),
 
