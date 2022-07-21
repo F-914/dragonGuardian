@@ -40,7 +40,6 @@ function ShopView:initView()
 
     self.shopBackgroundLayer_ = ShopBackgroundLayer.new()
     self:addChild(self.shopBackgroundLayer_)
-
     self.shopLayer_ = ShopLayer.new()
     self:addChild(self.shopLayer_)
 

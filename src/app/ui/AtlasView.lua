@@ -49,7 +49,8 @@ function AtlasView:ctor()
             table.remove(ConstDef.BUTTON_CLICK, 1)
             local cardId = order
             local tower = TowerDetailLayer.new(cardId, collected_)
-            self:add(tower)
+            --self:add(tower)
+            tower:addTo(display.getRunningScene(), 2)
             tower.use:addTouchEventListener(
                 function(sender, eventType)
                     --注册塔的详情中，“使用”按钮的点击事件

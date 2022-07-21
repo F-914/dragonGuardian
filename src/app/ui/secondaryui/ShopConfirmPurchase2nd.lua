@@ -39,7 +39,7 @@ function ShopConfirmPurchase2nd:initView()
     checkLayer:setAnchorPoint(0.5, 0.5)
     checkLayer:setPosition(display.cx, display.cy)
     checkLayer:setContentSize(display.width, display.height)
-    checkLayer:addTo(display.getRunningScene())
+    checkLayer:addTo(display.getRunningScene(), 2)
     -- TODO 尝试一下不设置是否可行
     --checkLayer:setLocalZOrder(1)
     -- 设置层可触摸屏蔽下方按键
@@ -61,7 +61,7 @@ function ShopConfirmPurchase2nd:initView()
     local checkClose = ccui.Button:create(StringDef.PATH_SHOP_SECOND_PURCHASE_CONFIRM_CLOSE)
     checkClose:setAnchorPoint(0.5, 0.5)
     checkClose:setPosition(display.cx + sizeSetBase.width / 2 - sizeSetBase.width / 15,
-        display.cy + sizeSetBase.height / 2 - sizeSetBase.height / 8)
+            display.cy + sizeSetBase.height / 2 - sizeSetBase.height / 8)
     checkClose:addTo(checkLayer)
     checkClose:addTouchEventListener(function(sender, eventType)
         if 2 == eventType then
@@ -99,7 +99,7 @@ function ShopConfirmPurchase2nd:initView()
             table.insert(msgUserInfo.userInfoCardList, TableUtil:removeTableFunction(
                     commodity:getCommodityCommodity()))
             local msg = TableUtil:encapsulateAsMsg(MsgDef.REQTYPE
-                    .LOBBY.PURCHASE_COMMODITY, userInfo:getAccount(),
+                                                         .LOBBY.PURCHASE_COMMODITY, userInfo:getAccount(),
                     "userInfo", msgUserInfo)
             OutGameMsgController:sendMsg(msg)
             _buttonCoinClickGrey(baseLayer, itemWidth, itemHeight, baseButton)
@@ -123,7 +123,7 @@ function ShopConfirmPurchase2nd:initView()
     coinIcon:addTo(checkLayer)
     -- 商品图
     local dragonSprite = cc.Sprite:create(ConstDef.ICON_TOWER_FRAGMENT[
-        self.commodity_:getCommodityCommodity():getCardId()])
+    self                                          .commodity_:getCommodityCommodity():getCardId()])
     dragonSprite:setAnchorPoint(0.5, 0.5)
     dragonSprite:setPosition(display.cx, display.cy)
     dragonSprite:scale(0.8)

@@ -43,6 +43,7 @@ function TowerDetialLayer2nd:init(cardId, bag)
     local mask = display.newColorLayer(cc.c4b(0, 0, 0, 360))
     --local mask=display.newSprite(StringDef.PATH_MASK)
     self:add(mask)
+    --mask:addTo()
     mask:setAnchorPoint(0.5, 0.5)
     mask:setPosition(display.cx, display.cy)
     -- get card

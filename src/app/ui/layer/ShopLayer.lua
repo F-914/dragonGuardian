@@ -28,7 +28,7 @@ function ShopLayer:initView()
     listView:setContentSize(display.width, display.height * 7 / 8) -- 滑动区域大小
     --listView:setContentSize(display.cx * 2, display.cy * 1.4) -- 滑动区域大小
     -- TODO 这里的滑动出了点问题
-    --listView:setBounceEnabled(true)
+    listView:setBounceEnabled(true)
     listView:setAnchorPoint(0.5, 0.5)
     listView:setPosition(display.cx, display.cy)
     --listView:setPosition(display.cx, display.cy * 1.4)

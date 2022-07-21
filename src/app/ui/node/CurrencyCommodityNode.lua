@@ -103,6 +103,7 @@ function CurrencyCommodityNode:initView()
                         false, 0)
                     openTreasure2nd:addTo(display.getRunningScene(), 2)
                 end
+
                 EventManager:doEvent(EventDef.ID.CREATE_NEW_ATLAS_VIEW)
             end
         end
