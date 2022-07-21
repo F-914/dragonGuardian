@@ -1,0 +1,112 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{2E93A392-65F8-4FBD-ABF4-AC6EA8DFE850}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>demoserver</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\..\..\deps\boost\include;..\..\..\..\deps\net\include;..\..\..\..\deps\util\include;..\..\..\..\deps\json\include;..\..\..\..\deps\lua\include;..\..\..\..\deps\lua_cjson;..\..\..\..\deps\lua\lfs;..\..\..\..\deps\lua\bit;..\..\..\..\deps\lua_timer;..\..\..\src;..\..\..\src\lua;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>..\..\..\..\deps\boost\lib\win32;..\..\..\..\deps\util\lib\win32;..\..\..\..\deps\net\lib\win32;..\..\..\..\deps\json\lib\win32;..\..\..\..\deps\lua\lib\win32;..\..\..\..\deps\iconv\lib\win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>libnetwork_d.lib;util_d.lib;json_d.lib;lua_d.lib;libiconv.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>..\..\..\..\bin\demoservice.exe</OutputFile>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\deps\lua_cjson\fpconv.c" />
+    <ClCompile Include="..\..\..\..\deps\lua_cjson\lua_cjson.c" />
+    <ClCompile Include="..\..\..\..\deps\lua_cjson\strbuf.c" />
+    <ClCompile Include="..\..\..\src\client_msg_handler.cpp" />
+    <ClCompile Include="..\..\..\src\demo_service.cpp" />
+    <ClCompile Include="..\..\..\src\game_thread.cpp" />
+    <ClCompile Include="..\..\..\src\base_thread.cpp" />
+    <ClCompile Include="..\..\..\src\lua\lua_c_func.cpp" />
+    <ClCompile Include="..\..\..\src\main.cpp" />
+    <ClCompile Include="..\..\..\src\msg_thread.cpp" />
+    <ClCompile Include="..\..\..\src\lobby_thread.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\deps\lua_cjson\fpconv.h" />
+    <ClInclude Include="..\..\..\..\deps\lua_cjson\lua_cjson.h" />
+    <ClInclude Include="..\..\..\..\deps\lua_cjson\strbuf.h" />
+    <ClInclude Include="..\..\..\src\client_msg_handler.h" />
+    <ClInclude Include="..\..\..\src\demo_service.h" />
+    <ClInclude Include="..\..\..\src\game_thread.h" />
+    <ClInclude Include="..\..\..\src\base_thread.h" />
+    <ClInclude Include="..\..\..\src\lua\lua_c_func.h" />
+    <ClInclude Include="..\..\..\src\message_filter.h" />
+    <ClInclude Include="..\..\..\src\msg_thread.h" />
+    <ClInclude Include="..\..\..\src\lobby_thread.h" />
+    <ClInclude Include="..\..\..\src\protocol_def.h" />
+    <ClInclude Include="..\..\..\src\struct_def.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

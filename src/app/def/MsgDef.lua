@@ -67,6 +67,12 @@ MsgDef.REQTYPE = {
         MODIFY_BATTLETEAM = 15,
         --修改战斗队伍信息
         RECEIVE_REWARD = 16,
+        CARD_USE = 17,
+        --卡牌使用
+        CARD_INTENSIFY = 18,
+        --卡牌强化
+        CARD_UPGRADE = 19,
+        --卡牌升级
     }
 }
 
@@ -77,7 +83,7 @@ MsgDef.ACKTYPE = {
     GAME = {
         STARTGAME = 0x80000 + 1,
         GAMEOVER = 0x80000 + 2,
-        REFRESHHP= 0x80000 + 3,
+        REFRESHHP = 0x80000 + 3,
     },
     LOBBY = {
         LOGIN = 0x80000 + 5,
@@ -103,7 +109,7 @@ MsgDef.ACKTYPE = {
         --钻石商店信息初始化
         COINSHOP_INIT = 0x80000 + 14,
 
-        MATCH_SUC=0x80000 + 15,
+        MATCH_SUC = 0x80000 + 15,
         --金币商店初始化
         PURCHASE_COMMODITY = 0x80000 + 15,
         --购买商品

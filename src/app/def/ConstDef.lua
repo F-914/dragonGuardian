@@ -1,6 +1,7 @@
+
 --local
 local StringDef = require("app.def.StringDef")
---
+
 local ConstDef = {
     scale_ = 0.7,
     ROW_COMMODITY_NUMBER = 3,
@@ -155,7 +156,6 @@ local ConstDef = {
     },
 
 
-
     ICON_SUBINSTANCE_TOWER_LIST_TYPE = {
         StringDef.PATH_SUBINTERFACE_TOWER_TYPE_ATTACK,
         StringDef.PATH_SUBINTERFACE_TOWER_TYPE_DISTURB,
@@ -169,6 +169,7 @@ local ConstDef = {
         lineupTwo = { 2, 2, 2, 2, 2 },
         lineupThree = { 3, 3, 3, 3, 3 }
     },
+
     STR_TOWER_TYPE = {
         StringDef.STR_TYPE_ATTACK,
         StringDef.STR_TYPE_DISTURB,
@@ -268,6 +269,7 @@ local ConstDef = {
     },
     BUTTON_CLICK = {}, --用于实现部分功能的全局变量，希望后期能重写
     POPUP = {}, --用于实现弹窗部分功能的全局变量，希望后期能重写
+
     CARD_UPDATE_CONDITION = {
         CARD_CONDITION = {
             -- 这个里面是或者的关系
@@ -355,5 +357,6 @@ local ConstDef = {
         WIDTH = 120 * 0.85,
         HEIGHT = 120 * 0.85
     }
+
 }
 return ConstDef
