@@ -99,14 +99,11 @@ function handleMessage(event, data)
         isConnected_ = false
     elseif event == SimpleTCP.EVENT_DATA then
         if data then
-            print(data)
             local ba = ByteArray.new()
             ba:writeBuf(data)
             ba:setPos(1)
             local len = ba:readInt()
             local msg = json.decode(ba:readStringBytes(len))
-
-            ---每一个返回的消息应该有type(可能与属性重复们可以改成其他的)字段,用于回调函数
             if msg.type and listenerMap_[msg.type] then
                 listenerMap_[msg.type](msg)
             end

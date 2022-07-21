@@ -78,18 +78,18 @@ MsgDef.REQTYPE = {
 
 MsgDef.ACKTYPE = {
     --确认类型，是服务器发往客户端的
-    RANKLIST = 0x80000 + 3,
-    HEARTBEAT = 0x80000 + 4,
+    RANKLIST = 0x80000 + 4,
+    HEARTBEAT = 0x80000 + 5,
     GAME = {
         STARTGAME = 0x80000 + 1,
         GAMEOVER = 0x80000 + 2,
         REFRESHHP = 0x80000 + 3,
     },
     LOBBY = {
-        LOGIN = 0x80000 + 5,
-        ASSERT_CHANGE = 0x80000 + 6,
-        CARD_COLLECT = 0x80000 + 7,
-        CARD_ATTRIBUTE_CHANGE = 0x80000 + 8,
+        LOGIN = 0x80000 + 6,
+        ASSERT_CHANGE = 0x80000 + 7,
+        CARD_COLLECT = 0x80000 + 8,
+        CARD_ATTRIBUTE_CHANGE = 0x80000 + 9,
 
         --[[--以下部分来自幸周
             虽然和发送类型的名字一样，但使用情况不同，
@@ -97,27 +97,27 @@ MsgDef.ACKTYPE = {
             基于不同的类型调用不同的回调函数
         ]]
         ---以下部分均是同步和初始化消息
-        USERINFO_DS = 0x80000 + 9,
+        USERINFO_DS = 0x80000 + 10,
         --用户信息同步
-        DIAMONDSHOP_DS = 0x80000 + 10,
+        DIAMONDSHOP_DS = 0x80000 + 11,
         --钻石商店信息同步
-        COINSHOP_DS = 0x80000 + 11,
+        COINSHOP_DS = 0x80000 + 12,
         --金币商店信息同步
-        USERINFO_INIT = 0x80000 + 12,
+        USERINFO_INIT = 0x80000 + 13,
         --用户信息初始化
-        DIAMONDSHOP_INIT = 0x80000 + 13,
+        DIAMONDSHOP_INIT = 0x80000 + 14,
         --钻石商店信息初始化
-        COINSHOP_INIT = 0x80000 + 14,
+        COINSHOP_INIT = 0x80000 + 15,
 
-        MATCH_SUC = 0x80000 + 15,
+        MATCH_SUC = 0x80000 + 16,
 
-        PURCHASE_COMMODITY = 0x80000 + 16,
+        PURCHASE_COMMODITY = 0x80000 + 17,
         --购买商品
-        TROPHY_CHANGE = 0x80000 + 17,
+        TROPHY_CHANGE = 0x80000 + 18,
         --奖杯数改变
-        MODIFY_BATTLETEAM = 0x80000 + 18,
+        MODIFY_BATTLETEAM = 0x80000 + 19,
         --修改战斗队伍信息
-        RECEIVE_REWARD = 0x80000 + 19,
+        RECEIVE_REWARD = 0x80000 + 20,
 
     }
 }

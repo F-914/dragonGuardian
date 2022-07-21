@@ -26,22 +26,20 @@ local MsgDef = require("app.def.MsgDef")
 local pageView
 local loadView
 local userInfo_
+local pageLayers = {}
 --
 function OutGameScene:ctor()
-    OutGameData:init("cjb13323", self)
+    OutGameData:init("scsjxas13323", self)
 
     loadView = LoadView.new()
-    print(self.addChild, "--------------")
     loadView:addTo(self, 3)
 end
 function OutGameScene:eventTriggerLoadView()
     self.mainUIBattleView_ = MainUIBattleView.new()
     self.atlasView_ = AtlasView.new()
     self.shopView_ = ShopView.new()
-    print(self.addChild)
-    MenuView.new(self, 1)
+    self.menuView_ = MenuView.new(self, 1)
     self:sliderView()
-
     self:addNodeEventListener(cc.NODE_ENTER_FRAME_EVENT, handler(self, self.update))
     self:performWithDelay(function()
         self:scheduleUpdate()
@@ -65,12 +63,17 @@ function OutGameScene:onEnter()
         }
         MsgController:sendMsg(msg)
     end)
+    EventManager:regListener(EventDef.ID.CREATE_NEW_ATLAS_VIEW, self, function()
+        self.atlasView_:removeFromParent()
+        self.atlasView_ = AtlasView.new()
+        self.atlasView_:addTo(pageLayers[3])
+    end)
 end
 
 function OutGameScene:update(dt)
-    --GameData:update(dt)
     OutGameData:update(dt)
     self.mainUIBattleView_:update(dt)
+    self.menuView_:updateLabel()
 end
 
 function OutGameScene:onExit()
@@ -123,6 +126,7 @@ function OutGameScene:sliderView()
         layer:setContentSize(display.width, display.height)
         -- ShopScene.new(layer, 0)
         layerTable[i]:addTo(layer, 0)
+        pageLayers[i] = layer
         pageView:addPage(layer)
         -- pageView:addPage(layerTable[i])
     end

@@ -138,19 +138,17 @@ end
 function UserInfo:getCollectedList()
     local cardList = self:getCardList()
     local list = {}
-    local set = {}
     if cardList == nil then
         return list
     end
-    for i = 1, #cardList do
-        local id = cardList[i]:getCardId()
-        if set[id] then
-            -- nothing
-        else
-            set[id] = true
-            table.insert(list, id)
+    for i, v in pairs(cardList) do
+        if cardList[i] and v.cardId_ == i then
+            table.insert(list, i)
         end
     end
+    --for i = 1, #list do
+    --    print(list[i])
+    --end
     return list
 end
 
@@ -159,24 +157,15 @@ function UserInfo:getUnCollectedList()
     local list = {}
     local set = {}
     for id = 1, 20 do
-        set[id] = true
+        table.insert(set, id, id)
     end
-    if cardList == nil then
-        for id = 1, 20 do
-            table.insert(list, id)
-        end
-        return list
-    end
-    for i = 1, #cardList do
-        local id = cardList[i]:getCardId()
-        if set[id] then
-            set[id] = false
+    for i, v in pairs(cardList) do
+        if cardList[i] and v.cardId_ == i then
+            table.removebyvalue(set, i, false)
         end
     end
-    for k, v in pairs(set) do
-        if v == true then
-            table.insert(list, k)
-        end
+    for _, v in pairs(set) do
+        table.insert(list, v)
     end
     return list
 end

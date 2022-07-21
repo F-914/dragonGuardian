@@ -166,12 +166,15 @@ function TableUtil:toUserInfo(msg)
     ---这个由于是单例模式，所以没有返回值
     local cardList = {}
     for i = 1, #msg.userInfoCardList do
-        cardList[i] = self:toCard(msg.userInfoCardList[i])
+        if msg.userInfoCardList[i] then
+            local card = self:toCard(msg.userInfoCardList[i])
+            table.insert(cardList, card:getCardId(), card)
+        end
     end
 
     local userInfo = UserInfo:getInstance()
     userInfo:setUserInfo(msg.userInfoAccount, msg.userInfoAvatar,
-            msg.userInfoNickname, msg.userInfoCoinAmount,
+            msg.userInfoNickName, msg.userInfoCoinAmount,
             msg.userInfoDiamondAmount, msg.userInfoTrophyAmount,
             self:toBattleTeam(msg.userInfoBattleTeam),
             self:toLadder(msg.userInfoLadder),

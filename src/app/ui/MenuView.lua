@@ -3,10 +3,11 @@
     MenuView.lua
 ]]
 local MenuView = class(
-        "MenuView",
-        function()
-            return display.newColorLayer(cc.c4b(0, 0, 0, 0))
-        end
+        "MenuView"
+        ---这个有用吗？？？？？？？？？？？？？？？？？？
+        --function()
+        --    return display.newColorLayer(cc.c4b(0, 0, 0, 0))
+        --end
 )
 -- local
 local audio = require "framework.audio"
@@ -30,6 +31,7 @@ local _tabGuide
 local _battleTitle, _battleIcon
 local _shopTitle, _shopIcon
 local _guideTitle, _guideIcon
+local _coinNumTTF, _trophyTTF, _diamondTTF
 --
 
 --[[--
@@ -44,10 +46,10 @@ function MenuView:ctor(layer, num)
     self:loadMusic()
     local menuTop = self:createMenuTop()
     local menuBottom = self:createMenuBottom()
-    print(layer.addChild)
     menuTop:addTo(layer, _priority)
     menuBottom:addTo(layer, _priority)
 end
+
 
 --[[--
     描述：音乐音效加载
@@ -69,7 +71,6 @@ end
     @return layer
 ]]
 function MenuView:createMenuTop()
-    -- 顶部栏
     _menuTopLayer = ccui.Layout:create() -- 菜单层
     --menuLayer:setBackGroundImage("home/shop/background_shop.png")
     _menuTopLayer:setPosition(display.width / 2, display.height / 2)
@@ -140,6 +141,7 @@ function MenuView:createMenuTop()
     scoreText:align(display.LEFT_CENTER, display.width * 23 / 80, baseCY + 5 - sizeNameBase.height / 4)
     scoreText:setColor(cc.c3b(255, 206, 55))
     scoreText:addTo(_menuTopLayer)
+    _trophyTTF = scoreText
 
     local coinBase = cc.Sprite:create("home/top_player_info/base_diamond_coins.png")
     coinBase:setAnchorPoint(0, 1)
@@ -159,6 +161,7 @@ function MenuView:createMenuTop()
     coinNum:align(display.RIGHT_TOP, display.cx * 8 / 5 + display.cx / 20, baseCY + sizeNameBase.height / 2 - 5)
     coinNum:setColor(cc.c3b(255, 255, 255))
     coinNum:addTo(_menuTopLayer)
+    _coinNumTTF = coinNum
 
     local diaBase = cc.Sprite:create("home/top_player_info/base_diamond_coins.png")
     diaBase:setAnchorPoint(0, 0)
@@ -178,7 +181,7 @@ function MenuView:createMenuTop()
     diaNum:align(display.RIGHT_BOTTOM, display.cx * 8 / 5 + display.cx / 20, baseCY - sizeNameBase.height / 2 + 5)
     diaNum:setColor(cc.c3b(255, 255, 255))
     diaNum:addTo(_menuTopLayer)
-
+    _diamondTTF = diaNum
     return _menuTopLayer
 end
 
@@ -837,4 +840,9 @@ function MenuView:createAvatarSelection(layer)
     end
 end
 
+function MenuView:updateLabel()
+    _coinNumTTF:setString(tostring(OutGameData:getUserInfo():getCoinAmount()))
+    _diamondTTF:setString(tostring(OutGameData:getUserInfo():getDiamondAmount()))
+    _trophyTTF:setString(tostring(OutGameData:getUserInfo():getTrophyAmount()))
+end
 return MenuView

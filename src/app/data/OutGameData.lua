@@ -13,9 +13,9 @@ local Shop = require("app.data.Shop")
 local TestDataFactory = require("app.test.TestDataFactory")
 
 
-local Factory = require("src/app/utils/Factory.lua")
-local TowerDef = require("src/app/def/TowerDef.lua")
-local Log = require("src/app/utils/Log.lua")
+local Factory = require("app.utils.Factory")
+local TowerDef = require("app.def.TowerDef")
+local Log = require("app.utils.Log")
 
 --网络部分
 local OutGameMsgController = require("app.network.OutGameMsgController")
@@ -127,7 +127,10 @@ function OutGameData:register()
         handler(self, self.changeCardAttribute))
     OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.ASSERT_CHANGE,
         handler(self, self.assertChange))
-
+    OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.RECEIVE_REWARD,
+        handler(self, self.receiveReward))
+    OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.PURCHASE_COMMODITY,
+        handler(self, self.purchaseCommodity))
 end
 
 --[[--
@@ -312,6 +315,7 @@ end
     这个函数和上面的购买商品的函数是几乎一模一样,除了增加了修改天梯数据的部分
 ]]
 function OutGameData:receiveReward(msg)
+    print("received")
     _userInfo:setUserInfoCoinAmount(msg.userInfo.userInfoCoinAmount)
     _userInfo:setUserInfoDiamondAmount(msg.userInfo.userInfoDiamondAmount)
     --将卡片数据合并至userInfo中
