@@ -93,31 +93,6 @@ function Card:ctor(cardId, name, rarity, type, level, cardAmount, atk, atkTarget
     -- EventManager:doEvent(EventDef.ID.CREATE_CARD, self, cardId)
 end
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
->>>>>>> origin/dev_xz
--- function Card:setCard(cardId, name, rarity, type, level, cardAmount, atk, atkTarget, atkUpgrade, atkEnhance, fireCd,
---                       fireCdEnhance,
--- function Card:ctor(camp, x, y, xLocate, yLocate, cardId, name, rarity, type, level, atk, atkTarget, atkUpgrade, atkEnhance, fireCd, fireCdEnhance,
---                    fireCdUpgrade,
---                    skills, extraDamage, fatalityRate, location)
---     Card.super.ctor(self, x, y, ConstDef.CARD_BUTTON_SIZE.WIDTH, ConstDef.CARD_BUTTON_SIZE.HEIGHT)
---     self:setCard(cardId, xLocate, yLocate, name, rarity, type, level, atk, atkTarget, atkUpgrade, atkEnhance, fireCd, fireCdEnhance,
---         fireCdUpgrade, skills
---         , extraDamage, fatalityRate, location)
---     if camp == 1 then
---         EventManager:doEvent(EventDef.ID.CREATE_CARD, self, cardId)
---     elseif camp == 2 then
---         EventManager:doEvent(EventDef.ID.CREATE_ENEMY_CARD, self, cardId)
---     end
--- end
-
-<<<<<<< HEAD
->>>>>>> c7f939b78a6e526fb50bd6ef2afbd0484de7354b
-=======
->>>>>>> origin/dev_xz
 function Card:setCard(cardId, name, rarity, type, level, cardAmount, atk, atkTarget, atkUpgrade, atkEnhance, fireCd
                       , fireCdEnhance, fireCdUpgrade, skills, extraDamage, fatalityRate, location)
 

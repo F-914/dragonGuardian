@@ -107,19 +107,11 @@ MsgDef.ACKTYPE = {
         --用户信息初始化
         DIAMONDSHOP_INIT = 0x80000 + 14,
         --钻石商店信息初始化
-<<<<<<< HEAD
-        COINSHOP_INIT = 0x80000 + 14,
-
-        MATCH_SUC = 0x80000 + 15,
-        --金币商店初始化
-        PURCHASE_COMMODITY = 0x80000 + 15,
-=======
         COINSHOP_INIT = 0x80000 + 15,
 
         MATCH_SUC = 0x80000 + 16,
 
         PURCHASE_COMMODITY = 0x80000 + 17,
->>>>>>> origin/dev_xz
         --购买商品
         TROPHY_CHANGE = 0x80000 + 18,
         --奖杯数改变

@@ -13,15 +13,9 @@ local Shop = require("app.data.Shop")
 local TestDataFactory = require("app.test.TestDataFactory")
 
 
-<<<<<<< HEAD
-local Factory = require("src/app/utils/Factory.lua")
-local TowerDef = require("src/app/def/TowerDef.lua")
-local Log = require("src/app/utils/Log.lua")
-=======
 local Factory = require("app.utils.Factory")
 local TowerDef = require("app.def.TowerDef")
 local Log = require("app.utils.Log")
->>>>>>> origin/dev_xz
 
 --网络部分
 local OutGameMsgController = require("app.network.OutGameMsgController")
@@ -34,49 +28,8 @@ local _coinShop
 local _diamondShop
 local _treasureBoxRewardWinningRate
 local _isAlive
-<<<<<<< HEAD
---
----测试时用这个
--- function OutGameData:init()
-
---     --连接到服务器
---     -- OutGameMsgController:connect()
---     -- self:register()
-
---     -- TODO 如果在这里调用init就会出错，但是直接get是没有问题的
---     _userInfo = UserInfo:getInstance()
---     Log.i("OutGameData:init: " .. tostring(_userInfo == nil))
---     --self:initUserInfo()
---     _coinShop = TestDataFactory:getTestCoinShop()
---     --self:initCoinShop()
---     Log.i("OutGameData:init: " .. tostring(_coinShop == nil))
---     _diamondShop = TestDataFactory:getTestDiamondShop()
---     --self:initDiamondShop()
---     Log.i("OutGameData:init: " .. tostring(_diamondShop == nil))
---     self:initTreasureBoxRewardWinningRate()
-
-
---     OutGameMsgController:init("127.0.0.0", 33333, 2)
---     OutGameMsgController:connect()
---     self:register()
---     self:initUserInfo()
---     self:initCoinShop()
---     self:initDiamondShop()
---     self:initTreasureBoxRewardWinningRate()
--- end
-
--- -- 调用 OutGameData:getTreasureBoxRewardWinningRate()[ConstDef.TREASUREBOX_RARITY.R][ConstDef.TREASUREBOX_REWARD.R]
--- function OutGameData:getTreasureBoxRewardWinningRate()
---     if _treasureBoxRewardWinningRate == nil then
---         self:initTreasureBoxRewardWinningRate()
---     end
---     return _treasureBoxRewardWinningRate
--- end
-
-=======
 local _loginName
 local _scene
->>>>>>> origin/dev_xz
 --function OutGameData:init()
 --    --暂时先用这里的假数据，后面改成发送消息的方式初始化数据
 --    self:initUserInfo()
@@ -137,6 +90,7 @@ function OutGameData:initTreasureBoxRewardWinningRate()
         }
     }
 end
+
 ---测试的时候就用下面这三个函数
 --function OutGameData:initDiamondShop()
 --    _diamondShop = TestDataFactory:getTestDiamondShop()
@@ -186,16 +140,6 @@ function OutGameData:register()
 
     ---这一部分是代表事件的函数
     OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.CARD_COLLECT,
-<<<<<<< HEAD
-        handler(self, self.addCard))
-    OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.CARD_ATTRIBUTE_CHANGE,
-        handler(self, self.changeCardAttribute))
-    OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.ASSERT_CHANGE,
-        handler(self, self.assertChange))
-
-    OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.CARD_COLLECT,
-=======
->>>>>>> origin/dev_xz
         handler(self, self.addCard))
     OutGameMsgController:registerListener(MsgDef.ACKTYPE.LOBBY.CARD_ATTRIBUTE_CHANGE,
         handler(self, self.changeCardAttribute))
@@ -232,6 +176,7 @@ end
 function OutGameData:diamondShopDS(msg)
     _diamondShop = TableUtil:toShop(msg.diamondShop)
 end
+
 --[[--
 
 ]]
@@ -240,6 +185,7 @@ function OutGameData:update(dt)
     ---在这里,进行计时，每隔一段时间进行发送消息进行数据同步
     ---同时隔一段事件发送心跳消息，确认在线
 end
+
 local initCount = 1
 function OutGameData:initDiamondShop(msg)
     _diamondShop = TableUtil:toShop(msg.diamondShop)
@@ -267,6 +213,7 @@ function OutGameData:initUserInfo(msg)
         initCount = initCount + 1
     end
 end
+
 function OutGameData:eventTriggerInit()
     local msgUserInfo = TableUtil:encapsulateAsMsg(MsgDef.REQTYPE.LOBBY.USERINFO_INIT, _loginName)
     local msgCoinShop = TableUtil:encapsulateAsMsg(MsgDef.REQTYPE.LOBBY.COINSHOP_INIT, _loginName)
@@ -275,6 +222,7 @@ function OutGameData:eventTriggerInit()
     OutGameMsgController:sendMsg(msgCoinShop)
     OutGameMsgController:sendMsg(msgDiamondShop)
 end
+
 --[[--
     @description 接受来自服务器的消息，确定新增的卡片,并将数据同步至本地数据
     这个函数可以一口气增加大量卡片

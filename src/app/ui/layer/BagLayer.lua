@@ -3,10 +3,10 @@
     BagLayer.lua
 ]]
 local BagLayer = class(
-        "BagLayer",
-        function()
-            return display.newLayer()
-        end
+    "BagLayer",
+    function()
+        return display.newLayer()
+    end
 )
 --local
 local StringDef = require("app.def.StringDef")
@@ -49,7 +49,8 @@ function BagLayer:init(lineupList, types)
     TotalLayout:addTo(self)
     TotalLayout:setAnchorPoint(0.5, 1)
     TotalLayout:setContentSize(cc.Director:getInstance():getWinSize().width,
-            test:getContentSize().height * ConstDef.scale_ * height + (height - 1) * test:getContentSize().height * 0.2 * ConstDef.scale_)
+        test:getContentSize().height * ConstDef.scale_ * height +
+        (height - 1) * test:getContentSize().height * 0.2 * ConstDef.scale_)
     if types == "uncollected" then
         for i = 1, #(lineupList), 4 do
             local layout = ccui.Layout:create()
@@ -57,9 +58,9 @@ function BagLayer:init(lineupList, types)
             layout:setAnchorPoint(0.5, 1)
             layout:setContentSize(TotalLayout:getContentSize().width, test:getContentSize().height * ConstDef.scale_)
             layout:setPosition(
-                    TotalLayout:getContentSize().width * 0.5,
-                    TotalLayout:getContentSize().height - test:getContentSize().height * ConstDef.scale_ * math.floor(i / 4)
-                            - math.floor(i / 4) * test:getContentSize().height * 0.1 * ConstDef.scale_
+                TotalLayout:getContentSize().width * 0.5,
+                TotalLayout:getContentSize().height - test:getContentSize().height * ConstDef.scale_ * math.floor(i / 4)
+                - math.floor(i / 4) * test:getContentSize().height * 0.1 * ConstDef.scale_
             )
             for j = 0, 3 do
                 local cardId = i + j
@@ -72,7 +73,7 @@ function BagLayer:init(lineupList, types)
                 sprite:setAnchorPoint(0, 1)
                 sprite:setPosition(layout:getContentSize().width * j * 0.25 + 20, 0)
                 sprite:setContentSize(sprite:getContentSize().width * ConstDef.scale_,
-                        sprite:getContentSize().height * ConstDef.scale_)
+                    sprite:getContentSize().height * ConstDef.scale_)
             end
         end
     elseif types == "collected" then
@@ -82,26 +83,19 @@ function BagLayer:init(lineupList, types)
             layout:setAnchorPoint(0.5, 1)
             layout:setContentSize(TotalLayout:getContentSize().width, test:getContentSize().height * ConstDef.scale_)
             layout:setPosition(
-                    TotalLayout:getContentSize().width * 0.5,
-                    TotalLayout:getContentSize().height * 1 + 100 -
-                            test:getContentSize().height * ConstDef.scale_ * math.floor(i / 4) -
-                            math.floor(i / 4) * test:getContentSize().height * 0.1 * ConstDef.scale_
+                TotalLayout:getContentSize().width * 0.5,
+                TotalLayout:getContentSize().height * 1 + 100 -
+                test:getContentSize().height * ConstDef.scale_ * math.floor(i / 4) -
+                math.floor(i / 4) * test:getContentSize().height * 0.1 * ConstDef.scale_
             )
             for j = 0, 3 do
                 local cardId = i + j
-<<<<<<< HEAD
-                if lineupList[cardId] == nil then
-                    break
-                end
-                --Log.i("un: " .. tostring(lineupList[cardId]))
-=======
                 print(cardId)
                 if lineupList[cardId] == nil then
                     break
                 end
->>>>>>> origin/dev_xz
                 local button = ccui.Button:create(ConstDef.ICON_LIST[lineupList[cardId]],
-                        ConstDef.ICON_LIST[lineupList[cardId]])
+                    ConstDef.ICON_LIST[lineupList[cardId]])
                 button:addTo(layout)
                 button:setAnchorPoint(0, 1)
                 button:setScale(ConstDef.scale_)
@@ -116,13 +110,8 @@ function BagLayer:init(lineupList, types)
                     end
                 end)
                 table.insert(list_, button)
-<<<<<<< HEAD
-                -- get card
-                local card = OutGameData:getUserInfo():getCardList()[cardId]
-=======
                 ---太草率了，检测的是lineupList[cardId],还用cardId,而且就不该取名叫cardId
                 local card = OutGameData:getUserInfo():getCardList()[lineupList[cardId]]
->>>>>>> origin/dev_xz
                 -- 卡牌等级
                 local level = display.newSprite(ConstDef.ICON_SUBINTERFACE_TOWER_LINE_UP[card:getCardLevel()])
                 button:add(level)
@@ -146,7 +135,7 @@ function BagLayer:init(lineupList, types)
                 progressBg:add(progressNumber)
                 progressNumber:setAnchorPoint(0.5, 0.5)
                 progressNumber:setPosition(progressBg:getContentSize().width * 0.5,
-                        progressBg:getContentSize().height * 0.5)
+                    progressBg:getContentSize().height * 0.5)
                 -- TODO 这块有个问题 按照 游戏策划文档v4.3中 养成方式 部分的卡牌升级的表格，用来升级的卡牌的稀有度会影响所需要的卡牌的数量，那么这里需要的卡牌数量应该是哪一种呢？？
                 -- 目前全部按 R稀有度 卡牌整的
                 local upgradeNumber = ConstDef.CARD_UPDATE_CONDITION.CARD_CONDITION[card:getCardLevel()].R --升级需要的卡片数量

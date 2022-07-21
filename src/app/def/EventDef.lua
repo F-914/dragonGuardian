@@ -43,10 +43,7 @@ EventDef.ID = {
     --卡牌强化
     CARD_UPGRADE = 32,
     --卡牌升级
-<<<<<<< HEAD
-=======
     CREATE_NEW_ATLAS_VIEW = 33
->>>>>>> origin/dev_xz
 }
 
 return EventDef

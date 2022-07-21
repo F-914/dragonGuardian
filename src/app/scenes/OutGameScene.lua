@@ -26,10 +26,7 @@ local MsgDef = require("app.def.MsgDef")
 local pageView
 local loadView
 local userInfo_
-<<<<<<< HEAD
-=======
 local pageLayers = {}
->>>>>>> origin/dev_xz
 --
 function OutGameScene:ctor()
     OutGameData:init("scsjxas13323", self)
@@ -37,6 +34,7 @@ function OutGameScene:ctor()
     loadView = LoadView.new()
     loadView:addTo(self, 3)
 end
+
 function OutGameScene:eventTriggerLoadView()
     self.mainUIBattleView_ = MainUIBattleView.new()
     self.atlasView_ = AtlasView.new()
@@ -48,6 +46,7 @@ function OutGameScene:eventTriggerLoadView()
         self:scheduleUpdate()
     end, 1)
 end
+
 function OutGameScene:onEnter()
     -- 主界面默认音乐播放
     if MenuConfig.IS_PLAY_BGM then
@@ -66,14 +65,11 @@ function OutGameScene:onEnter()
         }
         MsgController:sendMsg(msg)
     end)
-<<<<<<< HEAD
-=======
     EventManager:regListener(EventDef.ID.CREATE_NEW_ATLAS_VIEW, self, function()
         self.atlasView_:removeFromParent()
         self.atlasView_ = AtlasView.new()
         self.atlasView_:addTo(pageLayers[3])
     end)
->>>>>>> origin/dev_xz
 end
 
 function OutGameScene:update(dt)
