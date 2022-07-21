@@ -92,7 +92,7 @@ function BagLayer:init(lineupList, types)
                 if lineupList[cardId] == nil then
                     break
                 end
-                Log.i("un: " .. tostring(lineupList[cardId]))
+                --Log.i("un: " .. tostring(lineupList[cardId]))
                 local button = ccui.Button:create(ConstDef.ICON_LIST[lineupList[cardId]],
                         ConstDef.ICON_LIST[lineupList[cardId]])
                 button:addTo(layout)
